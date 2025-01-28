@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D)
 # CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D) -g3 -D DEBUG=1
 MAKEFLAGS += --no-print-directory
 
-SRC =	main.c
+SRC =	*.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -40,16 +40,16 @@ libft:
 .PHONY: header
 header:
 	printf "$(YELLOW)"
-	printf "\n---------------------------------------------------------------------"
-	printf "\n\t ___ _ _  __  _ _         __  _ _ _   _   ___ "
-	printf "\n\t| o \\ | |/ _|| U |       / _|| | | | / \\ | o \\"
-	printf "\n\t|  _/ U |\\_ \\|   |       \\_ \\| V V || o ||  _/"
-	printf "\n\t|_| |___||__/|_n_|  ___  |__/ \\_n_/ |_n_||_|  "
-	printf "\n\t                   |___|                      "
-	printf "\n\n---------------------------------------------------------------------\n"
+	printf "\n---------------------------------------------------------------------\n"
+	printf "  __  __ ___ _   _ ___ ____  _   _ _____ _     _      \n";
+	printf " |  \/  |_ _| \ | |_ _/ ___|| | | | ____| |   | |     \n";
+	printf " | |\/| || ||  \| || |\___ \| |_| |  _| | |   | |     \n";
+	printf " | |  | || || |\  || | ___) |  _  | |___| |___| |___  \n";
+	printf " |_|  |_|___|_| \_|___|____/|_| |_|_____|_____|_____| \n";
+	printf "                                                      ";
+	printf "\n---------------------------------------------------------------------\n"
 
-	printf "[Author]: $(GREEN)Maxime Juncker"
-	printf "$(YELLOW)\t[github]: $(GREEN)https://github.com/Maxime-juncker\n\n"
+	printf "$(YELLOW)[github]: $(GREEN)https://github.com/Maxime-juncker/Minishell.git\n\n"
 
 $(BIN_D)$(NAME): $(OBJ) $(BIN_D)
 	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
