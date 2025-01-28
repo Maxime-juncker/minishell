@@ -17,8 +17,8 @@ typedef struct s_cmd
 typedef struct s_command
 {
 	t_cmd	*cmd;
-	int		fd_in;
-	int		fd_out;
+	char	*infile;
+	char	*outfile;
 }	t_command;
 
 typedef struct s_command_table
