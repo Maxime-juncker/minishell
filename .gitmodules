@@ -1,0 +1,3 @@
+[submodule "better-libunit"]
+	path = better-libunit
+	url = git@github.com:Maxime-juncker/better-libunit.git

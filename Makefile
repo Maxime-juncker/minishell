@@ -1,6 +1,5 @@
 NAME = minishell
 CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D)
-# CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D) -g3 -D DEBUG=1
 MAKEFLAGS += --no-print-directory
 
 SRC =	*.c
@@ -32,6 +31,12 @@ R_ARGS=$(shell python3 rand_numbers.py)
 
 all: header libft $(BIN_D)$(NAME)
 
+.PHONY: lib
+lib: $(OBJ) $(BIN_D)
+	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
+	ar rcs $(BIN_D)$(NAME).a $(OBJ) "libft/bin/libft.a"
+	printf "$(GREEN)$(NAME): success\n"
+	printf "\n---------------------$(CURSOR_ON)\n\n"
 
 .PHONY: libft
 libft:
@@ -51,9 +56,9 @@ header:
 
 	printf "$(YELLOW)[github]: $(GREEN)https://github.com/Maxime-juncker/Minishell.git\n\n"
 
-$(BIN_D)$(NAME): $(OBJ) $(BIN_D)
+$(BIN_D)$(NAME): $(OBJ) $(MAIN_OBJ) $(BIN_D)
 	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
-	$(CC) $(CFLAGS) $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME)
+	$(CC) $(CFLAGS) $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME).out
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)\n\n"
 
