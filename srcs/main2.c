@@ -3,6 +3,7 @@
 int	main(int argc, char **argv, char **env)
 {
 	(void)argc;
-	pipex(argv, env);
+	(void)argv;
+	run_pipeline(example_table(env));
 	return (0);
 }

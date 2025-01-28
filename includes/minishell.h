@@ -14,7 +14,7 @@ typedef struct s_command
 	char	**args; // args[0] = cmd name (ex: ls)
 	size_t	n_args;
 
-	int	fd_int; // NULL = stdin
+	int	fd_in; // NULL = stdin
 	int	fd_out; // NULL = stdout
 }	t_command;
 
@@ -27,8 +27,8 @@ typedef struct s_command_table
 }	t_command_table;
 
 // pipex.c
-void	pipex(char **args, char **env);
 char	**get_paths(char **env);
+t_command_table	example_table(char **env);
 
 // executor
 char	*get_cmd_path(char **paths, t_command cmd);
@@ -37,5 +37,6 @@ void	exec(t_command cmd);
 
 // pipeline.c
 int		run_pipeline(t_command_table table);
+int	run_command(t_command cmd, t_command_table table);
 
 #endif

@@ -1,19 +1,18 @@
 #include "minishell.h"
-#include <sys/wait.h>
 #include <stdio.h>
 #include <unistd.h>
+
+/* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /*                                example table                               */
 /* -------------------------------------------------------------------------- */
-// command example: ls -l | wc -l < outfile.txt | sleep 3 < infile
-
-
+/* -------------- command example: ls -l | wc -l > outfile.txt -------------- */
+/* -------------------------------------------------------------------------- */
 t_command_table	example_table(char **env)
 {
 	t_command_table table;
-	t_command	cmd;
-	int			pid;
-	int			pipefd[2]; // [1] = write || [0] = read
+	// int			pipefd[2]; // [1] = write || [0] = read
+	// int	fd = open("outfile.txt", O_TRUNC | O_CREAT | O_WRONLY, 0777);
 
 
 	table.n_commands = 2;
@@ -23,13 +22,13 @@ t_command_table	example_table(char **env)
 	table.commands[0].n_args = 2;
 
 	table.commands[0].path = get_cmd_path(get_paths(env), table.commands[0]);
-	printf("Path: %s\n", cmd.path);
+	printf("Path: %s\n", table.commands[0].path);
 
-	if (pipe(pipefd) == -1)
-		return ;
+	pipe(table.pipe);
 
-	table.commands[0].fd_int = STDIN_FILENO;
-	table.commands[0].fd_out = pipefd[1];
+
+	table.commands[0].fd_in = STDIN_FILENO;
+	table.commands[0].fd_out = table.pipe[1];
 
 /* ----------------------------- writing 2nd cmd ---------------------------- */
 
@@ -37,27 +36,10 @@ t_command_table	example_table(char **env)
 	table.commands[1].n_args = 2;
 
 	table.commands[1].path = get_cmd_path(get_paths(env), table.commands[1]);
-	printf("Path: %s\n", cmd.path);
+	printf("Path: %s\n", table.commands[1].path);
 
-	table.commands[1].fd_int = pipefd[0];
+	table.commands[1].fd_in = table.pipe[0];
+	table.commands[1].fd_out = STDOUT_FILENO;
 
-	int	fd = open("outfile.txt", O_RDONLY, 0777);
-	table.commands[1].fd_out = fd;
-
-}
-
-void pipex(char **args, char **env)
-{
-
-
-	// need to happen in separated process
-	pid = fork();
-	if (pid == -1)
-		return ;
-	if (pid == 0)
-	{
-		setup_redirection(cmd);
-		exec(cmd);
-	}
-	wait(NULL);
+	return (table);
 }

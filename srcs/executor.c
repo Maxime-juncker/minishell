@@ -1,21 +1,5 @@
 #include "minishell.h"
 
-void	setup_redirection(t_command cmd)
-{
-	int	fd;
-
-	if (cmd.fd_out != -1)
-	{
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
-	if (cmd.fd_int != -1)
-	{
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-	}
-}
-
 static void	cleanup(char **arr)
 {
 	int	i;
