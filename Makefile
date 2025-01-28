@@ -1,5 +1,5 @@
 NAME = minishell
-CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D) -lreadline
+CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D)
 MAKEFLAGS += --no-print-directory
 
 SRC =	main.c	\
@@ -60,7 +60,7 @@ header:
 
 $(BIN_D)$(NAME): $(OBJ) $(MAIN_OBJ) $(BIN_D)
 	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
-	$(CC) $(CFLAGS) $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME).out
+	$(CC) $(CFLAGS) -lreadline $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME).out
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)\n\n"
 
