@@ -3,6 +3,7 @@
 		"*.c": "c",
 		"minishell.h": "c",
 		"libft.h": "c",
-		"wait.h": "c"
+		"wait.h": "c",
+		"fcntl.h": "c"
 	}
 }

@@ -1,10 +1,12 @@
 NAME = minishell
-CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D)
+# CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D)
+CFLAGS = $(INCLUDES_D) -g3
 MAKEFLAGS += --no-print-directory
 
-SRC =	main.c	\
-		pipex.c	\
+SRC =	main.c			\
+		pipex.c			\
 		pipex_utils.c	\
+		executor.c		\
 
 OBJ = $(SRC:.c=.o)
 
@@ -29,7 +31,6 @@ CURSOR_ON 		= \e[?25h
 
 RM = rm -fr
 ARGS = 451 222 117 441 280
-R_ARGS=$(shell python3 rand_numbers.py)
 
 all: header libft $(BIN_D)$(NAME)
 
@@ -62,7 +63,7 @@ $(BIN_D)$(NAME): $(OBJ) $(MAIN_OBJ) $(BIN_D)
 	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
 	$(CC) $(CFLAGS) -lreadline $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME).out
 	printf "$(GREEN)$(NAME): success\n"
-	printf "\n---------------------$(CURSOR_ON)\n\n"
+	printf "\n---------------------$(CURSOR_ON)$(RESET)\n\n"
 
 $(OBJ_D)%.o : $(SRCS_D)%.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
 	printf "$(CURSOR_OFF)$(BLUE)"

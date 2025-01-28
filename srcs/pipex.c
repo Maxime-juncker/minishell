@@ -1,70 +1,63 @@
 #include "minishell.h"
 #include <sys/wait.h>
 #include <stdio.h>
+#include <unistd.h>
+/* -------------------------------------------------------------------------- */
+/*                                example table                               */
+/* -------------------------------------------------------------------------- */
+// command example: ls -l | wc -l < outfile.txt | sleep 3 < infile
+
+
+t_command_table	example_table(char **env)
+{
+	t_command_table table;
+	t_command	cmd;
+	int			pid;
+	int			pipefd[2]; // [1] = write || [0] = read
+
+
+	table.n_commands = 2;
+	table.commands = malloc(sizeof(t_command) * table.n_commands);
+
+	table.commands[0].args = ft_split("ls -l", ' ');
+	table.commands[0].n_args = 2;
+
+	table.commands[0].path = get_cmd_path(get_paths(env), table.commands[0]);
+	printf("Path: %s\n", cmd.path);
+
+	if (pipe(pipefd) == -1)
+		return ;
+
+	table.commands[0].fd_int = STDIN_FILENO;
+	table.commands[0].fd_out = pipefd[1];
+
+/* ----------------------------- writing 2nd cmd ---------------------------- */
+
+	table.commands[1].args = ft_split("wc -l", ' ');
+	table.commands[1].n_args = 2;
+
+	table.commands[1].path = get_cmd_path(get_paths(env), table.commands[1]);
+	printf("Path: %s\n", cmd.path);
+
+	table.commands[1].fd_int = pipefd[0];
+
+	int	fd = open("outfile.txt", O_RDONLY, 0777);
+	table.commands[1].fd_out = fd;
+
+}
 
 void pipex(char **args, char **env)
 {
-	(void)args;
-	t_cmd cmd;
 
-	cmd.args = ft_split("ls -l", ' ');
-	cmd.n_args = 2;
-	exec_cmd(get_path(env), cmd);
 
-	// int fd[2]; // fd[1] == write | fd[0] == read
-
-	// if (pipe(fd) == -1)
-	// {
-	// 	perror("\033[31mError");
-	// 	return ;
-	// }
-
-	// int pid1 = fork();
-	// if (pid1 == -1)
-	// {
-	// 	return ;
-	// }
-
-	// if (pid1 == 0) // child process
-	// {
-	// 	int	infile = open(args[1], O_RDONLY);
-	// 	if (infile == -1)
-	// 	{
-	// 		perror("\033[31mError");
-	// 		return ;
-	// 	}
-	// 	dup2(infile, STDIN_FILENO);
-	// 	close(infile);
-	// 	dup2(fd[1], STDOUT_FILENO);
-	// 	close(fd[0]);
-	// 	close(fd[1]);
-	// 	exec_cmd(get_path(env), args[2]);
-	// }
-
-	// int pid2 = fork();
-	// if (pid2 == -1)
-	// 	return ;
-
-	// if (pid2 == 0)
-	// {
-	// 	int	outfile = open(args[4], O_WRONLY | O_TRUNC | O_CREAT, 0777);
-	// 	if (outfile == -1)
-	// 	{
-	// 		perror("\033[31mError");
-	// 		return ;
-	// 	}
-	// 	// child
-	// 	dup2(fd[0], STDIN_FILENO);
-	// 	close(fd[1]);
-	// 	close(fd[0]);
-	// 	dup2(outfile, STDOUT_FILENO);
-
-	// 	exec_cmd(get_path(env), args[3]);
-	// }
-
-	// close(fd[0]);
-	// close(fd[1]);
-
-	// waitpid(pid1, NULL, 0);
-	// waitpid(pid2, NULL, 0);
+	// need to happen in separated process
+	pid = fork();
+	if (pid == -1)
+		return ;
+	if (pid == 0)
+	{
+		setup_redirection(cmd);
+		exec(cmd);
+	}
+	wait(NULL);
 }
