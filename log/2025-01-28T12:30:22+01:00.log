@@ -1,0 +1,11 @@
+total 8
+-rw-r--r-- 1 mjuncker 2024_lyon 2799 Jan 28 12:30 Makefile
+drwxr-xr-x 5 mjuncker 2024_lyon   92 Jan 28 12:02 better-libunit
+drwxr-xr-x 2 mjuncker 2024_lyon   27 Jan 28 12:30 bin
+drwxr-xr-x 2 mjuncker 2024_lyon   25 Jan 28 09:54 includes
+-rw-r--r-- 1 mjuncker 2024_lyon    0 Jan 28 12:21 infile
+drwxr-xr-x 6 mjuncker 2024_lyon  106 Jan 28 12:20 libft
+drwxr-xr-x 2 mjuncker 2024_lyon  117 Jan 28 12:30 log
+drwxr-xr-x 2 mjuncker 2024_lyon   67 Jan 28 12:29 obj
+-rwxr-xr-x 1 mjuncker 2024_lyon   67 Jan 28 12:21 outfile
+drwxr-xr-x 2 mjuncker 2024_lyon   74 Jan 28 12:17 srcs

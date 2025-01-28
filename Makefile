@@ -1,8 +1,10 @@
 NAME = minishell
-CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D)
+CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D) -lreadline
 MAKEFLAGS += --no-print-directory
 
-SRC =	*.c
+SRC =	main.c	\
+		pipex.c	\
+		pipex_utils.c	\
 
 OBJ = $(SRC:.c=.o)
 
@@ -102,18 +104,9 @@ $(BIN_D):
 
 .PHONY: debug
 debug: all $(LOG_D)
-	$(BIN_D)./push_swap $(ARGS) > $(LOG_D)$(shell date --iso=seconds).log
+	echo "$(RESET)"
+	./$(BIN_D)$(NAME).out $(ARGS) > $(LOG_D)$(shell date --iso=seconds).log
 	cat $(LOG_D)$(shell date --iso=seconds).log
 	echo "$(BLUE)[SAVED]: $(LOG_D)$(shell date --iso=seconds).log"
-
-.PHONY: rdebug
-rdebug: all $(LOG_D)
-	$(BIN_D)./push_swap $(R_ARGS) > $(LOG_D)$(shell date --iso=seconds).log
-	cat $(LOG_D)$(shell date --iso=seconds).log
-	echo "$(BLUE)[SAVED]: $(LOG_D)$(shell date --iso=seconds).log"
-
-visu: all
-	make -C push_swap_visualizer/build/
-	./push_swap_visualizer/build/bin/visualizer
 
 .SILENT:
