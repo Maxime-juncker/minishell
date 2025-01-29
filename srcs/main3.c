@@ -30,10 +30,8 @@ char	*remove_special_characters(char *line)
 			in_double_quote = !in_double_quote;
 		if (!in_single_quote && !in_double_quote && (line[i] == '\\' || line[i] == ';'))
 			i++;
-		else if (in_single_quote || (in_double_quote && line[i] != '$'))
-			clean_line[j++] = line[i++];
 		else
-			i++;
+			clean_line[j++] = line[i++];
 	}
 	clean_line[j] = 0;
 	return (clean_line);
@@ -204,24 +202,24 @@ void	init_table(char *line, char **env, t_command_table *table)
 }
 
 
-// void	print_table(t_command_table *table)
-// {
-// 	int	i;
-// 	int	j;
+void	print_table(t_command_table *table)
+{
+	int	i;
+	int	j;
 
-// 	i = 0;
-// 	while (i < table->n_commands)
-// 	{
-// 		j = 0;
-// 		while (j < table->commands[i].n_args)
-// 		{
-// 			printf("%s ", table->commands[i].args[j]);
-// 			j++;
-// 		}
-// 		printf("\n");
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while (i < table->n_commands)
+	{
+		j = 0;
+		while (j < table->commands[i].n_args)
+		{
+			printf("%s ", table->commands[i].args[j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -242,7 +240,7 @@ int	main(int ac, char **av, char **env)
 			break ;
 		}
 		init_table(line, env, &table);
-		// print_table(&table);
+		print_table(&table);
 		free(line);
 	}
 	return (0);
