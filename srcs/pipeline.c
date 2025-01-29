@@ -42,7 +42,7 @@ int	run_command(t_command cmd, t_command_table table)
 	int	code;
 
 	// need to happen in separated process
-	printf("%sRunning: %s%s\n", GRAY, cmd.args[0], RESET);
+	// printf("%sRunning: %s%s\n", GRAY, cmd.args[0], RESET);
 	pid = fork();
 	if (pid == -1)
 		return (-1);
@@ -54,8 +54,10 @@ int	run_command(t_command cmd, t_command_table table)
 		if (execve(cmd.path, cmd.args, NULL) == -1)
 			alert("execve failed");
 	}
-	close(cmd.fd_out);
-	close(cmd.fd_in);
+	if (cmd.fd_out != STDOUT_FILENO)
+		close(cmd.fd_out);
+	if (cmd.fd_in != STDIN_FILENO)
+		close(cmd.fd_in);
 	wait(NULL);
 	return (0);
 }
