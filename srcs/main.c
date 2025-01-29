@@ -33,8 +33,7 @@ char	*remove_special_characters(char *line)
 		else
 			clean_line[j++] = line[i++];
 	}
-	clean_line[j] = 0;
-	return (clean_line);
+	return (clean_line[j] = 0, clean_line);
 }
 
 int	check_unclosed_quotes(char *line, char *quote)
@@ -86,6 +85,54 @@ char	*read_with_quotes(char *line)
 	return (line);
 }
 
+char	*expand_variable(char *str, char **env)
+{
+	char	*expanded_str;
+	char	*env_var;
+	char	*env_value;
+	size_t	i;
+	size_t	j;
+	size_t	len;
+	size_t	var_len;
+	size_t	var_start;
+	char	*tmp_expanded_str;
+
+	expanded_str = malloc(1);
+	if (!expanded_str)
+		return (NULL);
+	expanded_str[0] = '\0';
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$' && str[i + 1] != '\0')
+		{
+			i++;
+			var_start = i;
+			while (str[i] && (str[i] != ' ' && str[i] != '$' && str[i] != '"' && str[i] != '\''))
+				i++;
+			var_len = i - var_start;
+			env_var = ft_strdup(&str[var_start]);
+			env_value = getenv(env_var);
+			free(env_var);
+			tmp_expanded_str = expanded_str;
+			if (env_value)
+				expanded_str = ft_strjoin(expanded_str, env_value);
+			else
+				expanded_str = ft_strjoin(expanded_str, &str[var_start]);
+			free(tmp_expanded_str);
+		}
+		else
+		{
+			tmp_expanded_str = expanded_str;
+			expanded_str = ft_strjoin(expanded_str, (char[]){str[i], '\0'});
+			free(tmp_expanded_str);
+			i++;
+		}
+	}
+	return (expanded_str);
+}
+
+
 
 int	init_table(char *line, char **env, t_command_table *table)
 {
@@ -95,6 +142,9 @@ int	init_table(char *line, char **env, t_command_table *table)
 	int			i;
 	int			j;
 	int			fd;
+	char		*delimiter;
+	char		*heredoc_input;
+	int			heredoc_fd;
 
 	line = read_with_quotes(line);
 	if (!line)
@@ -118,6 +168,14 @@ int	init_table(char *line, char **env, t_command_table *table)
 		table->commands[i].n_args = 0;
 		while (table->commands[i].args[table->commands[i].n_args])
 			table->commands[i].n_args++;
+		j = 0;
+		while (j < table->commands[i].n_args)
+		{
+			char *expanded_arg = expand_variable(table->commands[i].args[j], env);
+			free(table->commands[i].args[j]);
+			table->commands[i].args[j] = expanded_arg;
+			j++;
+		}
 		table->commands[i].path = get_cmd_path(get_paths(env), table->commands[i]);
 		if (!table->commands[i].path)
 			return (0);
@@ -159,6 +217,31 @@ int	init_table(char *line, char **env, t_command_table *table)
 					table->commands[i].fd_out = fd;
 					j++;
 				}
+			}
+			else if (table->commands[i].args[j][0] == '<' && table->commands[i].args[j][1] == '<')
+			{
+				delimiter = table->commands[i].args[j + 1];
+				heredoc_input = NULL;
+				heredoc_fd = open("/tmp/heredoc_temp.txt", O_CREAT | O_WRONLY | O_TRUNC, 0666);
+				if (heredoc_fd == -1)
+					return (0);
+				while (1)
+				{
+					heredoc_input = readline("> ");
+					if (!heredoc_input)
+						return (0);
+					if (ft_strncmp(heredoc_input, delimiter, ft_strlen(delimiter)) == 0)
+					{
+						free(heredoc_input);
+						break;
+					}
+					write(heredoc_fd, heredoc_input, ft_strlen(heredoc_input));
+					write(heredoc_fd, "\n", 1);
+					free(heredoc_input);
+				}
+				close(heredoc_fd);
+				table->commands[i].fd_in = open("/tmp/heredoc_temp.txt", O_RDONLY);
+				j++;
 			}
 			j++;
 		}
@@ -206,7 +289,6 @@ int	main(int ac, char **av, char **env)
 		}
 		if (init_table(line, env, &table))
 			run_pipeline(table);
-		// print_table(&table);
 		free(line);
 	}
 	return (0);
