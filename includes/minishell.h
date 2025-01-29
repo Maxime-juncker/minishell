@@ -20,8 +20,6 @@ typedef struct s_command
 
 typedef struct s_command_table
 {
-	int			pipe[2];
-
 	t_command	*commands;
 	size_t		n_commands;
 }	t_command_table;
