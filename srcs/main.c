@@ -4,6 +4,8 @@
 #include <string.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 static char	*process_dollar_sign(const char *str, char *expanded_str, int *i)
 {
@@ -42,7 +44,7 @@ static char	*process_dollar_sign(const char *str, char *expanded_str, int *i)
 static char	*expand_env_var(const char *str, char **env)
 {
 	char	*expanded_str;
-	size_t	i;
+	int		i;
 
 	expanded_str = "";
 	i = 0;
@@ -66,7 +68,8 @@ static int	handle_redirection(t_command *cmd, char *cmd_str)
 	char	*input_file;
 	char	*output_file;
 
-	if ((input_file = ft_strchr(cmd_str, '<')) != NULL)
+	input_file = ft_strchr(cmd_str, '<');
+	if (input_file)
 	{
 		*input_file = '\0';
 		input_file++;
@@ -80,7 +83,8 @@ static int	handle_redirection(t_command *cmd, char *cmd_str)
 		}
 		cmd->n_args -= 2;
 	}
-	if ((output_file = ft_strchr(cmd_str, '>')) != NULL)
+	output_file = ft_strchr(cmd_str, '>');
+	if (output_file)
 	{
 		*output_file = '\0';
 		output_file++;
@@ -97,11 +101,21 @@ static int	handle_redirection(t_command *cmd, char *cmd_str)
 	return (1);
 }
 
-static int	init_cmd(t_command *cmd, char *cmd_str, char **env)
+// static int	handle_pipe_redirection(t_command *cmd, int *pipe_fd)
+// {
+// 	if (pipe(pipe_fd) == -1)
+// 		return (0);
+// 	cmd->fd_out = pipe_fd[1];
+// 	if (pipe_fd[0] != -1)
+// 	cmd->fd_in = pipe_fd[0];
+// 	return (1);
+// }
+
+static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int *pipe_fd)
 {
 	char		**args;
 	char		**paths;
-	size_t		i;
+	int			i;
 
 	args = ft_split(cmd_str, ' ');
 	if (!args)
@@ -123,12 +137,15 @@ static int	init_cmd(t_command *cmd, char *cmd_str, char **env)
 		cmd->args[i] = expand_env_var(cmd->args[i], env);
 	if (!handle_redirection(cmd, cmd_str))
 		return (0);
+	// if (!handle_pipe_redirection(cmd, pipe_fd))
+	// 	return (0);
 	return (1);
 }
 
 int	init_table(char *line, char **env, t_command_table *table)
 {
 	char		**cmd_strs;
+	int			pipe_fd[2];
 	size_t		i;
 
 	cmd_strs = ft_split(line, '|');
@@ -143,7 +160,9 @@ int	init_table(char *line, char **env, t_command_table *table)
 	i = 0;
 	while (i < table->n_commands)
 	{
-		if (!init_cmd(&table->commands[i], cmd_strs[i], env))
+		if (i < table->n_commands - 1)
+			pipe(pipe_fd);
+		if (!init_cmd(&table->commands[i], cmd_strs[i], env, pipe_fd))
 			return (0);
 		i++;
 	}
