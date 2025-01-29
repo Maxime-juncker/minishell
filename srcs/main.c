@@ -86,40 +86,8 @@ char	*read_with_quotes(char *line)
 	return (line);
 }
 
-void	handle_heredoc(t_command_table *table, int i, int j)
-{
-	char	*delimiter;
-	char	*input_line;
-	char	*here_doc_input;
-	int		len;
 
-	delimiter = table->commands[i].args[j + 1];
-	here_doc_input = malloc(1);
-	len = 0;
-	if (!here_doc_input)
-		return ;
-	while (1)
-	{
-		input_line = readline("heredoc> ");
-		if (!input_line || ft_strncmp(input_line, delimiter, ft_strlen(delimiter)) == 0)
-		{
-			free(input_line);
-			break ;
-		}
-		here_doc_input = realloc(here_doc_input, len + ft_strlen(input_line) + 2);
-		strcpy(here_doc_input + len, input_line);
-		len += ft_strlen(input_line);
-		here_doc_input[len++] = '\n';
-		free(input_line);
-	}
-	table->commands[i].fd_in = open("/tmp/heredoc.tmp", O_CREAT | O_WRONLY | O_TRUNC, 0666);
-	write(table->commands[i].fd_in, here_doc_input, len);
-	close(table->commands[i].fd_in);
-	table->commands[i].fd_in = open("/tmp/heredoc.tmp", O_RDONLY);
-	free(here_doc_input);
-}
-
-void	init_table(char *line, char **env, t_command_table *table)
+int	init_table(char *line, char **env, t_command_table *table)
 {
 	t_command	cmd;
 	int			pipefd[2];
@@ -130,29 +98,31 @@ void	init_table(char *line, char **env, t_command_table *table)
 
 	line = read_with_quotes(line);
 	if (!line)
-		return ;
+		return (0);
 	line = remove_special_characters(line);
 	commands = ft_split(line, '|');
 	if (!commands)
-		return ;
+		return (0);
 	table->n_commands = 0;
 	while (commands[table->n_commands])
 		table->n_commands++;
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
 	if (!table->commands)
-		return ;
+		return (0);
 	i = 0;
 	while (i < table->n_commands)
 	{
 		table->commands[i].args = ft_split(commands[i], ' ');
 		if (!table->commands[i].args)
-			return ;
+			return (0);
 		table->commands[i].n_args = 0;
 		while (table->commands[i].args[table->commands[i].n_args])
 			table->commands[i].n_args++;
 		table->commands[i].path = get_cmd_path(get_paths(env), table->commands[i]);
+		if (!table->commands[i].path)
+			return (0);
 		if (i < table->n_commands - 1 && pipe(pipefd) == -1)
-			return ;
+			return (0);
 		if (i == 0)
 			table->commands[i].fd_in = STDIN_FILENO;
 		else
@@ -168,7 +138,7 @@ void	init_table(char *line, char **env, t_command_table *table)
 			{
 				table->commands[i].fd_in = open(table->commands[i].args[j + 1], O_RDONLY);
 				if (table->commands[i].fd_in == -1)
-					return ;
+					return (0);
 				j++;
 			}
 			else if (table->commands[i].args[j][0] == '>')
@@ -177,7 +147,7 @@ void	init_table(char *line, char **env, t_command_table *table)
 				{
 					fd = open(table->commands[i].args[j + 1], O_CREAT | O_APPEND | O_WRONLY, 0777);
 					if (fd == -1)
-						return ;
+						return (0);
 					table->commands[i].fd_out = fd;
 					j++;
 				}
@@ -185,22 +155,17 @@ void	init_table(char *line, char **env, t_command_table *table)
 				{
 					fd = open(table->commands[i].args[j + 1], O_CREAT | O_TRUNC | O_WRONLY, 0777);
 					if (fd == -1)
-						return ;
+						return (0);
 					table->commands[i].fd_out = fd;
 					j++;
 				}
-			}
-			else if (ft_strncmp(table->commands[i].args[j], "<<", 3) == 0)
-			{
-				handle_heredoc(table, i, j);
-				j++;
 			}
 			j++;
 		}
 		i++;
 	}
+	return (1);
 }
-
 
 void	print_table(t_command_table *table)
 {
@@ -230,7 +195,7 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	while (1)
 	{
-		line = readline("minishell$ ");
+		line = readline("\033[0mminishell$ ");
 		if (!line)
 			break ;
 		add_history(line);
@@ -239,8 +204,8 @@ int	main(int ac, char **av, char **env)
 			free(line);
 			break ;
 		}
-		init_table(line, env, &table);
-		run_pipeline(table);
+		if (init_table(line, env, &table))
+			run_pipeline(table);
 		// print_table(&table);
 		free(line);
 	}
