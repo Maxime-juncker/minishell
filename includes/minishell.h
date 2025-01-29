@@ -2,7 +2,9 @@
 #define MINISHELL_H
 
 # include "libft.h"
+
 # include <fcntl.h>
+# include <stdio.h>
 
 /* -------------------------------------------------------------------------- */
 /*                                command table                               */
@@ -36,5 +38,9 @@ void	exec(t_command cmd);
 // pipeline.c
 int		run_pipeline(t_command_table table);
 int	run_command(t_command cmd, t_command_table table);
+
+/* ------------------------------ built-in cmd ------------------------------ */
+// echo.c
+int		echo(char **args, int n);
 
 #endif

@@ -2,6 +2,16 @@
 #include <sys/wait.h>
 #include <stdio.h>
 
+int	run_built_in(t_command cmd)
+{
+	size_t	len;
+
+	len = ft_strlen(cmd.args[0]);
+	if (ft_strncmp(cmd.args[0], "echo", len) == 0)
+		return (echo(cmd.args, cmd.n_args));
+	return (-1);
+}
+
 void	show_table(t_command_table table)
 {
 	int	i = 0;
@@ -26,7 +36,6 @@ int	run_pipeline(t_command_table table)
 		run_command(table.commands[i], table);
 		i++;
 	}
-
 	return (1);
 }
 
@@ -51,6 +60,10 @@ int	run_command(t_command cmd, t_command_table table)
 		setup_redirection(cmd);
 		if (cmd.fd_out != STDOUT_FILENO)
 			close(cmd.fd_out);
+		if (run_built_in(cmd) != -1)
+		{
+			exit (0);
+		}
 		if (execve(cmd.path, cmd.args, NULL) == -1)
 			alert("execve failed");
 	}

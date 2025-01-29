@@ -1,23 +1,45 @@
 NAME = minishell
-# CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D)
+
 CFLAGS = $(INCLUDES_D) -g3
 MAKEFLAGS += --no-print-directory
 
-SRC =	main.c	executor.c pipex_utils.c pipeline.c example.c
+LIB_UNIT = better-libunit/
+
+# ---------------------------------------------------------------------------- #
+#                                  srcs / objs                                 #
+# ---------------------------------------------------------------------------- #
+SRC =	main.c			\
+		executor.c		\
+		pipex_utils.c	\
+		pipeline.c		\
+		example.c		\
+		echo.c			\
+
+LIB_SRC =	executor.c pipex_utils.c pipeline.c example.c echo.c
 
 OBJ = $(SRC:.c=.o)
+LIB_OBJ = $(LIB_SRC:.c=.o)
 
+# ---------------------------------------------------------------------------- #
+#                                  directories                                 #
+# ---------------------------------------------------------------------------- #
 OBJ_D = obj/
 SRCS_D = srcs/
 BIN_D = bin/
 LOG_D = log/
 INCLUDES_D = -Iincludes/ -Ilibft/includes/
 
-
+# ---------------------------------------------------------------------------- #
+#                                 adding prefix                                #
+# ---------------------------------------------------------------------------- #
 OBJ := $(addprefix $(OBJ_D), $(OBJ))
 SRCS := $(addprefix $(SRCS_D), $(SRCS))
+LIB_OBJ := $(addprefix $(OBJ_D), $(LIB_OBJ))
+LIB_SRCS := $(addprefix $(SRCS_D), $(LIB_SRC))
 
-# colors
+# ---------------------------------------------------------------------------- #
+#                                    colors                                    #
+# ---------------------------------------------------------------------------- #
 RESET 			= \033[0m
 RED 			= \033[31m
 GREEN 			= \033[32m
@@ -27,16 +49,16 @@ CURSOR_OFF 		= \e[?25l
 CURSOR_ON 		= \e[?25h
 
 RM = rm -fr
-ARGS = 451 222 117 441 280
 
 all: header libft $(BIN_D)$(NAME)
 
 .PHONY: lib
-lib: $(OBJ) $(BIN_D)
+lib: $(LIB_OBJ) $(BIN_D)
 	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
-	ar rcs $(BIN_D)$(NAME).a $(OBJ) "libft/bin/libft.a"
+	ar rcs $(BIN_D)libminishell.a $(LIB_OBJ) "libft/bin/libft.a"
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)\n\n"
+	$(MAKE) -C $(LIB_UNIT)
 
 .PHONY: libft
 libft:
@@ -62,6 +84,7 @@ $(BIN_D)$(NAME): $(OBJ) $(MAIN_OBJ) $(BIN_D)
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)$(RESET)\n\n"
 
+
 $(OBJ_D)%.o : $(SRCS_D)%.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
 	printf "$(CURSOR_OFF)$(BLUE)"
 	printf "compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)]\r"
@@ -71,8 +94,9 @@ $(OBJ_D)%.o : $(SRCS_D)%.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
 clean:
 	printf "$(RED)clean:\t$(NAME)\n\n"
 	$(MAKE) clean -C ./libft
+	$(RM) $(OBJ_D)
+	$(RM) $(LOG_D)
 	printf "$(RED)---------------------\n\n$(RESET)"
-	$(MAKE) clog
 
 .PHONY: fclean
 fclean:
@@ -89,6 +113,10 @@ clog:
 re:
 	$(MAKE) fclean
 	$(MAKE) all
+
+.PHONY: test
+test: lib
+	$(MAKE) test -C better-libunit/
 
 # Create directories
 $(OBJ_D):

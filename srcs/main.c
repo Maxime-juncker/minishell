@@ -279,6 +279,28 @@ int	main(int ac, char **av, char **env)
 	char			*line;
 	t_command_table	table;
 
+	t_command cmd;
+	printf("minishell $>\n");
+
+	char **args;
+	args = malloc(50);
+	args[0] = ft_strdup("-n");
+	args[1] = ft_strdup("grjgjgew");
+	args[2] = ft_strdup("kuykpupiuliul");
+	echo(args, 3);
+
+	// cmd.args = ft_split("echo", ' ');
+	// cmd.n_args = 5;
+	// cmd.fd_in = STDIN_FILENO;
+	// cmd.fd_out = STDOUT_FILENO;
+	// table.commands = malloc(sizeof(t_command));
+	// table.n_commands = 1;
+	// table.commands[0] = cmd;
+	// run_pipeline(table);
+	printf("minishell $>\n");
+	return (1);
+
+
 	(void)ac;
 	(void)av;
 	while (1)
