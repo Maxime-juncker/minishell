@@ -96,30 +96,29 @@ char	*expand_variable(char *str, char **env)
 	size_t	var_len;
 	size_t	var_start;
 	char	*tmp_expanded_str;
+	pid_t	pid;
 
 	expanded_str = malloc(1);
 	if (!expanded_str)
 		return (NULL);
 	expanded_str[0] = '\0';
 	i = 0;
+	pid = getpid();
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1] != '\0')
+		if (str[i] == '$' && str[i + 1] == '$')
 		{
-			i++;
-			var_start = i;
-			while (str[i] && (str[i] != ' ' && str[i] != '$' && str[i] != '"' && str[i] != '\''))
-				i++;
-			var_len = i - var_start;
-			env_var = ft_strdup(&str[var_start]);
-			env_value = getenv(env_var);
-			free(env_var);
 			tmp_expanded_str = expanded_str;
-			if (env_value)
-				expanded_str = ft_strjoin(expanded_str, env_value);
-			else
-				expanded_str = ft_strjoin(expanded_str, &str[var_start]);
+			expanded_str = ft_strjoin(expanded_str, ft_itoa(pid));
 			free(tmp_expanded_str);
+			i += 2;
+		}
+		else if (str[i] == '$')
+		{
+			tmp_expanded_str = expanded_str;
+			expanded_str = ft_strjoin(expanded_str, (char[]){str[i], '\0'});
+			free(tmp_expanded_str);
+			i++;
 		}
 		else
 		{
@@ -132,8 +131,6 @@ char	*expand_variable(char *str, char **env)
 	return (expanded_str);
 }
 
-
-
 int	init_table(char *line, char **env, t_command_table *table)
 {
 	t_command	cmd;
@@ -145,6 +142,8 @@ int	init_table(char *line, char **env, t_command_table *table)
 	char		*delimiter;
 	char		*heredoc_input;
 	int			heredoc_fd;
+	char		*expanded_arg;
+	char		**args_without_redir;
 
 	line = read_with_quotes(line);
 	if (!line)
@@ -165,13 +164,74 @@ int	init_table(char *line, char **env, t_command_table *table)
 		table->commands[i].args = ft_split(commands[i], ' ');
 		if (!table->commands[i].args)
 			return (0);
+		args_without_redir = malloc(sizeof(char *) * (table->commands[i].n_args + 1));
+		if (!args_without_redir)
+			return (0);
+		j = 0;
 		table->commands[i].n_args = 0;
-		while (table->commands[i].args[table->commands[i].n_args])
-			table->commands[i].n_args++;
+		while (table->commands[i].args[j])
+		{
+			if (table->commands[i].args[j][0] == '>' || table->commands[i].args[j][0] == '<' ||
+				(table->commands[i].args[j][0] == '<' && table->commands[i].args[j][1] == '<'))
+			{
+				if (table->commands[i].args[j][0] == '<' && table->commands[i].args[j][1] == '<')
+				{
+					delimiter = table->commands[i].args[j + 1];
+					heredoc_input = NULL;
+					heredoc_fd = open("/tmp/heredoc_temp.txt", O_CREAT | O_WRONLY | O_TRUNC, 0666);
+					if (heredoc_fd == -1)
+						return (0);
+					while (1)
+					{
+						heredoc_input = readline("> ");
+						if (!heredoc_input)
+							return (0);
+						if (ft_strncmp(heredoc_input, delimiter, ft_strlen(delimiter)) == 0)
+						{
+							free(heredoc_input);
+							break;
+						}
+						write(heredoc_fd, heredoc_input, ft_strlen(heredoc_input));
+						write(heredoc_fd, "\n", 1);
+						free(heredoc_input);
+					}
+					close(heredoc_fd);
+					table->commands[i].fd_in = open("/tmp/heredoc_temp.txt", O_RDONLY);
+					j++;
+				}
+				else
+				{
+					if (table->commands[i].args[j][1] == '>')
+					{
+						fd = open(table->commands[i].args[j + 1], O_CREAT | O_APPEND | O_WRONLY, 0777);
+						if (fd == -1)
+							return (0);
+						table->commands[i].fd_out = fd;
+						j++;
+					}
+					else
+					{
+						fd = open(table->commands[i].args[j + 1], O_CREAT | O_TRUNC | O_WRONLY, 0777);
+						if (fd == -1)
+							return (0);
+						table->commands[i].fd_out = fd;
+						j++;
+					}
+				}
+			}
+			else
+			{
+				args_without_redir[table->commands[i].n_args] = table->commands[i].args[j];
+				table->commands[i].n_args++;
+			}
+			j++;
+		}
+		args_without_redir[table->commands[i].n_args] = NULL;
+		table->commands[i].args = args_without_redir;
 		j = 0;
 		while (j < table->commands[i].n_args)
 		{
-			char *expanded_arg = expand_variable(table->commands[i].args[j], env);
+			expanded_arg = expand_variable(table->commands[i].args[j], env);
 			free(table->commands[i].args[j]);
 			table->commands[i].args[j] = expanded_arg;
 			j++;
@@ -189,66 +249,11 @@ int	init_table(char *line, char **env, t_command_table *table)
 			table->commands[i].fd_out = STDOUT_FILENO;
 		else
 			table->commands[i].fd_out = pipefd[1];
-		j = 0;
-		while (j < table->commands[i].n_args)
-		{
-			if (table->commands[i].args[j][0] == '<')
-			{
-				table->commands[i].fd_in = open(table->commands[i].args[j + 1], O_RDONLY);
-				if (table->commands[i].fd_in == -1)
-					return (0);
-				j++;
-			}
-			else if (table->commands[i].args[j][0] == '>')
-			{
-				if (table->commands[i].args[j][1] == '>')
-				{
-					fd = open(table->commands[i].args[j + 1], O_CREAT | O_APPEND | O_WRONLY, 0777);
-					if (fd == -1)
-						return (0);
-					table->commands[i].fd_out = fd;
-					j++;
-				}
-				else
-				{
-					fd = open(table->commands[i].args[j + 1], O_CREAT | O_TRUNC | O_WRONLY, 0777);
-					if (fd == -1)
-						return (0);
-					table->commands[i].fd_out = fd;
-					j++;
-				}
-			}
-			else if (table->commands[i].args[j][0] == '<' && table->commands[i].args[j][1] == '<')
-			{
-				delimiter = table->commands[i].args[j + 1];
-				heredoc_input = NULL;
-				heredoc_fd = open("/tmp/heredoc_temp.txt", O_CREAT | O_WRONLY | O_TRUNC, 0666);
-				if (heredoc_fd == -1)
-					return (0);
-				while (1)
-				{
-					heredoc_input = readline("> ");
-					if (!heredoc_input)
-						return (0);
-					if (ft_strncmp(heredoc_input, delimiter, ft_strlen(delimiter)) == 0)
-					{
-						free(heredoc_input);
-						break;
-					}
-					write(heredoc_fd, heredoc_input, ft_strlen(heredoc_input));
-					write(heredoc_fd, "\n", 1);
-					free(heredoc_input);
-				}
-				close(heredoc_fd);
-				table->commands[i].fd_in = open("/tmp/heredoc_temp.txt", O_RDONLY);
-				j++;
-			}
-			j++;
-		}
 		i++;
 	}
 	return (1);
 }
+
 
 void	print_table(t_command_table *table)
 {
