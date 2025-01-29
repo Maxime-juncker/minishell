@@ -14,8 +14,9 @@ SRC =	main.c			\
 		pipeline.c		\
 		example.c		\
 		echo.c			\
+		env.c			\
 
-LIB_SRC =	executor.c pipex_utils.c pipeline.c example.c echo.c
+LIB_SRC =	executor.c pipex_utils.c pipeline.c example.c echo.c env.c
 
 OBJ = $(SRC:.c=.o)
 LIB_OBJ = $(LIB_SRC:.c=.o)
@@ -35,7 +36,7 @@ INCLUDES_D = -Iincludes/ -Ilibft/includes/
 OBJ := $(addprefix $(OBJ_D), $(OBJ))
 SRCS := $(addprefix $(SRCS_D), $(SRCS))
 LIB_OBJ := $(addprefix $(OBJ_D), $(LIB_OBJ))
-LIB_SRCS := $(addprefix $(SRCS_D), $(LIB_SRC))
+LIB_SRC := $(addprefix $(SRCS_D), $(LIB_SRC))
 
 # ---------------------------------------------------------------------------- #
 #                                    colors                                    #
@@ -52,14 +53,9 @@ RM = rm -fr
 
 all: header libft $(BIN_D)$(NAME)
 
-.PHONY: lib
-lib: $(LIB_OBJ) $(BIN_D)
-	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
-	ar rcs $(BIN_D)libminishell.a $(LIB_OBJ) "libft/bin/libft.a"
-	printf "$(GREEN)$(NAME): success\n"
-	printf "\n---------------------$(CURSOR_ON)\n\n"
-	$(MAKE) -C $(LIB_UNIT)
-
+# ---------------------------------------------------------------------------- #
+#                                     misc                                     #
+# ---------------------------------------------------------------------------- #
 .PHONY: libft
 libft:
 	$(MAKE) -C libft
@@ -78,18 +74,35 @@ header:
 
 	printf "$(YELLOW)[github]: $(GREEN)https://github.com/Maxime-juncker/Minishell.git\n\n"
 
-$(BIN_D)$(NAME): $(OBJ) $(MAIN_OBJ) $(BIN_D)
+# ---------------------------------------------------------------------------- #
+#                                 creating exec                                #
+# ---------------------------------------------------------------------------- #
+.PHONY: lib
+lib: all
+	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
+	ar rcs $(BIN_D)libminishell.a $(LIB_OBJ) "libft/bin/libft.a"
+	printf "$(GREEN)$(NAME): success\n"
+	printf "\n---------------------$(CURSOR_ON)\n\n"
+
+
+$(BIN_D)$(NAME): $(OBJ) $(BIN_D)
 	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
 	$(CC) $(CFLAGS) -lreadline $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME).out
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)$(RESET)\n\n"
 
 
+# ---------------------------------------------------------------------------- #
+#                                   compiling                                  #
+# ---------------------------------------------------------------------------- #
 $(OBJ_D)%.o : $(SRCS_D)%.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
 	printf "$(CURSOR_OFF)$(BLUE)"
 	printf "compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)]\r"
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# ---------------------------------------------------------------------------- #
+#                                   cleaning                                   #
+# ---------------------------------------------------------------------------- #
 .PHONY: clean
 clean:
 	printf "$(RED)clean:\t$(NAME)\n\n"
@@ -118,7 +131,9 @@ re:
 test: lib
 	$(MAKE) test -C better-libunit/
 
-# Create directories
+# ---------------------------------------------------------------------------- #
+#                              create directories                              #
+# ---------------------------------------------------------------------------- #
 $(OBJ_D):
 	mkdir -p $(OBJ_D)
 
@@ -127,12 +142,5 @@ $(LOG_D):
 
 $(BIN_D):
 	mkdir -p $(BIN_D)
-
-.PHONY: debug
-debug: all $(LOG_D)
-	echo "$(RESET)"
-	./$(BIN_D)$(NAME).out $(ARGS) > $(LOG_D)$(shell date --iso=seconds).log
-	cat $(LOG_D)$(shell date --iso=seconds).log
-	echo "$(BLUE)[SAVED]: $(LOG_D)$(shell date --iso=seconds).log"
 
 .SILENT:

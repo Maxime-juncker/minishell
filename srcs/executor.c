@@ -13,6 +13,10 @@ static void	cleanup(char **arr)
 	free(arr);
 }
 
+// @brief return the full path of a command if it exist
+// @param paths the env paths variable
+// @param cmd the command to search
+// @return the full path of the command if it exist, NULL otherwise
 char*	get_cmd_path(char** paths, t_command cmd)
 {
 	int	i = 0;
@@ -37,9 +41,4 @@ char*	get_cmd_path(char** paths, t_command cmd)
 	cleanup(paths);
 	ft_putstr_fd("\033[31mCommand not found\n", 2);
 	return (NULL);
-}
-
-void	exec(t_command cmd)
-{
-	execve(cmd.path, cmd.args, NULL);
 }

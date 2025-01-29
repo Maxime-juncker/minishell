@@ -14,6 +14,7 @@ TEST_SRCS = executor/00_executor.cpp			\
 			builtin/02_multiple_echo.cpp		\
 			builtin/03_no_br_echo.cpp			\
 			builtin/04_no_br_multiple_echo.cpp	\
+			# builtin/05_env_test.cpp				\
 
 TEST_OBJS = $(TEST_SRCS:.cpp=.o)
 MAIN_OBJ = main.o

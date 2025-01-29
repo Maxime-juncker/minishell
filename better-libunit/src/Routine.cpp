@@ -79,7 +79,7 @@ namespace Libunit
 
 	/*
 	 * @brief Print the result of the routine
-	 */
+	*/
 	void Routine::EndRoutine()
 	{
 		Routine::m_final_res.total_tests += GetNbTests();

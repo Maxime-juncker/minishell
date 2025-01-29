@@ -27,20 +27,22 @@ typedef struct s_command_table
 }	t_command_table;
 
 // pipex.c
-char	**get_paths(char **env);
+char			**get_paths(char **env);
 t_command_table	example_table(char **env);
 
 // executor
-char	*get_cmd_path(char **paths, t_command cmd);
-void	setup_redirection(t_command cmd);
-void	exec(t_command cmd);
+char			*get_cmd_path(char **paths, t_command cmd);
+void			setup_redirection(t_command cmd);
 
 // pipeline.c
-int		run_pipeline(t_command_table table);
-int	run_command(t_command cmd, t_command_table table);
+int				run_pipeline(t_command_table table);
+int				run_command(t_command cmd);
 
 /* ------------------------------ built-in cmd ------------------------------ */
 // echo.c
 int		echo(char **args, int n);
+
+// env.c
+int		env( void );
 
 #endif
