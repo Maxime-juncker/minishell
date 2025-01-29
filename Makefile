@@ -3,7 +3,7 @@ NAME = minishell
 CFLAGS = $(INCLUDES_D) -g3
 MAKEFLAGS += --no-print-directory
 
-SRC =	main3.c	executor.c pipex_utils.c
+SRC =	main.c	executor.c pipex_utils.c pipeline.c
 
 OBJ = $(SRC:.c=.o)
 

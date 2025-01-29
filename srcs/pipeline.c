@@ -9,7 +9,6 @@ int	run_pipeline(t_command_table table)
 	while (i < table.n_commands)
 	{
 		run_command(table.commands[i], table);
-		printf("ytjy%s", get_next_line(table.pipe[1]));
 		i++;
 	}
 	close(table.pipe[0]);
@@ -19,7 +18,7 @@ int	run_pipeline(t_command_table table)
 
 void	setup_redirection(t_command cmd)
 {
-	ft_printf("%s %d %d\n", cmd.args[0], cmd.fd_out, cmd.fd_in);
+	// ft_printf("%s %d %d\n", cmd.args[0], cmd.fd_out, cmd.fd_in);
 	if (cmd.fd_out != -1 && cmd.fd_out != STDOUT_FILENO)
 	{
 		dup2(cmd.fd_out, STDOUT_FILENO);
@@ -51,7 +50,7 @@ int	run_command(t_command cmd, t_command_table table)
 		if (execve(cmd.path, cmd.args, NULL) == -1)
 			alert("execve failed");
 	}
-	// wait(&code);
+	wait(&code);
 	// sleep(1);
 	return (code);
 }
