@@ -4,156 +4,138 @@
 #include <string.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <unistd.h>
-#include <fcntl.h>
 
-char	*remove_special_characters(char *line)
+static char	*process_dollar_sign(const char *str, char *expanded_str, int *i)
 {
-	int		i;
-	int		j;
-	int		in_single_quote;
-	int		in_double_quote;
-	char	*clean_line;
-
-	i = 0;
-	j = 0;
-	in_single_quote = 0;
-	in_double_quote = 0;
-	clean_line = malloc(ft_strlen(line) + 1);
-	if (!clean_line)
-		return (NULL);
-	while (line[i])
-	{
-		if (line[i] == '\'' && !in_double_quote)
-			in_single_quote = !in_single_quote;
-		else if (line[i] == '\"' && !in_single_quote)
-			in_double_quote = !in_double_quote;
-		if (!in_single_quote && !in_double_quote && (line[i] == '\\' || line[i] == ';'))
-			i++;
-		else
-			clean_line[j++] = line[i++];
-	}
-	return (clean_line[j] = 0, clean_line);
-}
-
-int	check_unclosed_quotes(char *line, char *quote)
-{
-	int	i;
-	int	single_quotes;
-	int	double_quotes;
-
-	i = 0;
-	single_quotes = 0;
-	double_quotes = 0;
-	while (line[i])
-	{
-		if (line[i] == '\'' && double_quotes % 2 == 0)
-			single_quotes = !single_quotes;
-		else if (line[i] == '\"' && single_quotes % 2 == 0)
-			double_quotes = !double_quotes;
-		i++;
-	}
-	if (single_quotes && quote)
-		*quote = '\'';
-	else if (double_quotes && quote)
-		*quote = '\"';
-	return (single_quotes || double_quotes);
-}
-
-char	*read_with_quotes(char *line)
-{
-	char	*new_line;
-	char	*prompt;
-	int		unclosed_quotes;
-	char	quote;
-
-	quote = ' ';
-	unclosed_quotes = check_unclosed_quotes(line, &quote);
-	while (unclosed_quotes)
-	{
-		if (quote == '\"')
-			prompt = "dquote> ";
-		else
-			prompt = "quote> ";
-		new_line = readline(prompt);
-		if (!new_line)
-			return (NULL);
-		line = ft_strjoin(line, new_line);
-		free(new_line);
-		unclosed_quotes = check_unclosed_quotes(line, NULL);
-	}
-	return (line);
-}
-
-char	*expand_variable(char *str, char **env)
-{
-	char	*expanded_str;
-	char	*env_var;
-	char	*env_value;
-	size_t	i;
 	size_t	j;
-	size_t	len;
-	size_t	var_len;
-	size_t	var_start;
-	char	*tmp_expanded_str;
-	pid_t	pid;
+	char	*var_name;
+	char	*var_value;
 
-	expanded_str = malloc(1);
-	if (!expanded_str)
-		return (NULL);
-	expanded_str[0] = '\0';
-	i = 0;
-	pid = getpid();
-	while (str[i])
+	if (str[*i + 1] == '$')
 	{
-		if (str[i] == '$' && str[i + 1] == '$')
-		{
-			tmp_expanded_str = expanded_str;
-			expanded_str = ft_strjoin(expanded_str, ft_itoa(pid));
-			free(tmp_expanded_str);
-			i += 2;
-		}
-		else if (str[i] == '$')
-		{
-			tmp_expanded_str = expanded_str;
-			expanded_str = ft_strjoin(expanded_str, (char[]){str[i], '\0'});
-			free(tmp_expanded_str);
-			i++;
-		}
-		else
-		{
-			tmp_expanded_str = expanded_str;
-			expanded_str = ft_strjoin(expanded_str, (char[]){str[i], '\0'});
-			free(tmp_expanded_str);
-			i++;
-		}
+		expanded_str = ft_strjoin(expanded_str, "$$");
+		*i += 2;
+	}
+	else if (str[*i + 1] && (ft_isalnum(str[*i + 1]) || str[*i + 1] == '_'))
+	{
+		(*i)++;
+		j = 0;
+		while (str[*i + j] && (ft_isalnum(str[*i + j]) || str[*i + j] == '_'))
+			j++;
+		var_name = ft_substr(str, *i, j);
+		if (!var_name)
+			return (NULL);
+		var_value = getenv(var_name);
+		free(var_name);
+		if (var_value)
+			expanded_str = ft_strjoin(expanded_str, var_value);
+		*i += j;
+	}
+	else
+	{
+		expanded_str = ft_strjoin(expanded_str, "$");
+		(*i)++;
 	}
 	return (expanded_str);
 }
 
+static char	*expand_env_var(const char *str, char **env)
+{
+	char	*expanded_str;
+	size_t	i;
+
+	expanded_str = "";
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			expanded_str = process_dollar_sign(str, expanded_str, &i);
+		else
+		{
+			expanded_str = ft_charjoin(expanded_str, str[i]);
+			i++;
+		}
+		if (!expanded_str)
+			return (NULL);
+	}
+	return (expanded_str);
+}
+
+static int	handle_redirection(t_command *cmd, char *cmd_str)
+{
+	char	*input_file;
+	char	*output_file;
+
+	if ((input_file = ft_strchr(cmd_str, '<')) != NULL)
+	{
+		*input_file = '\0';
+		input_file++;
+		while (*input_file == ' ' || *input_file == '\t')
+			input_file++;
+		cmd->fd_in = open(input_file, O_RDONLY);
+		if (cmd->fd_in == -1)
+		{
+			perror("Error opening input file");
+			return (0);
+		}
+		cmd->n_args -= 2;
+	}
+	if ((output_file = ft_strchr(cmd_str, '>')) != NULL)
+	{
+		*output_file = '\0';
+		output_file++;
+		while (*output_file == ' ' || *output_file == '\t')
+			output_file++;
+		cmd->fd_out = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->fd_out == -1)
+		{
+			perror("Error opening output file");
+			return (0);
+		}
+		cmd->n_args -= 2;
+	}
+	return (1);
+}
+
+static int	init_cmd(t_command *cmd, char *cmd_str, char **env)
+{
+	char		**args;
+	char		**paths;
+	size_t		i;
+
+	args = ft_split(cmd_str, ' ');
+	if (!args)
+		return (0);
+	paths = get_paths(env);
+	if (!paths)
+		return (0);
+	cmd->args = args;
+	cmd->n_args = 0;
+	while (args[cmd->n_args])
+		cmd->n_args++;
+	cmd->path = get_cmd_path(paths, *cmd);
+	if (!cmd->path)
+		return (0);
+	cmd->fd_in = 0;
+	cmd->fd_out = 1;
+	i = -1;
+	while (++i < cmd->n_args)
+		cmd->args[i] = expand_env_var(cmd->args[i], env);
+	if (!handle_redirection(cmd, cmd_str))
+		return (0);
+	return (1);
+}
+
 int	init_table(char *line, char **env, t_command_table *table)
 {
-	t_command	cmd;
-	int			pipefd[2];
-	char		**commands;
-	int			i;
-	int			j;
-	int			fd;
-	char		*delimiter;
-	char		*heredoc_input;
-	int			heredoc_fd;
-	char		*expanded_arg;
-	char		**args_without_redir;
+	char		**cmd_strs;
+	size_t		i;
 
-	line = read_with_quotes(line);
-	if (!line)
-		return (0);
-	line = remove_special_characters(line);
-	commands = ft_split(line, '|');
-	if (!commands)
+	cmd_strs = ft_split(line, '|');
+	if (!cmd_strs)
 		return (0);
 	table->n_commands = 0;
-	while (commands[table->n_commands])
+	while (cmd_strs[table->n_commands])
 		table->n_commands++;
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
 	if (!table->commands)
@@ -161,117 +143,11 @@ int	init_table(char *line, char **env, t_command_table *table)
 	i = 0;
 	while (i < table->n_commands)
 	{
-		table->commands[i].args = ft_split(commands[i], ' ');
-		if (!table->commands[i].args)
+		if (!init_cmd(&table->commands[i], cmd_strs[i], env))
 			return (0);
-		args_without_redir = malloc(sizeof(char *) * (table->commands[i].n_args + 1));
-		if (!args_without_redir)
-			return (0);
-		j = 0;
-		table->commands[i].n_args = 0;
-		while (table->commands[i].args[j])
-		{
-			if (table->commands[i].args[j][0] == '>' || table->commands[i].args[j][0] == '<' ||
-				(table->commands[i].args[j][0] == '<' && table->commands[i].args[j][1] == '<'))
-			{
-				if (table->commands[i].args[j][0] == '<' && table->commands[i].args[j][1] == '<')
-				{
-					delimiter = table->commands[i].args[j + 1];
-					heredoc_input = NULL;
-					heredoc_fd = open("/tmp/heredoc_temp.txt", O_CREAT | O_WRONLY | O_TRUNC, 0666);
-					if (heredoc_fd == -1)
-						return (0);
-					while (1)
-					{
-						heredoc_input = readline("> ");
-						if (!heredoc_input)
-							return (0);
-						if (ft_strncmp(heredoc_input, delimiter, ft_strlen(delimiter)) == 0)
-						{
-							free(heredoc_input);
-							break;
-						}
-						write(heredoc_fd, heredoc_input, ft_strlen(heredoc_input));
-						write(heredoc_fd, "\n", 1);
-						free(heredoc_input);
-					}
-					close(heredoc_fd);
-					table->commands[i].fd_in = open("/tmp/heredoc_temp.txt", O_RDONLY);
-					j++;
-				}
-				else
-				{
-					if (table->commands[i].args[j][1] == '>')
-					{
-						fd = open(table->commands[i].args[j + 1], O_CREAT | O_APPEND | O_WRONLY, 0777);
-						if (fd == -1)
-							return (0);
-						table->commands[i].fd_out = fd;
-						j++;
-					}
-					else
-					{
-						fd = open(table->commands[i].args[j + 1], O_CREAT | O_TRUNC | O_WRONLY, 0777);
-						if (fd == -1)
-							return (0);
-						table->commands[i].fd_out = fd;
-						j++;
-					}
-				}
-			}
-			else
-			{
-				args_without_redir[table->commands[i].n_args] = table->commands[i].args[j];
-				table->commands[i].n_args++;
-			}
-			j++;
-		}
-		args_without_redir[table->commands[i].n_args] = NULL;
-		table->commands[i].args = args_without_redir;
-		j = 0;
-		while (j < table->commands[i].n_args)
-		{
-			expanded_arg = expand_variable(table->commands[i].args[j], env);
-			free(table->commands[i].args[j]);
-			table->commands[i].args[j] = expanded_arg;
-			j++;
-		}
-		table->commands[i].path = get_cmd_path(get_paths(env), table->commands[i]);
-		if (!table->commands[i].path)
-			return (0);
-		if (i < table->n_commands - 1 && pipe(pipefd) == -1)
-			return (0);
-		if (i == 0)
-			table->commands[i].fd_in = STDIN_FILENO;
-		else
-			table->commands[i].fd_in = pipefd[0];
-		if (i == table->n_commands - 1)
-			table->commands[i].fd_out = STDOUT_FILENO;
-		else
-			table->commands[i].fd_out = pipefd[1];
 		i++;
 	}
 	return (1);
-}
-
-
-void	print_table(t_command_table *table)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < table->n_commands)
-	{
-		j = 0;
-		while (j < table->commands[i].n_args)
-		{
-			printf("%s ", table->commands[i].args[j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
 }
 
 int	main(int ac, char **av, char **env)
