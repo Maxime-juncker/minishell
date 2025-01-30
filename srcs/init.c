@@ -41,7 +41,7 @@ static char	*process_dollar_sign(const char *str, char *expanded_str, int *i)
 	return (expanded_str);
 }
 
-static char	*expand_env_var(const char *str, char **env)
+char	*expand_env_var(const char *str, char **env)
 {
 	char	*expanded_str;
 	int		i;
@@ -138,7 +138,7 @@ int	init_table(char *line, char **env, t_command_table *table)
 	char		**cmd_strs;
 	int			pipe_fd[2];
 	size_t		i;
-	int			temp;
+	t_command			*temp;
 
 	cmd_strs = ft_split(line, '|');
 	if (!cmd_strs)
