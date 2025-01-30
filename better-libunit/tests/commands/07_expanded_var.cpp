@@ -4,7 +4,7 @@ int	expanded_var( void )
 {
 	t_command_table	table;
 
-	init_table((char *)"echo $DESKTOP_SESSION", environ, &table);
+	init_table((char *)"echo $DESKTOP_SESSION", environ, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 	if (Libunit::Check_output("ubuntu\n") == 0)

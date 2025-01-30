@@ -19,18 +19,25 @@ int	run_built_in(t_command cmd, t_command_table *table)
 		return (env(*table));
 	if (ft_strncmp(cmd.args[0], "pwd", len) == 0)
 		return (pwd());
-	if (ft_strncmp(cmd.args[0], "export", len) == 0)
-	{
-		 (export_cmd(table, cmd));
-	int i = 0;
-	while (table->env[i] != NULL)
-	{
-		printf("%s\n", table->env[i]);
-		i++;
-	}
-	return (1);
-	}
+
 	return (-1);
+}
+
+
+int	run_env_cmd(t_command_table *table, t_command cmd)
+{
+	char *name = cmd.args[0];
+	if (ft_strncmp(name, "export", ft_strlen(name)) == 0)
+	{
+		export_cmd(table, cmd);
+		return (1);
+	}
+	if (ft_strncmp(name, "unset", ft_strlen(name)) == 0)
+	{
+		unset(table, cmd);
+		return (1);
+	}
+	return (0);
 }
 
 /// @brief Run every command in the command table
@@ -45,6 +52,11 @@ int	run_pipeline(t_command_table *table)
 	i = 0;
 	while (i < table->n_commands)
 	{
+		if (run_env_cmd(table, table->commands[i]))
+		{
+			i++;
+			continue;
+		}
 		code = run_command(table->commands[i], table);
 		i++;
 	}

@@ -10,24 +10,29 @@ static int	get_env_len(char **env)
 	return (len);
 }
 
-int	export_cmd(t_command_table *table, t_command cmd)
+int	unset(t_command_table *table, t_command cmd)
 {
 	char **cpy;
 	int		i;
 	char	*path;
+	int		len = 0;
 
 	// cpy env
-	cpy = malloc((get_env_len(table->env) + 2) * sizeof(char *)); //? +2 because 1 for the new var and 1 for the final null;
+	cpy = malloc(get_env_len(table->env) * sizeof(char *));
 	if (cpy == NULL)
 		return (1);
 	i = 0;
 	while (table->env[i] != NULL)
 	{
-		cpy[i] = table->env[i];
+		if (ft_strncmp(table->env[i], cmd.args[1], ft_strlen(cmd.args[1])) != 0)
+		{
+			cpy[i] = table->env[i];
+			len++;
+		}
 		i++;
 	}
-	cpy[i] = cmd.args[1];
-	cpy[i + 1] = NULL;
+	cpy[len] = NULL;
 	table->env = cpy;
 	return (0);
+
 }

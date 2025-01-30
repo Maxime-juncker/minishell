@@ -9,7 +9,7 @@ LIB_UNIT = better-libunit/
 #                                  srcs / objs                                 #
 # ---------------------------------------------------------------------------- #
 SRC =	main.c			\
-		init.c	\
+		init.c			\
 		executor.c		\
 		pipex_utils.c	\
 		pipeline.c		\
@@ -17,8 +17,9 @@ SRC =	main.c			\
 		echo.c			\
 		env.c			\
 		pwd.c			\
-		export_cmd.c	\
 		utils.c			\
+		export_cmd.c	\
+		unset.c			\
 
 LIB_SRC =	executor.c pipex_utils.c pipeline.c example.c echo.c env.c pwd.c export_cmd.c init.c utils.c
 
