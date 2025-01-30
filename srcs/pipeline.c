@@ -67,7 +67,7 @@ int	run_command(t_command cmd)
 		{
 			exit (0);
 		}
-		show_cmd(cmd);
+		// show_cmd(cmd);
 		if (execve(cmd.path, cmd.args, NULL) == -1)
 			alert("execve failed");
 	}

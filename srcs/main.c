@@ -101,22 +101,27 @@ static int	handle_redirection(t_command *cmd, char *cmd_str)
 	return (1);
 }
 
-// static int	handle_pipe_redirection(t_command *cmd, int *pipe_fd)
-// {
-// 	if (pipe(pipe_fd) == -1)
-// 		return (0);
-// 	cmd->fd_out = pipe_fd[1];
-// 	if (pipe_fd[0] != -1)
-// 	cmd->fd_in = pipe_fd[0];
-// 	return (1);
-// }
+static int	handle_pipe_redirection(t_command *cmd, int *pipe_fd)
+{
+	cmd->fd_out = pipe_fd[1];
+	if (pipe_fd[0] != -1)
+		cmd->fd_in = pipe_fd[0];
+	return (1);
+}
 
-static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int *pipe_fd)
+static int	init_cmd(t_command *cmd, char *cmd_str, char **env)
 {
 	char		**args;
 	char		**paths;
+	static int	pipefd[2] = {-1};
 	int			i;
 
+	cmd->fd_in = 0;
+	cmd->fd_out = 1;
+	if (pipefd[0] != -1)
+	{
+		cmd->fd_in = pipefd[0];
+	}
 	args = ft_split(cmd_str, ' ');
 	if (!args)
 		return (0);
@@ -130,15 +135,17 @@ static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int *pipe_fd)
 	cmd->path = get_cmd_path(paths, *cmd);
 	if (!cmd->path)
 		return (0);
-	cmd->fd_in = 0;
-	cmd->fd_out = 1;
 	i = -1;
 	while (++i < cmd->n_args)
 		cmd->args[i] = expand_env_var(cmd->args[i], env);
-	if (!handle_redirection(cmd, cmd_str))
-		return (0);
 	// if (!handle_pipe_redirection(cmd, pipe_fd))
 	// 	return (0);
+	if (pipe(pipefd) != -1);
+	{
+		cmd->fd_out = pipefd[1];
+	}
+	if (!handle_redirection(cmd, cmd_str))
+		return (0);
 	return (1);
 }
 
@@ -160,10 +167,11 @@ int	init_table(char *line, char **env, t_command_table *table)
 	i = 0;
 	while (i < table->n_commands)
 	{
-		if (i < table->n_commands - 1)
-			pipe(pipe_fd);
-		if (!init_cmd(&table->commands[i], cmd_strs[i], env, pipe_fd))
+		// if (i < table->n_commands - 1)
+		// 	pipe(pipe_fd);
+		if (!init_cmd(&table->commands[i], cmd_strs[i], env))
 			return (0);
+
 		i++;
 	}
 	return (1);
