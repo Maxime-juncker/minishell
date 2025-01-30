@@ -53,17 +53,14 @@ static char	*expand_env_var(const char *str, char **env)
 		if (str[i] == '$')
 			expanded_str = process_dollar_sign(str, expanded_str, &i);
 		else
-		{
-			expanded_str = ft_charjoin(expanded_str, str[i]);
-			i++;
-		}
+			expanded_str = ft_charjoin(expanded_str, str[i++]);
 		if (!expanded_str)
 			return (NULL);
 	}
 	return (expanded_str);
 }
 
-static int	handle_redirection(t_command *cmd, char *cmd_str)
+static int	handle_redirection(t_command *cmd, char *cmd_str, int is_last)
 {
 	char	*input_file;
 	char	*output_file;
@@ -86,6 +83,7 @@ static int	handle_redirection(t_command *cmd, char *cmd_str)
 	output_file = ft_strchr(cmd_str, '>');
 	if (output_file)
 	{
+		output_file = ft_strdup(output_file);
 		*output_file = '\0';
 		output_file++;
 		while (*output_file == ' ' || *output_file == '\t')
@@ -98,18 +96,12 @@ static int	handle_redirection(t_command *cmd, char *cmd_str)
 		}
 		cmd->n_args -= 2;
 	}
+	if (is_last && !ft_strchr(cmd_str, '>'))
+		cmd->fd_out = 1;
 	return (1);
 }
 
-static int	handle_pipe_redirection(t_command *cmd, int *pipe_fd)
-{
-	cmd->fd_out = pipe_fd[1];
-	if (pipe_fd[0] != -1)
-		cmd->fd_in = pipe_fd[0];
-	return (1);
-}
-
-static int	init_cmd(t_command *cmd, char *cmd_str, char **env)
+static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last)
 {
 	char		**args;
 	char		**paths;
@@ -119,9 +111,7 @@ static int	init_cmd(t_command *cmd, char *cmd_str, char **env)
 	cmd->fd_in = 0;
 	cmd->fd_out = 1;
 	if (pipefd[0] != -1)
-	{
 		cmd->fd_in = pipefd[0];
-	}
 	args = ft_split(cmd_str, ' ');
 	if (!args)
 		return (0);
@@ -138,15 +128,9 @@ static int	init_cmd(t_command *cmd, char *cmd_str, char **env)
 	i = -1;
 	while (++i < cmd->n_args)
 		cmd->args[i] = expand_env_var(cmd->args[i], env);
-	// if (!handle_pipe_redirection(cmd, pipe_fd))
-	// 	return (0);
-	if (pipe(pipefd) != -1);
-	{
+	if (pipe(pipefd) != -1)
 		cmd->fd_out = pipefd[1];
-	}
-	if (!handle_redirection(cmd, cmd_str))
-		return (0);
-	return (1);
+	return (handle_redirection(cmd, cmd_str, is_last));
 }
 
 int	init_table(char *line, char **env, t_command_table *table)
@@ -154,6 +138,7 @@ int	init_table(char *line, char **env, t_command_table *table)
 	char		**cmd_strs;
 	int			pipe_fd[2];
 	size_t		i;
+	int			temp;
 
 	cmd_strs = ft_split(line, '|');
 	if (!cmd_strs)
@@ -161,17 +146,15 @@ int	init_table(char *line, char **env, t_command_table *table)
 	table->n_commands = 0;
 	while (cmd_strs[table->n_commands])
 		table->n_commands++;
+	temp = table->commands;
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
 	if (!table->commands)
 		return (0);
 	i = 0;
 	while (i < table->n_commands)
 	{
-		// if (i < table->n_commands - 1)
-		// 	pipe(pipe_fd);
-		if (!init_cmd(&table->commands[i], cmd_strs[i], env))
+		if (!init_cmd(&table->commands[i], cmd_strs[i], env, i == table->n_commands - 1))
 			return (0);
-
 		i++;
 	}
 	return (1);
