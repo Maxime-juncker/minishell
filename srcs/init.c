@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-static char	*process_dollar_sign(const char *str, char *expanded_str, int *i)
+static char	*process_dollar_sign(const char *str, char *expanded_str, int *i, int last_cmd)
 {
 	size_t	j;
 	char	*var_name;
@@ -16,6 +16,11 @@ static char	*process_dollar_sign(const char *str, char *expanded_str, int *i)
 	if (str[*i + 1] == '$')
 	{
 		expanded_str = ft_strjoin(expanded_str, "$$");
+		*i += 2;
+	}
+	else if (str[*i + 1] == '?')
+	{
+		expanded_str = ft_strjoin(expanded_str, ft_itoa(last_cmd));
 		*i += 2;
 	}
 	else if (str[*i + 1] && (ft_isalnum(str[*i + 1]) || str[*i + 1] == '_'))
@@ -41,23 +46,32 @@ static char	*process_dollar_sign(const char *str, char *expanded_str, int *i)
 	return (expanded_str);
 }
 
-char	*expand_env_var(const char *str, char **env)
+char	*expand_env_var(const char *str, char **env, int last_cmd)
 {
 	char	*expanded_str;
 	int		i;
+	int		in_quotes;
+	char	quote;
 
 	expanded_str = "";
 	i = 0;
+	in_quotes = 0;
 	while (str[i])
 	{
-		if (str[i] == '$')
-			expanded_str = process_dollar_sign(str, expanded_str, &i);
+		if (str[i] == '\'')
+		{
+			quote = '\'';
+			in_quotes = !in_quotes;
+			i++;
+		}
+		if (!in_quotes && str[i] == '$' && quote != '\'')
+			expanded_str = process_dollar_sign(str, expanded_str, &i, last_cmd);
 		else
 			expanded_str = ft_charjoin(expanded_str, str[i++]);
 		if (!expanded_str)
 			return (NULL);
 	}
-	return (expanded_str);
+	return (ft_strtrim(expanded_str, "'\""));
 }
 
 static int	handle_redirection(t_command *cmd, char *cmd_str, int is_last)
@@ -101,7 +115,7 @@ static int	handle_redirection(t_command *cmd, char *cmd_str, int is_last)
 	return (1);
 }
 
-static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last)
+static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last, int last_cmd)
 {
 	char		**args;
 	char		**paths;
@@ -127,34 +141,38 @@ static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last)
 		return (0);
 	i = -1;
 	while (++i < cmd->n_args)
-		cmd->args[i] = expand_env_var(cmd->args[i], env);
+	{
+		cmd->args[i] = expand_env_var(cmd->args[i], env, last_cmd);
+		if (!cmd->args[i])
+			return (0);
+	}
 	if (pipe(pipefd) != -1)
 		cmd->fd_out = pipefd[1];
 	return (handle_redirection(cmd, cmd_str, is_last));
 }
 
-int	init_table(char *line, char **env, t_command_table *table)
+int	init_table(char *line, char **env, t_command_table *table, int last_cmd)
 {
-	char		**cmd_strs;
-	int			pipe_fd[2];
-	size_t		i;
+	char				**cmd_strs;
+	int					pipe_fd[2];
+	size_t				i;
 	t_command			*temp;
 
 	cmd_strs = ft_split(line, '|');
 	if (!cmd_strs)
-		return (0);
+		return (127);
 	table->n_commands = 0;
 	while (cmd_strs[table->n_commands])
 		table->n_commands++;
 	temp = table->commands;
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
 	if (!table->commands)
-		return (0);
+		return (127);
 	i = 0;
 	while (i < table->n_commands)
 	{
-		if (!init_cmd(&table->commands[i], cmd_strs[i], env, i == table->n_commands - 1))
-			return (0);
+		if (!init_cmd(&table->commands[i], cmd_strs[i], env, i == table->n_commands - 1, last_cmd))
+			return (127);
 		i++;
 	}
 	return (1);
