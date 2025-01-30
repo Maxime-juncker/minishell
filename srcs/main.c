@@ -31,7 +31,7 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
-	// table.env = env();
+	table.env = env;
 	while (1)
 	{
 		line = readline("\033[0mminishell$ ");
@@ -40,7 +40,7 @@ int	main(int ac, char **av, char **env)
 		else if (!line || !ft_strncmp(line, "exit", strlen(line)))
 			return (0);
 		else if (init_table(line, env, &table))
-			run_pipeline(table);
+			run_pipeline(&table);
 		add_history(line);
 		free(line);
 	}
