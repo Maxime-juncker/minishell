@@ -45,4 +45,7 @@ int		echo(char **args, int n);
 // env.c
 int		env( void );
 
+// init.c
+int	init_table(char *line, char **env, t_command_table *table);
+
 #endif

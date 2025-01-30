@@ -20,7 +20,7 @@ int	main(int ac, char **av, char **env)
 		if (!line)
 			break ;
 		add_history(line);
-		if (!ft_strncmp(line, "exit", 4))
+		if (!ft_strncmp(line, "exit", strlen(line)))
 		{
 			free(line);
 			break ;
