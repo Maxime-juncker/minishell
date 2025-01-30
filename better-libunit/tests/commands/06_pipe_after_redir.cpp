@@ -6,7 +6,7 @@ int	pipe_after_redir( void )
 
 	init_table((char *)"echo test | wc -c > log.txt | wc -l", environ, &table);
 	Libunit::Redirect_log();
-	run_pipeline(table);
+	run_pipeline(&table);
 	if (Libunit::Check_output("1\n") == 0)
 		return (0);
 	else

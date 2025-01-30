@@ -6,7 +6,7 @@ int	create_mulitple_pipes( void )
 
 	init_table((char *)"sleep 1 | echo test | wc -c | wc -l", environ, &table);
 	Libunit::Redirect_log();
-	run_pipeline(table);
+	run_pipeline(&table);
 	if (Libunit::Check_output("0\n") == 0)
 		return (0);
 	else

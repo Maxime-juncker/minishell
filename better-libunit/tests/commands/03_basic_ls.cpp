@@ -17,7 +17,7 @@ int	ls_basic( void )
 {
 
 	Libunit::Redirect_log();
-	run_command(ls_cmd());
+	run_command(ls_cmd(), NULL);
 	if (Libunit::Check_output("Makefile  better-libunit  bin  includes  libft  obj  srcs\n") == 0)
 		return (0);
 	else

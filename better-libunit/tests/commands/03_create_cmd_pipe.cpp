@@ -6,7 +6,7 @@ int	create_pipe( void )
 
 	init_table((char *)"echo test | wc -c", environ, &table);
 	Libunit::Redirect_log();
-	run_pipeline(table);
+	run_pipeline(&table);
 	if (Libunit::Check_output("5\n") == 0)
 		return (0);
 	else

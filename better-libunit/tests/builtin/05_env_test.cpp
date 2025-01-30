@@ -2,8 +2,11 @@
 
 int	env_test( void )
 {
+	t_command_table table;
+	table.env = environ;
+
 	Libunit::Redirect_log();
-	env();
+	env(table);
 	if (Libunit::Check_output("") != 0)
 		return (0);
 	else
