@@ -1,6 +1,6 @@
 NAME = minishell
 
-CFLAGS = $(INCLUDES_D) -g3
+CFLAGS = $(INCLUDES_D) -g3 -fPIC
 MAKEFLAGS += --no-print-directory
 
 LIB_UNIT = better-libunit/
@@ -16,8 +16,11 @@ SRC =	main.c			\
 		example.c		\
 		echo.c			\
 		env.c			\
+		pwd.c			\
+		export_cmd.c	\
+		utils.c			\
 
-LIB_SRC =	executor.c pipex_utils.c pipeline.c example.c echo.c env.c
+LIB_SRC =	executor.c pipex_utils.c pipeline.c example.c echo.c env.c pwd.c export_cmd.c init.c
 
 OBJ = $(SRC:.c=.o)
 LIB_OBJ = $(LIB_SRC:.c=.o)

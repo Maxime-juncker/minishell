@@ -8,7 +8,7 @@ void	show_cmd(t_command cmd);
 /// @brief Run a built-in command
 /// @param cmd The command to run
 /// @return the exit value of the run command, -1 if the command isn't builtin
-int	run_built_in(t_command cmd)
+int	run_built_in(t_command cmd, t_command_table *table)
 {
 	size_t	len;
 
@@ -16,23 +16,36 @@ int	run_built_in(t_command cmd)
 	if (ft_strncmp(cmd.args[0], "echo", len) == 0)
 		return (echo(&cmd.args[1], cmd.n_args - 1));
 	if (ft_strncmp(cmd.args[0], "env", len) == 0)
-		return (env());
+		return (env(*table));
+	if (ft_strncmp(cmd.args[0], "pwd", len) == 0)
+		return (pwd());
+	if (ft_strncmp(cmd.args[0], "export", len) == 0)
+	{
+		 (export_cmd(table, cmd));
+	int i = 0;
+	while (table->env[i] != NULL)
+	{
+		printf("%s\n", table->env[i]);
+		i++;
+	}
+	return (1);
+	}
 	return (-1);
 }
 
 /// @brief Run every command in the command table
 /// @param table The command table to run
 /// @return the exit value of the last command
-int	run_pipeline(t_command_table table)
+int	run_pipeline(t_command_table *table)
 {
 	size_t	i;
 	int		code;
 
 	// show_table(table);
 	i = 0;
-	while (i < table.n_commands)
+	while (i < table->n_commands)
 	{
-		code = run_command(table.commands[i]);
+		code = run_command(table->commands[i], table);
 		i++;
 	}
 	return (code);
@@ -47,7 +60,7 @@ void	setup_redirection(t_command cmd)
 /// @brief run a command
 /// @param cmd the command to run
 /// @return exit code of the command
-int	run_command(t_command cmd)
+int	run_command(t_command cmd, t_command_table *table)
 {
 	int	pid;
 	int	code;
@@ -63,12 +76,12 @@ int	run_command(t_command cmd)
 		setup_redirection(cmd);
 		if (cmd.fd_out != STDOUT_FILENO)
 			close(cmd.fd_out);
-		if (run_built_in(cmd) != -1)
+		if (run_built_in(cmd, table) != -1)
 		{
 			exit (0);
 		}
 		// show_cmd(cmd);
-		if (execve(cmd.path, cmd.args, NULL) == -1)
+		if (execve(cmd.path, cmd.args, table->env) == -1)
 			alert("execve failed");
 	}
 	if (cmd.fd_out != STDOUT_FILENO)

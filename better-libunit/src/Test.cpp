@@ -8,6 +8,11 @@
 
 #include <Test.hpp>
 #include <Routine.hpp>
+#include <iostream>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <future>
+#include <chrono>
 
 namespace Libunit
 {
@@ -18,6 +23,8 @@ namespace Libunit
 	*/
 	std::string Test::CodeToString(int code)
 	{
+		if (code == 2)
+			return ("TIMEOUT");
 		if (WTERMSIG(code) == SIGSEGV)
 			return ("SIGSEGV");
 		if (WTERMSIG(code) == SIGBUS)
@@ -52,6 +59,8 @@ namespace Libunit
 			std::cout << "[" << GREEN << res << RESET << "]" << std::endl;
 		else if (res == "KO")
 			std::cout << "[" << RED << res << RESET << "]" << std::endl;
+		else if (res == "TIMEOUT")
+			std::cout << "[" << YELLOW << res << RESET << "]" << std::endl;
 		else
 			std::cout << "[" << B_RED << res << RESET << "]" << std::endl;
 	}
@@ -78,6 +87,24 @@ namespace Libunit
 	{
 	}
 
+	int wait_with_timeout(pid_t pid, int &status, int timeout_seconds)
+	{
+		auto future = std::async(std::launch::async, [&]()
+		{
+			return waitpid(pid, &status, 0);
+		});
+
+		if (future.wait_for(std::chrono::seconds(timeout_seconds)) == std::future_status::ready)
+		{
+			return future.get();  // Process exited within the timeout
+		} else
+		{
+			status = 2;
+			kill(pid, SIGABRT);
+			return 2;  // Timeout occurred
+		}
+	}
+
 	/*
 	* @brief Run the test
 	* @param caller the routine that called the test
@@ -99,7 +126,9 @@ namespace Libunit
 			exit(code);
 		}
 		// parent process
-		wait(&code);
+		int result = wait_with_timeout(pid, code, 3);
+		if (result == 2) // timeout
+			return (EndTest(result));
 		return (EndTest(code));
 	}
 }

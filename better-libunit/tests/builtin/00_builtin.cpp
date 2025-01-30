@@ -11,7 +11,7 @@ int	built_in_routine( void )
 	routine.AddNewTest(Libunit::Test("ECHO", "echo_mutiple", &echo_multiple));
 	routine.AddNewTest(Libunit::Test("ECHO", "echo_no_br", &echo_no_br));
 	routine.AddNewTest(Libunit::Test("ECHO", "echo_no_br_multiple", &echo_multiple_no_br));
-	// routine.AddNewTest(Libunit::Test("ENV", "env", &env_test));
+	routine.AddNewTest(Libunit::Test("ENV", "printing", &env_test));
 	// ==================================================
 
 	routine.Run();

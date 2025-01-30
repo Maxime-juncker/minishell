@@ -22,6 +22,8 @@ char*	get_cmd_path(char** paths, t_command cmd)
 	int	i = 0;
 	char* cmd_path;
 
+	if (is_builtin(cmd.args[0]))
+		return (ft_strdup(cmd.args[0]));
 	while (paths[i] != NULL)
 	{
 		cmd_path = ft_strjoin("/", cmd.args[0]);

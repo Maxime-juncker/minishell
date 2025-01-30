@@ -17,6 +17,5 @@ int	echo_multiple( void );
 int	echo_no_br( void );
 int	echo_multiple_no_br( void );
 
-// env
+// env tests
 int	env_test( void );
-

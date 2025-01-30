@@ -14,7 +14,16 @@ TEST_SRCS = executor/00_executor.cpp			\
 			builtin/02_multiple_echo.cpp		\
 			builtin/03_no_br_echo.cpp			\
 			builtin/04_no_br_multiple_echo.cpp	\
-			# builtin/05_env_test.cpp				\
+			builtin/05_env_test.cpp				\
+			commands/00_commands.cpp			\
+			commands/01_create_cmd_basic.cpp	\
+			commands/02_create_redir.cpp		\
+			commands/03_create_cmd_pipe.cpp		\
+			commands/03_basic_ls.cpp			\
+			commands/04_multiple_pipes.cpp		\
+			commands/05_redir_after_pipe.cpp	\
+			commands/06_pipe_after_redir.cpp	\
+			commands/07_expanded_var.cpp		\
 
 TEST_OBJS = $(TEST_SRCS:.cpp=.o)
 MAIN_OBJ = main.o
@@ -35,7 +44,7 @@ all: $(NAME)
 
 $(NAME): $(TEST_OBJS) $(MAIN_OBJ)
 	printf "$(BLUE)compiling: [$$(find . -type f -name "*.o" | wc -l)/$(shell find . -type f -name "*.cpp" | wc -l)] [OK]\r\n"
-	$(CC) $(CFLAGS) $(MAIN_OBJ) $(TEST_OBJS) $(FRAMEWORK_LIB) $(TEST_LIB) $(INCLUDES) -o $(NAME)
+	$(CC) $(CFLAGS) -pie $(MAIN_OBJ) $(TEST_OBJS) $(FRAMEWORK_LIB) $(TEST_LIB) $(INCLUDES) -o $(NAME)
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)\n\n"
 
