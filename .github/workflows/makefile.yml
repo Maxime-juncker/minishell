@@ -3,24 +3,19 @@ name: CI Workflow
 on: [push, pull_request]
 
 jobs:
-  setup:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
         run: sudo apt update && sudo apt install -y libreadline-dev
 
+      - uses: actions/checkout@v4
+
       - name: Verify installation
         run: ls -l /usr/include/readline && ls -l /usr/lib/*/libreadline.*
-
-  build:
-    runs-on: ubuntu-latest
-    needs: setup
-    steps:
-      - uses: actions/checkout@v4
 
       - name: Building
         run: make
 
       - name: Testing
         run: make test
-
