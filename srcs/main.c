@@ -17,6 +17,7 @@ void	new_prompt(void)
 
 void	handle_signal(int sig)
 {
+	(void)sig;
 	printf("\n");
 	new_prompt();
 }
@@ -30,7 +31,7 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, handle_signal);
+	signal(SIGQUIT, SIG_IGN);
 	table.env = env;
 	last_cmd = 0;
 	while (1)

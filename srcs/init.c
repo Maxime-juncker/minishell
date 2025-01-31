@@ -102,7 +102,10 @@ static int	handle_redirection(t_command *cmd, char *cmd_str, int is_last)
 		output_file++;
 		while (*output_file == ' ' || *output_file == '\t')
 			output_file++;
-		cmd->fd_out = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (ft_strnstr(cmd_str, ">>", ft_strlen(cmd_str)))
+			cmd->fd_out = open(output_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			cmd->fd_out = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fd_out == -1)
 		{
 			perror("Error opening output file");
