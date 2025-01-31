@@ -1,5 +1,5 @@
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
 # include "libft.h"
 
@@ -46,6 +46,8 @@ char	*expand_env_var(const char *str, char **env, int last_cmd);
 // utils.c
 int		is_builtin(char *name);
 size_t	get_biggest_len(char *s1, char *s2);
+char	*find_env_var(char **env, const char *to_find, int *index);
+int		replace_env_var(char **env, const char *to_find, const char *replace);
 
 /* ------------------------------ built-in cmd ------------------------------ */
 // echo.c
@@ -55,7 +57,7 @@ int		echo(char **args, int n);
 int		env(t_command_table table);
 
 // pwd.c
-int		pwd( void );
+int		pwd(char **env);
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);
@@ -64,7 +66,8 @@ int		export_cmd(t_command_table *table, t_command cmd);
 int		unset(t_command_table *table, t_command cmd);
 
 // dirs.c
-int	test();
+int	cd_command(const t_command_table *table, const t_command cmd);
+int change_directory(const char *path, char **env);
 
 
 #endif

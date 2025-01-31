@@ -32,6 +32,7 @@ TEST_SRCS = executor/00_executor.cpp			\
 			commands/10_single_quote2.cpp		\
 			commands/11_double_quote1.cpp		\
 			commands/12_double_quote2.cpp		\
+			commands/13_redir_in.cpp			\
 
 
 TEST_OBJS = $(TEST_SRCS:.cpp=.o)
@@ -60,7 +61,7 @@ $(NAME): $(TEST_OBJS) $(MAIN_OBJ)
 %.o: %.cpp $(FRAMEWORK_LIB)
 	printf "$(CURSOR_OFF)$(BLUE)"
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-	printf "compiling: [$$(find . -type f -name "*.o" | wc -l)/$(shell find . -type f -name "*.cpp" | wc -l)]\r"
+	printf "compiling: $@\n"
 
 clean:
 	printf "$(RED)clean:  tests.out\n"

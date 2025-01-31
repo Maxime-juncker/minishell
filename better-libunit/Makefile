@@ -83,7 +83,7 @@ re:
 .PHONY: test
 test:
 	$(MAKE) all
-	$(MAKE) -C tests/
+	$(MAKE) test -C tests/
 
 # Create directories
 $(OBJ_D):

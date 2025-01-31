@@ -1,11 +1,12 @@
 #include "executor.hpp"
-
+#include <iostream>
 int	test_path( void )
 {
-	char** paths = ft_split(getenv("PATH") + 5, ':');
-	std::string	path = get_cmd_path(paths, example_cmd());
-
-	if (path == "/usr/bin/ls")
+	t_command_table	table;
+	table.env = environ;
+	init_table((char *)"ls -l", table.env, &table, 0);
+	std::string path = table.commands[0].path;
+	if (path.compare("/usr/bin/ls") == 0)
 		return (0);
 	else
 		return (1);

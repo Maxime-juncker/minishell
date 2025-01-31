@@ -126,7 +126,7 @@ namespace Libunit
 			exit(code);
 		}
 		// parent process
-		int result = wait_with_timeout(pid, code, 3);
+		int result = wait_with_timeout(pid, code, 2);
 		if (result == 2) // timeout
 			return (EndTest(result));
 		return (EndTest(code));

@@ -18,7 +18,7 @@ int	run_built_in(t_command cmd, t_command_table *table)
 	if (ft_strncmp(cmd.args[0], "env", len) == 0)
 		return (env(*table));
 	if (ft_strncmp(cmd.args[0], "pwd", len) == 0)
-		return (pwd());
+		return (pwd(table->env));
 
 	return (-1);
 }
@@ -35,6 +35,11 @@ int	run_env_cmd(t_command_table *table, t_command cmd)
 	if (ft_strncmp(name, "unset", ft_strlen(name)) == 0)
 	{
 		unset(table, cmd);
+		return (1);
+	}
+	if (ft_strncmp(cmd.args[0], "cd", ft_strlen(name)) == 0)
+	{
+		cd_command(table, cmd);
 		return (1);
 	}
 	return (0);

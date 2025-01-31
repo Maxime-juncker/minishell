@@ -10,6 +10,7 @@ static int	get_env_len(char **env)
 	return (len);
 }
 
+
 int	export_cmd(t_command_table *table, t_command cmd)
 {
 	char **cpy;

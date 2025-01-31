@@ -1,10 +1,11 @@
 #include "minishell.h"
 
-int	pwd(void)
+int	pwd(char **env)
 {
 	char	*dir;
 
-	dir = getenv("PWD");
+	dir = find_env_var(env, "PWD", NULL);
+
 	if (dir == NULL)
 		return (1);
 	printf("%s\n", dir);

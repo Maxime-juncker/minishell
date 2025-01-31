@@ -20,6 +20,7 @@ int	commands_routine( void )
 	routine.AddNewTest(Libunit::Test("QUOTE", "double basic", &double_quote_basic));
 	routine.AddNewTest(Libunit::Test("QUOTE", "double hard", &double_quote_hard));
 	routine.AddNewTest(Libunit::Test("LS", "ls_basic", &ls_basic));
+	routine.AddNewTest(Libunit::Test("REDIR", "cat < out", &redir_in));
 	// ==================================================
 
 	routine.Run();
