@@ -94,7 +94,7 @@ lib: all
 
 $(BIN_D)$(NAME): $(OBJ) $(BIN_D)
 	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
-	$(CC) $(CFLAGS) -lreadline $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME).out
+	$(CC) $(CFLAGS) $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME).out -L/usr/lib -lreadline
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)$(RESET)\n\n"
 
