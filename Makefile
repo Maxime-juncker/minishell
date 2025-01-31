@@ -35,7 +35,7 @@ OBJ_D = obj/
 SRCS_D = srcs/
 BIN_D = bin/
 LOG_D = log/
-INCLUDES_D = -Iincludes/ -Ilibft/includes/
+INCLUDES_D = -Iincludes/ -Ilibft/includes/ -I/usr/include/readline/
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #
