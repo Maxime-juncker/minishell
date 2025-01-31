@@ -12,6 +12,9 @@ int	built_in_routine( void )
 	routine.AddNewTest(Libunit::Test("ECHO", "echo_no_br", &echo_no_br));
 	routine.AddNewTest(Libunit::Test("ECHO", "echo_no_br_multiple", &echo_multiple_no_br));
 	routine.AddNewTest(Libunit::Test("ENV", "printing", &env_test));
+	routine.AddNewTest(Libunit::Test("EXPORT", "basic", &export_test));
+	routine.AddNewTest(Libunit::Test("UNSET", "basic", &unset_test));
+	routine.AddNewTest(Libunit::Test("DIR", "pwd", &pwd_test));
 	// ==================================================
 
 	routine.Run();

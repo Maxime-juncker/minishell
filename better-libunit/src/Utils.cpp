@@ -22,6 +22,11 @@
 #include <stdio.h>
 #include <string>
 #include <fstream>
+#include <iostream>
+#include <string.h>
+#include <sys/wait.h>
+
+#include <fcntl.h>
 
 namespace Libunit
 {
@@ -33,18 +38,21 @@ namespace Libunit
 
 	int Check_output(std::string expected)
 	{
+		char *buffer[1000] = {0};
+		int		fd;
 
-		std::string line;
-		std::ifstream file("filename.txt");
-		getline(file, line);
+		freopen("/dev/tty", "w", stdout);
 
-		return (line == expected);
+		fd = open("log.txt", O_RDONLY, 0777);
+		if (fd == -1)
+			std::cerr << "cant read file" << std::endl;
+		read(fd, buffer, expected.length());
+		close(fd);
+		// std::cout << expected.compare((const char *)buffer) << std::endl;
+		// std::cout << buffer << std::endl;
+		// std::cout << expected << std::endl;
+		return (expected.compare((const char *)buffer));
 	}
 
-	// void	Check_output(void)
-	// {
-	// 	freopen("/dev/tty", "w", stdout);
-	// 	freopen("/dev/tty", "w", stderr);
-	// }
 } // namespace Libunit
 

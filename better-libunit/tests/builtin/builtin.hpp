@@ -19,3 +19,8 @@ int	echo_multiple_no_br( void );
 
 // env tests
 int	env_test( void );
+int	export_test( void );
+int	unset_test( void );
+
+// directories tests
+int	pwd_test( void );

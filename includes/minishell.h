@@ -45,6 +45,7 @@ char	*expand_env_var(const char *str, char **env, int last_cmd);
 
 // utils.c
 int		is_builtin(char *name);
+size_t	get_biggest_len(char *s1, char *s2);
 
 /* ------------------------------ built-in cmd ------------------------------ */
 // echo.c
@@ -61,4 +62,9 @@ int		export_cmd(t_command_table *table, t_command cmd);
 
 // unset.c
 int		unset(t_command_table *table, t_command cmd);
+
+// dirs.c
+int	test();
+
+
 #endif

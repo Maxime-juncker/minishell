@@ -1,0 +1,12 @@
+1 > 2 > 3 > 4
+builtin
+commands
+executor
+log.txt
+log.txt 
+main.cpp
+main.o
+Makefile
+out
+parser
+tests.out

@@ -20,8 +20,10 @@ SRC =	main.c			\
 		utils.c			\
 		export_cmd.c	\
 		unset.c			\
+		dirs.c			\
 
-LIB_SRC =	executor.c pipex_utils.c pipeline.c example.c echo.c env.c pwd.c export_cmd.c init.c utils.c
+LIB_SRC =	executor.c pipex_utils.c pipeline.c example.c \
+			echo.c env.c pwd.c export_cmd.c init.c utils.c unset.c	\
 
 OBJ = $(SRC:.c=.o)
 LIB_OBJ = $(LIB_SRC:.c=.o)

@@ -7,7 +7,7 @@ int	env_test( void )
 
 	Libunit::Redirect_log();
 	env(table);
-	if (Libunit::Check_output("") != 0)
+	if (Libunit::Check_output("ABCDEF") != 0)
 		return (0);
 	else
 		return (1);

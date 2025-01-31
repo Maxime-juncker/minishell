@@ -3,6 +3,7 @@
 int	redir_after_pipe( void )
 {
 	t_command_table	table;
+	table.env = environ;
 
 	init_table((char *)"echo test | wc -c > log.txt", environ, &table, 0);
 	run_pipeline(&table);

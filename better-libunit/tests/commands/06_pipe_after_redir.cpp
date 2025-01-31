@@ -3,6 +3,7 @@
 int	pipe_after_redir( void )
 {
 	t_command_table	table;
+	table.env = environ;
 
 	init_table((char *)"echo test | wc -c > log.txt | wc -l", environ, &table, 0);
 	Libunit::Redirect_log();

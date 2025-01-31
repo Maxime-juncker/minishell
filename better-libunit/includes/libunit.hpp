@@ -16,7 +16,7 @@ namespace Libunit
 	# define PURPLE	"\033[0;35m"
 	# define CYAN	"\033[0;36m"
 	# define WHITE	"\033[0;37m"
-	# define GRAY	"\033[0;30m"
+	# define GRAY	"\033[90m"
 
 	/* -------------------------------------------------------------------------- */
 	/*                                 Backgrounds                                */
