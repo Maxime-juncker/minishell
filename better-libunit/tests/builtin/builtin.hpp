@@ -24,3 +24,6 @@ int	unset_test( void );
 
 // directories tests
 int	pwd_test( void );
+int	cd_relative( void );
+int cd_absolute( void );
+int cd_nothing( void );

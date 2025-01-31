@@ -18,6 +18,7 @@ TEST_SRCS = executor/00_executor.cpp			\
 			builtin/06_export.cpp				\
 			builtin/07_unset.cpp				\
 			builtin/08_pwd_test.cpp				\
+			builtin/09_cd.cpp					\
 			commands/00_commands.cpp			\
 			commands/01_create_cmd_basic.cpp	\
 			commands/02_create_redir.cpp		\

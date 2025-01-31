@@ -114,6 +114,7 @@ $(OBJ_D)%.o : $(SRCS_D)%.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
 clean:
 	printf "$(RED)clean:\t$(NAME)\n\n"
 	$(MAKE) clean -C ./libft
+	$(MAKE) clean -C $(LIB_UNIT)
 	$(RM) $(OBJ_D)
 	$(RM) $(LOG_D)
 	printf "$(RED)---------------------\n\n$(RESET)"
@@ -121,6 +122,7 @@ clean:
 .PHONY: fclean
 fclean:
 	$(MAKE) fclean -C ./libft
+	$(MAKE) fclean -C $(LIB_UNIT)
 	$(RM) $(BIN_D)
 	printf "$(RED)fclean:\t$(NAME)\n"
 	$(MAKE) clean
