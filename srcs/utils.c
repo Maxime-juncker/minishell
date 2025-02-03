@@ -7,6 +7,7 @@ size_t	get_biggest_len(char *s1, char *s2)
 
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
+	return (ft_max(len1, len2));
 }
 
 int	is_builtin(char *name)
@@ -21,7 +22,8 @@ int	is_builtin(char *name)
 		return (1);
 	if (ft_strncmp(name, "cd", get_biggest_len(name, "cd")) == 0)
 		return (1);
-
+	if (ft_strncmp(name, "heredoc", get_biggest_len(name, "heredoc")) == 0)
+		return (1);
 	return (0);
 }
 

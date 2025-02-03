@@ -49,6 +49,9 @@ size_t	get_biggest_len(char *s1, char *s2);
 char	*find_env_var(char **env, const char *to_find, int *index);
 int		replace_env_var(char **env, const char *to_find, const char *replace);
 
+// heredoc.c
+int		heredoc(const t_command cmd);
+
 /* ------------------------------ built-in cmd ------------------------------ */
 // echo.c
 int		echo(char **args, int n);

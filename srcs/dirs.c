@@ -38,7 +38,7 @@ int change_directory(const char *path, char **env)
 {
 	DIR		*dir;
 
-	if (path == NULL)
+	if (path == NULL || ft_strncmp(path, "~", ft_strlen(path)) == 0)
 		path = find_env_var(env, "HOME", NULL);
 
 	dir = opendir(path);

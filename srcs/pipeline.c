@@ -8,7 +8,7 @@ void	show_cmd(t_command cmd);
 /// @brief Run a built-in command
 /// @param cmd The command to run
 /// @return the exit value of the run command, -1 if the command isn't builtin
-int	run_built_in(t_command cmd, t_command_table *table)
+int	run_built_in(const t_command cmd, const t_command_table *table)
 {
 	size_t	len;
 
@@ -22,7 +22,6 @@ int	run_built_in(t_command cmd, t_command_table *table)
 
 	return (-1);
 }
-
 
 int	run_env_cmd(t_command_table *table, t_command cmd)
 {
@@ -42,6 +41,11 @@ int	run_env_cmd(t_command_table *table, t_command cmd)
 		cd_command(table, cmd);
 		return (1);
 	}
+	if (ft_strncmp(cmd.args[0], "heredoc", ft_strlen(name)) == 0)
+	{
+		heredoc(cmd);
+		return (1);
+	}
 	return (0);
 }
 
@@ -53,7 +57,6 @@ int	run_pipeline(t_command_table *table)
 	size_t	i;
 	int		code;
 
-	// show_table(table);
 	i = 0;
 	while (i < table->n_commands)
 	{
@@ -62,9 +65,10 @@ int	run_pipeline(t_command_table *table)
 			i++;
 			continue;
 		}
-		code = run_command(table->commands[i], table);
+		run_command(table->commands[i], table);
 		i++;
 	}
+	wait(&code);
 	return (code);
 }
 
@@ -80,7 +84,6 @@ void	setup_redirection(t_command cmd)
 int	run_command(t_command cmd, t_command_table *table)
 {
 	int	pid;
-	int	code;
 
 	cmd.args[cmd.n_args] = NULL;
 
@@ -105,8 +108,7 @@ int	run_command(t_command cmd, t_command_table *table)
 		close(cmd.fd_out);
 	if (cmd.fd_in != STDIN_FILENO)
 		close(cmd.fd_in);
-	wait(&code);
-	return (code);
+	return (0);
 }
 
 /* -------------------------------------------------------------------------- */

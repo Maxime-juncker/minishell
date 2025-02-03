@@ -12,8 +12,10 @@ int	echo(char **args, int n)
 
 	i = 0;
 	no_br = 0;
-	if (n > 0 && ft_strncmp(args[0], "-n", ft_strlen(args[0])) == 0)
+	if (ft_strncmp(args[0], "-n", ft_strlen(args[0])) == 0)
 	{
+		if (n == 1)
+			return (0);
 		no_br = 1;
 		i++;
 	}
