@@ -76,30 +76,36 @@ char	*expand_env_var(const char *str, char **env, int last_cmd)
 
 static int	handle_redirection(t_command *cmd, char *cmd_str, int is_last)
 {
-	char	*output_file;
-	char	*redirection_pos;
+	int		i;
+	int		j;
+	char	*file;
 
-	redirection_pos = ft_strchr(cmd_str, '>');
-	if (redirection_pos)
+	i = 0;
+	while (cmd_str[i] && cmd_str[i] != '>')
+		i++;
+	while (cmd_str[i] && cmd_str[i] == '>')
+		i++;
+	while (cmd_str[i])
 	{
-		if (*(redirection_pos + 1) == '>')
-		{
-			output_file = ft_strdup(redirection_pos + 2);
-			*redirection_pos = '\0';
-			cmd->fd_out = open(output_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		}
-		else
-		{
-			output_file = ft_strdup(redirection_pos + 1);
-			*redirection_pos = '\0';
-			cmd->fd_out = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		}
-		free(output_file);
-		if (cmd->fd_out == -1)
+		// printf("%c", cmd_str[i]);
+		j = i;
+		while (cmd_str[j] && cmd_str[j] != '>')
+			j++;
+		file = malloc(j - i + 1);
+		if (!file)
 			return (0);
-		cmd->n_args -= 2;
+		while (i < j)
+		{
+			file[i] = cmd_str[i];
+			i++;
+		}
+		printf("%s\n", file);
+		// if (cmd_str[i] && cmd_str[i + 1] && cmd_str[i + 2] == '>')
+		// 	cmd->fd_out = open(ft_strtrim(file, " "), O_WRONLY | O_CREAT | O_APPEND, 0644);
+		// else
+		// 	cmd->fd_out = open(ft_strtrim(file, " "), O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	}
-	else if (is_last)
+	if (is_last && !ft_strchr(cmd_str, '>'))
 		cmd->fd_out = 1;
 	return (1);
 }
@@ -145,7 +151,7 @@ int	init_table(char *line, char **env, t_command_table *table, int last_cmd)
 	char				**cmd_strs;
 	size_t				i;
 
-	cmd_strs = ft_split(line, '|');
+	cmd_strs = ft_split(ft_strtrim(line, " \t"), '|');
 	if (!cmd_strs)
 		return (127);
 	table->n_commands = 0;

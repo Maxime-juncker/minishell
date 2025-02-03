@@ -42,6 +42,7 @@ int		run_command(t_command cmd, t_command_table *table);
 // init.c
 int		init_table(char *line, char **env, t_command_table *table, int last_cmd);
 char	*expand_env_var(const char *str, char **env, int last_cmd);
+char	**ft_split_str(const char *s, char c);
 
 // utils.c
 int		is_builtin(char *name);
