@@ -78,32 +78,34 @@ static int	handle_redirection(t_command *cmd, char *cmd_str, int is_last)
 {
 	int		i;
 	int		j;
+	int		k;
 	char	*file;
 
 	i = 0;
 	while (cmd_str[i] && cmd_str[i] != '>')
 		i++;
-	while (cmd_str[i] && cmd_str[i] == '>')
+	while (cmd_str[i] && (cmd_str[i] == '>' || cmd_str[i] == ' '))
 		i++;
 	while (cmd_str[i])
 	{
-		// printf("%c", cmd_str[i]);
+		cmd->n_args -= 2;
 		j = i;
-		while (cmd_str[j] && cmd_str[j] != '>')
+		while (cmd_str[j] && (cmd_str[j] != '>' || cmd_str[i] == ' '))
 			j++;
 		file = malloc(j - i + 1);
 		if (!file)
 			return (0);
-		while (i < j)
+		k = 0;
+		while (i + k < j)
 		{
-			file[i] = cmd_str[i];
-			i++;
+			file[k] = cmd_str[i + k];
+			k++;
 		}
-		printf("%s\n", file);
-		// if (cmd_str[i] && cmd_str[i + 1] && cmd_str[i + 2] == '>')
-		// 	cmd->fd_out = open(ft_strtrim(file, " "), O_WRONLY | O_CREAT | O_APPEND, 0644);
-		// else
-		// 	cmd->fd_out = open(ft_strtrim(file, " "), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		file[k] = 0;
+		cmd->fd_out = open(ft_strtrim(file, " "), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		i += k;
+		while (cmd_str[i] == ' ')
+			i++;
 	}
 	if (is_last && !ft_strchr(cmd_str, '>'))
 		cmd->fd_out = 1;
