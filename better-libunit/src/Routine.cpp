@@ -52,7 +52,7 @@ namespace Libunit
 		while (i < m_tests.size())
 		{
 			m_passed += m_tests[i].RunTest(this);
-			usleep(200);
+			usleep(100 * 1000);
 			i++;
 		}
 		EndRoutine();

@@ -1,5 +1,41 @@
 #include "minishell.h"
 
+int	is_arg(char *arg)
+{
+	int	i;
+
+	if (arg[0] != '-')
+		return (0);
+	i = 1;
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	process_args(char **args, int n)
+{
+	int	i;
+	int	found_args;
+
+	i = 0;
+	found_args = 0;
+	while (i < n)
+	{
+		if (is_arg(args[i]) == 1)
+		{
+			found_args++;
+		}
+		else
+			break;
+		i++;
+	}
+	return (found_args);
+}
+
 // @brief Print the arguments to the standard output.
 // @param args The arguments to print (each args are separated by a space).
 // @param n The number of arguments.
@@ -10,26 +46,16 @@ int	echo(char **args, int n)
 	int	i;
 	int	no_br;
 
-	i = 0;
-	no_br = 0;
-	if (ft_strncmp(args[0], "-n", ft_strlen(args[0])) == 0)
+	i = process_args(args, n);
+	no_br = i;
+	while (i < n)
 	{
-		if (n == 1)
-			return (0);
-		no_br = 1;
-		i++;
-	}
-	while (i < n - 1)
-	{
-		if (printf("%s ", args[i]) == -1)
-			return (1);
-		i++;
-	}
-	if (n == 0)
-		printf("\n");
-	else if (no_br == 0)
-		printf("%s\n", args[i]);
-	else
 		printf("%s", args[i]);
+		if (i < n - 1)
+			printf(" ");
+		i++;
+	}
+	if (no_br == 0)
+		printf("\n");
 	return (0);
 }

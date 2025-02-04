@@ -10,6 +10,15 @@
 /*                                command table                               */
 /* -------------------------------------------------------------------------- */
 
+# define SYNTAX_ERR 2
+# define CMD_NOT_FOUND 3
+# define MALLOC_ERR 4
+
+
+
+# define DEBUG 1
+
+
 typedef struct s_command
 {
 	char	*path;
@@ -53,6 +62,9 @@ int		replace_env_var(char **env, const char *to_find, const char *replace);
 // heredoc.c
 int		heredoc(const t_command cmd);
 
+// checker.c
+int		check_cmd( const char *cmd_line );
+
 /* ------------------------------ built-in cmd ------------------------------ */
 // echo.c
 int		echo(char **args, int n);
@@ -72,6 +84,9 @@ int		unset(t_command_table *table, t_command cmd);
 // dirs.c
 int	cd_command(const t_command_table *table, const t_command cmd);
 int change_directory(const char *path, char **env);
+
+// debug
+void	show_cmd(t_command cmd);
 
 
 #endif

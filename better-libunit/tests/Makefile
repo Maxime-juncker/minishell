@@ -34,6 +34,11 @@ TEST_SRCS = executor/00_executor.cpp			\
 			commands/11_double_quote1.cpp		\
 			commands/12_double_quote2.cpp		\
 			commands/13_redir_in.cpp			\
+			tests/00_tests.cpp					\
+			tests/01_br.cpp						\
+			tests/02_syntax_err.cpp				\
+			echo/00_echo.cpp					\
+			echo/01_echo_test.cpp				\
 
 
 TEST_OBJS = $(TEST_SRCS:.cpp=.o)
@@ -59,7 +64,7 @@ $(NAME): $(TEST_OBJS) $(MAIN_OBJ)
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)\n\n"
 
-%.o: %.cpp $(FRAMEWORK_LIB)
+%.o: %.cpp $(FRAMEWORK_LIB) ../../bin/libminishell.a
 	printf "$(CURSOR_OFF)$(BLUE)"
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 	printf "compiling: $@\n"
@@ -73,7 +78,8 @@ fclean: clean
 
 re: fclean all
 
-test: all
+test:
+	$(MAKE) -j all
 	./$(NAME)
 
 .PHONY: all clean fclean re bonus

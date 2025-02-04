@@ -54,5 +54,35 @@ namespace Libunit
 		return (expected.compare((const char *)buffer));
 	}
 
+	/// @param filename: the path to the file to open.
+	/// @param expected_line: an array of C-strings, each representing the expected content of a line.
+	/// @param number_of_line: the number of lines to check.
+	int CheckFile(const std::string &filename, const char *expected_line[], const int number_of_line)
+	{
+		std::ifstream infile(filename);
+		if (!infile.is_open())
+		{
+			std::cerr << "Error: Unable to open file " << filename << std::endl;
+			return 1;
+		}
+
+		std::string line;
+		// Loop over the expected number of lines
+		for (int i = 0; i < number_of_line; ++i)
+		{
+			// Read a line from the file.
+			if (!std::getline(infile, line)) {
+				std::cerr << "Error: File " << filename << " contains fewer than " << number_of_line << " lines." << std::endl;
+				return 1;
+			}
+			// Compare the read line with the expected line.
+			if (line != expected_line[i])
+			{
+				return 1;
+			}
+		}
+
+		return 0; // All lines matched.
+	}
 } // namespace Libunit
 

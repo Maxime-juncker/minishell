@@ -22,10 +22,11 @@ SRC =	main.c			\
 		unset.c			\
 		dirs.c			\
 		heredoc.c		\
+		checker.c		\
 
 LIB_SRC =	executor.c pipex_utils.c pipeline.c example.c \
 			echo.c env.c pwd.c export_cmd.c init.c utils.c unset.c dirs.c \
-			heredoc.c	\
+			heredoc.c checker.c	\
 
 OBJ = $(SRC:.c=.o)
 LIB_OBJ = $(LIB_SRC:.c=.o)
@@ -140,7 +141,7 @@ re:
 
 .PHONY: test
 test: lib
-	$(MAKE) test -C better-libunit/
+	$(MAKE) -j test -C better-libunit/
 
 # ---------------------------------------------------------------------------- #
 #                              create directories                              #

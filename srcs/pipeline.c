@@ -36,6 +36,11 @@ int	run_env_cmd(t_command_table *table, t_command cmd)
 		unset(table, cmd);
 		return (1);
 	}
+	// if (ft_strncmp(name, "echo", ft_strlen(name)) == 0)
+	// {
+	// 	echo(cmd.args + 1, cmd.n_args - 1);
+	// 	return (1);
+	// }
 	if (ft_strncmp(cmd.args[0], "cd", ft_strlen(name)) == 0)
 	{
 		cd_command(table, cmd);
@@ -68,7 +73,7 @@ int	run_pipeline(t_command_table *table)
 		run_command(table->commands[i], table);
 		i++;
 	}
-	wait(&code);
+	while (wait(&code) > 0);
 	return (code);
 }
 
@@ -84,6 +89,10 @@ void	setup_redirection(t_command cmd)
 int	run_command(t_command cmd, t_command_table *table)
 {
 	int	pid;
+
+#if DEBUG
+	show_cmd(cmd);
+#endif
 
 	cmd.args[cmd.n_args] = NULL;
 
