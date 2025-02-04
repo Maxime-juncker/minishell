@@ -1,10 +1,0 @@
-^[[90mrunning echo (4 args)$
-args: echo ^^>"V $ ^^>"V $
-fd_in(0)	fd_out(4)^[[0m$
-^^>"V $ ^^>"V$
-[90mrunning echo (4 args)
-args: echo >"V $ >"V 
-fd_in(0)	fd_out(4)[0m
-[90mrunning cat (2 args)
-args: cat -e 
-fd_in(3)	fd_out(1)[0m
