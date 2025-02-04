@@ -55,4 +55,3 @@ obj/
 .vscode/
 .idea/
 *.txt
-!better-libunit/tests/log.txt
