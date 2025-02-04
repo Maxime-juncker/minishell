@@ -37,6 +37,8 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = readline("\033[0mminishell$ ");
+		if (check_cmd(line) == SYNTAX_ERR)
+			continue ;
 		if (line && !ft_strncmp(line, "\n", ft_strlen(line)))
 			new_prompt();
 		else if (!line || !ft_strncmp(line, "exit", ft_strlen(line)) && ft_strlen(line) == 4)
