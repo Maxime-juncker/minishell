@@ -31,7 +31,6 @@ RM = rm -fr
 ARGS = 1
 
 all: header $(BIN_D)$(NAME)
-	$(MAKE) -C tests/
 
 .PHONY: header
 header:

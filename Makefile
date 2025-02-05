@@ -61,7 +61,10 @@ CURSOR_ON 		= \e[?25h
 
 RM = rm -fr
 
-all: header libft $(BIN_D)$(NAME)
+all:
+	$(MAKE) header
+	$(MAKE) libft
+	$(MAKE) $(BIN_D)$(NAME)
 
 # ---------------------------------------------------------------------------- #
 #                                     misc                                     #
@@ -87,17 +90,17 @@ header:
 # ---------------------------------------------------------------------------- #
 #                                 creating exec                                #
 # ---------------------------------------------------------------------------- #
-.PHONY: lib
-lib: all
+$(BIN)/libminishell.a:
 	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
 	ar rcs $(BIN_D)libminishell.a $(LIB_OBJ) "libft/bin/libft.a"
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)\n\n"
 
 
-$(BIN_D)$(NAME): $(OBJ) $(BIN_D)
+$(BIN_D)$(NAME): $(OBJ) | $(BIN_D)
 	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
-	$(CC) $(CFLAGS) $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME).out -L/usr/lib -lreadline
+	$(CC) $(CFLAGS) $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME) -L/usr/lib -lreadline
+	ar rcs $(BIN_D)libminishell.a $(LIB_OBJ) "libft/bin/libft.a"
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)$(RESET)\n\n"
 
@@ -140,8 +143,10 @@ re:
 	$(MAKE) all
 
 .PHONY: test
-test: lib
-	$(MAKE) -j test -C better-libunit/
+test:
+	$(MAKE) all
+	$(MAKE) test -C better-libunit/
+	# $(MAKE) $(BIN)/libminishell.a
 
 # ---------------------------------------------------------------------------- #
 #                              create directories                              #

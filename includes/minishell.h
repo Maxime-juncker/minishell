@@ -10,11 +10,10 @@
 /*                                command table                               */
 /* -------------------------------------------------------------------------- */
 
-# define SYNTAX_ERR 2
-# define CMD_NOT_FOUND 3
-# define MALLOC_ERR 4
-
-
+# define SYNTAX_ERR	2
+# define NOT_FOUND	3
+# define IS_DIR		4
+# define MALLOC_ERR	-1
 
 # define DEBUG 0
 

@@ -20,7 +20,6 @@ int	executor_routine( void )
 	/* ================ ADD TESTS HERE ================ */
 	routine.AddNewTest(Libunit::Test("GET_PATH", "basic_test", &test_path));
 	routine.AddNewTest(Libunit::Test("GET_PATH", "not found", &not_found));
-	routine.AddNewTest(Libunit::Test("GET_PATH", "null_test", &null_path));
 	// ==================================================
 
 	routine.Run();

@@ -1,30 +1,11 @@
-// #include "Routine.hpp"
-
-
-// namespace Libunit
-// {
-// 	void PrintFinalRes(void)
-// 	{
-// 		std::cout << "==== " << BOLD << "FINAL RESULT" << RESET << " ====" << std::endl;
-// 		std::cout << "Total tests: " << Routine::m_final_res.total_tests << std::endl;
-// 		std::cout << "Tests passed: " << Routine::m_final_res.tests_passed << std::endl;
-// 		std::cout << "Routines passed: " << Routine::m_final_res.routine_passed << std::endl;
-// 		std::cout << "Total routines: " << Routine::m_final_res.total_routine << std::endl;
-// 		std::cout << std::endl;
-// 	}
-// } // namespace Libunit
-
-// namespace Libunit
-// {
-// 	void	Redirect_out
-// } // namespace Libunit
-
 #include <stdio.h>
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <string.h>
 #include <sys/wait.h>
+
+#include"libunit.hpp"
 
 #include <fcntl.h>
 
@@ -48,10 +29,12 @@ namespace Libunit
 			std::cerr << "cant read file" << std::endl;
 		read(fd, buffer, expected.length());
 		close(fd);
-		// std::cout << expected.compare((const char *)buffer) << std::endl;
-		// std::cout << buffer << std::endl;
-		// std::cout << expected << std::endl;
-		return (expected.compare((const char *)buffer));
+		if (expected.compare((const char *)buffer) == 0)
+			return (0);
+		// std::cout << GRAY << "  diff:" << std::endl;
+		// std::cout << "\t" << (const char *)buffer << std::endl;
+		// std::cout << "\t" << expected << RESET << std::endl;
+		return (1);
 	}
 
 	/// @param filename: the path to the file to open.
@@ -59,25 +42,31 @@ namespace Libunit
 	/// @param number_of_line: the number of lines to check.
 	int CheckFile(const std::string &filename, const char *expected_line[], const int number_of_line)
 	{
+		freopen("/dev/tty", "w", stdout);
+
 		std::ifstream infile(filename);
 		if (!infile.is_open())
 		{
-			std::cerr << "Error: Unable to open file " << filename << std::endl;
+			std::cout << "Error: Unable to open file " << filename << std::endl;
 			return 1;
 		}
 
 		std::string line;
 		// Loop over the expected number of lines
+//        std::cout << "test" << std::endl;
 		for (int i = 0; i < number_of_line; ++i)
 		{
 			// Read a line from the file.
 			if (!std::getline(infile, line)) {
-				std::cerr << "Error: File " << filename << " contains fewer than " << number_of_line << " lines." << std::endl;
+				std::cout << "Error: File " << filename << " contains fewer than " << number_of_line << " lines." << std::endl;
 				return 1;
 			}
 			// Compare the read line with the expected line.
 			if (line != expected_line[i])
 			{
+				std::cout << GRAY << "  diff:" << std::endl;
+				std::cout << "\t" << "usr:" << line << std::endl;
+				std::cout << "\t" << "res:" << expected_line[i] << RESET << std::endl;
 				return 1;
 			}
 		}

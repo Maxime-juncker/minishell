@@ -27,6 +27,7 @@ int	main(int ac, char **av, char **env)
 	char			*line;
 	t_command_table	table;
 	int				last_cmd;
+	int				code;
 
 	(void)ac;
 	(void)av;
@@ -37,8 +38,11 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = readline("\033[0mminishell$ ");
-		if (check_cmd(line) == SYNTAX_ERR)
+		code = check_cmd(line);
+		if (code == SYNTAX_ERR || code == IS_DIR)
 			continue ;
+		else if (code == MALLOC_ERR)
+			exit(EXIT_FAILURE); //! need to cleanup if needed
 		if (line && !ft_strncmp(line, "\n", ft_strlen(line)))
 			new_prompt();
 		else if (!line || !ft_strncmp(line, "exit", ft_strlen(line)) && ft_strlen(line) == 4)

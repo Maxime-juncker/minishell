@@ -41,6 +41,5 @@ char*	get_cmd_path(char** paths, t_command cmd)
 		i++;
 	}
 	cleanup(paths);
-	ft_putstr_fd("\033[31mCommand not found\n", 2);
 	return (NULL);
 }
