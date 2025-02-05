@@ -15,7 +15,6 @@ int	export_cmd(t_command_table *table, t_command cmd)
 {
 	char **cpy;
 	int		i;
-	char	*path;
 
 	// cpy env
 	cpy = malloc((get_env_len(table->env) + 2) * sizeof(char *)); //? +2 because 1 for the new var and 1 for the final null;

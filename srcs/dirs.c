@@ -19,6 +19,8 @@ static char	*get_absolute_path(const char *new_path)
 		free(buff);
 		cur_size++;
 		buff = malloc(cur_size);
+		if (buff == NULL)
+			return (NULL);
 	}
 	return (buff);
 }
@@ -37,6 +39,7 @@ int	cd_command(const t_command_table *table, const t_command cmd)
 int change_directory(const char *path, char **env)
 {
 	DIR		*dir;
+	char	*abs_path;
 
 	if (path == NULL || ft_strncmp(path, "~", ft_strlen(path)) == 0)
 		path = find_env_var(env, "HOME", NULL);
@@ -52,9 +55,11 @@ int change_directory(const char *path, char **env)
 		perror("chdir failed");
 		return (1);
 	}
-	path = get_absolute_path(path);
-	replace_env_var(env, "PWD", path);
+	abs_path = get_absolute_path(path);
+	if (!abs_path)
+		return (MALLOC_ERR);
+	replace_env_var(env, "PWD", abs_path);
 	closedir(dir);
-	free(path);
+	free(abs_path);
 	return (0);
 }

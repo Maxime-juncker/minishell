@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	is_arg(char *arg)
+int	is_arg(const char *arg)
 {
 	int	i;
 

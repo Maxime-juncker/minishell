@@ -10,11 +10,10 @@ static int	get_env_len(char **env)
 	return (len);
 }
 
-int	unset(t_command_table *table, t_command cmd)
+int	unset(t_command_table *table, const t_command cmd)
 {
 	char **cpy;
 	int		i;
-	char	*path;
 	int		len = 0;
 
 	// cpy env

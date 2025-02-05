@@ -46,4 +46,5 @@ int	heredoc(const t_command cmd)
 		line = get_next_line(0);
 	}
 	ft_printf("%s", doc);
+	return (0);
 }

@@ -9,7 +9,7 @@ char	**get_paths(char **env)
 		i++;
 	}
 
-	char *tmp = env[i] + 5;
+	const char *tmp = env[i] + 5;
 	return (ft_split(tmp, ':'));
 }
 

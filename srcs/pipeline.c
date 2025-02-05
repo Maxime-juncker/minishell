@@ -3,7 +3,6 @@
 #include <stdio.h>
 
 void	show_table(t_command_table table);
-void	show_cmd(t_command cmd);
 
 /// @brief Run a built-in command
 /// @param cmd The command to run
@@ -73,7 +72,7 @@ int	run_pipeline(t_command_table *table)
 		run_command(table->commands[i], table);
 		i++;
 	}
-	while (wait(&code) > 0);
+	while (wait(&code) > 0) {}
 	return (code);
 }
 
@@ -86,7 +85,7 @@ void	setup_redirection(t_command cmd)
 /// @brief run a command
 /// @param cmd the command to run
 /// @return exit code of the command
-int	run_command(t_command cmd, t_command_table *table)
+int	run_command(t_command cmd, const t_command_table *table)
 {
 	int	pid;
 

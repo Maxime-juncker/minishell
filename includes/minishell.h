@@ -45,7 +45,7 @@ void	setup_redirection(t_command cmd);
 
 // pipeline.c
 int		run_pipeline(t_command_table *table);
-int		run_command(t_command cmd, t_command_table *table);
+int		run_command(t_command cmd, const t_command_table *table);
 
 // init.c
 int		init_table(char *line, char **env, t_command_table *table, int last_cmd);
@@ -54,7 +54,7 @@ char	**ft_split_str(const char *s, char c);
 
 // utils.c
 int		is_builtin(char *name);
-size_t	get_biggest_len(char *s1, char *s2);
+size_t	get_biggest_len(const char *s1, const char *s2);
 char	*find_env_var(char **env, const char *to_find, int *index);
 int		replace_env_var(char **env, const char *to_find, const char *replace);
 

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-size_t	get_biggest_len(char *s1, char *s2)
+size_t	get_biggest_len(const char *s1, const char *s2)
 {
 	size_t	len1;
 	size_t	len2;

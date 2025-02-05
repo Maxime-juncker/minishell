@@ -1,11 +1,8 @@
 #include "minishell.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <signal.h>
 
 void	new_prompt(void)
@@ -45,7 +42,7 @@ int	main(int ac, char **av, char **env)
 			exit(EXIT_FAILURE); //! need to cleanup if needed
 		if (line && !ft_strncmp(line, "\n", ft_strlen(line)))
 			new_prompt();
-		else if (!line || !ft_strncmp(line, "exit", ft_strlen(line)) && ft_strlen(line) == 4)
+		else if (!line || (!ft_strncmp(line, "exit", ft_strlen(line)) && ft_strlen(line) == 4))
 			return (0);
 		last_cmd = init_table(line, env, &table, last_cmd);
 		if (last_cmd != 127)

@@ -13,10 +13,10 @@ static void	cleanup(char **arr)
 	free(arr);
 }
 
-// @brief return the full path of a command if it exist
+// @brief return the full path of a command if it exists
 // @param paths the env paths variable
 // @param cmd the command to search
-// @return the full path of the command if it exist, NULL otherwise
+// @return the full path of the command if it exists, NULL otherwise
 char*	get_cmd_path(char** paths, t_command cmd)
 {
 	int	i = 0;

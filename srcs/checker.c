@@ -30,6 +30,7 @@ static int in_base(const char c, const char *base)
 }
 
 //TODO: special case for if <> -> bash: syntax error near unexpected token `newline'
+//!!!! ex: ls<>file the file is created but is empty, the fd out of ls is the stdout
 static int	check_syntax(const char *cmd)
 {
 	int	n_args;
@@ -54,7 +55,7 @@ static int	check_syntax(const char *cmd)
 		n_args++;
 
 	// store redirection
-	tmp = cmd[i];
+	tmp = (int)cmd[i];
 	occ = 1;
 	i++;
 	while (cmd[i] && (in_base(cmd[i], "><") > -1 || cmd[i] == ' '))
@@ -62,6 +63,11 @@ static int	check_syntax(const char *cmd)
 		//* error
 		if (in_base(cmd[i], "><") > -1 && (cmd[i] != tmp || occ == 2)) // >< or ><> or ><<
 		{
+			// if (tmp == '<' && cmd[i] == '>')
+			// {
+			// 	printf("minishell$ syntax error near unexpected token `newline\'\n");
+			// 	return (SYNTAX_ERR);
+			// }
 			printf("minishell$ syntax error near unexpected token `%c", cmd[i]);
 			if (in_base(cmd[i + 1], "><") > -1)
 				printf("%c", cmd[i + 1]);
@@ -89,14 +95,13 @@ static int	check_syntax(const char *cmd)
 	return (SYNTAX_ERR);
 }
 
-static int	check_cmd_path(const char *cmd_line, char *operators)
+static int	check_cmd_path(const char *cmd_line)
 {
 	int	i;
 	t_command	cmd;
-	char path;
 
 	i = 0;
-	while (cmd_line[i] && in_base(cmd_line[i], operators) == -1 && cmd_line[i] != ' ')
+	while (cmd_line[i] && in_base(cmd_line[i], "><") == -1 && cmd_line[i] != ' ')
 	{
 		i++;
 	}
@@ -115,9 +120,9 @@ static int	check_cmd_path(const char *cmd_line, char *operators)
 	return (0);
 }
 
-int	check_dir_validity(char *path)
+int	check_dir_validity(const char *path)
 {
-	DIR *dir;
+	DIR		*dir;
 	char	**paths;
 
 	paths = ft_split(path, ' ');
@@ -125,7 +130,7 @@ int	check_dir_validity(char *path)
 		return (MALLOC_ERR);
 
 	// check that it's only the dir
-	if (ft_strchr(paths[0], "/") == NULL)
+	if (ft_strchr(paths[0], '/') == NULL)
 		return (0);
 
 	// open dir
@@ -139,7 +144,7 @@ int	check_dir_validity(char *path)
 	return (IS_DIR);
 }
 
-int	check_needed(const char **cmd, const char operator)
+int	check_needed(char **cmd, const char operator)
 {
 	int	i;
 
@@ -173,6 +178,7 @@ int	check_cmd( const char *cmd_line )
 			code = check_syntax(cmd[i]);
 			if (code != 0)
 			{
+				cleanup_arr((void **)cmd);
 				return (code);
 			}
 			i++;
@@ -186,13 +192,17 @@ int	check_cmd( const char *cmd_line )
 	{
 		code = check_dir_validity(cmd[0]);
 		if (code != 0)
+		{
+			cleanup_arr((void **)cmd);
 			return (code);
+		}
 	}
-	code = check_cmd_path(cmd_line, "><");
+	code = check_cmd_path(cmd_line);
 	if (code != 0)
 	{
+		cleanup_arr((void **)cmd);
 		return (code);
 	}
-
-	return 0;
+	cleanup_arr((void **)cmd);
+	return (0);
 }

@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 /// @brief Print the environment variables
-/// @param env The environment variables
+/// @param table The environment variables
 int	env(t_command_table table)
 {
 	int	i;
