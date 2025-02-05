@@ -7,7 +7,7 @@
 		"name": "(gdb) Launch",
 		"type": "cppdbg",
 		"request": "launch",
-		"program": "${workspaceFolder}/bin/minishell.out",
+		"program": "${workspaceFolder}/bin/minishell",
 		"args": [],
 		"stopAtEntry": false,
 		"cwd": "${fileDirname}",
@@ -27,5 +27,15 @@
 				"ignoreFailures": true
 			}
 		]
-	}]
+	},
+	{
+		"type": "lldb",
+		"request": "launch",
+		"name": "(lldb) Launch",
+		"program": "${workspaceFolder}/bin/minishell",
+		"args": [],
+		"cwd": "${workspaceFolder}"
+	}
+
+]
 }
