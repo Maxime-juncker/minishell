@@ -13,7 +13,6 @@ SRC =	main.c			\
 		executor.c		\
 		pipex_utils.c	\
 		pipeline.c		\
-		example.c		\
 		echo.c			\
 		env.c			\
 		pwd.c			\
@@ -24,7 +23,7 @@ SRC =	main.c			\
 		heredoc.c		\
 		checker.c		\
 
-LIB_SRC =	executor.c pipex_utils.c pipeline.c example.c \
+LIB_SRC =	executor.c pipex_utils.c pipeline.c \
 			echo.c env.c pwd.c export_cmd.c init.c utils.c unset.c dirs.c \
 			heredoc.c checker.c	\
 
