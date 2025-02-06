@@ -17,7 +17,6 @@
 
 # define DEBUG 0
 
-
 typedef struct s_command
 {
 	char	*path;

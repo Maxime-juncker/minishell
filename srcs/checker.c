@@ -29,9 +29,9 @@ static int in_base(const char c, const char *base)
 	return (-1);
 }
 
-//TODO: special case for if <> -> bash: syntax error near unexpected token `newline'
-//!!!! ex: ls<>file the file is created but is empty, the fd out of ls is the stdout
-static int	check_syntax(const char *cmd)
+//!!!! special case for if <> -> bash: syntax error near unexpected token `newline'
+//!!!! ls <> file the file is created but is empty, the fd out of ls is the stdout
+static int	check_syntax_old(const char *cmd)
 {
 	int	n_args;
 	int	n_redir;
@@ -88,8 +88,7 @@ static int	check_syntax(const char *cmd)
 	if (tmp == 1)
 		n_args++;
 
-
-	if (n_args == n_redir + 1)
+	if (n_args == n_redir + 1 || n_args == n_redir)
 		return (0);
 	printf("minishell$ syntax error near unexpected token `newline\'\n");
 	return (SYNTAX_ERR);
@@ -111,6 +110,7 @@ static int	check_cmd_path(const char *cmd_line)
 	cmd.args[0] = malloc(i + 1);
 	if (cmd.args[0] == NULL)
 		return (MALLOC_ERR);
+	cmd_line = ft_strtrim(cmd_line, "\'\"");
 	ft_strlcpy(cmd.args[0], cmd_line, i + 1);
 	if (get_cmd_path(get_paths(__environ), cmd) == NULL)
 	{
@@ -158,32 +158,86 @@ int	check_needed(char **cmd, const char operator)
 	return (0);
 }
 
+int	is_symbols(const char c)
+{
+	return (c == '|' || c == '>' || c == '<');
+}
+
+int	check_error(const char *cmd_line, const int i)
+{
+	int	j;
+	int	nb_spaces;
+
+	j = 0;
+	nb_spaces = 0;
+	while (cmd_line[i - j] == '|' || cmd_line[i - j] == '<' || cmd_line[i - j] == '>' || cmd_line[i - j] == ' ')
+	{
+		if (cmd_line[i - j] == ' ')
+		{
+			nb_spaces++;
+			j++;
+			continue;
+		}
+		if (j - nb_spaces == 2 || cmd_line[i - j] != cmd_line[i])
+		{
+			printf("minishell$ syntax error near unexpected token `%c", cmd_line[i]);
+			if (cmd_line[i + 1] == cmd_line[i] && (cmd_line[i + 1] == '<' || cmd_line[i + 1] == '>'))
+			{
+				printf("%c", cmd_line[i + 1]);
+			}
+			printf("\'\n");
+			return (SYNTAX_ERR);
+		}
+		j++;
+	}
+	return (0);
+}
+
+int	check_syntax(const char *cmd_line)
+{
+	int		i;
+	char	last;
+
+	i = 0;
+	last = 0;
+	while (cmd_line[i])
+	{
+		if (cmd_line[i] == '<' || cmd_line[i] == '>' || cmd_line[i] == '|')
+			if (check_error(cmd_line, i) == SYNTAX_ERR)
+				return (SYNTAX_ERR);
+		if (cmd_line[i] != ' ')
+			last = cmd_line[i];
+		i++;
+	}
+	if (last == '|' )
+	{
+		printf("minishell$ syntax error near unexpected token `|\'\n");
+		return (SYNTAX_ERR);
+
+	}
+	if (last == '>' || last == '<')
+	{
+		printf("minishell$ syntax error near unexpected token `newline\'\n");
+		return (SYNTAX_ERR);
+	}
+	return (0);
+}
+
 int	check_cmd( const char *cmd_line )
 {
 	char	**cmd;
 	int		i;
 	int		code;
 
+	//* 0. check syntax
+	code = check_syntax(cmd_line);
+	if (code == SYNTAX_ERR)
+		return (SYNTAX_ERR);
+
 	//* 1. splitting every cmd
 	cmd = ft_split(cmd_line, '|');
 	if (cmd == NULL)
 		return (EXIT_FAILURE);
-
-	//* 2. checking syntax
-	if (check_needed(cmd, '<') || check_needed(cmd, '>'))
-	{
-		i = 0;
-		while (cmd[i])
-		{
-			code = check_syntax(cmd[i]);
-			if (code != 0)
-			{
-				cleanup_arr((void **)cmd);
-				return (code);
-			}
-			i++;
-		}
-	}
 
 	//* 3. check if cmd right / is a directory
 	// if it's a directory, check if it exists
