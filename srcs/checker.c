@@ -28,71 +28,11 @@ static int in_base(const char c, const char *base)
 	}
 	return (-1);
 }
+//!!!! ' hola""" ' -> cmd not found hola"""
+//!!!! " hola''' " -> cmd not found hola'''
 
 //!!!! special case for if <> -> bash: syntax error near unexpected token `newline'
 //!!!! ls <> file the file is created but is empty, the fd out of ls is the stdout
-static int	check_syntax_old(const char *cmd)
-{
-	int	n_args;
-	int	n_redir;
-	int	tmp;
-	int occ;
-	int	i;
-
-	n_args = 0;
-	n_redir = 0;
-	tmp = 0;
-
-	i = 0;
-
-	while (cmd[i] && in_base(cmd[i], "><") == -1)
-	{
-		if (cmd[i] != ' ')
-			tmp = 1;
-		i++;
-	}
-	if (tmp == 1) // then a cmd is here
-		n_args++;
-
-	// store redirection
-	tmp = (int)cmd[i];
-	occ = 1;
-	i++;
-	while (cmd[i] && (in_base(cmd[i], "><") > -1 || cmd[i] == ' '))
-	{
-		//* error
-		if (in_base(cmd[i], "><") > -1 && (cmd[i] != tmp || occ == 2)) // >< or ><> or ><<
-		{
-			// if (tmp == '<' && cmd[i] == '>')
-			// {
-			// 	printf("minishell$ syntax error near unexpected token `newline\'\n");
-			// 	return (SYNTAX_ERR);
-			// }
-			printf("minishell$ syntax error near unexpected token `%c", cmd[i]);
-			if (in_base(cmd[i + 1], "><") > -1)
-				printf("%c", cmd[i + 1]);
-			printf("\'\n");
-			return (SYNTAX_ERR);
-		}
-		occ++;
-		i++;
-	}
-	n_redir++;
-
-	while (cmd[i] && in_base(cmd[i], "><") == -1)
-	{
-		if (cmd[i] != ' ')
-			tmp = 1;
-		i++;
-	}
-	if (tmp == 1)
-		n_args++;
-
-	if (n_args == n_redir + 1 || n_args == n_redir)
-		return (0);
-	printf("minishell$ syntax error near unexpected token `newline\'\n");
-	return (SYNTAX_ERR);
-}
 
 static int	check_cmd_path(const char *cmd_line)
 {
@@ -130,7 +70,7 @@ int	check_dir_validity(const char *path)
 		return (MALLOC_ERR);
 
 	// check that it's only the dir
-	if (ft_strchr(paths[0], '/') == NULL)
+	if (ft_strchr(paths[0], '/') == NULL && ft_strchr(paths[0], '.') == NULL)
 		return (0);
 
 	// open dir
@@ -158,11 +98,7 @@ int	check_needed(char **cmd, const char operator)
 	return (0);
 }
 
-int	is_symbols(const char c)
-{
-	return (c == '|' || c == '>' || c == '<');
-}
-
+// $HOME
 int	check_error(const char *cmd_line, const int i)
 {
 	int	j;
@@ -170,7 +106,8 @@ int	check_error(const char *cmd_line, const int i)
 
 	j = 0;
 	nb_spaces = 0;
-	while (cmd_line[i - j] == '|' || cmd_line[i - j] == '<' || cmd_line[i - j] == '>' || cmd_line[i - j] == ' ')
+	while (cmd_line[i - j] == '|' || cmd_line[i - j] == '<' || cmd_line[i - j] == '>' ||
+			cmd_line[i - j] == ' ')
 	{
 		if (cmd_line[i - j] == ' ')
 		{
@@ -180,11 +117,15 @@ int	check_error(const char *cmd_line, const int i)
 		}
 		if (j - nb_spaces == 2 || cmd_line[i - j] != cmd_line[i])
 		{
-			printf("minishell$ syntax error near unexpected token `%c", cmd_line[i]);
-			if (cmd_line[i + 1] == cmd_line[i] && (cmd_line[i + 1] == '<' || cmd_line[i + 1] == '>'))
+			if (j - nb_spaces == 1 && cmd_line[i - j] == '<')
 			{
-				printf("%c", cmd_line[i + 1]);
+				j++;
+				continue;
 			}
+			printf("minishell$ syntax error near unexpected token `%c", cmd_line[i]);
+			if (cmd_line[i + 1] == cmd_line[i])
+				printf("%c", cmd_line[i + 1]);
+
 			printf("\'\n");
 			return (SYNTAX_ERR);
 		}
@@ -200,6 +141,15 @@ int	check_syntax(const char *cmd_line)
 
 	i = 0;
 	last = 0;
+	while (cmd_line[i] == ' ')
+	{
+		i++;
+	}
+	if (cmd_line[i] == '|' && cmd_line[i + 1] != '|')
+	{
+		printf("minishell$ syntax error near unexpected token `|\'\n");
+		return (SYNTAX_ERR);
+	}
 	while (cmd_line[i])
 	{
 		if (cmd_line[i] == '<' || cmd_line[i] == '>' || cmd_line[i] == '|')
@@ -209,9 +159,12 @@ int	check_syntax(const char *cmd_line)
 			last = cmd_line[i];
 		i++;
 	}
-	if (last == '|' )
+	if (last == '|')
 	{
-		printf("minishell$ syntax error near unexpected token `|\'\n");
+		printf("minishell$ syntax error near unexpected token `|");
+		if (cmd_line[i - 2] == '|')
+			printf("%c", cmd_line[i - 2]);
+		printf("\'\n");
 		return (SYNTAX_ERR);
 
 	}
@@ -242,7 +195,7 @@ int	check_cmd( const char *cmd_line )
 	//* 3. check if cmd right / is a directory
 	// if it's a directory, check if it exists
 	// otherwise check is the cmd exists
-	if (check_needed(cmd, '/'))
+	if (check_needed(cmd, '/') || check_needed(cmd, '.'))
 	{
 		code = check_dir_validity(cmd[0]);
 		if (code != 0)

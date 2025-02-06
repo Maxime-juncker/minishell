@@ -173,11 +173,11 @@ int	synt_err_13( void )
 {
 	const char *exepted_file[]
 	{
-		"minishell$ /: Is a directory",
+		"minishell$ /./././...//: No such file or directory",
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("/./././...//") == IS_DIR && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd("/./././...//") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
