@@ -30,6 +30,7 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = readline("\033[0mminishell$ ");
+		add_history(line);
 		if (!line || (!ft_strncmp(line, "exit", ft_strlen(line)) && ft_strlen(line) == 4))
 			return (printf("exit\n"), 0);
 		code = check_cmd(line);
@@ -42,7 +43,6 @@ int	main(int ac, char **av, char **env)
 		last_cmd = init_table(line, env, &table, last_cmd);
 		if (last_cmd != 127)
 			last_cmd = run_pipeline(&table);
-		add_history(line);
 		free(line);
 	}
 	return (0);
