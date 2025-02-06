@@ -5,18 +5,13 @@
 #include <readline/history.h>
 #include <signal.h>
 
-void	new_prompt(void)
+void	new_prompt(int sig)
 {
+	if (sig)
+		printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-}
-
-void	handle_signal(int sig)
-{
-	(void)sig;
-	printf("\n");
-	new_prompt();
 }
 
 int	main(int ac, char **av, char **env)
@@ -28,7 +23,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	signal(SIGINT, handle_signal);
+	signal(SIGINT, new_prompt);
 	signal(SIGQUIT, SIG_IGN);
 	table.env = env;
 	last_cmd = 0;
@@ -41,7 +36,7 @@ int	main(int ac, char **av, char **env)
 		else if (code == MALLOC_ERR)
 			exit(EXIT_FAILURE); //! need to cleanup if needed
 		if (line && !ft_strncmp(line, "\n", ft_strlen(line)))
-			new_prompt();
+			new_prompt(0);
 		else if (!line || (!ft_strncmp(line, "exit", ft_strlen(line)) && ft_strlen(line) == 4))
 			return (0);
 		last_cmd = init_table(line, env, &table, last_cmd);
