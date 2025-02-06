@@ -45,11 +45,6 @@ int	run_env_cmd(t_command_table *table, t_command cmd)
 		cd_command(table, cmd);
 		return (1);
 	}
-	if (ft_strncmp(cmd.args[0], "heredoc", ft_strlen(name)) == 0)
-	{
-		heredoc(cmd);
-		return (1);
-	}
 	return (0);
 }
 

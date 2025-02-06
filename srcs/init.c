@@ -107,7 +107,8 @@ static void	handle_redirection_right(t_command *cmd, char *cmd_str, int *i)
 		k++;
 	}
 	file[k] = 0;
-	close(cmd->fd_out);
+	if (cmd->fd_out != 0 && cmd->fd_out != 1)
+		close(cmd->fd_out);
 	cmd->fd_out = open(file, O_WRONLY | O_CREAT | flag, 0644);
 	free(file);
 	*i += k + 1;
@@ -118,9 +119,14 @@ static void	handle_redirection_left(t_command *cmd, char *cmd_str, int *i)
 	int		j;
 	int		k;
 	char	*file;
+	int		db_redir;
 
 	while (cmd_str[*i] && cmd_str[*i] != '<')
 		(*i)++;
+	if (cmd_str[*i] && cmd_str[*i + 1] == '<')
+		db_redir = 1;
+	else
+		db_redir = 0;
 	while (cmd_str[*i] && (cmd_str[*i] == '<' || cmd_str[*i] == ' '))
 		(*i)++;
 	if (!cmd_str[*i])
@@ -141,8 +147,15 @@ static void	handle_redirection_left(t_command *cmd, char *cmd_str, int *i)
 		k++;
 	}
 	file[k] = 0;
-	close(cmd->fd_in);
-	cmd->fd_in = open(file, O_RDONLY, 0644);
+	if (cmd->fd_in != 0 && cmd->fd_in != 1)
+		close(cmd->fd_in);
+	if (db_redir)
+	{
+		heredoc(cmd, file);
+		cmd->fd_in = open("/tmp/", __O_TMPFILE | O_RDWR, 0644);
+	}
+	else
+		cmd->fd_in = open(file, O_RDONLY, 0644);
 	free(file);
 	*i += k + 1;
 }
@@ -167,7 +180,7 @@ static void	handle_redirection(t_command *cmd, char *cmd_str, int is_last)
 			break ;
 		}
 		else if (!ft_strchr(&cmd_str[i], '<')
-				&& !ft_strchr(&cmd_str[i], '>'))
+			&& !ft_strchr(&cmd_str[i], '>'))
 			break ;
 		while (cmd_str[i] == ' ')
 			i++;

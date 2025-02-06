@@ -59,7 +59,7 @@ char	*find_env_var(char **env, const char *to_find, int *index);
 int		replace_env_var(char **env, const char *to_find, const char *replace);
 
 // heredoc.c
-int		heredoc(const t_command cmd);
+int		heredoc(t_command *cmd, char *delimiter);
 
 // checker.c
 int		check_cmd( const char *cmd_line );

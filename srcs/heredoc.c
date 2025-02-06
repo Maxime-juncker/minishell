@@ -14,11 +14,10 @@ char *append_str(char *old, char *append_str, int new_lenght)
 	return (new_str);
 }
 
-int	heredoc(const t_command cmd)
+int	heredoc(t_command *cmd, char *delimiter)
 {
 	char	*doc;
 	char	*line;
-	char	*delemiter = "EOF\n"; //! to change with cmd args
 	size_t	len;
 
 	doc = NULL;
@@ -26,7 +25,7 @@ int	heredoc(const t_command cmd)
 	while (line != NULL)
 	{
 		len = ft_strlen(line);
-		if (ft_strncmp(line, delemiter, len) == 0)
+		if (ft_strncmp(line, delimiter, len - 1) == 0)
 		{
 			break;
 		}
