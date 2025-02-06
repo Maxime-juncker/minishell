@@ -160,12 +160,14 @@ static void	handle_redirection(t_command *cmd, char *cmd_str, int is_last)
 			handle_redirection_left(cmd, cmd_str, &i);
 		else if (ft_strchr(&cmd_str[i], '>'))
 			handle_redirection_right(cmd, cmd_str, &i);
-		if (!(ft_strchr(&cmd_str[temp], '>')) && !ft_strchr(&cmd_str[i], '<') && !ft_strchr(&cmd_str[i], '>') && is_last)
+		if (!(ft_strchr(&cmd_str[temp], '>')) && !ft_strchr(&cmd_str[i], '<')
+			&& !ft_strchr(&cmd_str[i], '>') && is_last)
 		{
 			cmd->fd_out = 1;
 			break ;
 		}
-		else if (is_last && !ft_strchr(&cmd_str[i], '<') && !ft_strchr(&cmd_str[i], '>'))
+		else if (!ft_strchr(&cmd_str[i], '<')
+				&& !ft_strchr(&cmd_str[i], '>'))
 			break ;
 		while (cmd_str[i] == ' ')
 			i++;

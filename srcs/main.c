@@ -30,6 +30,8 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = readline("\033[0mminishell$ ");
+		if (!line || (!ft_strncmp(line, "exit", ft_strlen(line)) && ft_strlen(line) == 4))
+			return (printf("exit\n"), 0);
 		code = check_cmd(line);
 		if (code == SYNTAX_ERR || code == IS_DIR)
 			continue ;
@@ -37,8 +39,6 @@ int	main(int ac, char **av, char **env)
 			exit(EXIT_FAILURE); //! need to cleanup if needed
 		if (line && !ft_strncmp(line, "\n", ft_strlen(line)))
 			new_prompt(0);
-		else if (!line || (!ft_strncmp(line, "exit", ft_strlen(line)) && ft_strlen(line) == 4))
-			return (0);
 		last_cmd = init_table(line, env, &table, last_cmd);
 		if (last_cmd != 127)
 			last_cmd = run_pipeline(&table);
