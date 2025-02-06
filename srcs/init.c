@@ -74,55 +74,102 @@ char	*expand_env_var(const char *str, char **env, int last_cmd)
 	return (ft_strtrim(expanded_str, "'\""));
 }
 
-static int	handle_redirection(t_command *cmd, char *cmd_str, int is_last)
+static void	handle_redirection_right(t_command *cmd, char *cmd_str, int *i)
 {
-	int		i;
+	int		flag;
 	int		j;
 	int		k;
 	char	*file;
-	int		flag;
+
+	while (cmd_str[*i] && cmd_str[*i] != '>')
+		(*i)++;
+	if (cmd_str[*i] && cmd_str[*i + 1] == '>')
+		flag = O_APPEND;
+	else
+		flag = O_TRUNC;
+	while (cmd_str[*i] && (cmd_str[*i] == '>' || cmd_str[*i] == ' '))
+		(*i)++;
+	if (!cmd_str[*i])
+		return ;
+	cmd->n_args -= 2;
+	j = *i;
+	while (cmd_str[j] && cmd_str[j] != '>')
+		j++;
+	if (!cmd_str[j])
+		j++;
+	file = malloc(j - *i);
+	if (!file)
+		return ;
+	k = 0;
+	while (*i + k < j - 1)
+	{
+		file[k] = cmd_str[*i + k];
+		k++;
+	}
+	file[k] = 0;
+	close(cmd->fd_out);
+	cmd->fd_out = open(file, O_WRONLY | O_CREAT | flag, 0644);
+	free(file);
+	*i += k + 1;
+}
+
+static void	handle_redirection_left(t_command *cmd, char *cmd_str, int *i)
+{
+	int		j;
+	int		k;
+	char	*file;
+
+	while (cmd_str[*i] && cmd_str[*i] != '<')
+		(*i)++;
+	while (cmd_str[*i] && (cmd_str[*i] == '<' || cmd_str[*i] == ' '))
+		(*i)++;
+	if (!cmd_str[*i])
+		return ;
+	cmd->n_args -= 2;
+	j = *i;
+	while (cmd_str[j] && cmd_str[j] != '<')
+		j++;
+	if (!cmd_str[j])
+		j++;
+	file = malloc(j - *i);
+	if (!file)
+		return ;
+	k = 0;
+	while (*i + k < j - 1)
+	{
+		file[k] = cmd_str[*i + k];
+		k++;
+	}
+	file[k] = 0;
+	close(cmd->fd_in);
+	cmd->fd_in = open(file, O_RDONLY, 0644);
+	free(file);
+	*i += k + 1;
+}
+
+static void	handle_redirection(t_command *cmd, char *cmd_str, int is_last)
+{
+	int		i;
+	int		temp;
 
 	i = 0;
-	file = NULL;
 	while (cmd_str[i])
 	{
-		while (cmd_str[i] && cmd_str[i] != '>')
-			i++;
-		if (cmd_str[i] && cmd_str[i + 1] == '>')
-			flag = O_APPEND;
-		else
-			flag = O_TRUNC;
-		while (cmd_str[i] && (cmd_str[i] == '>' || cmd_str[i] == ' '))
-			i++;
-		if (!cmd_str[i])
-			break ;
-		cmd->n_args -= 2;
-		j = i;
-		while (cmd_str[j] && (cmd_str[j] != '>' || cmd_str[i] == ' '))
-			j++;
-		if (!cmd_str[j])
-			j++;
-		if (file)
-			free(file);
-		file = malloc(j - i);
-		if (!file)
-			return (0);
-		k = 0;
-		while (i + k < j - 1)
+		temp = i;
+		if (ft_strchr(&cmd_str[i], '<'))
+			handle_redirection_left(cmd, cmd_str, &i);
+		else if (ft_strchr(&cmd_str[i], '>'))
+			handle_redirection_right(cmd, cmd_str, &i);
+		if (!(ft_strchr(&cmd_str[temp], '>')) && !ft_strchr(&cmd_str[i], '<') && !ft_strchr(&cmd_str[i], '>') && is_last)
 		{
-			file[k] = cmd_str[i + k];
-			k++;
+			cmd->fd_out = 1;
+			break ;
 		}
-		file[k] = 0;
-		close(cmd->fd_out);
-		cmd->fd_out = open(ft_strtrim(file, " "), O_WRONLY | O_CREAT | flag, 0644);
-		i += k + 1;
+		else if (is_last && !ft_strchr(&cmd_str[i], '<') && !ft_strchr(&cmd_str[i], '>'))
+			break ;
 		while (cmd_str[i] == ' ')
 			i++;
 	}
-	if (is_last && !ft_strchr(cmd_str, '>'))
-		cmd->fd_out = 1;
-	return (1);
 }
 
 static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last, int last_cmd)
@@ -158,7 +205,8 @@ static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last, int 
 	}
 	if (pipe(pipefd) != -1)
 		cmd->fd_out = pipefd[1];
-	return (handle_redirection(cmd, cmd_str, is_last));
+	handle_redirection(cmd, cmd_str, is_last);
+	return (1);
 }
 
 int	init_table(char *line, char **env, t_command_table *table, int last_cmd)
