@@ -285,7 +285,7 @@ int	synt_err_21( void )
 {
 	const char *exepted_file[]
 	{
-		"minishell$ syntax error near unexpected token `||\'",
+		"minishell$ syntax error near unexpected token `|\'",
 	};
 
 	Libunit::Redirect_log();
