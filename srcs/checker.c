@@ -176,19 +176,84 @@ int	check_syntax(const char *cmd_line)
 	return (0);
 }
 
+size_t	get_new_line_length(const char *cmd_line)
+{
+	size_t	i;
+	char *dup;
+
+	i = 0;
+	dup = ft_strdup(cmd_line);
+	if (!dup)
+		return (1);
+	while (*dup)
+	{
+		if (*dup == '$')
+		{
+			i += ft_strlen(expand_env_var(ft_strdup(dup), __environ, 0));
+			while (*dup != ' ' && *dup)
+			{
+				dup++;
+			}
+		}
+		if (*dup == '\0')
+			break;
+		i++;
+		dup++;
+	}
+	dup -= ft_strlen(cmd_line);
+	free(dup);
+	return (i);
+}
+
+char	*get_expanded_line(const char *cmd_line)
+{
+	char	*new_line;
+	size_t	size;
+	size_t	i;
+
+	i = 0;
+	size = get_new_line_length(cmd_line) + 1;
+	new_line = ft_calloc(size, sizeof(char));
+	if (new_line == NULL)
+		return (NULL);
+	while (*cmd_line)
+	{
+		if (*cmd_line == '$')
+		{
+			new_line = ft_strjoin(new_line, expand_env_var(ft_strdup(cmd_line), __environ, 0));
+			i = ft_strlen(new_line);
+			if (new_line == NULL)
+				return (NULL);
+			while (*cmd_line != ' ' && *cmd_line)
+			{
+				cmd_line++;
+			}
+		}
+		if (*cmd_line == '\0')
+			break;
+		new_line[i] = *cmd_line;
+		i++;
+		cmd_line++;
+	}
+	new_line[i] = '\0';
+	return (new_line);
+}
+
 int	check_cmd( const char *cmd_line )
 {
 	char	**cmd;
-	int		i;
 	int		code;
+	char	*new_line;
+
+	new_line = get_expanded_line(cmd_line);
 
 	//* 0. check syntax
-	code = check_syntax(cmd_line);
+	code = check_syntax(new_line);
 	if (code == SYNTAX_ERR)
 		return (SYNTAX_ERR);
 
 	//* 1. splitting every cmd
-	cmd = ft_split(cmd_line, '|');
+	cmd = ft_split(new_line, '|');
 	if (cmd == NULL)
 		return (EXIT_FAILURE);
 
@@ -204,7 +269,7 @@ int	check_cmd( const char *cmd_line )
 			return (code);
 		}
 	}
-	code = check_cmd_path(cmd_line);
+	code = check_cmd_path(new_line);
 	if (code != 0)
 	{
 		cleanup_arr((void **)cmd);

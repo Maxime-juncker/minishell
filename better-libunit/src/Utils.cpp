@@ -31,9 +31,9 @@ namespace Libunit
 		close(fd);
 		if (expected.compare((const char *)buffer) == 0)
 			return (0);
-		// std::cout << GRAY << "  diff:" << std::endl;
-		// std::cout << "\t" << (const char *)buffer << std::endl;
-		// std::cout << "\t" << expected << RESET << std::endl;
+		 std::cout << GRAY << "  diff:" << std::endl;
+		 std::cout << "\t" << (const char *)buffer << std::endl;
+		 std::cout << "\t" << expected << RESET << std::endl;
 		return (1);
 	}
 
