@@ -31,7 +31,7 @@ int	main(int ac, char **av, char **env)
 	{
 		line = readline("\033[0mminishell$ ");
 		add_history(line);
-		if (!line || (!ft_strncmp(line, "exit", ft_strlen(line)) && ft_strlen(line) == 4))
+		if (!line || (ft_strlen(line) == 4 && !ft_strncmp(line, "exit", 4)))
 			return (printf("exit\n"), 0);
 		code = check_cmd(line);
 		if (code == SYNTAX_ERR || code == IS_DIR)

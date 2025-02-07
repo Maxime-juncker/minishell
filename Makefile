@@ -20,12 +20,12 @@ SRC =	main.c			\
 		export_cmd.c	\
 		unset.c			\
 		dirs.c			\
-		heredoc.c		\
+		redir.c			\
 		checker.c		\
 
 LIB_SRC =	executor.c pipex_utils.c pipeline.c \
 			echo.c env.c pwd.c export_cmd.c init.c utils.c unset.c dirs.c \
-			heredoc.c checker.c	\
+			redir.c checker.c	\
 
 OBJ = $(SRC:.c=.o)
 LIB_OBJ = $(LIB_SRC:.c=.o)

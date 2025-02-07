@@ -79,7 +79,7 @@ char	*find_env_var(char **env, const char *to_find, int *index)
 	return (NULL);
 }
 
-int	replace_env_var(char **env, const char *to_find, const char *replace)
+int	replace_env_var(char **env, char *to_find, const char *replace)
 {
 	int	i = 0;
 	size_t	len = ft_strlen(to_find);
