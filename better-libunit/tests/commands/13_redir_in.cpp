@@ -2,15 +2,21 @@
 
 int	redir_in( void )
 {
+	const char *exepted_file[]
+	{
+		"test",
+	};
 	t_command_table	table;
 	table.env = environ;
 
 	init_table((char *)"echo test > 1.txt", environ, &table, 0);
 	run_pipeline(&table);
 
-	init_table((char *)"cat < 1.txt", environ, &table, 0);
 	Libunit::Redirect_log();
-	if (Libunit::Check_output("test") == 0)
+
+	init_table((char *)"cat < 1.txt", environ, &table, 0);
+	run_pipeline(&table);
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
