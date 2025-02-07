@@ -42,4 +42,10 @@ int synt_err_23( void );
 int synt_err_24( void );
 int synt_err_25( void );
 int synt_err_26( void );
+int synt_err_27( void );
+int synt_err_28( void );
+int synt_err_29( void );
+int synt_err_30( void );
+int synt_err_31( void );
+int synt_err_32( void );
 

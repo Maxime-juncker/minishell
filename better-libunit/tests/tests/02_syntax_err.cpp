@@ -364,3 +364,87 @@ int	synt_err_26( void )
 	else
 		return (1);
 }
+
+int	synt_err_27( void )
+{
+	const char *exepted_file[]
+	{
+		"minishell$ holaoui: command not found",
+	};
+
+	Libunit::Redirect_log();
+	if (check_cmd("hola\"\"oui") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+		return (0);
+	else
+		return (1);
+}
+
+int	synt_err_28( void )
+{
+	const char *exepted_file[]
+	{
+		"minishell$ ho\'\'laoui: command not found",
+	};
+
+	Libunit::Redirect_log();
+	if (check_cmd("ho\"\'\'\"la\'\'oui") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+		return (0);
+	else
+		return (1);
+}
+
+int	synt_err_29( void )
+{
+	const char *exepted_file[]
+	{
+		"minishell$ \"hola\": command not found",
+	};
+
+	Libunit::Redirect_log();
+	if (check_cmd("\'\"hola\"\'") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+		return (0);
+	else
+		return (1);
+}
+
+int	synt_err_30( void )
+{
+	const char *exepted_file[]
+	{
+		"minishell$ \'hola\': command not found",
+	};
+
+	Libunit::Redirect_log();
+	if (check_cmd("\"\'hola\'\"") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+		return (0);
+	else
+		return (1);
+}
+
+int	synt_err_31( void )
+{
+	const char *exepted_file[]
+	{
+		"minishell$ \'ls\': command not found",
+	};
+
+	Libunit::Redirect_log();
+	if (check_cmd("\"\'\"ls\"\'\"") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+		return (0);
+	else
+		return (1);
+}
+
+int	synt_err_32( void )
+{
+	const char *exepted_file[]
+	{
+		"minishell$ \'\'/bin: No such file or directory",
+	};
+
+	Libunit::Redirect_log();
+	if (check_cmd("\"\'\'\"/bin") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+		return (0);
+	else
+		return (1);
+}

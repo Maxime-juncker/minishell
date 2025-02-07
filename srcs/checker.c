@@ -50,7 +50,6 @@ static int	check_cmd_path(const char *cmd_line)
 	cmd.args[0] = malloc(i + 1);
 	if (cmd.args[0] == NULL)
 		return (MALLOC_ERR);
-	cmd_line = ft_strtrim(cmd_line, "\'\"");
 	ft_strlcpy(cmd.args[0], cmd_line, i + 1);
 	if (get_cmd_path(get_paths(__environ), cmd) == NULL)
 	{
@@ -239,13 +238,93 @@ char	*get_expanded_line(const char *cmd_line)
 	return (new_line);
 }
 
+char *remove_quotes(const char *line)
+{
+	char	*new_line;
+	int		i;
+	char	quote_type;
+
+	new_line = ft_calloc(ft_strlen(line) + 1, sizeof(char));
+	if (!new_line)
+		return (NULL);
+	i = 0;
+	quote_type = line[0];
+	line++;
+	while (line[i])
+	{
+		if (line[i] == quote_type)
+			break;
+		new_line[i] = line[i];
+		i++;
+	}
+	new_line[i] = '\0';
+
+	return (new_line);
+}
+
+char	*process_quotes(const char *line)
+{
+	char	*new_line;
+	size_t	i;
+	size_t	j;
+	char	*tmp;
+
+	new_line = ft_calloc(get_new_line_length(line) + 1, sizeof(char));
+	if (!new_line)
+		return (NULL);
+
+	i = 0;
+	j = 0;
+	while (line[i])
+	{
+		if (line[i] == '\'' || line[i] == '\"')
+		{
+			tmp = remove_quotes(&line[i]);
+			if (tmp[0] != '\0')
+			{
+				new_line = ft_strjoin(new_line, tmp);
+				i += ft_strlen(tmp);
+			}
+			free(tmp);
+			j = ft_strlen(new_line);
+			new_line[j] = 0;
+			i += 2; // +2 for opening in closing quote
+		}
+		else
+		{
+			new_line[j] = line[i];
+			j++;
+			i++;
+			new_line[j] = 0;
+		}
+	}
+	new_line[j] = '\0';
+	return (new_line);
+}
+
+char *process_line(const char *cmd_line)
+{
+	char	*process_line;
+
+	// start by expending the env vars
+	process_line = get_expanded_line(cmd_line);
+
+	// remove the first set of " or '
+	// "'""'"ls -> ''ls
+
+	process_line = process_quotes(process_line);
+
+	return (process_line);
+
+}
+
 int	check_cmd( const char *cmd_line )
 {
 	char	**cmd;
 	int		code;
 	char	*new_line;
 
-	new_line = get_expanded_line(cmd_line);
+	new_line = process_line(cmd_line);
 
 	//* 0. check syntax
 	code = check_syntax(new_line);

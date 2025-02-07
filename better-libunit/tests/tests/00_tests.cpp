@@ -38,6 +38,12 @@ int	tests_routine( void )
 	routine.AddNewTest(Libunit::Test("syntax", "hola", &synt_err_24));
 	routine.AddNewTest(Libunit::Test("syntax", "hola boula badaboum", &synt_err_25));
 	routine.AddNewTest(Libunit::Test("syntax", "Makefile", &synt_err_26));
+	routine.AddNewTest(Libunit::Test("syntax", "hola\"\"oui", &synt_err_27));
+	routine.AddNewTest(Libunit::Test("syntax", "ho\"\'\'\"la\'\'oui", &synt_err_28));
+	routine.AddNewTest(Libunit::Test("syntax", "\'\"hola\"\'", &synt_err_29));
+	routine.AddNewTest(Libunit::Test("syntax", "\"\'hola\'\"", &synt_err_30));
+	routine.AddNewTest(Libunit::Test("syntax", "\"\'\"ls\"\'\"", &synt_err_31));
+	routine.AddNewTest(Libunit::Test("syntax", "\"\'\'\"/bin", &synt_err_32));
 
 
 	// ==================================================
