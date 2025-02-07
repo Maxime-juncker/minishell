@@ -1,5 +1,32 @@
 #include "minishell.h"
 
+char	*ft_strcpy_expect_char(char *s, char c)
+{
+	size_t	i;
+	size_t	j;
+	char	*res;
+
+	i = -1;
+	j = 0;
+	while (s[++i])
+		if (s[i] != c)
+			j++;
+	res = malloc(j + 1);
+	if (!res)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s[i])
+	{
+		if (s[i] != c)
+			res[j++] = s[i];
+		i++;
+	}
+	free(s);
+	res[i] = 0;
+	return (res);
+}
+
 size_t	get_biggest_len(const char *s1, const char *s2)
 {
 	size_t	len1;

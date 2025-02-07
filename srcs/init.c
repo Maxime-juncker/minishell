@@ -40,38 +40,41 @@ static char	*process_dollar_sign(const char *str, char *expanded_str, int *i, in
 	}
 	else
 	{
-		expanded_str = ft_strjoin(expanded_str, "$");
+		expanded_str = ft_charjoin(expanded_str, '$');
 		(*i)++;
 	}
 	return (expanded_str);
 }
 
-char	*expand_env_var(const char *str, char **env, int last_cmd)
+char	*expand_env_var(char *str, char **env, int last_cmd)
 {
 	char	*expanded_str;
 	int		i;
-	int		in_quotes;
+	int		in_quote;
 	char	quote;
 
 	expanded_str = "";
 	i = 0;
-	in_quotes = 0;
+	in_quote = 0;
+	quote = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'')
-		{
-			quote = '\'';
-			in_quotes = !in_quotes;
-			i++;
-		}
-		if (!in_quotes && str[i] == '$' && quote != '\'')
+		if (!quote && (str[i] == '\'' || str[i] == '\"'))
+			quote = str[i];
+		if (i && str[i] == '$' && str[i - 1] != '\'' && str[i - 1] != '\"' && str[i - 1] != '\\')
+			break ;
+		else if (str[i] == '$' && str[i - 1] != '\\' && quote != '\'')
 			expanded_str = process_dollar_sign(str, expanded_str, &i, last_cmd);
-		else
-			expanded_str = ft_charjoin(expanded_str, str[i++]);
+		else if (str[i] != '\\')
+			expanded_str = ft_charjoin(expanded_str, str[i]);
 		if (!expanded_str)
 			return (NULL);
+		i++;
 	}
-	return (ft_strtrim(expanded_str, "'\""));
+	free(str);
+	if (quote)
+		expanded_str = ft_strcpy_expect_char(expanded_str, quote);
+	return (expanded_str);
 }
 
 static void	handle_redirection_right(t_command *cmd, char *cmd_str, int *i)
