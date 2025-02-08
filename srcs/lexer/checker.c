@@ -376,7 +376,7 @@ char*	process_expanded_vars(t_list *lst)
 				const char *expanded_var = expand_env_var2(ft_strdup(&str[i]), __environ);
 				process_str = ft_strjoin(process_str, expanded_var);
 				i++;
-				while (ft_isalnum(str[i]))
+				while (ft_isalnum(str[i]) || str[i] == '_')
 					i++;
 			}
 			else
@@ -397,27 +397,22 @@ char *process_line(const char *cmd_line)
 
 	process_lst = process_quotes(cmd_line);
 	process_str = process_expanded_vars(process_lst);
-	// ft_lstprint(process_lst);
-	// printf("%s\n", process_str);
 
 	return (process_str);
 }
 
-int	check_cmd( const char *cmd_line )
+int	check_cmd( const char *process_line )
 {
 	char	**cmd;
 	int		code;
-	char	*new_line;
-
-	new_line = process_line(cmd_line);
 
 	//* 0. check syntax
-	code = check_syntax(new_line);
+	code = check_syntax(process_line);
 	if (code == SYNTAX_ERR)
 		return (SYNTAX_ERR);
 
 	//* 1. splitting every cmd
-	cmd = ft_split(new_line, '|');
+	cmd = ft_split(process_line, '|');
 	if (cmd == NULL)
 		return (EXIT_FAILURE);
 	int	i = 0;

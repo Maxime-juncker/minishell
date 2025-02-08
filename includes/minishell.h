@@ -63,6 +63,7 @@ char	*ft_strcpy_expect_char(char *s, char c);
 
 // checker.c
 int		check_cmd( const char *cmd_line );
+char	*process_line(const char *cmd_line);
 
 /* ------------------------------ built-in cmd ------------------------------ */
 // echo.c

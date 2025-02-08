@@ -31,9 +31,9 @@ namespace Libunit
 		close(fd);
 		if (expected.compare((const char *)buffer) == 0)
 			return (0);
-		 std::cout << GRAY << "  diff:" << std::endl;
-		 std::cout << "\t" << (const char *)buffer << std::endl;
-		 std::cout << "\t" << expected << RESET << std::endl;
+		//  std::cout << GRAY << "  diff:" << std::endl;
+		//  std::cout << "\t" << (const char *)buffer << std::endl;
+		//  std::cout << "\t" << expected << RESET << std::endl;
 		return (1);
 	}
 
@@ -53,7 +53,6 @@ namespace Libunit
 
 		std::string line;
 		// Loop over the expected number of lines
-//        std::cout << "test" << std::endl;
 		for (int i = 0; i < number_of_line; ++i)
 		{
 			// Read a line from the file.

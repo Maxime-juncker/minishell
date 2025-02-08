@@ -99,12 +99,12 @@ static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last, int 
 		cmd->fd_out = pipefd[1];
 	redir(cmd, cmd_str, is_last);
 	i = -1;
-	while (++i < cmd->n_args)
-	{
-		cmd->args[i] = expand_env_var(cmd->args[i], env, last_cmd);
-		if (!cmd->args[i])
-			return (0);
-	}
+//	while (++i < cmd->n_args)
+//	{
+//		cmd->args[i] = expand_env_var(cmd->args[i], env, last_cmd);
+//		if (!cmd->args[i])
+//			return (0);
+//	}
 	return (1);
 }
 

@@ -20,6 +20,7 @@ int	main(int ac, char **av, char **env)
 	t_command_table	table;
 	int				last_cmd;
 	int				code;
+	char			*process_cmd;
 
 	(void)ac;
 	(void)av;
@@ -33,17 +34,19 @@ int	main(int ac, char **av, char **env)
 		add_history(line);
 		if (!line || (ft_strlen(line) == 4 && !ft_strncmp(line, "exit", 4)))
 			return (printf("exit\n"), 0);
-		code = check_cmd(line);
+		process_cmd = process_line(line);
+		code = check_cmd(process_cmd);
 		if (code == SYNTAX_ERR || code == IS_DIR)
 			continue ;
 		else if (code == MALLOC_ERR)
 			exit(EXIT_FAILURE); //! need to cleanup if needed
-		if (line && !ft_strncmp(line, "\n", ft_strlen(line)))
+		if (process_cmd && !ft_strncmp(process_cmd, "\n", ft_strlen(process_cmd)))
 			new_prompt(0);
-		last_cmd = init_table(line, env, &table, last_cmd);
+		last_cmd = init_table(process_cmd, env, &table, last_cmd);
 		if (last_cmd != 127)
 			last_cmd = run_pipeline(&table);
 		free(line);
+		free(process_cmd);
 	}
 	return (0);
 }
