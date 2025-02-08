@@ -48,7 +48,7 @@ LIB_SRC = 	utils.c			\
 
 OBJ := $(SRCS:.c=.o)
 
-LIB_OBJ := utils.o $(SRCS:.c=.o) $(BUILTIN_SRC:.c=.o) $(EXECUTOR_SRC:.c=.o) $(LEXER_SRC:.c=.o)  $(PARSER_SRC:.c=.o)
+LIB_OBJ := $(LIB_SRC:.c=.o)
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #
@@ -126,7 +126,7 @@ $(BIN_D)$(NAME): $(OBJ) | $(BIN_D)
 $(OBJ_D)%.o: %.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
 	$(CC) $(CFLAGS) -c $< -o $@
 	printf "$(CURSOR_OFF)$(BLUE)"
-	printf "$(GRAY)compiling: $(BLUE)%-20s $(GRAY)[%d/%d]\n" "$@" "$$(ls obj | wc -l)" "$(words $(SRCS))"
+	printf "$(GRAY)compiling: $(BLUE)%-30s $(GRAY)[%d/%d]\n" "$<" "$$(ls obj | wc -l)" "$(words $(SRCS))"
 
 	# printf "compiling: $@\t\t[$$(ls obj | wc -l)/$(words $(SRCS))]\n"
 
