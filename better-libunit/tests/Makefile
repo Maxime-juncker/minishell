@@ -88,7 +88,7 @@ fclean: clean
 re: fclean all
 
 test:
-	$(MAKE) -j all
+	$(MAKE) all
 	./$(NAME)
 
 $(OBJ_D):

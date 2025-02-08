@@ -23,8 +23,8 @@ typedef struct s_command
 	char	**args; // args[0] = cmd name (ex: ls)
 	size_t	n_args;
 
-	int	fd_in; // NULL = stdin
-	int	fd_out; // NULL = stdout
+	int		fd_in;
+	int		fd_out;
 }	t_command;
 
 typedef struct s_command_table
@@ -32,7 +32,7 @@ typedef struct s_command_table
 	t_command	*commands;
 	size_t		n_commands;
 
-	char **env;
+	char		**env;
 }	t_command_table;
 
 // pipex.c
@@ -50,9 +50,11 @@ int		run_command(t_command cmd, const t_command_table *table);
 void	redir(t_command *cmd, char *cmd_str, int is_last);
 
 // init.c
-int		init_table(char *line, char **env, t_command_table *table, int last_cmd);
+int		init_table(char *line, char **env, \
+					t_command_table *table, int last_cmd);
 char	*expand_env_var(char *str, char **env, int last_cmd);
-char	*process_dollar_sign(const char *str, char *expanded_str, int *i, int last_cmd);
+char	*process_dollar_sign(const char *str, \
+							char *expanded_str, int *i, int last_cmd);
 
 // utils.c
 int		is_builtin(char *name);
@@ -61,8 +63,15 @@ char	*find_env_var(char **env, const char *to_find, int *index);
 int		replace_env_var(char **env, char *to_find, const char *replace);
 char	*ft_strcpy_expect_char(char *s, char c);
 
+// checker_utils.c
+int		check_needed(char **cmd, const char c_operator);
+void	cleanup_arr(void **arr);
+int		in_base(const char c, const char *base);
+
 // checker.c
 int		check_cmd( const char *cmd_line );
+
+// lexer.c
 char	*process_line(const char *cmd_line);
 
 /* ------------------------------ built-in cmd ------------------------------ */
@@ -82,11 +91,11 @@ int		export_cmd(t_command_table *table, t_command cmd);
 int		unset(t_command_table *table, t_command cmd);
 
 // dirs.c
-int	cd_command(const t_command_table *table, const t_command cmd);
-int change_directory(const char *path, char **env);
+int		cd_command(const t_command_table *table, const t_command cmd);
+int		change_directory(const char *path, char **env);
 
 // debug
 void	show_cmd(t_command cmd);
-
+void	show_table(t_command_table table);
 
 #endif

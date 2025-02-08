@@ -31,6 +31,9 @@ SRCS = 		main.c			\
 			checker.c		\
 			redir.c			\
 			init.c			\
+			lexer.c			\
+			checker_utils.c	\
+			cmd_debug.c		\
 
 LIB_SRC = 	utils.c			\
 			echo.c			\
@@ -45,6 +48,9 @@ LIB_SRC = 	utils.c			\
 			checker.c		\
 			redir.c			\
 			init.c			\
+			lexer.c			\
+			checker_utils.c	\
+			cmd_debug.c		\
 
 OBJ := $(SRCS:.c=.o)
 

@@ -12,11 +12,11 @@ static int	get_env_len(char **env)
 
 int	unset(t_command_table *table, const t_command cmd)
 {
-	char **cpy;
+	char	**cpy;
 	int		i;
-	int		len = 0;
+	int		len;
 
-	// cpy env
+	len = 0;
 	cpy = malloc(get_env_len(table->env) * sizeof(char *));
 	if (cpy == NULL)
 		return (1);
@@ -33,5 +33,4 @@ int	unset(t_command_table *table, const t_command cmd)
 	cpy[len] = NULL;
 	table->env = cpy;
 	return (0);
-
 }

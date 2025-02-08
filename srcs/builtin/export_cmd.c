@@ -10,14 +10,13 @@ static int	get_env_len(char **env)
 	return (len);
 }
 
-
+ //? +2 because 1 for the new var and 1 for the final null;
 int	export_cmd(t_command_table *table, t_command cmd)
 {
-	char **cpy;
+	char	**cpy;
 	int		i;
 
-	// cpy env
-	cpy = malloc((get_env_len(table->env) + 2) * sizeof(char *)); //? +2 because 1 for the new var and 1 for the final null;
+	cpy = malloc((get_env_len(table->env) + 2) * sizeof(char *));
 	if (cpy == NULL)
 		return (MALLOC_ERR);
 	i = 0;

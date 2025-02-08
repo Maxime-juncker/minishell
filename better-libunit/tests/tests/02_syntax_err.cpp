@@ -303,7 +303,7 @@ int	synt_err_22( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("\"hola\"") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd(process_line("\"hola\"")) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -317,7 +317,7 @@ int	synt_err_23( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("hola\'") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd(process_line("hola\'")) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -331,7 +331,7 @@ int	synt_err_24( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("hola") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd(process_line("hola")) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -345,7 +345,7 @@ int	synt_err_25( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("hola boula badaboum") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd(process_line("hola boula badaboum")) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -359,7 +359,7 @@ int	synt_err_26( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("Makefile") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd(process_line("Makefile")) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -373,7 +373,7 @@ int	synt_err_27( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("hola\"\"oui") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd(process_line("hola\"\"oui")) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -387,7 +387,7 @@ int	synt_err_28( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("ho\"\'\'\"la\'\'oui") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd(process_line("ho\"\'\'\"la\'\'oui")) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -401,7 +401,7 @@ int	synt_err_29( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("\'\"hola\"\'") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd(process_line("\'\"hola\"\'")) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -415,7 +415,7 @@ int	synt_err_30( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("\"\'hola\'\"") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd(process_line("\"\'hola\'\"")) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -429,7 +429,7 @@ int	synt_err_31( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("\"\'\"ls\"\'\"") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd(process_line("\"\'\"ls\"\'\"")) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -443,7 +443,7 @@ int	synt_err_32( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("\"\'\'\"/bin") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd(process_line("\"\'\'\"/bin")) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);

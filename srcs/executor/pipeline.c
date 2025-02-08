@@ -18,13 +18,14 @@ int	run_built_in(const t_command cmd, const t_command_table *table)
 		return (env(*table));
 	if (ft_strncmp(cmd.args[0], "pwd", len) == 0)
 		return (pwd(table->env));
-
 	return (-1);
 }
 
 int	run_env_cmd(t_command_table *table, t_command cmd)
 {
-	char *name = cmd.args[0];
+	char	*name;
+
+	name = cmd.args[0];
 	if (ft_strncmp(name, "export", ft_strlen(name)) == 0)
 	{
 		export_cmd(table, cmd);
@@ -35,11 +36,6 @@ int	run_env_cmd(t_command_table *table, t_command cmd)
 		unset(table, cmd);
 		return (1);
 	}
-	// if (ft_strncmp(name, "echo", ft_strlen(name)) == 0)
-	// {
-	// 	echo(cmd.args + 1, cmd.n_args - 1);
-	// 	return (1);
-	// }
 	if (ft_strncmp(cmd.args[0], "cd", ft_strlen(name)) == 0)
 	{
 		cd_command(table, cmd);
@@ -62,12 +58,14 @@ int	run_pipeline(t_command_table *table)
 		if (run_env_cmd(table, table->commands[i]))
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		run_command(table->commands[i], table);
 		i++;
 	}
-	while (wait(&code) > 0) {}
+	while (wait(&code) > 0)
+	{
+	}
 	return (code);
 }
 
@@ -84,13 +82,8 @@ int	run_command(t_command cmd, const t_command_table *table)
 {
 	int	pid;
 
-#if DEBUG
 	show_cmd(cmd);
-#endif
-
 	cmd.args[cmd.n_args] = NULL;
-
-	// need to happen in separated process
 	pid = fork();
 	if (pid == -1)
 		return (-1);
@@ -103,7 +96,6 @@ int	run_command(t_command cmd, const t_command_table *table)
 		{
 			exit (0);
 		}
-		// show_cmd(cmd);
 		if (execve(cmd.path, cmd.args, table->env) == -1)
 			alert("execve failed");
 	}
@@ -112,34 +104,4 @@ int	run_command(t_command cmd, const t_command_table *table)
 	if (cmd.fd_in != STDIN_FILENO)
 		close(cmd.fd_in);
 	return (0);
-}
-
-/* -------------------------------------------------------------------------- */
-/*                                    debug                                   */
-/* -------------------------------------------------------------------------- */
-
-void	show_table(t_command_table table)
-{
-	int	i = 0;
-	while (i < table.n_commands)
-	{
-		printf("%s%s:\n", GRAY, table.commands[i].args[0]);
-		printf("  fd: in (%d) out (%d)\n", table.commands[i].fd_in, table.commands[i].fd_out);
-		printf("%s", RESET);
-		i++;
-	}
-}
-
-void	show_cmd(t_command cmd)
-{
-	int	i;
-
-	printf("%srunning %s (%zu args)\nargs: ", GRAY, cmd.args[0], cmd.n_args);
-	i = 0;
-	while (i < cmd.n_args)
-	{
-		printf("%s ", cmd.args[i]);
-		i++;
-	}
-	printf("\nfd_in(%d)\tfd_out(%d)%s\n", cmd.fd_in, cmd.fd_out, RESET);
 }

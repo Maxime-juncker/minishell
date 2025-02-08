@@ -28,11 +28,12 @@ static char	*get_absolute_path(const char *new_path)
 int	cd_command(const t_command_table *table, const t_command cmd)
 {
 	char	*path;
+	int		code;
 
 	path = NULL;
 	if (cmd.n_args > 1)
 		path = cmd.args[1];
-	const int code = change_directory(path, table->env);
+	code = change_directory(path, table->env);
 	return (code);
 }
 
@@ -43,7 +44,6 @@ int change_directory(const char *path, char **env)
 
 	if (path == NULL || ft_strncmp(path, "~", ft_strlen(path)) == 0)
 		path = find_env_var(env, "HOME", NULL);
-
 	dir = opendir(path);
 	if (dir == NULL)
 	{

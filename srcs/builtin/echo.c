@@ -30,7 +30,7 @@ int	process_args(char **args, int n)
 			found_args++;
 		}
 		else
-			break;
+			break ;
 		i++;
 	}
 	return (found_args);

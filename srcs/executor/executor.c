@@ -17,13 +17,14 @@ static void	cleanup(char **arr)
 // @param paths the env paths variable
 // @param cmd the command to search
 // @return the full path of the command if it exists, NULL otherwise
-char*	get_cmd_path(char** paths, t_command cmd)
+char	*get_cmd_path(char **paths, t_command cmd)
 {
-	int	i = 0;
-	char* cmd_path;
+	int		i;
+	char	*cmd_path;
 
 	if (is_builtin(cmd.args[0]))
 		return (ft_strdup(cmd.args[0]));
+	i = 0;
 	while (paths[i] != NULL)
 	{
 		cmd_path = ft_strjoin("/", cmd.args[0]);
