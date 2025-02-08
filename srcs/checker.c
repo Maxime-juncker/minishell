@@ -34,26 +34,26 @@ static int in_base(const char c, const char *base)
 //!!!! special case for if <> -> bash: syntax error near unexpected token `newline'
 //!!!! ls <> file the file is created but is empty, the fd out of ls is the stdout
 
-static int	check_cmd_path(const char *cmd_line)
+static int	check_cmd_path(const char *cmd)
 {
 	int	i;
-	t_command	cmd;
+	t_command	cmd_tmp;
 
 	i = 0;
-	while (cmd_line[i] && in_base(cmd_line[i], "><") == -1 && cmd_line[i] != ' ')
+	while (cmd[i] && in_base(cmd[i], "><") == -1 && cmd[i] != ' ')
 	{
 		i++;
 	}
-	cmd.args = malloc(1 * sizeof(char *));
-	if (!cmd.args)
+	cmd_tmp.args = malloc(1 * sizeof(char *));
+	if (!cmd_tmp.args)
 		return (MALLOC_ERR);
-	cmd.args[0] = malloc(i + 1);
-	if (cmd.args[0] == NULL)
+	cmd_tmp.args[0] = malloc(i + 1);
+	if (cmd_tmp.args[0] == NULL)
 		return (MALLOC_ERR);
-	ft_strlcpy(cmd.args[0], cmd_line, i + 1);
-	if (get_cmd_path(get_paths(__environ), cmd) == NULL)
+	ft_strlcpy(cmd_tmp.args[0], cmd, i + 1);
+	if (get_cmd_path(get_paths(__environ), cmd_tmp) == NULL)
 	{
-		printf("minishell$ %s: command not found\n", cmd.args[0]);
+		printf("minishell$ %s: command not found\n", cmd_tmp.args[0]);
 		return (NOT_FOUND);
 	}
 	return (0);
@@ -238,6 +238,35 @@ char	*get_expanded_line(const char *cmd_line)
 	return (new_line);
 }
 
+char	*expand_env_var2(char *str, char **env)
+{
+	char	*expanded_str;
+	int		i;
+	char	quote;
+
+	expanded_str = NULL;
+	i = 0;
+	quote = 0;
+	while (str[i] && str[i] != '\"' && str[i] != '\'')
+	{
+		if (!quote && (str[i] == '\'' || str[i] == '\"'))
+			quote = str[i];
+		if (i && str[i] == '$' && str[i - 1] != '\'')
+			break ;
+		if (str[i] == '$' && str[i - 1] != '\\' && quote != '\'')
+			expanded_str = process_dollar_sign(str, expanded_str, &i, 0);
+		else if (str[i] != '\\')
+			expanded_str = ft_charjoin(expanded_str, str[i]);
+		if (!expanded_str)
+			return (NULL);
+		i++;
+	}
+	free(str);
+	if (quote)
+		expanded_str = ft_strcpy_expect_char(expanded_str, quote);
+	return (expanded_str);
+}
+
 char *remove_quotes(const char *line)
 {
 	char	*new_line;
@@ -247,14 +276,22 @@ char *remove_quotes(const char *line)
 	new_line = ft_calloc(ft_strlen(line) + 1, sizeof(char));
 	if (!new_line)
 		return (NULL);
-	i = 0;
+	i = 1;
 	quote_type = line[0];
-	line++;
+	if (line[1] == quote_type)
+	{
+		new_line[0] = '\0';
+		return (new_line);
+	}
+	new_line[0] = quote_type;
 	while (line[i])
 	{
-		if (line[i] == quote_type)
-			break;
 		new_line[i] = line[i];
+		if (line[i] == quote_type)
+		{
+			i++;
+			break;
+		}
 		i++;
 	}
 	new_line[i] = '\0';
@@ -262,60 +299,108 @@ char *remove_quotes(const char *line)
 	return (new_line);
 }
 
-char	*process_quotes(const char *line)
+t_list	*process_quotes(const char *line)
 {
-	char	*new_line;
 	size_t	i;
 	size_t	j;
 	char	*tmp;
-
-	new_line = ft_calloc(get_new_line_length(line) + 1, sizeof(char));
-	if (!new_line)
-		return (NULL);
+	t_list	*lst;
+	int		line_len;
 
 	i = 0;
 	j = 0;
-	while (line[i])
+	lst = NULL;
+	line_len = ft_strlen(line);
+	while (i < line_len)
 	{
 		if (line[i] == '\'' || line[i] == '\"')
 		{
 			tmp = remove_quotes(&line[i]);
 			if (tmp[0] != '\0')
 			{
-				new_line = ft_strjoin(new_line, tmp);
+				ft_lstadd_back(&lst, ft_lstnew(ft_strdup(tmp)));
 				i += ft_strlen(tmp);
 			}
+			else
+				i += 2; // +2 for opening in closing quote
+
 			free(tmp);
-			j = ft_strlen(new_line);
-			new_line[j] = 0;
-			i += 2; // +2 for opening in closing quote
 		}
 		else
 		{
-			new_line[j] = line[i];
-			j++;
-			i++;
-			new_line[j] = 0;
+			char buff[1000];
+			j = 0;
+			while (line[i] && !(line[i] == '\'' || line[i] == '\"'))
+			{
+				buff[j] = line[i];
+				i++;
+				j++;
+			}
+			buff[j] = 0;
+			ft_lstadd_back(&lst, ft_lstnew(ft_strdup(buff)));
 		}
 	}
-	new_line[j] = '\0';
-	return (new_line);
+	return (lst);
+}
+
+char*	process_expanded_vars(t_list *lst)
+{
+	t_list	*expanded;
+	int		i;
+	char	*str;
+	char	*process_str;
+	int		is_str_literal;
+
+	process_str = NULL;
+
+	while (lst)
+	{
+		i = 0;
+		str = ((char*)lst->content);
+		if (str[0] == '\'')
+		{
+			is_str_literal = 1;
+			str = ft_strtrim(str, "\'");
+		}
+		else
+		{
+			is_str_literal = 0;
+			str = ft_strtrim(str, "\"");
+		}
+		if (!str)
+			return (NULL);
+		while (str[i])
+		{
+			if (str[i] == '$' && !is_str_literal)
+			{
+				const char *expanded_var = expand_env_var2(ft_strdup(&str[i]), __environ);
+				process_str = ft_strjoin(process_str, expanded_var);
+				i++;
+				while (ft_isalnum(str[i]))
+					i++;
+			}
+			else
+			{
+				process_str = ft_charjoin(process_str, str[i]);
+				i++;
+			}
+		}
+		lst = lst->next;
+	}
+	return (process_str);
 }
 
 char *process_line(const char *cmd_line)
 {
-	char	*process_line;
+	t_list	*process_lst;
+	char	*process_str;
 
-	// start by expending the env vars
-	process_line = get_expanded_line(cmd_line);
+	process_lst = process_quotes(cmd_line);
+	process_str = process_expanded_vars(process_lst);
+	// ft_lstprint(process_lst);
+	// printf("%s\n", process_str);
 
-	// remove the first set of " or '
-	// "'""'"ls -> ''ls
-
-	process_line = process_quotes(process_line);
-
-	return (process_line);
-
+	return (process_str);
 }
 
 int	check_cmd( const char *cmd_line )
@@ -335,7 +420,14 @@ int	check_cmd( const char *cmd_line )
 	cmd = ft_split(new_line, '|');
 	if (cmd == NULL)
 		return (EXIT_FAILURE);
-
+	int	i = 0;
+	while (cmd[i])
+	{
+		cmd[i] = ft_strtrim(cmd[i], " ");
+		if (!cmd[i]) // ! clean already allocated mem
+			return (MALLOC_ERR);
+		i++;
+	}
 	//* 3. check if cmd right / is a directory
 	// if it's a directory, check if it exists
 	// otherwise check is the cmd exists
@@ -348,11 +440,16 @@ int	check_cmd( const char *cmd_line )
 			return (code);
 		}
 	}
-	code = check_cmd_path(new_line);
-	if (code != 0)
+	i = 0;
+	while (cmd[i])
 	{
-		cleanup_arr((void **)cmd);
-		return (code);
+		code = check_cmd_path(cmd[i]);
+		if (code != 0)
+		{
+			cleanup_arr((void **)cmd);
+			return (code);
+		}
+		i++;
 	}
 	cleanup_arr((void **)cmd);
 	return (0);

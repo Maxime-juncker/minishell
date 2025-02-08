@@ -15,7 +15,7 @@
 # define IS_DIR		4
 # define MALLOC_ERR	-1
 
-# define DEBUG 0
+# define DEBUG 1
 
 typedef struct s_command
 {
@@ -52,6 +52,7 @@ void	redir(t_command *cmd, char *cmd_str, int is_last);
 // init.c
 int		init_table(char *line, char **env, t_command_table *table, int last_cmd);
 char	*expand_env_var(char *str, char **env, int last_cmd);
+char	*process_dollar_sign(const char *str, char *expanded_str, int *i, int last_cmd);
 
 // utils.c
 int		is_builtin(char *name);

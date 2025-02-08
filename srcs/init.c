@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static char	*process_dollar_sign(const char *str, char *expanded_str, int *i, int last_cmd)
+char	*process_dollar_sign(const char *str, char *expanded_str, int *i, int last_cmd)
 {
 	size_t	j;
 	char	*var_name;

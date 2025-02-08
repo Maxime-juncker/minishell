@@ -14,6 +14,8 @@
 
 void	ft_lstprint(t_list *lst)
 {
+  if (lst == NULL)
+    return ;
 	ft_printf("[");
 	while (lst->next)
 	{
