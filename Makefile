@@ -9,13 +9,7 @@ LIB_UNIT = better-libunit/
 #                                  directories                                 #
 # ---------------------------------------------------------------------------- #
 OBJ_D = obj/
-SRCS_D = srcs/
-BUILTIN_D = builtin/
-EXECUTOR_D = executor/
-LEXER_D = lexer/
-PARSER_D = parser/
 BIN_D = bin/
-LOG_D = log/
 INCLUDES_D = -Iincludes/ -Ilibft/includes/ -I/usr/include/readline/
 
 VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser
@@ -23,29 +17,36 @@ VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser
 # ---------------------------------------------------------------------------- #
 #                                  srcs / objs                                 #
 # ---------------------------------------------------------------------------- #
-SRCS = main.c utils.c
+SRCS = 		main.c			\
+			utils.c			\
+			echo.c			\
+			cd.c			\
+			env.c			\
+			export_cmd.c	\
+			pwd.c			\
+			unset.c			\
+			executor.c		\
+			pipeline.c		\
+			pipex_utils.c	\
+			checker.c		\
+			redir.c			\
+			init.c			\
 
-BUILTIN_SRC =	echo.c			\
-				cd.c			\
-				env.c			\
-				export_cmd.c	\
-				pwd.c			\
-				unset.c			\
+LIB_SRC = 	utils.c			\
+			echo.c			\
+			cd.c			\
+			env.c			\
+			export_cmd.c	\
+			pwd.c			\
+			unset.c			\
+			executor.c		\
+			pipeline.c		\
+			pipex_utils.c	\
+			checker.c		\
+			redir.c			\
+			init.c			\
 
-EXECUTOR_SRC =	executor.c		\
-				pipeline.c		\
-				pipex_utils.c	\
-
-LEXER_SRC =	checker.c		\
-
-PARSER_SRC =	init.c		\
-				redir.c		\
-
-LIB_SRC =	executor.c pipex_utils.c pipeline.c \
-			echo.c env.c pwd.c export_cmd.c init.c utils.c unset.c dirs.c \
-			redir.c checker.c	\
-
-OBJ := $(SRCS:.c=.o) $(BUILTIN_SRC:.c=.o) $(EXECUTOR_SRC:.c=.o) $(LEXER_SRC:.c=.o)  $(PARSER_SRC:.c=.o)
+OBJ := $(SRCS:.c=.o)
 
 LIB_OBJ := utils.o $(SRCS:.c=.o) $(BUILTIN_SRC:.c=.o) $(EXECUTOR_SRC:.c=.o) $(LEXER_SRC:.c=.o)  $(PARSER_SRC:.c=.o)
 
@@ -54,7 +55,6 @@ LIB_OBJ := utils.o $(SRCS:.c=.o) $(BUILTIN_SRC:.c=.o) $(EXECUTOR_SRC:.c=.o) $(LE
 # ---------------------------------------------------------------------------- #
 
 OBJ := $(addprefix $(OBJ_D), $(OBJ))
-SRCS := $(addprefix $(SRCS_D), $(SRCS))
 LIB_OBJ := $(addprefix $(OBJ_D), $(LIB_OBJ))
 
 # ---------------------------------------------------------------------------- #
@@ -62,6 +62,7 @@ LIB_OBJ := $(addprefix $(OBJ_D), $(LIB_OBJ))
 # ---------------------------------------------------------------------------- #
 
 RESET 			= \033[0m
+GRAY			=\033[90m
 RED 			= \033[31m
 GREEN 			= \033[32m
 YELLOW 			= \033[33m
@@ -105,14 +106,13 @@ header:
 #                                 creating exec                                #
 # ---------------------------------------------------------------------------- #
 $(BIN)/libminishell.a:
-	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
+	printf "$(GREEN)compiling: success [$$(ls obj | wc -l)/$(words $(SRCS))]\n"
 	ar rcs $(BIN_D)libminishell.a $(LIB_OBJ) "libft/bin/libft.a"
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)\n\n"
 
 
 $(BIN_D)$(NAME): $(OBJ) | $(BIN_D)
-	printf "$(BLUE)compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)] [OK]\r\n"
 	$(CC) $(CFLAGS) $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME) -L/usr/lib -lreadline
 	ar rcs $(BIN_D)libminishell.a $(LIB_OBJ) "libft/bin/libft.a"
 	printf "$(GREEN)$(NAME): success\n"
@@ -125,11 +125,10 @@ $(BIN_D)$(NAME): $(OBJ) | $(BIN_D)
 
 $(OBJ_D)%.o: %.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
 	$(CC) $(CFLAGS) -c $< -o $@
+	printf "$(CURSOR_OFF)$(BLUE)"
+	printf "$(GRAY)compiling: $(BLUE)%-20s $(GRAY)[%d/%d]\n" "$@" "$$(ls obj | wc -l)" "$(words $(SRCS))"
 
-# %.o: %.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
-# 	printf "$(CURSOR_OFF)$(BLUE)"
-# 	printf "compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)]\r"
-# 	$(CC) $(CFLAGS) -c $< -o $@
+	# printf "compiling: $@\t\t[$$(ls obj | wc -l)/$(words $(SRCS))]\n"
 
 # ---------------------------------------------------------------------------- #
 #                                   cleaning                                   #

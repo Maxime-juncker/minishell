@@ -6,7 +6,7 @@ static char	*append_str(char *old, char *append_str, int new_len)
 
 	new_str = malloc(new_len);
 	if (!new_str)
-		return (MALLOC_ERR);
+		return (NULL);
 	ft_strlcpy(new_str, old, new_len);
 	ft_strlcat(new_str, append_str, new_len);
 	free(old);
