@@ -6,39 +6,48 @@ MAKEFLAGS += --no-print-directory
 LIB_UNIT = better-libunit/
 
 # ---------------------------------------------------------------------------- #
+#                                  directories                                 #
+# ---------------------------------------------------------------------------- #
+OBJ_D = obj/
+SRCS_D = srcs/
+BUILTIN_D = builtin/
+EXECUTOR_D = executor/
+LEXER_D = lexer/
+PARSER_D = parser/
+BIN_D = bin/
+LOG_D = log/
+INCLUDES_D = -Iincludes/ -Ilibft/includes/ -I/usr/include/readline/
+
+VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser
+
+# ---------------------------------------------------------------------------- #
 #                                  srcs / objs                                 #
 # ---------------------------------------------------------------------------- #
-SRC =	main.c			\
-		init.c			\
-		executor.c		\
-		pipex_utils.c	\
-		pipeline.c		\
-		echo.c			\
-		env.c			\
-		pwd.c			\
-		utils.c			\
-		export_cmd.c	\
-		unset.c			\
-		dirs.c			\
-		redir.c			\
-		checker.c		\
+SRCS = main.c utils.c
+
+BUILTIN_SRC =	echo.c			\
+				cd.c			\
+				env.c			\
+				export_cmd.c	\
+				pwd.c			\
+				unset.c			\
+
+EXECUTOR_SRC =	executor.c		\
+				pipeline.c		\
+				pipex_utils.c	\
+
+LEXER_SRC =	checker.c		\
+
+PARSER_SRC =	init.c		\
+				redir.c		\
 
 LIB_SRC =	executor.c pipex_utils.c pipeline.c \
 			echo.c env.c pwd.c export_cmd.c init.c utils.c unset.c dirs.c \
 			redir.c checker.c	\
 
-OBJ = $(SRC:.c=.o)
-LIB_OBJ = $(LIB_SRC:.c=.o)
+OBJ := $(SRCS:.c=.o) $(BUILTIN_SRC:.c=.o) $(EXECUTOR_SRC:.c=.o) $(LEXER_SRC:.c=.o)  $(PARSER_SRC:.c=.o)
 
-# ---------------------------------------------------------------------------- #
-#                                  directories                                 #
-# ---------------------------------------------------------------------------- #
-
-OBJ_D = obj/
-SRCS_D = srcs/
-BIN_D = bin/
-LOG_D = log/
-INCLUDES_D = -Iincludes/ -Ilibft/includes/ -I/usr/include/readline/
+LIB_OBJ := utils.o $(SRCS:.c=.o) $(BUILTIN_SRC:.c=.o) $(EXECUTOR_SRC:.c=.o) $(LEXER_SRC:.c=.o)  $(PARSER_SRC:.c=.o)
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #
@@ -47,7 +56,6 @@ INCLUDES_D = -Iincludes/ -Ilibft/includes/ -I/usr/include/readline/
 OBJ := $(addprefix $(OBJ_D), $(OBJ))
 SRCS := $(addprefix $(SRCS_D), $(SRCS))
 LIB_OBJ := $(addprefix $(OBJ_D), $(LIB_OBJ))
-LIB_SRC := $(addprefix $(SRCS_D), $(LIB_SRC))
 
 # ---------------------------------------------------------------------------- #
 #                                    colors                                    #
@@ -67,6 +75,10 @@ all:
 	$(MAKE) header
 	$(MAKE) libft
 	$(MAKE) $(BIN_D)$(NAME)
+
+de:
+	@echo $(SRCS)
+	@echo $(OBJ)
 
 # ---------------------------------------------------------------------------- #
 #                                     misc                                     #
@@ -110,10 +122,14 @@ $(BIN_D)$(NAME): $(OBJ) | $(BIN_D)
 # ---------------------------------------------------------------------------- #
 #                                   compiling                                  #
 # ---------------------------------------------------------------------------- #
-$(OBJ_D)%.o : $(SRCS_D)%.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
-	printf "$(CURSOR_OFF)$(BLUE)"
-	printf "compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)]\r"
+
+$(OBJ_D)%.o: %.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+# %.o: %.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
+# 	printf "$(CURSOR_OFF)$(BLUE)"
+# 	printf "compiling: [$$(ls obj | wc -l)/$(shell ls srcs | wc -l)]\r"
+# 	$(CC) $(CFLAGS) -c $< -o $@
 
 # ---------------------------------------------------------------------------- #
 #                                   cleaning                                   #
