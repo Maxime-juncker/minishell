@@ -69,7 +69,7 @@ int		in_base(const char c, const char *base);
 int		token_error(char c1, char c2);
 
 // checker.c
-int		check_cmd_line( const char *cmd_line );
+int		check_cmd_line( const char *process_line );
 
 // lexer.c
 char	*process_line(const char *cmd_line);

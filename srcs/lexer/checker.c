@@ -1,5 +1,4 @@
 #include "minishell.h"
-#include <stdio.h>
 
 static int	check_dir(char	**cmd)
 {
@@ -62,7 +61,6 @@ int	check_cmd_line( const char *process_line )
 {
 	char	**cmd;
 	int		code;
-	int		i;
 
 	code = check_syntax(process_line);
 	if (code == SYNTAX_ERR)

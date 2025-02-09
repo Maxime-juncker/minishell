@@ -38,7 +38,7 @@ int	main(int ac, char **av, char **env)
 		code = check_cmd_line(process_cmd);
 		if (code == SYNTAX_ERR || code == IS_DIR)
 			continue ;
-		else if (code == MALLOC_ERR)
+		if (code == MALLOC_ERR)
 			exit(EXIT_FAILURE); //! need to cleanup if needed
 		if (process_cmd && !ft_strncmp(process_cmd, "\n", ft_strlen(process_cmd)))
 			new_prompt(0);

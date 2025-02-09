@@ -1,9 +1,9 @@
 #include "minishell.h"
 #include <sys/wait.h>
-#include <stdio.h>
 
 /// @brief Run a built-in command
 /// @param cmd The command to run
+/// @param table command table
 /// @return the exit value of the run command, -1 if the command isn't builtin
 static int	run_built_in(const t_command cmd, const t_command_table *table)
 {
@@ -44,6 +44,7 @@ static int	run_env_cmd(t_command_table *table, t_command cmd)
 
 /// @brief run a command
 /// @param cmd the command to run
+/// @param table command table
 /// @return exit code of the command
 static int	run_command(t_command cmd, const t_command_table *table)
 {

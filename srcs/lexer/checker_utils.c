@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-int	check_needed(char **cmd, const char operator)
+int	check_needed(char **cmd, const char c_operator)
 {
 	int	i;
 
 	i = 0;
 	while (cmd[i])
 	{
-		if (ft_strchr(cmd[i], operator) != NULL)
+		if (ft_strchr(cmd[i], c_operator) != NULL)
 			return (1);
 		i++;
 	}
