@@ -37,7 +37,7 @@ int	cd_command(const t_command_table *table, const t_command cmd)
 	return (code);
 }
 
-int change_directory(const char *path, char **env)
+int	change_directory(const char *path, char **env)
 {
 	DIR		*dir;
 	char	*abs_path;

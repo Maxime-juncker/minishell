@@ -54,7 +54,7 @@ int	echo_04( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("echoHola") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd_line("echoHola") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -68,7 +68,7 @@ int	echo_05( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd("echo-nHola") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd_line("echo-nHola") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -214,7 +214,7 @@ int	echo_16( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table((char *)"echo           | cat -e", table.env, &table, 0);
+	init_table(process_line("echo           | cat -e"), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -229,7 +229,7 @@ int	echo_17( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table((char *)"\"\"\'\'echo hola\"\"\'\'\'\' que\"\"\'\' tal\"\"\'\'", table.env, &table, 0);
+	init_table(process_line("\"\"\'\'echo hola\"\"\'\'\'\' que\"\"\'\' tal\"\"\'\'"), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -426,6 +426,11 @@ int	echo_29( void )
 
 int	echo_30( void )
 {
+	const char *exepted_file[]
+	{
+		"0",
+	};
+
 	t_command_table	table;
 	table.env = environ;
 
@@ -433,7 +438,7 @@ int	echo_30( void )
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
-	if (Libunit::Check_output("0\n") == 0)
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -441,6 +446,11 @@ int	echo_30( void )
 
 int	echo_31( void )
 {
+	const char *exepted_file[]
+	{
+		"0$",
+	};
+
 	t_command_table	table;
 	table.env = environ;
 
@@ -448,7 +458,7 @@ int	echo_31( void )
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
-	if (Libunit::Check_output("0$\n") == 0)
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -456,14 +466,19 @@ int	echo_31( void )
 
 int	echo_32( void )
 {
+	const char *exepted_file[]
+	{
+		"0",
+	};
+
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo $? | echo $? | echo $?"), table.env, &table, 0);
 	Libunit::Redirect_log();
+	init_table(process_line("echo $? | echo $? | echo $?"), table.env, &table, 0);
 	run_pipeline(&table);
 
-	if (Libunit::Check_output("0\n") == 0)
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -471,6 +486,11 @@ int	echo_32( void )
 
 int	echo_33( void )
 {
+	const char *exepted_file[]
+	{
+		"$:$=$",
+	};
+
 	t_command_table	table;
 	table.env = environ;
 
@@ -478,7 +498,7 @@ int	echo_33( void )
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
-	if (Libunit::Check_output("$:$=$\n") == 0)
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -486,6 +506,11 @@ int	echo_33( void )
 
 int	echo_34( void )
 {
+	const char *exepted_file[]
+	{
+		" $ $",
+	};
+
 	t_command_table	table;
 	table.env = environ;
 
@@ -493,7 +518,7 @@ int	echo_34( void )
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
-	if (Libunit::Check_output(" $ $\n") == 0)
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -501,6 +526,11 @@ int	echo_34( void )
 
 int	echo_35( void )
 {
+	const char *exepted_file[]
+	{
+		" $ $",
+	};
+
 	t_command_table	table;
 	table.env = environ;
 
@@ -508,37 +538,7 @@ int	echo_35( void )
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
-	if (Libunit::Check_output(" $ $\n") == 0)
-		return (0);
-	else
-		return (1);
-}
-
-int	echo_36( void )
-{
-	t_command_table	table;
-	table.env = environ;
-
-	init_table(process_line("echo $DESKTOP_SESSION"), table.env, &table, 0);
-	Libunit::Redirect_log();
-	run_pipeline(&table);
-
-	if (Libunit::Check_output("ubuntu\n") == 0)
-		return (0);
-	else
-		return (1);
-}
-
-int	echo_37( void )
-{
-	t_command_table	table;
-	table.env = environ;
-
-	init_table((char *)"echo \\$DESKTOP_SESSION", table.env, &table, 0);
-	Libunit::Redirect_log();
-	run_pipeline(&table);
-
-	if (Libunit::Check_output("$DESKTOP_SESSION\n") == 0)
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);

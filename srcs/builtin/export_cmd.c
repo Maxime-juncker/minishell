@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+// +2 because 1 for the new var and 1 for the final null;
 static int	get_env_len(char **env)
 {
 	int	len;
@@ -10,7 +11,6 @@ static int	get_env_len(char **env)
 	return (len);
 }
 
- //? +2 because 1 for the new var and 1 for the final null;
 int	export_cmd(t_command_table *table, t_command cmd)
 {
 	char	**cpy;

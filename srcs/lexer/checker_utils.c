@@ -40,3 +40,13 @@ int	in_base(const char c, const char *base)
 	}
 	return (-1);
 }
+
+int	token_error(char c1, char c2)
+{
+	printf("minishell$ syntax error near unexpected token `%c", \
+			c1);
+	if (c1 == c2)
+		printf("%c", c2);
+	printf("\'\n");
+	return (SYNTAX_ERR);
+}

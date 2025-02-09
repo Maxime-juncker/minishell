@@ -13,3 +13,9 @@ char	**get_paths(char **env)
 	tmp = env[i] + 5;
 	return (ft_split(tmp, ':'));
 }
+
+void	setup_redirection(t_command cmd)
+{
+	dup2(cmd.fd_out, STDOUT_FILENO);
+	dup2(cmd.fd_in, STDIN_FILENO);
+}

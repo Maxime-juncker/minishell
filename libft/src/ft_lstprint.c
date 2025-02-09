@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 12:23:24 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/01/08 13:36:46 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/09 11:33:35 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	ft_lstprint(t_list *lst)
 {
-  if (lst == NULL)
-    return ;
+	if (lst == NULL)
+		return ;
 	ft_printf("[");
 	while (lst->next)
 	{

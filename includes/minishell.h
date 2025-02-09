@@ -44,7 +44,6 @@ void	setup_redirection(t_command cmd);
 
 // pipeline.c
 int		run_pipeline(t_command_table *table);
-int		run_command(t_command cmd, const t_command_table *table);
 
 // redirect.c
 void	redir(t_command *cmd, char *cmd_str, int is_last);
@@ -67,12 +66,26 @@ char	*ft_strcpy_expect_char(char *s, char c);
 int		check_needed(char **cmd, const char c_operator);
 void	cleanup_arr(void **arr);
 int		in_base(const char c, const char *base);
+int		token_error(char c1, char c2);
 
 // checker.c
-int		check_cmd( const char *cmd_line );
+int		check_cmd_line( const char *cmd_line );
 
 // lexer.c
 char	*process_line(const char *cmd_line);
+
+// quotes_processing.c
+t_list	*process_quotes(const char *line);
+
+// var_processing.c
+char	*process_expanded_vars(const t_list *lst);
+
+// syntax_checker.c
+int		check_syntax(const char *cmd_line);
+
+// path_checker.c
+int		check_cmd_path(const char *cmd);
+int		check_dir_validity(const char *path);
 
 /* ------------------------------ built-in cmd ------------------------------ */
 // echo.c

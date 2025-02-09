@@ -17,40 +17,48 @@ VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser
 # ---------------------------------------------------------------------------- #
 #                                  srcs / objs                                 #
 # ---------------------------------------------------------------------------- #
-SRCS = 		main.c			\
-			utils.c			\
-			echo.c			\
-			cd.c			\
-			env.c			\
-			export_cmd.c	\
-			pwd.c			\
-			unset.c			\
-			executor.c		\
-			pipeline.c		\
-			pipex_utils.c	\
-			checker.c		\
-			redir.c			\
-			init.c			\
-			lexer.c			\
-			checker_utils.c	\
-			cmd_debug.c		\
+SRCS = 		main.c				\
+			utils.c				\
+			echo.c				\
+			cd.c				\
+			env.c				\
+			export_cmd.c		\
+			pwd.c				\
+			unset.c				\
+			executor.c			\
+			pipeline.c			\
+			pipeline_utils.c	\
+			checker.c			\
+			redir.c				\
+			init.c				\
+			lexer.c				\
+			checker_utils.c		\
+			cmd_debug.c			\
+			quotes_processing.c	\
+			var_processing.c	\
+			syntax_checker.c	\
+			path_checker.c		\
 
-LIB_SRC = 	utils.c			\
-			echo.c			\
-			cd.c			\
-			env.c			\
-			export_cmd.c	\
-			pwd.c			\
-			unset.c			\
-			executor.c		\
-			pipeline.c		\
-			pipex_utils.c	\
-			checker.c		\
-			redir.c			\
-			init.c			\
-			lexer.c			\
-			checker_utils.c	\
-			cmd_debug.c		\
+LIB_SRC = 	utils.c				\
+			echo.c				\
+			cd.c				\
+			env.c				\
+			export_cmd.c		\
+			pwd.c				\
+			unset.c				\
+			executor.c			\
+			pipeline.c			\
+			pipeline_utils.c	\
+			checker.c			\
+			redir.c				\
+			init.c				\
+			lexer.c				\
+			checker_utils.c		\
+			cmd_debug.c			\
+			quotes_processing.c	\
+			var_processing.c	\
+			syntax_checker.c	\
+			path_checker.c		\
 
 OBJ := $(SRCS:.c=.o)
 

@@ -35,7 +35,7 @@ int	main(int ac, char **av, char **env)
 		if (!line || (ft_strlen(line) == 4 && !ft_strncmp(line, "exit", 4)))
 			return (printf("exit\n"), 0);
 		process_cmd = process_line(line);
-		code = check_cmd(process_cmd);
+		code = check_cmd_line(process_cmd);
 		if (code == SYNTAX_ERR || code == IS_DIR)
 			continue ;
 		else if (code == MALLOC_ERR)
@@ -50,3 +50,4 @@ int	main(int ac, char **av, char **env)
 	}
 	return (0);
 }
+
