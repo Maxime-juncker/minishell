@@ -70,12 +70,11 @@ char	*expand_env_var(char *str, char **env, int last_cmd)
 	return (expanded_str);
 }
 
-static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last, int last_cmd)
+static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last)
 {
 	char		**args;
 	char		**paths;
 	static int	pipefd[2] = {-1};
-	int			i;
 
 	cmd->fd_in = 0;
 	cmd->fd_out = 1;
@@ -94,10 +93,9 @@ static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last, int 
 	cmd->path = get_cmd_path(paths, *cmd);
 	if (!cmd->path)
 		return (0);
-	if (!last_cmd && pipe(pipefd) != -1)
+	if (pipe(pipefd) != -1)
 		cmd->fd_out = pipefd[1];
 	redir(cmd, cmd_str, is_last);
-	i = -1;
 	return (1);
 }
 
@@ -118,7 +116,8 @@ int	init_table(char *line, char **env, t_command_table *table, int last_cmd)
 	i = 0;
 	while (i < table->n_commands)
 	{
-		if (!init_cmd(&table->commands[i], cmd_strs[i], env, i == table->n_commands - 1, last_cmd))
+		if (!init_cmd(&table->commands[i], cmd_strs[i],
+				env, i == table->n_commands - 1))
 			return (127);
 		i++;
 	}

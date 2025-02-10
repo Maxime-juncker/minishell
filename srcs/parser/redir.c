@@ -103,10 +103,18 @@ void	redir(t_command *cmd, char *cmd_str, int is_last)
 	while (cmd_str[i])
 	{
 		temp = i;
-		if (ft_strchr(&cmd_str[i], '>'))
+		if (ft_strchr(&cmd_str[i], '<'))
+		{
+			if (*(ft_strchr(&cmd_str[i], '<') + 1) == '>')
+			{
+				handle_redir(cmd, cmd_str, &i, '>');
+				cmd->fd_out = 1;
+			}
+			else
+				handle_redir(cmd, cmd_str, &i, '<');
+		}
+		else if (ft_strchr(&cmd_str[i], '>'))
 			handle_redir(cmd, cmd_str, &i, '>');
-		else if (ft_strchr(&cmd_str[i], '<'))
-			handle_redir(cmd, cmd_str, &i, '<');
 		if (!(ft_strchr(&cmd_str[temp], '>')) && !ft_strchr(&cmd_str[i], '<')
 			&& !ft_strchr(&cmd_str[i], '>') && is_last)
 			cmd->fd_out = 1;

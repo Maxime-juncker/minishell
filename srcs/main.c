@@ -31,22 +31,24 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = readline("\033[0mminishell$ ");
-		add_history(line);
 		if (!line || (ft_strlen(line) == 4 && !ft_strncmp(line, "exit", 4)))
 			return (printf("exit\n"), 0);
-		process_cmd = process_line(line);
-		code = check_cmd_line(process_cmd);
-		if (code == SYNTAX_ERR || code == IS_DIR)
-			continue ;
-		if (code == MALLOC_ERR)
-			exit(EXIT_FAILURE); //! need to cleanup if needed
-		if (process_cmd && !ft_strncmp(process_cmd, "\n", ft_strlen(process_cmd)))
-			new_prompt(0);
-		last_cmd = init_table(process_cmd, env, &table, last_cmd);
-		if (last_cmd != 127)
-			last_cmd = run_pipeline(&table);
+		else if (ft_strncmp(line, "\n", ft_strlen(line)))
+			add_history(line);
+		if (ft_strncmp(line, "\n", ft_strlen(line)) && ft_strncmp(line, "!", ft_strlen(line)) && ft_strncmp(line, ":", ft_strlen(line)))
+		{
+			process_cmd = process_line(line);
+			code = check_cmd_line(process_cmd);
+			if (code == SYNTAX_ERR || code == IS_DIR)
+				break ;
+			else if (code == MALLOC_ERR)
+				exit(EXIT_FAILURE); //! need to cleanup if needed
+			last_cmd = init_table(process_cmd, env, &table, last_cmd);
+			free(process_cmd);
+			if (last_cmd != 127)
+				last_cmd = run_pipeline(&table);
+		}
 		free(line);
-		free(process_cmd);
 	}
 	return (0);
 }
