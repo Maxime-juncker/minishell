@@ -78,20 +78,20 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 		j++;
 	}
 	tmp[j] = '\0';
+	tmp = ft_strtrim(tmp, " ");
+	tmp = ft_charjoin(tmp, ' ');
 	ft_lstadd_back(lst, ft_lstnew(ft_strdup(tmp)));
+	free(tmp);
 	return (0);
 }
 
 t_list	*process_quotes(const char *line)
 {
 	size_t	i;
-	size_t	j;
-	char	*tmp;
 	t_list	*lst;
-	int		line_len;
+	size_t		line_len;
 
 	i = 0;
-	j = 0;
 	lst = NULL;
 	line_len = ft_strlen(line);
 	while (i < line_len)

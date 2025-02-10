@@ -27,7 +27,6 @@ static int	check_command(char	**cmd)
 		code = check_cmd_path(cmd[i]);
 		if (code != 0)
 		{
-			cleanup_arr((void **)cmd);
 			return (code);
 		}
 		i++;
@@ -46,10 +45,9 @@ char	**split_cmd(const char *process_line)
 	i = 0;
 	while (cmd[i])
 	{
-		cmd[i] = ft_strtrim(cmd[i], " ");
+		cmd[i] = ft_strtrim_free(cmd[i], " ");
 		if (!cmd[i])
 		{
-			cleanup_arr((void **)cmd);
 			return (NULL);
 		}
 		i++;
@@ -68,10 +66,15 @@ int	check_cmd_line( const char *process_line )
 	cmd = split_cmd(process_line);
 	code = check_dir(cmd);
 	if (code != 0)
+	{
+		cleanup_arr((void **)cmd);
 		return (code);
+	}
 	code = check_command(cmd);
 	if (code != 0)
+	{
+		cleanup_arr((void **)cmd);
 		return (code);
-	cleanup_arr((void **)cmd);
+	}
 	return (0);
 }

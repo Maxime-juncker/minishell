@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:49:29 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/07 10:22:34 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/10 10:03:59 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char *s1, char const *s2);
 char	*ft_charjoin(char *s1, char const c);
 char	*ft_strtrim(char const *s1, char const *set);
+char	*ft_strtrim_free(char *s1, char const *set);
 char	*ft_itoa(int n);
 char	*ft_uitoa(unsigned int n);
 char	*get_next_line(int fd);
