@@ -4,6 +4,8 @@ static char	*append_str(char *old, char *append_str, int new_len)
 {
 	char	*new_str;
 
+	if (!old)
+		return (ft_strdup(append_str));
 	new_str = malloc(new_len);
 	if (!new_str)
 		return (NULL);
@@ -19,6 +21,7 @@ static int	heredoc(t_command *cmd, char *deli)
 	char	*line;
 	size_t	len;
 
+	cmd->fd_in = open("/tmp/temp.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	doc = NULL;
 	while (1)
 	{
@@ -27,19 +30,19 @@ static int	heredoc(t_command *cmd, char *deli)
 			printf("minishell: warning: %s (wanted `%s')\n",
 				"here-document delimited by end-of-file", deli);
 		len = ft_strlen(line) - 1;
-		if (!line || (!ft_strncmp(line, deli, len) && ft_strlen(deli) == len))
+		if (!line || !ft_strncmp(line, deli, len) && ft_strlen(deli) == len)
 			break ;
-		if (!doc)
-			doc = ft_strdup(line);
-		else
-			doc = append_str(doc, line, ft_strlen(doc) + len + 2);
+		doc = append_str(doc, line, ft_strlen(doc) + len + 2);
 		free(line);
 		if (!doc)
 			return (1);
 	}
-	printf("%s", doc);
-	cmd->fd_in = open("/tmp/", __O_TMPFILE | O_RDWR, 0644);
-	return (free(doc), 0);
+	if (doc)
+		write(cmd->fd_in, doc, ft_strlen(doc));
+	close(cmd->fd_in);
+	cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644);
+	free(doc);
+	return (0);
 }
 
 static void	handle_fd(t_command *cmd, char *file, char c, int db_redir)
@@ -88,9 +91,9 @@ static void	handle_redir(t_command *cmd, char *cmd_str, int *i, char c)
 	if (!file)
 		return ;
 	k = -1;
-	while (*i + ++k <= j)
+	while (*i + ++k < j)
 		file[k] = cmd_str[*i + k];
-	// *i += k + 1; Peut etre utile on sait pas
+	file[k] = 0;
 	handle_fd(cmd, file, c, db_redir);
 }
 
