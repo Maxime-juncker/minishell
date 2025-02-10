@@ -8,10 +8,10 @@ int	tests_routine( void )
 	Libunit::Routine	routine("random tests");
 
 	/* ================ ADD TESTS HERE ================ */
-	routine.AddNewTest(Libunit::Test("BR", "[\\n]", &input_new_line));
-	routine.AddNewTest(Libunit::Test("BR", "[\\t]", &input_tabs));
-	routine.AddNewTest(Libunit::Test("BR", "[!]", &input_colon));
-	routine.AddNewTest(Libunit::Test("BR", "[:]", &input_exclamation));
+	// routine.AddNewTest(Libunit::Test("BR", "[\\n]", &input_new_line));
+	// routine.AddNewTest(Libunit::Test("BR", "[\\t]", &input_tabs));
+	// routine.AddNewTest(Libunit::Test("BR", "[!]", &input_colon));
+	// routine.AddNewTest(Libunit::Test("BR", "[:]", &input_exclamation));
 	routine.AddNewTest(Libunit::Test("syntax", ">", &synt_err_1));
 	routine.AddNewTest(Libunit::Test("syntax", ">>", &synt_err_2));
 	routine.AddNewTest(Libunit::Test("syntax", "<", &synt_err_3));

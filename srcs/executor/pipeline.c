@@ -74,6 +74,20 @@ static int	run_command(t_command cmd, const t_command_table *table)
 	return (0);
 }
 
+static void	cleanup_table(t_command_table *table)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < table->n_commands)
+	{
+		cleanup_arr((void **)table->commands[i].args);
+		free(table->commands[i].path);
+		i++;
+	}
+	free(table->commands);
+}
+
 /// @brief Run every command in the command table
 /// @param table The command table to run
 /// @return the exit value of the last command
@@ -101,5 +115,6 @@ int	run_pipeline(t_command_table *table)
 	while (wait(&code) > 0)
 	{
 	}
+	cleanup_table(table);
 	return (code);
 }

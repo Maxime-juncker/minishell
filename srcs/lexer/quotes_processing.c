@@ -103,6 +103,7 @@ static char *remove_spaces(char *str)
 static int	add_str(t_list **lst, const char *line, size_t *i)
 {
 	char	*tmp;
+	char	*new_str;
 	size_t	j;
 
 	tmp = ft_calloc(get_str_len(&line[*i]) + 1, sizeof(char));
@@ -119,9 +120,10 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 		j++;
 	}
 	tmp[j] = '\0';
-	tmp = remove_spaces(tmp);
-	ft_lstadd_back(lst, ft_lstnew(ft_strdup(tmp)));
+	new_str = remove_spaces(tmp);
 	free(tmp);
+	ft_lstadd_back(lst, ft_lstnew(ft_strdup(new_str)));
+	free(new_str);
 	return (0);
 }
 

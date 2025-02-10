@@ -23,7 +23,10 @@ char	*get_cmd_path(char **paths, t_command cmd)
 	char	*cmd_path;
 
 	if (is_builtin(cmd.args[0]))
+	{
+		cleanup_arr((void **)paths);
 		return (ft_strdup(cmd.args[0]));
+	}
 	i = 0;
 	while (paths[i] != NULL)
 	{

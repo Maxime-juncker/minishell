@@ -25,7 +25,7 @@ int	export_cmd(t_command_table *table, t_command cmd)
 		cpy[i] = table->env[i];
 		i++;
 	}
-	cpy[i] = cmd.args[1];
+	cpy[i] = ft_strdup(cmd.args[1]);
 	cpy[i + 1] = NULL;
 	table->env = cpy;
 	return (0);

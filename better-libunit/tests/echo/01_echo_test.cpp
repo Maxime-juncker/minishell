@@ -159,7 +159,7 @@ int	echo_12( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table((char *)"echo                test", table.env, &table, 0);
+	init_table(process_line("echo                test"), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -174,7 +174,7 @@ int	echo_13( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table((char *)"echo test1     test2    test3", table.env, &table, 0);
+	init_table(process_line("echo test1     test2    test3"), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
