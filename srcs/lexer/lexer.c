@@ -10,6 +10,5 @@ char	*process_line(const char *cmd_line)
 	process_lst = process_quotes(cmd_line);
 	process_str = process_expanded_vars(process_lst);
 	ft_lstclear(&process_lst, free);
-	printf("%s$\n", process_str);
 	return (process_str);
 }
