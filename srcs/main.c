@@ -5,10 +5,10 @@
 #include <readline/history.h>
 #include <signal.h>
 
-void	new_prompt(int sig)
+void	handle_signal(int signal)
 {
-	if (sig)
-		printf("\n");
+	(void)signal;
+	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
@@ -24,7 +24,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	signal(SIGINT, new_prompt);
+	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, SIG_IGN);
 	table.env = duplicate_env(env);
 	last_cmd = 0;

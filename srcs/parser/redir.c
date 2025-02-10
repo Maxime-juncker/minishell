@@ -24,8 +24,8 @@ static int	heredoc(t_command *cmd, char *deli)
 	{
 		line = get_next_line(0);
 		if (!line)
-			printf("minishell: warning: %s\n",
-				"here-document delimited by end-of-file (wanted `EOF')");
+			printf("minishell: warning: %s (wanted `%s')\n",
+				"here-document delimited by end-of-file", deli);
 		len = ft_strlen(line) - 1;
 		if (!line || (!ft_strncmp(line, deli, len) && ft_strlen(deli) == len))
 			break ;
@@ -75,7 +75,8 @@ static void	handle_redir(t_command *cmd, char *cmd_str, int *i, char c)
 	cmd->n_args -= 2;
 	while (cmd_str[*i] && cmd_str[*i] != c)
 		(*i)++;
-	db_redir = (cmd_str[*i] && cmd_str[*i + 1] == c);
+	db_redir = ((cmd_str[*i] && cmd_str[*i + 1] == c)
+		|| (c == '>' && cmd_str[*i - 1] == '<'));
 	while (cmd_str[*i] && (cmd_str[*i] == c || cmd_str[*i] == ' '))
 		(*i)++;
 	if (!cmd_str[*i])
@@ -87,10 +88,9 @@ static void	handle_redir(t_command *cmd, char *cmd_str, int *i, char c)
 	if (!file)
 		return ;
 	k = -1;
-	while (*i + ++k < j)
+	while (*i + ++k <= j)
 		file[k] = cmd_str[*i + k];
-	file[k] = 0;
-	*i += k + 1;
+	// *i += k + 1; Peut etre utile on sait pas
 	handle_fd(cmd, file, c, db_redir);
 }
 
@@ -103,16 +103,14 @@ void	redir(t_command *cmd, char *cmd_str, int is_last)
 	while (cmd_str[i])
 	{
 		temp = i;
-		if (ft_strchr(&cmd_str[i], '<'))
+		if (ft_strchr(&cmd_str[i], '<')
+			&& *(ft_strchr(&cmd_str[i], '<') + 1) == '>')
 		{
-			if (*(ft_strchr(&cmd_str[i], '<') + 1) == '>')
-			{
-				handle_redir(cmd, cmd_str, &i, '>');
-				cmd->fd_out = 1;
-			}
-			else
-				handle_redir(cmd, cmd_str, &i, '<');
+			handle_redir(cmd, cmd_str, &i, '>');
+			cmd->fd_out = 1;
 		}
+		else if (ft_strchr(&cmd_str[i], '<'))
+			handle_redir(cmd, cmd_str, &i, '<');
 		else if (ft_strchr(&cmd_str[i], '>'))
 			handle_redir(cmd, cmd_str, &i, '>');
 		if (!(ft_strchr(&cmd_str[temp], '>')) && !ft_strchr(&cmd_str[i], '<')
