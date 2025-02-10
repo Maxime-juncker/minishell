@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static size_t	arrlen(void **arr)
+size_t	arrlen(void **arr)
 {
 	size_t	i;
 

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:47:08 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/10 10:03:31 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:28:13 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,10 @@ char	*ft_strtrim_free(char *s1, char const *set)
 		len--;
 	result = malloc(len - i + 2);
 	if (result == NULL)
+	{
+		free(s1);
 		return (NULL);
+	}
 	ft_strlcpy(result, s1 + i, len - i + 2);
 	free(s1);
 	return (result);

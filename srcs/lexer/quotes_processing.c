@@ -10,7 +10,7 @@ static size_t	get_str_len(const char *str)
 	return (i);
 }
 
-static char	*remove_quotes(const char *line)
+char	*remove_quotes(const char *line)
 {
 	char	*new_line;
 	int		i;

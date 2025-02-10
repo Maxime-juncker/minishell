@@ -16,6 +16,7 @@
 # define MALLOC_ERR	-1
 
 # define DEBUG 0
+# define SHOW_LEXER 0
 
 typedef struct s_command
 {
@@ -98,6 +99,7 @@ int		echo(char **args, int n);
 // env.c
 int		env(t_command_table table);
 char	**duplicate_env(char **old_env);
+size_t	arrlen(void **arr);
 
 // pwd.c
 int		pwd(char **env);
@@ -115,5 +117,7 @@ int		change_directory(const char *path, char **env);
 // debug
 void	show_cmd(t_command cmd);
 void	show_table(t_command_table table);
+
+char	*remove_quotes(const char *line);
 
 #endif

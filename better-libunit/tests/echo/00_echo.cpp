@@ -41,8 +41,6 @@ int	echo_routine( void )
 	routine.AddNewTest(Libunit::Test("ECHO", "echo $:$= | cat -e", &echo_33));
 	routine.AddNewTest(Libunit::Test("ECHO", "echo \" $ \" | cat -e", &echo_34));
 	routine.AddNewTest(Libunit::Test("ECHO", "echo \' $ \' | cat -e", &echo_35));
-//	routine.AddNewTest(Libunit::Test("ECHO", "echo $DESKTOP_SESSION", &echo_36));
-//	routine.AddNewTest(Libunit::Test("ECHO", "echo \\$DESKTOP_SESSION", &echo_37));
 
 	// ==================================================
 

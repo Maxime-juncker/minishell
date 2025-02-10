@@ -419,8 +419,8 @@ int	echo_29( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo $"), table.env, &table, 0);
 	Libunit::Redirect_log();
+	init_table(process_line("echo $"), table.env, &table, 0);
 	run_pipeline(&table);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)

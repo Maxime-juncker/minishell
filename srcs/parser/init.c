@@ -82,14 +82,26 @@ static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last)
 		return (0);
 	paths = get_paths(env);
 	if (!paths)
-		return (0);
+		return (cleanup_arr((void **)args), 0);
 	cmd->args = args;
 	cmd->n_args = 0;
 	while (args[cmd->n_args])
 		cmd->n_args++;
 	cmd->path = get_cmd_path(paths, *cmd);
+	if (!cmd->path)
+	{
+		cleanup_arr((void **)args);
+		cleanup_arr((void **)paths);
+		return (0);
+	}
 	if (pipe(pipefd) != -1)
 		cmd->fd_out = pipefd[1];
+	else
+	{
+		cleanup_arr((void **)args);
+		free(cmd->path);
+		return (0);
+	}
 	redir(cmd, cmd_str, is_last);
 	return (1);
 }

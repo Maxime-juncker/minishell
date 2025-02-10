@@ -27,6 +27,8 @@ int	main(int ac, char **av, char **env)
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, SIG_IGN);
 	table.env = duplicate_env(env);
+	if (table.env == NULL)
+		return (EXIT_FAILURE);
 	last_cmd = 0;
 	while (1)
 	{
@@ -41,6 +43,11 @@ int	main(int ac, char **av, char **env)
 		if (ft_strncmp(line, "\n", ft_strlen(line)) && ft_strncmp(line, "!", ft_strlen(line)) && ft_strncmp(line, ":", ft_strlen(line)))
 		{
 			process_cmd = process_line(line);
+			if (!process_cmd)
+			{
+				free(line);
+				continue ;
+			}
 			code = check_cmd_line(process_cmd);
 			if (code == SYNTAX_ERR || code == IS_DIR || code == NOT_FOUND)
 			{
@@ -52,7 +59,8 @@ int	main(int ac, char **av, char **env)
 			{
 				free(line);
 				free(process_cmd);
-				exit(EXIT_FAILURE); //! need to cleanup if needed
+				error("malloc failed");
+				exit(EXIT_FAILURE);
 			}
 			else
 			{

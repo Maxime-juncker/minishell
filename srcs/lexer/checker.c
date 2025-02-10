@@ -32,22 +32,32 @@ static int	check_command(char	**cmd)
 char	**split_cmd(const char *process_line)
 {
 	char	**cmd;
+	char	**cmd_trimed;
 	int		i;
 
 	cmd = ft_split(process_line, '|');
 	if (cmd == NULL)
 		return (NULL);
+	cmd_trimed = ft_calloc(arrlen((void **)cmd) + 1, sizeof(char *));
+	if (cmd_trimed == NULL)
+	{
+		cleanup_arr((void **)cmd);
+		return (NULL);
+	}
 	i = 0;
 	while (cmd[i])
 	{
-		cmd[i] = ft_strtrim_free(cmd[i], " ");
-		if (!cmd[i])
+		cmd_trimed[i] = ft_strtrim(cmd[i], " ");
+		if (!cmd_trimed[i])
 		{
+			cleanup_arr((void **)cmd);
+			cleanup_arr((void **)cmd_trimed);
 			return (NULL);
 		}
 		i++;
 	}
-	return (cmd);
+	cleanup_arr((void **)cmd);
+	return (cmd_trimed);
 }
 
 int	check_cmd_line( const char *process_line )
@@ -59,6 +69,8 @@ int	check_cmd_line( const char *process_line )
 	if (code == SYNTAX_ERR)
 		return (SYNTAX_ERR);
 	cmd = split_cmd(process_line);
+	if (cmd == NULL)
+		return (MALLOC_ERR);
 	code = check_dir(cmd);
 	if (code != 0)
 	{

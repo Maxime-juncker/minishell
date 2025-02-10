@@ -10,7 +10,9 @@ static int	add_new_str(char **process_str, char *new_str, int is_str_literal)
 	{
 		if (new_str[i] == '$' && !is_str_literal)
 		{
-			expanded_var = expand_env_var(ft_strdup(&new_str[i]), __environ, 0);
+			// printf("new_str[i]: %s\n", &new_str[i]);
+			expanded_var = expand_env_var(ft_strdup(&new_str[i]), __environ, 0); // a change pour le env de table
+			// printf("expanded_var: %s\n", expanded_var);
 			if (!expanded_var)
 				return (MALLOC_ERR);
 			*process_str = ft_strjoin(*process_str, expanded_var);
