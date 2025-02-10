@@ -11,12 +11,12 @@ char	*handle_doll(const char *str, char *expanded_str, int *i, int last_cmd)
 	if (str[*i + 1] == '$')
 	{
 		expanded_str = ft_strjoin(expanded_str, "$$");
-		*i += 2;
+		*i += 1;
 	}
 	else if (str[*i + 1] == '?')
 	{
 		expanded_str = ft_strjoin(expanded_str, ft_itoa(last_cmd));
-		*i += 2;
+		*i += 1;
 	}
 	else if (str[*i + 1] && (ft_isalnum(str[*i + 1]) || str[*i + 1] == '_'))
 	{
@@ -36,7 +36,6 @@ char	*handle_doll(const char *str, char *expanded_str, int *i, int last_cmd)
 	else
 	{
 		expanded_str = ft_charjoin(expanded_str, '$');
-		(*i)++;
 	}
 	return (expanded_str);
 }

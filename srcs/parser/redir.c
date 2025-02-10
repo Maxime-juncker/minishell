@@ -41,8 +41,7 @@ static int	heredoc(t_command *cmd, char *deli)
 		write(cmd->fd_in, doc, ft_strlen(doc));
 	close(cmd->fd_in);
 	cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644);
-	free(doc);
-	return (0);
+	return (free(doc), 0);
 }
 
 static void	handle_fd(t_command *cmd, char *file, char c, int db_redir)
@@ -79,7 +78,7 @@ static void	handle_redir(t_command *cmd, char *cmd_str, int *i, char c)
 	while (cmd_str[*i] && cmd_str[*i] != c)
 		(*i)++;
 	db_redir = ((cmd_str[*i] && cmd_str[*i + 1] == c)
-		|| (c == '>' && cmd_str[*i - 1] == '<'));
+			|| (c == '>' && cmd_str[*i - 1] == '<'));
 	while (cmd_str[*i] && (cmd_str[*i] == c || cmd_str[*i] == ' '))
 		(*i)++;
 	if (!cmd_str[*i])
