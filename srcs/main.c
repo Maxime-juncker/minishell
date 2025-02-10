@@ -26,13 +26,16 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	signal(SIGINT, new_prompt);
 	signal(SIGQUIT, SIG_IGN);
-	table.env = env;
+	table.env = duplicate_env(env);
 	last_cmd = 0;
 	while (1)
 	{
 		line = readline("\033[0mminishell$ ");
 		if (!line || (ft_strlen(line) == 4 && !ft_strncmp(line, "exit", 4)))
+		{
+			cleanup_arr((void **)table.env);
 			return (printf("exit\n"), 0);
+		}
 		else if (ft_strncmp(line, "\n", ft_strlen(line)))
 			add_history(line);
 		if (ft_strncmp(line, "\n", ft_strlen(line)) && ft_strncmp(line, "!", ft_strlen(line)) && ft_strncmp(line, ":", ft_strlen(line)))
@@ -54,12 +57,12 @@ int	main(int ac, char **av, char **env)
 			else
 			{
 				last_cmd = init_table(process_cmd, env, &table, last_cmd);
+				free(line);
+				free(process_cmd);
 				if (last_cmd != 127)
 					last_cmd = run_pipeline(&table);
 			}
-			free(process_cmd);
 		}
-		free(line);
 	}
 	return (0);
 }

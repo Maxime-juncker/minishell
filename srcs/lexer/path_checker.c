@@ -5,6 +5,7 @@ int	check_cmd_path(const char *cmd)
 {
 	int			i;
 	t_command	cmd_tmp;
+	char		*path;
 
 	i = 0;
 	while (cmd[i] && in_base(cmd[i], "><") == -1 && cmd[i] != ' ')
@@ -19,12 +20,15 @@ int	check_cmd_path(const char *cmd)
 	if (cmd_tmp.args[0] == NULL)
 		return (MALLOC_ERR);
 	ft_strlcpy(cmd_tmp.args[0], cmd, i + 1);
-	if (get_cmd_path(get_paths(__environ), cmd_tmp) == NULL)
+	path = get_cmd_path(get_paths(__environ), cmd_tmp);
+	if (path == NULL)
 	{
 		printf("minishell$ %s: command not found\n", cmd_tmp.args[0]);
 		cleanup_arr((void **)cmd_tmp.args);
+		free(path);
 		return (NOT_FOUND);
 	}
+	free(path);
 	cleanup_arr((void **)cmd_tmp.args);
 	return (0);
 }
@@ -38,7 +42,10 @@ int	check_dir_validity(const char *path)
 	if (paths == NULL)
 		return (MALLOC_ERR);
 	if (ft_strchr(paths[0], '/') == NULL && ft_strchr(paths[0], '.') == NULL)
+	{
+		cleanup_arr((void **)paths);
 		return (0);
+	}
 	dir = opendir(paths[0]);
 	if (!dir)
 	{

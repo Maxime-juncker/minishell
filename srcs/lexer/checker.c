@@ -71,5 +71,6 @@ int	check_cmd_line( const char *process_line )
 		cleanup_arr((void **)cmd);
 		return (code);
 	}
+	cleanup_arr((void **)cmd);
 	return (0);
 }

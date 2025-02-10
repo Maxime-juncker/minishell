@@ -59,6 +59,47 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	return (0);
 }
 
+static size_t	count_space(const char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i] == ' ')
+		i++;
+	return (i);
+}
+
+static char *remove_spaces(char *str)
+{
+	char	*buff;
+	char	*new_str;
+	int		i;
+	char	last;
+
+	buff = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+	if (!buff)
+		return (NULL);
+	i = 0;
+	last = 0;
+	while (*str)
+	{
+		if (*str == ' ' && last == ' ')
+		{
+			last = *str;
+			str++;
+			continue ;
+		}
+		buff[i] = *str;
+		last = *str;
+		i++;
+		str++;
+	}
+	buff[i] = '\0';
+	new_str = ft_strdup(buff);
+	free(buff);
+	return (new_str);
+}
+
 static int	add_str(t_list **lst, const char *line, size_t *i)
 {
 	char	*tmp;
@@ -78,8 +119,7 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 		j++;
 	}
 	tmp[j] = '\0';
-	tmp = ft_strtrim_free(tmp, " ");
-	tmp = ft_charjoin(tmp, ' ');
+	tmp = remove_spaces(tmp);
 	ft_lstadd_back(lst, ft_lstnew(ft_strdup(tmp)));
 	free(tmp);
 	return (0);

@@ -9,6 +9,8 @@ char	*process_line(const char *cmd_line)
 		return (ft_strdup(cmd_line));
 	process_lst = process_quotes(cmd_line);
 	process_str = process_expanded_vars(process_lst);
+	// printf("process_str: %s\n", process_str);
+	// ft_lstprint(process_lst);
 	ft_lstclear(&process_lst, free);
 	return (process_str);
 }

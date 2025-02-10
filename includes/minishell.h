@@ -93,6 +93,7 @@ int		echo(char **args, int n);
 
 // env.c
 int		env(t_command_table table);
+char	**duplicate_env(char **old_env);
 
 // pwd.c
 int		pwd(char **env);

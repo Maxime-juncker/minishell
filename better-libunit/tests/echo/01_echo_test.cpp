@@ -91,6 +91,11 @@ int	echo_07( void )
 
 int	echo_08( void )
 {
+	const char *exepted_file[]
+	{
+		"Test",
+	};
+
 	t_command_table	table;
 	table.env = environ;
 
@@ -98,7 +103,7 @@ int	echo_08( void )
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
-	if (Libunit::Check_output("Test") == 0)
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
