@@ -85,6 +85,11 @@ int	run_pipeline(t_command_table *table)
 	i = 0;
 	while (i < table->n_commands)
 	{
+		if (table->commands[i].n_args == 0)
+		{
+			i++;
+			continue ;
+		}
 		if (run_env_cmd(table, table->commands[i]))
 		{
 			i++;

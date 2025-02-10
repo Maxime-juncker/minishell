@@ -12,7 +12,7 @@ static int	check_error(const char *cmd_line, const int i)
 
 	j = 0;
 	nb_spaces = 0;
-	while (continue_chek(cmd_line[i - j]))
+	while (i - j >= 0 && continue_chek(cmd_line[i - j]))
 	{
 		if (cmd_line[i - j] == ' ')
 		{

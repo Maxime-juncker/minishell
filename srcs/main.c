@@ -39,14 +39,25 @@ int	main(int ac, char **av, char **env)
 		{
 			process_cmd = process_line(line);
 			code = check_cmd_line(process_cmd);
-			if (code == SYNTAX_ERR || code == IS_DIR)
-				break ;
+			if (code == SYNTAX_ERR || code == IS_DIR || code == NOT_FOUND)
+			{
+				free(process_cmd);
+				free(line);
+				continue ;
+			}
 			else if (code == MALLOC_ERR)
+			{
+				free(line);
+				free(process_cmd);
 				exit(EXIT_FAILURE); //! need to cleanup if needed
-			last_cmd = init_table(process_cmd, env, &table, last_cmd);
+			}
+			else
+			{
+				last_cmd = init_table(process_cmd, env, &table, last_cmd);
+				if (last_cmd != 127)
+					last_cmd = run_pipeline(&table);
+			}
 			free(process_cmd);
-			if (last_cmd != 127)
-				last_cmd = run_pipeline(&table);
 		}
 		free(line);
 	}

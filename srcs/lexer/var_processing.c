@@ -62,6 +62,7 @@ char	*process_expanded_vars(const t_list *lst)
 		if (is_str_literal == MALLOC_ERR)
 			return (NULL);
 		add_new_str(&process_str, str, is_str_literal);
+		free(str);
 		lst = lst->next;
 	}
 	return (process_str);

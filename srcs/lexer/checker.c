@@ -8,10 +8,7 @@ static int	check_dir(char	**cmd)
 	{
 		code = check_dir_validity(cmd[0]);
 		if (code != 0)
-		{
-			cleanup_arr((void **)cmd);
 			return (code);
-		}
 	}
 	return (0);
 }
@@ -26,9 +23,7 @@ static int	check_command(char	**cmd)
 	{
 		code = check_cmd_path(cmd[i]);
 		if (code != 0)
-		{
 			return (code);
-		}
 		i++;
 	}
 	return (0);

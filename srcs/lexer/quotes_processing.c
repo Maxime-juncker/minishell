@@ -78,7 +78,7 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 		j++;
 	}
 	tmp[j] = '\0';
-	tmp = ft_strtrim(tmp, " ");
+	tmp = ft_strtrim_free(tmp, " ");
 	tmp = ft_charjoin(tmp, ' ');
 	ft_lstadd_back(lst, ft_lstnew(ft_strdup(tmp)));
 	free(tmp);
