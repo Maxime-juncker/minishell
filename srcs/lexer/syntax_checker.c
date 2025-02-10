@@ -40,7 +40,7 @@ static int	new_line_error(const char *str, const char last)
 		return (token_error('|', *(str - 2)));
 	if (last == '>' || last == '<')
 	{
-		printf("minishell$ syntax error near unexpected token `newline\'\n");
+		printf("minishell: syntax error near unexpected token `newline\'\n");
 		return (SYNTAX_ERR);
 	}
 	return (0);

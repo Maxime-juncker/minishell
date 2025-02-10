@@ -23,7 +23,7 @@ int	check_cmd_path(const char *cmd)
 	path = get_cmd_path(get_paths(__environ), cmd_tmp);
 	if (path == NULL)
 	{
-		printf("minishell$ %s: command not found\n", cmd_tmp.args[0]);
+		printf("minishell: %s: command not found\n", cmd_tmp.args[0]);
 		cleanup_arr((void **)cmd_tmp.args);
 		free(path);
 		return (NOT_FOUND);
@@ -49,12 +49,12 @@ int	check_dir_validity(const char *path)
 	dir = opendir(paths[0]);
 	if (!dir)
 	{
-		printf("minishell$ %s: No such file or directory\n", paths[0]);
+		printf("minishell: %s: No such file or directory\n", paths[0]);
 		cleanup_arr((void **)paths);
 		return (NOT_FOUND);
 	}
 	closedir(dir);
-	printf("minishell$ %s: Is a directory\n", paths[0]);
+	printf("minishell: %s: Is a directory\n", paths[0]);
 	cleanup_arr((void **)paths);
 	return (IS_DIR);
 }
