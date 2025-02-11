@@ -54,8 +54,6 @@ void	redir(t_command *cmd, char *cmd_str, int is_last);
 int		init_table(char *line, char **env, \
 					t_command_table *table, int last_cmd);
 char	*expand_env_var(char *str, char **env, int last_cmd);
-char	*handle_doll(const char *str, \
-							char *expanded_str, int *i, int last_cmd);
 
 // ft_split_1space.c
 char	**ft_split_1space(const char *s, char c);

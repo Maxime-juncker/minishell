@@ -2,28 +2,20 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-char	*handle_doll(const char *str, char *expanded_str, int *i, int last_cmd)
+static char	*handle_dollar(const char *str, int *i, int last_cmd)
 {
 	size_t	j;
 	char	*var_name;
 	char	*var_value;
 
 	if (str[*i + 1] == '$')
-	{
-		expanded_str = ft_strjoin(expanded_str, "$$");
-		*i += 1;
-	}
+		return (*i += 1, ft_strdup("$$"));
 	else if (str[*i + 1] == '?')
-	{
-		expanded_str = ft_strjoin(expanded_str, ft_itoa(last_cmd));
-		*i = ft_strlen(str) - 1;
-	}
+		return (*i = ft_strlen(str), ft_itoa(last_cmd));
+	else if (ft_isdigit(str[*i + 1]) && str[*i + 1] == '0')
+		return (*i += 2, ft_strdup("minishell"));
 	else if (ft_isdigit(str[*i + 1]))
-	{
-		if (str[*i + 1] == '0')
-			expanded_str = ft_strjoin(expanded_str, "minishell");
-		*i += 1;
-	}
+		return (*i += 2, NULL);
 	else if (str[*i + 1] && (ft_isalnum(str[*i + 1]) || str[*i + 1] == '_'))
 	{
 		(*i)++;
@@ -35,23 +27,12 @@ char	*handle_doll(const char *str, char *expanded_str, int *i, int last_cmd)
 			return (NULL);
 		var_value = getenv(var_name);
 		free(var_name);
+		*i = ft_strlen(str);
 		if (var_value)
-			expanded_str = ft_strjoin(expanded_str, var_value);
-		else if (!expanded_str)
-			expanded_str = ft_strdup("");
-		*i = ft_strlen(str) - 1;
+			return (ft_strdup(var_value));
+		return (NULL);
 	}
-	else
-	{
-		expanded_str = ft_charjoin(expanded_str, '$');
-		(*i)++;
-		while (str[*i] == ' ')
-		{
-			expanded_str = ft_charjoin(expanded_str, ' ');
-			(*i)++;
-		}
-	}
-	return (expanded_str);
+	return (*i += 1, ft_strdup("$"));
 }
 
 char	*expand_env_var(char *str, char **env, int last_cmd)
@@ -61,12 +42,13 @@ char	*expand_env_var(char *str, char **env, int last_cmd)
 
 	if (!str)
 		return (NULL);
-	expanded_str = NULL;
 	i = 0;
-	if (str[i] == '$' && str[i + 1])
-		expanded_str = handle_doll(str, expanded_str, &i, last_cmd);
-	else
+	expanded_str = handle_dollar(str, &i, last_cmd);
+	while (ft_isalnum(str[i]) || str[i] == ' ')
+	{
 		expanded_str = ft_charjoin(expanded_str, str[i]);
+		i++;
+	}
 	free(str);
 	return (expanded_str);
 }

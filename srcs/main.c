@@ -14,7 +14,6 @@ void	handle_signal(int signal)
 	rl_redisplay();
 }
 
-
 int	main(int ac, char **av, char **env)
 {
 	char			*line;
