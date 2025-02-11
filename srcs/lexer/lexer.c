@@ -2,7 +2,7 @@
 
 #if SHOW_LEXER
 
-char	*process_line(const char *cmd_line)
+char	*process_line(const char *cmd_line, char **env)
 {
 	t_list	*process_lst;
 	char	*process_str;

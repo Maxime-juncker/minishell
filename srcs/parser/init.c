@@ -16,6 +16,12 @@ char	*handle_doll(const char *str, char *expanded_str, int *i, int last_cmd)
 	else if (str[*i + 1] == '?')
 	{
 		expanded_str = ft_strjoin(expanded_str, ft_itoa(last_cmd));
+		*i = ft_strlen(str) - 1;
+	}
+	else if (ft_isdigit(str[*i + 1]))
+	{
+		if (str[*i + 1] == '0')
+			expanded_str = ft_strjoin(expanded_str, "minishell");
 		*i += 1;
 	}
 	else if (str[*i + 1] && (ft_isalnum(str[*i + 1]) || str[*i + 1] == '_'))
@@ -38,6 +44,12 @@ char	*handle_doll(const char *str, char *expanded_str, int *i, int last_cmd)
 	else
 	{
 		expanded_str = ft_charjoin(expanded_str, '$');
+		(*i)++;
+		while (str[*i] == ' ')
+		{
+			expanded_str = ft_charjoin(expanded_str, ' ');
+			(*i)++;
+		}
 	}
 	return (expanded_str);
 }
@@ -46,21 +58,15 @@ char	*expand_env_var(char *str, char **env, int last_cmd)
 {
 	char	*expanded_str;
 	int		i;
-	char	quote;
 
 	if (!str)
 		return (NULL);
 	expanded_str = NULL;
 	i = 0;
-	quote = 0;
-	while (str[i])
-	{
-		if (str[i] == '$' && str[i + 1])
-			expanded_str = handle_doll(str, expanded_str, &i, last_cmd);
-		else
-			expanded_str = ft_charjoin(expanded_str, str[i]);
-		i++;
-	}
+	if (str[i] == '$' && str[i + 1])
+		expanded_str = handle_doll(str, expanded_str, &i, last_cmd);
+	else
+		expanded_str = ft_charjoin(expanded_str, str[i]);
 	free(str);
 	return (expanded_str);
 }

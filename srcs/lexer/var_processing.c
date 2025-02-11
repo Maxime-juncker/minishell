@@ -20,8 +20,9 @@ static int	add_new_str(char **process_str, char *new_str, int is_str_literal, ch
 				free(expanded_var);
 				return (MALLOC_ERR);
 			}
-			i++;
-			while (ft_isalnum(new_str[i + 1]) || new_str[i + 1] == '_')
+			if (new_str[i + 1] == ' ')
+				i++;
+			while (ft_isalnum(new_str[i + 1]) || new_str[i + 1] == '_' || new_str[i + 1] == '?')
 				i++;
 		}
 		else
