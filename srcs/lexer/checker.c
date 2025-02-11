@@ -4,7 +4,7 @@ static int	check_dir(char	**cmd)
 {
 	int	code;
 
-	if (check_needed(cmd, '/') || check_needed(cmd, '.'))
+	if (check_needed(cmd, '/'))
 	{
 		code = check_dir_validity(cmd[0]);
 		if (code != 0)
@@ -64,6 +64,8 @@ int	check_cmd_line( const char *process_line )
 {
 	char	**cmd;
 	int		code;
+
+	return (0);
 
 	code = check_syntax(process_line);
 	if (code == SYNTAX_ERR)

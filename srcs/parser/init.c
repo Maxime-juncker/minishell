@@ -95,7 +95,6 @@ static int	init_cmd(t_command *cmd, char *cmd_str, char **env, int is_last)
 	if (!cmd->path)
 	{
 		cleanup_arr((void **)args);
-		cleanup_arr((void **)paths);
 		return (0);
 	}
 	if (pipe(pipefd) != -1)
