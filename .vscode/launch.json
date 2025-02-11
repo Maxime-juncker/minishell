@@ -30,6 +30,7 @@
 		"type": "lldb",
 		"request": "launch",
 		"name": "(lldb) Launch",
+		"preLaunchTask": "build",
 		"program": "${workspaceFolder}/bin/minishell",
 		"args": [],
 		"cwd": "${workspaceFolder}"

@@ -13,16 +13,31 @@ static void	cleanup(char **arr)
 	free(arr);
 }
 
-// @brief return the full path of a command if it exists
-// @param paths the env paths variable
-// @param cmd the command to search
-// @return the full path of the command if it exists, NULL otherwise
+/// @brief return the full path of a command if it exists
+/// @param paths the env paths variable
+/// @param cmd the command to search
+/// @return the full path of the command if it exists, NULL otherwise
+
+int	relative_path(char *path)
+{
+	if (path[0] == '.')
+		return (1);
+	return (0);
+}
+
 char	*get_cmd_path(char **paths, t_command cmd)
 {
 	int		i;
 	char	*cmd_path;
-
+	
+	if (paths == NULL)
+		return (NULL);
 	if (is_builtin(cmd.args[0]))
+	{
+		cleanup_arr((void **)paths);
+		return (ft_strdup(cmd.args[0]));
+	}
+	if (relative_path(cmd.args[0]))
 	{
 		cleanup_arr((void **)paths);
 		return (ft_strdup(cmd.args[0]));
@@ -32,10 +47,16 @@ char	*get_cmd_path(char **paths, t_command cmd)
 	{
 		cmd_path = ft_strjoin("/", cmd.args[0]);
 		if (cmd_path == NULL)
+		{
+			cleanup(paths);
 			return (NULL);
+		}
 		cmd_path = ft_strjoin_free(paths[i], cmd_path, FREE2);
 		if (cmd_path == NULL)
+		{
+			cleanup(paths);
 			return (NULL);
+		}
 		if (access(cmd_path, F_OK) == 0)
 		{
 			cleanup(paths);
