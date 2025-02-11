@@ -14,7 +14,7 @@ static int	add_new_str(char **process_str, char *new_str, int is_str_literal, ch
 			expanded_var = expand_env_var(ft_strdup(&new_str[i]), env, 0);
 			if (!expanded_var)
 				return (MALLOC_ERR);
-			*process_str = ft_strjoin_free(*process_str, expanded_var, 1, 1);
+			*process_str = ft_strjoin_free(*process_str, expanded_var, FREE1 | FREE2);
 			if (!*process_str)
 			{
 				free(expanded_var);

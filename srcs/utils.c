@@ -94,7 +94,7 @@ int	replace_env_var(char **env, char *to_find, const char *replace)
 		if (ft_strncmp(env[i], to_find, len) == 0)
 		{
 			free(env[i]);
-			path = ft_strjoin_free(ft_strjoin(to_find, "="), ft_strdup(replace), 1, 1);
+			path = ft_strjoin_free(ft_strjoin(to_find, "="), ft_strdup(replace), FREE1 | FREE2);
 			env[i] = path;
 			return (0);
 		}

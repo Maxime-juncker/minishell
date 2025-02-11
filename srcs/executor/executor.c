@@ -33,7 +33,7 @@ char	*get_cmd_path(char **paths, t_command cmd)
 		cmd_path = ft_strjoin("/", cmd.args[0]);
 		if (cmd_path == NULL)
 			return (NULL);
-		cmd_path = ft_strjoin_free(paths[i], cmd_path, 0, 1);
+		cmd_path = ft_strjoin_free(paths[i], cmd_path, FREE2);
 		if (cmd_path == NULL)
 			return (NULL);
 		if (access(cmd_path, F_OK) == 0)

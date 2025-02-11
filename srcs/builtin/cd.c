@@ -9,7 +9,6 @@ static char	*get_absolute_path(const char *new_path)
 	char	*buff;
 	int		cur_size;
 
-	chdir(new_path);
 	cur_size = 1;
 	buff = malloc(cur_size);
 	if (buff == NULL)

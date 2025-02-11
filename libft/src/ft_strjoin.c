@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:56:58 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/11 09:50:59 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:52:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,15 @@ char	*ft_strjoin(char *s1, char const *s2)
 	return (result);
 }
 
-void	free_join(char *s1, char *s2, const int free1, const int free2)
+void	free_join(char *s1, char *s2, const int flags)
 {
-	if (free1)
+	if (flags & FREE1)
 		free(s1);
-	if (free2)
+	if (flags & FREE2)
 		free(s2);
 }
 
-char	*ft_strjoin_free(char *s1, char const *s2, const int free1, const int free2)
+char	*ft_strjoin_free(char *s1, char const *s2, const int flags)
 {
 	char	*result;
 	size_t	len1;
@@ -53,13 +53,13 @@ char	*ft_strjoin_free(char *s1, char const *s2, const int free1, const int free2
 	if (s1 == NULL)
 	{
 		result = ft_strdup(s2); 
-		free_join(NULL, (char *)s2, 0, free2);
+		free_join(NULL, (char *)s2, flags);
 		return (result);	
 	}
 	if (s2 == NULL)
 	{
 		result = ft_strdup(s1);
-		free_join(s1, NULL, free1, 0);
+		free_join(s1, NULL, flags);
 		return (result);
 	}
 	len1 = ft_strlen(s1);
@@ -67,12 +67,12 @@ char	*ft_strjoin_free(char *s1, char const *s2, const int free1, const int free2
 	result = malloc(len1 + len2 + 1);
 	if (result == NULL)
 	{
-		free_join(s1, (char *)s2, free1, free2);
+		free_join(s1, (char *)s2, flags);
 		return (NULL);
 	}
 	ft_strlcpy(result, s1, len1 + 1);
 	ft_strlcpy(result + len1, s2, len2 + 1);
-	free_join(s1, (char *)s2, free1, free2);
+	free_join(s1, (char *)s2, flags);
 	return (result);
 }
 
