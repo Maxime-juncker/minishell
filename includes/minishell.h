@@ -45,6 +45,7 @@ void	setup_redirection(t_command cmd);
 
 // pipeline.c
 int		run_pipeline(t_command_table *table);
+void	cleanup_table(t_command_table *table);
 
 // redirect.c
 void	redir(t_command *cmd, char *cmd_str, int is_last);
@@ -77,13 +78,13 @@ int		token_error(char c1, char c2);
 int		check_cmd_line( const char *process_line );
 
 // lexer.c
-char	*process_line(const char *cmd_line);
+char	*process_line(const char *cmd_line, char **env);
 
 // quotes_processing.c
 t_list	*process_quotes(const char *line);
 
 // var_processing.c
-char	*process_expanded_vars(const t_list *lst);
+char	*process_expanded_vars(const t_list *lst, char **env);
 
 // syntax_checker.c
 int		check_syntax(const char *cmd_line);

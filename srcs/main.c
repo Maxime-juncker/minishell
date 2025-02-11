@@ -14,6 +14,7 @@ void	handle_signal(int signal)
 	rl_redisplay();
 }
 
+
 int	main(int ac, char **av, char **env)
 {
 	char			*line;
@@ -42,7 +43,8 @@ int	main(int ac, char **av, char **env)
 			add_history(line);
 		if (ft_strncmp(line, "\n", ft_strlen(line)) && ft_strncmp(line, "!", ft_strlen(line)) && ft_strncmp(line, ":", ft_strlen(line)))
 		{
-			process_cmd = process_line(line);
+			process_cmd = process_line(line, table.env);
+
 			if (!process_cmd)
 			{
 				free(line);
@@ -51,14 +53,14 @@ int	main(int ac, char **av, char **env)
 			code = check_cmd_line(process_cmd);
 			if (code == SYNTAX_ERR || code == IS_DIR || code == NOT_FOUND)
 			{
-				free(process_cmd);
 				free(line);
+				free(process_cmd);
 				continue ;
 			}
 			else if (code == MALLOC_ERR)
 			{
 				free(line);
-				free(process_cmd);
+				cleanup_arr((void **)table.env);
 				error("malloc failed");
 				exit(EXIT_FAILURE);
 			}

@@ -46,6 +46,8 @@ char	*expand_env_var(char *str, char **env, int last_cmd)
 	int		i;
 	char	quote;
 
+	if (!str)
+		return (NULL);
 	expanded_str = NULL;
 	i = 0;
 	quote = 0;

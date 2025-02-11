@@ -49,6 +49,7 @@ static int	run_env_cmd(t_command_table *table, t_command cmd)
 static int	run_command(t_command cmd, const t_command_table *table)
 {
 	int	pid;
+	int	code;
 
 	show_cmd(cmd);
 	cmd.args[cmd.n_args] = NULL;
@@ -60,9 +61,11 @@ static int	run_command(t_command cmd, const t_command_table *table)
 		setup_redirection(cmd);
 		if (cmd.fd_out != STDOUT_FILENO)
 			close(cmd.fd_out);
-		if (run_built_in(cmd, table) != -1)
-		{
-			exit (0);
+		if (is_builtin(cmd.args[0]) == 1)
+		{	
+			code = run_built_in(cmd, table);
+			cleanup_table((t_command_table *)table);
+			exit (code);
 		}
 		if (execve(cmd.path, cmd.args, table->env) == -1)
 			alert("execve failed");
@@ -74,7 +77,7 @@ static int	run_command(t_command cmd, const t_command_table *table)
 	return (0);
 }
 
-static void	cleanup_table(t_command_table *table)
+void	cleanup_table(t_command_table *table)
 {
 	size_t	i;
 

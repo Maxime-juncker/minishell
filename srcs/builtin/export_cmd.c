@@ -16,6 +16,11 @@ int	export_cmd(t_command_table *table, t_command cmd)
 	char	**cpy;
 	int		i;
 
+	if (cmd.n_args == 1)
+	{
+		env(*table);
+		return (0);
+	}
 	cpy = malloc((get_env_len(table->env) + 2) * sizeof(char *));
 	if (cpy == NULL)
 		return (MALLOC_ERR);

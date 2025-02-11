@@ -10,7 +10,7 @@ char	*process_line(const char *cmd_line)
 	if (cmd_line[0] == '\0')
 		return (ft_strdup(cmd_line));
 	process_lst = process_quotes(cmd_line);
-	process_str = process_expanded_vars(process_lst);
+	process_str = process_expanded_vars(process_lst, env);
 
 	ft_printf("------------------------------ lexer output ------------------------------\n");
 	ft_printf("process_str: %s\n", process_str);
@@ -23,7 +23,7 @@ char	*process_line(const char *cmd_line)
 
 #else
 
-char	*process_line(const char *cmd_line)
+char	*process_line(const char *cmd_line, char **env)
 {
 	t_list	*process_lst;
 	char	*process_str;
@@ -33,7 +33,7 @@ char	*process_line(const char *cmd_line)
 	process_lst = process_quotes(cmd_line);
 	if (!process_lst)
 		return (NULL);
-	process_str = process_expanded_vars(process_lst);
+	process_str = process_expanded_vars(process_lst, env);
 	ft_lstclear(&process_lst, free);
 	return (process_str);
 }

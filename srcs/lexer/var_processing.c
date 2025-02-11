@@ -1,29 +1,41 @@
 #include "minishell.h"
 
-static int	add_new_str(char **process_str, char *new_str, int is_str_literal)
+static int	add_new_str(char **process_str, char *new_str, int is_str_literal, char **env)
 {
 	int		i;
 	char	*expanded_var;
 
 	i = 0;
+	expanded_var = NULL;
 	while (new_str[i])
 	{
 		if (new_str[i] == '$' && !is_str_literal)
 		{
-			// printf("new_str[i]: %s\n", &new_str[i]);
-			expanded_var = expand_env_var(ft_strdup(&new_str[i]), __environ, 0); // a change pour le env de table
-			// printf("expanded_var: %s\n", expanded_var);
+			expanded_var = expand_env_var(ft_strdup(&new_str[i]), env, 0);
 			if (!expanded_var)
 				return (MALLOC_ERR);
-			*process_str = ft_strjoin(*process_str, expanded_var);
+			*process_str = ft_strjoin_free(*process_str, expanded_var, 1, 1);
+			if (!*process_str)
+			{
+				free(expanded_var);
+				return (MALLOC_ERR);
+			}
 			i++;
 			while (ft_isalnum(new_str[i + 1]) || new_str[i + 1] == '_')
 				i++;
 		}
 		else
+		{
 			*process_str = ft_charjoin(*process_str, new_str[i]);
-		if (!*process_str)
-			return (MALLOC_ERR);
+			if (!*process_str)
+			{
+				if (expanded_var)
+					free(expanded_var);
+				if (process_str)
+					free(*process_str);
+				return (MALLOC_ERR);
+			}
+		}
 		i++;
 	}
 	return (0);
@@ -50,7 +62,7 @@ static int	setup_str(char **str, const t_list *lst)
 	return (is_str_literal);
 }
 
-char	*process_expanded_vars(const t_list *lst)
+char	*process_expanded_vars(const t_list *lst, char **env)
 {
 	char	*str;
 	char	*process_str;
@@ -63,7 +75,7 @@ char	*process_expanded_vars(const t_list *lst)
 		is_str_literal = setup_str(&str, lst);
 		if (is_str_literal == MALLOC_ERR)
 			return (NULL);
-		add_new_str(&process_str, str, is_str_literal);
+		add_new_str(&process_str, str, is_str_literal, env);
 		free(str);
 		lst = lst->next;
 	}

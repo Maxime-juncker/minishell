@@ -50,7 +50,7 @@ int	echo_04( void )
 {
 	const char *exepted_file[]
 	{
-		"minishell$ echoHola: command not found",
+		"minishell: echoHola: command not found",
 	};
 
 	Libunit::Redirect_log();
@@ -64,7 +64,7 @@ int	echo_05( void )
 {
 	const char *exepted_file[]
 	{
-		"minishell$ echo-nHola: command not found",
+		"minishell: echo-nHola: command not found",
 	};
 
 	Libunit::Redirect_log();
@@ -99,7 +99,7 @@ int	echo_08( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo \"-n\" Test"), table.env, &table, 0);
+	init_table(process_line("echo \"-n\" Test", environ), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -159,7 +159,7 @@ int	echo_12( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo                test"), table.env, &table, 0);
+	init_table(process_line("echo                test", environ), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -174,7 +174,7 @@ int	echo_13( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo test1     test2    test3"), table.env, &table, 0);
+	init_table(process_line("echo test1     test2    test3", environ), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -204,7 +204,7 @@ int	echo_15( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo \"         \" | cat -e"), table.env, &table, 0);
+	init_table(process_line("echo \"         \" | cat -e", environ), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -219,7 +219,7 @@ int	echo_16( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo           | cat -e"), table.env, &table, 0);
+	init_table(process_line("echo           | cat -e", environ), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -234,7 +234,7 @@ int	echo_17( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("\"\"\'\'echo hola\"\"\'\'\'\' que\"\"\'\' tal\"\"\'\'"), table.env, &table, 0);
+	init_table(process_line("\"\"\'\'echo hola\"\"\'\'\'\' que\"\"\'\' tal\"\"\'\'", environ), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -420,7 +420,7 @@ int	echo_29( void )
 	table.env = environ;
 
 	Libunit::Redirect_log();
-	init_table(process_line("echo $"), table.env, &table, 0);
+	init_table(process_line("echo $", environ), table.env, &table, 0);
 	run_pipeline(&table);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
@@ -439,7 +439,7 @@ int	echo_30( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo $?"), table.env, &table, 0);
+	init_table(process_line("echo $?", environ), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -459,7 +459,7 @@ int	echo_31( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo $?$"), table.env, &table, 0);
+	init_table(process_line("echo $?$", environ), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -480,7 +480,7 @@ int	echo_32( void )
 	table.env = environ;
 
 	Libunit::Redirect_log();
-	init_table(process_line("echo $? | echo $? | echo $?"), table.env, &table, 0);
+	init_table(process_line("echo $? | echo $? | echo $?", environ), table.env, &table, 0);
 	run_pipeline(&table);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
@@ -499,7 +499,7 @@ int	echo_33( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo $:$= | cat -e"), table.env, &table, 0);
+	init_table(process_line("echo $:$= | cat -e", environ), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -519,7 +519,7 @@ int	echo_34( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo \" $ \" | cat -e"), table.env, &table, 0);
+	init_table(process_line("echo \" $ \" | cat -e", environ), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -539,7 +539,7 @@ int	echo_35( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo \' $ \' | cat -e"), table.env, &table, 0);
+	init_table(process_line("echo \' $ \' | cat -e", environ), table.env, &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
