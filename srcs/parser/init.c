@@ -31,6 +31,8 @@ char	*handle_doll(const char *str, char *expanded_str, int *i, int last_cmd)
 		free(var_name);
 		if (var_value)
 			expanded_str = ft_strjoin(expanded_str, var_value);
+		else if (!expanded_str)
+			expanded_str = ft_strdup("");
 		*i += j;
 	}
 	else
@@ -53,16 +55,10 @@ char	*expand_env_var(char *str, char **env, int last_cmd)
 	quote = 0;
 	while (str[i])
 	{
-		if (!quote && (str[i] == '\'' || str[i] == '\"'))
-			quote = str[i];
-		if (i && str[i] == '$' && str[i - 1] != '\'')
-			break ;
-		else if (str[i] == '$' && str[i - 1] != '\\' && quote != '\'')
+		if (str[i] == '$' && str[i + 1])
 			expanded_str = handle_doll(str, expanded_str, &i, last_cmd);
-		else if (str[i] != '\\')
+		else
 			expanded_str = ft_charjoin(expanded_str, str[i]);
-		if (!expanded_str)
-			return (NULL);
 		i++;
 	}
 	free(str);
