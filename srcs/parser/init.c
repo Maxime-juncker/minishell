@@ -33,7 +33,7 @@ char	*handle_doll(const char *str, char *expanded_str, int *i, int last_cmd)
 			expanded_str = ft_strjoin(expanded_str, var_value);
 		else if (!expanded_str)
 			expanded_str = ft_strdup("");
-		*i += j;
+		*i = ft_strlen(str) - 1;
 	}
 	else
 	{
