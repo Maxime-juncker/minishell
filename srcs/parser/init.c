@@ -15,7 +15,7 @@ static char	*handle_dollar(const char *str, int *i, int last_cmd)
 	else if (ft_isdigit(str[*i + 1]) && str[*i + 1] == '0')
 		return (*i += 2, ft_strdup("minishell"));
 	else if (ft_isdigit(str[*i + 1]))
-		return (*i += 2, NULL);
+		return (*i += 2, ft_strdup(""));
 	else if (str[*i + 1] && (ft_isalnum(str[*i + 1]) || str[*i + 1] == '_'))
 	{
 		(*i)++;
@@ -30,7 +30,7 @@ static char	*handle_dollar(const char *str, int *i, int last_cmd)
 		*i = ft_strlen(str);
 		if (var_value)
 			return (ft_strdup(var_value));
-		return (NULL);
+		return (ft_strdup(""));
 	}
 	return (*i += 1, ft_strdup("$"));
 }
