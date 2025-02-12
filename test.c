@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int main() {
-    printf("Hello, World!\n");
-
-    return EXIT_SUCCESS;
+int main() 
+{
+	printf("Hello, World!\n");
+	return EXIT_SUCCESS;
 }

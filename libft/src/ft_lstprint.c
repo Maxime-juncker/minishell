@@ -12,14 +12,14 @@
 
 #include "libft.h"
 
-void	ft_lstprint(t_list *lst)
+void	ft_lstprint(const char *msg, t_list *lst)
 {
 	if (lst == NULL)
 		return ;
-	ft_printf("[");
+	ft_printf("%s [", msg);
 	while (lst->next)
 	{
-		ft_printf("%s => ", lst->content);
+		ft_printf("|%s| => ", lst->content);
 		lst = lst->next;
 	}
 	ft_printf("%s]\n", lst->content);

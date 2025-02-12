@@ -1,84 +1,67 @@
 #include "minishell.h"
 
-static int	add_new_str(char **process_str, char *new_str, int is_str_literal, char **env)
+int	is_literal(const char *str)
 {
-	int		i;
-	char	*expanded_var;
-
-	i = 0;
-	expanded_var = NULL;
-	while (new_str[i])
-	{
-		if (new_str[i] == '$' && !is_str_literal)
-		{
-			expanded_var = expand_env_var(ft_strdup(&new_str[i]), env, 0);
-			if (!expanded_var)
-				return (MALLOC_ERR);
-			*process_str = ft_strjoin_free(*process_str, expanded_var, FREE1 | FREE2);
-			if (!*process_str)
-			{
-				free(expanded_var);
-				return (MALLOC_ERR);
-			}
-			if (new_str[i + 1] == ' ')
-				i++;
-			while (ft_isalnum(new_str[i + 1]) || new_str[i + 1] == '_' || new_str[i + 1] == '?')
-				i++;
-		}
-		else
-		{
-			*process_str = ft_charjoin(*process_str, new_str[i]);
-			if (!*process_str)
-			{
-				if (expanded_var)
-					free(expanded_var);
-				if (process_str)
-					free(*process_str);
-				return (MALLOC_ERR);
-			}
-		}
-		i++;
-	}
+	if (str[0] == '\'')
+		return (1);
 	return (0);
 }
 
-static int	setup_str(char **str, const t_list *lst)
+char	*process_var(char *str, char **env)
 {
-	int		is_str_literal;
+	char	*result;
+	int		i;
 
-	if ((*str)[0] == '\'')
+	i = 0;
+	result = NULL;
+	while (str[i])
 	{
-		is_str_literal = 1;
-		*str = ft_strtrim(*str, "\'");
-		if (!*str)
-			return (MALLOC_ERR);
+		if (str[i] == '$')
+		{
+			//* join var
+			result = ft_strjoin_free(result, expand_env_var(ft_strdup(&str[i]), env, 0), FREE1 | FREE2);
+			if (result == NULL)
+				return (NULL);
+			//* skip var in str
+			i++;
+			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_')) //! peut poser pb si $9HOME par example
+			{
+				i++;
+			}
+		}
+		else
+		{
+			result = ft_charjoin(result, str[i]);
+			if (result == NULL)
+				return (NULL);
+			i++;
+		}
+
 	}
-	else
-	{
-		is_str_literal = 0;
-		*str = ft_strtrim(*str, "\"");
-		if (!*str)
-			return (MALLOC_ERR);
-	}
-	return (is_str_literal);
+	return (result);
 }
 
-char	*process_expanded_vars(const t_list *lst, char **env)
+int	only_quote(const char *str)
 {
-	char	*str;
-	char	*process_str;
-	int		is_str_literal;
+	return (str[0] == str[1] && (str[0] == '\'' || str[0] == '\"'));
+}
 
-	process_str = NULL;
+t_list	*process_expanded_vars(const t_list *lst, char **env)
+{
+	t_list	*process_lst;
+	char	*content;
+
+	process_lst = NULL;
+	content = NULL;
 	while (lst)
 	{
-		str = ((char *)lst->content);
-		is_str_literal = setup_str(&str, lst);
-		if (is_str_literal == MALLOC_ERR)
-			return (NULL);
-		add_new_str(&process_str, str, is_str_literal, env);
-		free(str);
+		if (is_literal(lst->content))
+			content = ft_strdup(lst->content);
+		else
+			content = process_var(lst->content, env);
+		if (!only_quote(content))
+			ft_lstadd_back(&process_lst, ft_lstnew(content));
 		lst = lst->next;
 	}
-	return (process_str);
+	return (process_lst);
 }

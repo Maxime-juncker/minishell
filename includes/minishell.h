@@ -15,8 +15,8 @@
 # define IS_DIR		4
 # define MALLOC_ERR	-1
 
-# define DEBUG 0
-# define SHOW_LEXER 0
+# define DEBUG 1
+# define SHOW_LEXER 1
 
 typedef struct s_command
 {
@@ -76,13 +76,13 @@ int		token_error(char c1, char c2);
 int		check_cmd_line( const char *process_line );
 
 // lexer.c
-char	*process_line(const char *cmd_line, char **env);
+char	*process_line(const char *cmd_line, char **env, int *code);
 
 // quotes_processing.c
 t_list	*process_quotes(const char *line);
 
 // var_processing.c
-char	*process_expanded_vars(const t_list *lst, char **env);
+t_list	*process_expanded_vars(const t_list *lst, char **env);
 
 // syntax_checker.c
 int		check_syntax(const char *cmd_line);

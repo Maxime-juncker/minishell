@@ -121,7 +121,7 @@ t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 int		ft_lstchr_n(t_list *lst, int n);
 t_list	*ft_lstchr(t_list *lst, void *content);
-void	ft_lstprint(t_list *lst);
+void	ft_lstprint(const char *msg, t_list *lst);
 
 // debug.c
 void	debug_color(const char *msg, const char *color);

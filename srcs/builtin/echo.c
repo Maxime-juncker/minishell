@@ -50,6 +50,11 @@ int	echo(char **args, int n)
 	no_br = i;
 	while (i < n)
 	{
+		if (args[i][0] == '\0')
+		{
+			i++;
+			continue ;
+		}
 		printf("%s", args[i]);
 		if (i < n - 1)
 			printf(" ");
