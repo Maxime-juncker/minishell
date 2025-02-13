@@ -19,6 +19,8 @@
 
 # define DEBUG 0
 # define SHOW_LEXER 0
+# define DEBUG 0
+# define SHOW_LEXER 0
 
 typedef struct s_command
 {
@@ -53,9 +55,7 @@ void	cleanup_table(t_command_table *table);
 void	redir(t_command *cmd, char *cmd_str, int is_last);
 
 // init.c
-int		init_table(char *line, char **env, \
-					t_command_table *table, int last_cmd);
-char	*expand_env_var(char *str, char **env, int last_cmd);
+int		init_table(char *line, t_command_table *table, int last_cmd);
 
 // ft_split_1space.c
 char	**ft_split_1space(const char *s, char c);

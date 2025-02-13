@@ -62,12 +62,12 @@ static int	run_command(t_command cmd, const t_command_table *table)
 		if (cmd.fd_out != STDOUT_FILENO)
 			close(cmd.fd_out);
 		if (is_builtin(cmd.args[0]) == 1)
-		{	
+		{
 			code = run_built_in(cmd, table);
 			cleanup_table((t_command_table *)table);
 			exit (code);
 		}
-		if (execve(cmd.path, cmd.args, table->env) == -1)
+		if (execve(get_cmd_path(get_paths(table->env), cmd), cmd.args, table->env) == -1)
 			alert("execve failed");
 	}
 	if (cmd.fd_out != STDOUT_FILENO)
@@ -118,6 +118,6 @@ int	run_pipeline(t_command_table *table)
 	while (wait(&code) > 0)
 	{
 	}
-	cleanup_table(table);
+	// cleanup_table(table);
 	return (code);
 }
