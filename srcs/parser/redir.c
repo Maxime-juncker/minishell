@@ -67,60 +67,54 @@ static void	handle_fd(t_command *cmd, char *file, char c, int db_redir)
 	free(file);
 }
 
-static void	handle_redir(t_command *cmd, char *cmd_str, int *i, char c)
+static void	handle_redir(t_command *cmd, char *cmd_str, char c)
 {
+	int		i;
 	int		j;
 	int		k;
 	char	*file;
 	int		db_redir;
 
+	i = 0;
 	cmd->n_args -= 2;
-	while (cmd_str[*i] && cmd_str[*i] != c)
-		(*i)++;
-	db_redir = ((cmd_str[*i] && cmd_str[*i + 1] == c)
-			|| (c == '>' && cmd_str[*i - 1] == '<'));
-	while (cmd_str[*i] && (cmd_str[*i] == c || cmd_str[*i] == ' '))
-		(*i)++;
-	if (!cmd_str[*i])
+	while (cmd_str[i] && cmd_str[i] != c)
+		i++;
+	db_redir = ((cmd_str[i] && cmd_str[i + 1] == c)
+			|| (c == '>' && cmd_str[i - 1] == '<'));
+	while (cmd_str[i] && (cmd_str[i] == c || cmd_str[i] == ' '))
+		i++;
+	if (!cmd_str[i])
 		return ;
-	j = *i;
+	j = i;
 	while (cmd_str[j] && cmd_str[j] != ' ')
 		j++;
-	file = malloc(j - *i + 1);
+	file = malloc(j - i + 1);
 	if (!file)
 		return ;
 	k = -1;
-	while (*i + ++k < j)
-		file[k] = cmd_str[*i + k];
+	while (i + ++k < j)
+		file[k] = cmd_str[i + k];
 	file[k] = 0;
 	handle_fd(cmd, file, c, db_redir);
 }
 
-void	redir(t_command *cmd, char *cmd_str, int is_last)
+void	redir(t_command *cmd, char *command, int is_last)
 {
-	int		i;
-	int		temp;
+	int	temp;
 
-	i = 0;
-	while (cmd_str[i])
+	temp = is_last && !ft_strchr(&command, '>');
+	while (*command)
 	{
-		temp = i;
-		if (ft_strchr(&cmd_str[i], '<')
-			&& *(ft_strchr(&cmd_str[i], '<') + 1) == '>')
+		if (*command == '<' && *command == '>')
 		{
-			handle_redir(cmd, cmd_str, &i, '>');
+			handle_redir(cmd, command, '>');
 			cmd->fd_out = 1;
 		}
-		else if (ft_strchr(&cmd_str[i], '<'))
-			handle_redir(cmd, cmd_str, &i, '<');
-		else if (ft_strchr(&cmd_str[i], '>'))
-			handle_redir(cmd, cmd_str, &i, '>');
-		if (!(ft_strchr(&cmd_str[temp], '>')) && !ft_strchr(&cmd_str[i], '<')
-			&& !ft_strchr(&cmd_str[i], '>') && is_last)
-			cmd->fd_out = 1;
-		if (!ft_strchr(&cmd_str[i], '>') && !ft_strchr(&cmd_str[i], '<'))
-			break ;
-		while (cmd_str[i] == ' ')
-			i++;
+		else if (*command =='<')
+			handle_redir(cmd, command, '<');
+		else if (*command == '>')
+			handle_redir(cmd, command, '>');
 	}
+	if (temp)
+		cmd->fd_out = 1;
 }

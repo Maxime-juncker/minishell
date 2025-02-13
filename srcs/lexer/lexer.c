@@ -57,18 +57,21 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 
 #else
 
-char	*process_line(const char *cmd_line, char **env)
+char	*process_line(const char *cmd_line, char **env, int *code)
 {
-	t_list	*process_lst;
+	t_list	*quotes_lst;
+	t_list	*var_lst;
 	char	*process_str;
 
 	if (cmd_line[0] == '\0')
 		return (ft_strdup(cmd_line));
-	process_lst = process_quotes(cmd_line);
-	if (!process_lst)
-		return (NULL);
-	process_str = process_expanded_vars(process_lst, env);
-	ft_lstclear(&process_lst, free);
+	quotes_lst = process_quotes(cmd_line);
+	var_lst = process_expanded_vars(quotes_lst, env);
+	process_str = join_lst(var_lst);
+	ft_lstclear(&quotes_lst, free);
+	ft_lstclear(&var_lst, free);
+
+	*code = check_cmd_line(process_str);
 	return (process_str);
 }
 

@@ -1,65 +1,75 @@
 #include "minishell.h"
 
-int	is_literal(const char *str)
+static char	*handle_dollar(char **str, int last_cmd)
 {
-	if (str[0] == '\'')
-		return (1);
-	return (0);
+	size_t	j;
+	char	*var_name;
+	char	*var_value;
+
+	if (**str == '?')
+		return ((*str)++, ft_itoa(last_cmd));
+	else if (**str == '0')
+		return ((*str)++, ft_strdup("minishell"));
+	else if (ft_isdigit(**str))
+		return ((*str)++, ft_strdup(""));
+	else if (ft_isalnum(**str) || **str == '_')
+	{
+		j = 0;
+		while ((*str)[j] && (ft_isalnum((*str)[j]) || (*str)[j] == '_'))
+			j++;
+		var_name = ft_substr(*str, 0, j);
+		if (!var_name)
+			return (NULL);
+		var_value = getenv(var_name);
+		free(var_name);
+		if (var_value)
+			return (*str += j, ft_strdup(var_value));
+		return (*str += j, ft_strdup(""));
+	}
+	return (ft_strdup("$"));
 }
 
-char	*process_var(char *str, char **env)
+static char	*process_var(char *str, char **env)
 {
 	char	*result;
-	int		i;
 
-	i = 0;
 	result = NULL;
-	while (str[i])
+	while (*str)
 	{
-		if (str[i] == '$')
+		if (*str == '$')
 		{
-			//* join var
-			result = ft_strjoin_free(result, expand_env_var(ft_strdup(&str[i]), env, 0), FREE1 | FREE2);
-			if (result == NULL)
-				return (NULL);
-			//* skip var in str
-			i++;
-			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_')) //! peut poser pb si $9HOME par example
-			{
-				i++;
-			}
+			str++;
+			result = ft_strjoin_free(result, handle_dollar(&str, 0),
+					FREE1 | FREE2);
 		}
 		else
 		{
-			result = ft_charjoin(result, str[i]);
-			if (result == NULL)
-				return (NULL);
-			i++;
+			result = ft_charjoin(result, *str);
+			str++;
 		}
-
+		if (!result)
+			return (NULL);
 	}
 	return (result);
-}
-
-int	only_quote(const char *str)
-{
-	return (str[0] == str[1] && (str[0] == '\'' || str[0] == '\"'));
 }
 
 t_list	*process_expanded_vars(const t_list *lst, char **env)
 {
 	t_list	*process_lst;
 	char	*content;
+	char	*str_content;
 
 	process_lst = NULL;
 	content = NULL;
 	while (lst)
 	{
-		if (is_literal(lst->content))
-			content = ft_strdup(lst->content);
+		str_content = (char *)lst->content;
+		if (str_content[0] == '\'')
+			content = ft_strdup(str_content);
 		else
-			content = process_var(lst->content, env);
-		if (!only_quote(content))
+			content = process_var(str_content, env);
+		if (!(str_content[0] == str_content[1]
+				&& (str_content[0] == '\'' || str_content[0] == '\"')))
 			ft_lstadd_back(&process_lst, ft_lstnew(content));
 		lst = lst->next;
 	}

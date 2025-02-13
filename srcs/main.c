@@ -14,7 +14,7 @@ void	handle_signal(int signal)
 	rl_redisplay();
 }
 
-int	main(int ac, char **av, char **env)
+int	main(void)
 {
 	char			*line;
 	t_command_table	table;
@@ -22,11 +22,9 @@ int	main(int ac, char **av, char **env)
 	int				code;
 	char			*process_cmd;
 
-	(void)ac;
-	(void)av;
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, SIG_IGN);
-	table.env = duplicate_env(env);
+	table.env = duplicate_env(__environ);
 	if (table.env == NULL)
 		return (EXIT_FAILURE);
 	last_cmd = 0;
@@ -43,31 +41,26 @@ int	main(int ac, char **av, char **env)
 		if (ft_strncmp(line, "\n", ft_strlen(line)) && ft_strncmp(line, "!", ft_strlen(line)) && ft_strncmp(line, ":", ft_strlen(line)))
 		{
 			process_cmd = process_line(line, table.env, &code);
-			printf("code: %d\n", code);
-			continue;
+			free(line);
 			if (!process_cmd)
 			{
-				free(line);
 				continue ;
 			}
 			code = check_cmd_line(process_cmd);
 			if (code == SYNTAX_ERR || code == IS_DIR || code == NOT_FOUND)
 			{
-				free(line);
 				free(process_cmd);
 				continue ;
 			}
 			else if (code == MALLOC_ERR)
 			{
-				free(line);
 				cleanup_arr((void **)table.env);
 				error("malloc failed");
 				exit(EXIT_FAILURE);
 			}
 			else
 			{
-				last_cmd = init_table(process_cmd, env, &table, last_cmd);
-				free(line);
+				last_cmd = init_table(process_cmd, &table, last_cmd);
 				free(process_cmd);
 				if (last_cmd != 127)
 					last_cmd = run_pipeline(&table);
