@@ -82,8 +82,10 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 	file = ft_substr(start, 0, *command - start);
 	if (!file)
 		return ; // free_all(cmd->args);
+	while (command && **command == ' ')
+		(*command)++;
 	start = *command;
-	while (**command && (**command != '>' || **command != '<'))
+	while (**command && **command != '>' && **command != '<')
 		(*command)++;
 	args = ft_split(ft_substr(start, 0, *command - start), ' ');
 	if (!args)

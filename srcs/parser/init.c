@@ -6,6 +6,7 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last)
 {
 	char		**paths;
 	static int	pipefd[2] = {-1};
+	int			i;
 
 	cmd->fd_in = 0;
 	cmd->fd_out = 1;
@@ -25,6 +26,9 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last)
 		return (0);
 	}
 	redir(cmd, cmd_str, is_last);
+	i = -1;
+	while (cmd->args[++i])
+		cmd->args[i] = remove_quotes_pair(cmd->args[i]);
 	return (1);
 }
 
