@@ -15,8 +15,8 @@
 # define IS_DIR		4
 # define MALLOC_ERR	-1
 
-# define DEBUG 1
-# define SHOW_LEXER 1
+# define DEBUG 0
+# define SHOW_LEXER 0
 
 typedef struct s_command
 {
@@ -51,9 +51,7 @@ void	cleanup_table(t_command_table *table);
 void	redir(t_command *cmd, char *cmd_str, int is_last);
 
 // init.c
-int		init_table(char *line, char **env, \
-					t_command_table *table, int last_cmd);
-char	*expand_env_var(char *str, char **env, int last_cmd);
+int		init_table(char *line, t_command_table *table, int last_cmd);
 
 // ft_split_1space.c
 char	**ft_split_1space(const char *s, char c);
@@ -64,7 +62,6 @@ int		is_builtin(char *name);
 size_t	get_biggest_len(const char *s1, const char *s2);
 char	*find_env_var(char **env, const char *to_find, int *index);
 int		replace_env_var(char **env, char *to_find, const char *replace);
-char	*ft_strcpy_expect_char(char *s, char c);
 
 // checker_utils.c
 int		check_needed(char **cmd, const char c_operator);
