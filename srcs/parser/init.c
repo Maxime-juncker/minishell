@@ -17,12 +17,6 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last)
 	cmd->n_args = 0;
 	while (cmd->args[cmd->n_args])
 		cmd->n_args++;
-	paths = get_paths(__environ);
-	if (!paths)
-		return (cleanup_arr((void **)cmd->args), 0);
-	cmd->path = get_cmd_path(paths, *cmd);
-	if (!cmd->path)
-		return (cleanup_arr((void **)cmd->args), 0);
 	if (pipe(pipefd) != -1)
 		cmd->fd_out = pipefd[1];
 	else
