@@ -75,3 +75,37 @@ int	replace_env_var(char **env, char *to_find, const char *replace)
 	}
 	return (-1);
 }
+
+char	*remove_quotes_pair(const char *s)
+{
+	char	*tmp;
+	char	*result;
+	char	quote;
+	int		i;
+
+	tmp = ft_calloc(ft_strlen(s) + 1, sizeof(char)); // dup will make the right calloc
+	if (!tmp)
+		return (NULL);
+	quote = 0;
+	i = 0;
+	while (*s)
+	{
+		if (quote == 0 && *s == '\'' || *s == '\"')
+		{
+			quote = *s;
+			s++;
+			continue ;
+		}
+		if (quote != 0 && *s == quote)
+		{
+			s++;
+			continue ;
+		}
+		tmp[i] = *s;
+		i++;
+		s++;
+	}
+	result = ft_strdup(tmp);
+	free(tmp);
+	return (result);
+}
