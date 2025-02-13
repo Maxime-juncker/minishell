@@ -448,3 +448,17 @@ int	synt_err_32( void )
 	else
 		return (1);
 }
+
+int	synt_err_31( void )
+{
+	const char *exepted_file[]
+	{
+		"minishell: e cho: command not found",
+	};
+
+	Libunit::Redirect_log();
+	if (check_cmd_line(process_line("\"e\"\' c\'\"o\"\'h\'", environ, NULL)) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+		return (0);
+	else
+		return (1);
+}

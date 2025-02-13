@@ -78,13 +78,17 @@ int	check_dir_validity(const char *path)
 
 int	check_path(const char *cmd_part)
 {
-	t_list		*lst;
-	char		*name;
-	char		*name_no_quote;
+	t_list	*lst;
+	char	*name;
+	char	*name_no_quote;
+	char	*tmp;
 
 	lst = split_line((char *)cmd_part);
 
-	name = ft_strdup(get_cmd_name(lst));
+	tmp = get_cmd_name(lst);
+	if (!tmp)
+		return (0);
+	name = ft_strdup(tmp);
 	ft_lstclear(&lst, free);
 	if (name == NULL)
 		return (NOT_FOUND);
