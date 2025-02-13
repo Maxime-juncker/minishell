@@ -72,6 +72,7 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 	char	*file;
 	char	*start;
 	char	**args;
+	int		i;
 
 	while (**command && (**command == c || **command == ' '))
 		(*command)++;
@@ -87,12 +88,16 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 	args = ft_split(ft_substr(start, 0, *command - start), ' ');
 	if (!args)
 		return ; // free_all(cmd->args);
-	if ((cmd->args[0][0] == '>' || cmd->args[0][0] == '<') && args[0])
+	if (args[0])
 	{
-		cmd->args[0] = args[0];
+		i = 0;
+		while (args[i])
+		{
+			cmd->args[cmd->n_args] = args[i];
+			cmd->n_args++;
+			i++;
+		}
 	}
-	else if (args[0])
-		cmd->args[0] = ft_strjoin(ft_charjoin(cmd->args[0], ' '), args[0]);
 	handle_fd(cmd, file, c, db_redir);
 }
 
@@ -102,7 +107,11 @@ void	redir(t_command *cmd, char *command, int is_last)
 
 	temp = is_last && !ft_strchr(command, '>');
 	if (ft_strchr(command, '>') || ft_strchr(command, '<'))
-		cmd->n_args = 1;
+	{
+		cmd->n_args = 0;
+		while (cmd->args[cmd->n_args][0] != '>' && cmd->args[cmd->n_args][0] != '<')
+			cmd->n_args++;
+	}
 	while (*command)
 	{
 		if (*command == '<' && *command == '>')
