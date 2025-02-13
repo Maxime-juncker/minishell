@@ -24,9 +24,16 @@ char	*process_var(char *str, char **env)
 				return (NULL);
 			//* skip var in str
 			i++;
-			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_')) //! peut poser pb si $9HOME par example
+			if (str[i] == '?')
 			{
 				i++;
+			}
+			else
+			{
+				while (str[i] && (ft_isalnum(str[i]) || str[i] == '_')) //! peut poser pb si $9HOME par example
+				{
+					i++;
+				}
 			}
 		}
 		else

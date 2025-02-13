@@ -1,90 +1,66 @@
 #include "minishell.h"
 
-static int	check_dir(char	**cmd)
+t_list	*split_line(char *line)
 {
-	int	code;
-
-	if (check_needed(cmd, '/'))
-	{
-		code = check_dir_validity(cmd[0]);
-		if (code != 0)
-			return (code);
-	}
-	return (0);
-}
-
-static int	check_command(char	**cmd)
-{
-	int	code;
-	int	i;
-
-	i = 0;
-	while (cmd[i])
-	{
-		code = check_cmd_path(cmd[i]);
-		if (code != 0)
-			return (code);
-		i++;
-	}
-	return (0);
-}
-
-char	**split_cmd(const char *process_line)
-{
-	char	**cmd;
-	char	**cmd_trimed;
+	t_list	*lst;
+	char	*tmp;
 	int		i;
+	char	quote;
 
-	cmd = ft_split(process_line, '|');
-	if (cmd == NULL)
-		return (NULL);
-	cmd_trimed = ft_calloc(arrlen((void **)cmd) + 1, sizeof(char *));
-	if (cmd_trimed == NULL)
-	{
-		cleanup_arr((void **)cmd);
-		return (NULL);
-	}
+	lst = NULL;
+	tmp = NULL;
 	i = 0;
-	while (cmd[i])
+	quote = 0;
+	while (line[i])
 	{
-		cmd_trimed[i] = ft_strtrim(cmd[i], " ");
-		if (!cmd_trimed[i])
+		quote = toggle_quote(line[i], quote);
+		if (quote == 0 && line[i] == ' ')
 		{
-			cleanup_arr((void **)cmd);
-			cleanup_arr((void **)cmd_trimed);
-			return (NULL);
+			if (tmp)
+			{
+				ft_lstadd_back(&lst, ft_lstnew(ft_strdup(tmp)));
+				free(tmp);
+			}
+			tmp = NULL;
+			i++;
+			continue;
 		}
+		tmp = ft_charjoin(tmp, line[i]);
+		if (tmp == NULL)
+			return (NULL);
 		i++;
 	}
-	cleanup_arr((void **)cmd);
-	return (cmd_trimed);
+	if (tmp)
+	{
+		ft_lstadd_back(&lst, ft_lstnew(ft_strdup(tmp)));
+		free(tmp);
+	}
+	return (lst);
 }
 
 int	check_cmd_line( const char *process_line )
 {
-	char	**cmd;
 	int		code;
-
-	return (0);
-
+	char	**cmd_parts;
+	int		i;
+	int		tmp;
+	
 	code = check_syntax(process_line);
-	if (code == SYNTAX_ERR)
-		return (SYNTAX_ERR);
-	cmd = split_cmd(process_line);
-	if (cmd == NULL)
+	if (code != 0)
+		return (code);
+
+	cmd_parts = ft_split_1space(process_line, '|');
+	if (cmd_parts == NULL)
 		return (MALLOC_ERR);
-	code = check_dir(cmd);
-	if (code != 0)
+	i = 0;
+	code = 0;
+	while (cmd_parts[i])
 	{
-		cleanup_arr((void **)cmd);
-		return (code);
+		tmp = check_path(cmd_parts[i]);
+		if (tmp != 0)
+			code = tmp;
+		i++;
 	}
-	code = check_command(cmd);
-	if (code != 0)
-	{
-		cleanup_arr((void **)cmd);
-		return (code);
-	}
-	cleanup_arr((void **)cmd);
-	return (0);
+
+	return (code);
 }

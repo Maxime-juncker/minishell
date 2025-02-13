@@ -43,7 +43,7 @@ int	main(int ac, char **av, char **env)
 		if (ft_strncmp(line, "\n", ft_strlen(line)) && ft_strncmp(line, "!", ft_strlen(line)) && ft_strncmp(line, ":", ft_strlen(line)))
 		{
 			process_cmd = process_line(line, table.env, &code);
-			printf("code: %d\n", code);
+			printf("%s, code: %d\n", process_cmd, code);
 			continue;
 			if (!process_cmd)
 			{

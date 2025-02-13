@@ -1,36 +1,55 @@
 #include "minishell.h"
 
-static int	continue_chek(char c)
+static int	continue_check(char c)
 {
 	return (c == '|' || c == '<' || c == '>' || c == ' ');
 }
 
-static int	check_error(const char *cmd_line, const int i)
+int	count_occ_reverse(const char *str, const char to_find, int i)
 {
-	int	j;
-	int	nb_spaces;
+	int	occ;
 
-	j = 0;
-	nb_spaces = 0;
-	while (i - j >= 0 && continue_chek(cmd_line[i - j]))
+	occ = 0;
+	while (i >= 0 && str[i] == to_find)
 	{
-		if (cmd_line[i - j] == ' ')
-		{
-			nb_spaces++;
-			j++;
-			continue ;
-		}
-		if (j - nb_spaces == 2 || cmd_line[i - j] != cmd_line[i])
-		{
-			if (j - nb_spaces == 1 && cmd_line[i - j] == '<')
-			{
-				j++;
-				continue ;
-			}
-			return (token_error(cmd_line[i], cmd_line[i + 1]));
-		}
-		j++;
+		occ++;
+		i--;
 	}
+	return (occ);
+}
+
+int	check_token_error(const char *cmd_line, int i, int max_occ, char to_find)
+{
+	int		occ;
+
+	occ = count_occ_reverse(cmd_line, to_find, i);
+	if (occ > max_occ)
+	{
+		printf("minishell: syntax error near unexpected token `");
+		occ = 0;
+		while (cmd_line[i] == to_find && occ < max_occ)
+		{
+			printf("%c", to_find);
+			i++;
+			occ++;
+		}
+		printf("\'\n");
+		return (SYNTAX_ERR);
+	}
+	return (0);
+}
+
+static int	check_error(const char *cmd_line, int i)
+{
+	char	to_find;
+
+	to_find = cmd_line[i];
+	if (to_find == '>')
+		return (check_token_error(cmd_line, i, 2, '>'));
+	if (to_find == '<')
+		return (check_token_error(cmd_line, i, 3, '<'));
+	if (to_find == '|')
+		return (check_token_error(cmd_line, i, 2, '|'));
 	return (0);
 }
 
@@ -50,19 +69,22 @@ int	check_syntax(const char *cmd_line)
 {
 	int		i;
 	char	last;
+	char	quote;
 
 	i = 0;
 	last = 0;
+	quote = 0;
 	while (cmd_line[i] == ' ')
 		i++;
 	if (cmd_line[i] == '|' && cmd_line[i + 1] != '|')
 		return (token_error('|', '\0'));
 	while (cmd_line[i])
 	{
-		if (cmd_line[i] == '<' || cmd_line[i] == '>' || cmd_line[i] == '|')
+		quote = toggle_quote(cmd_line[i], quote);
+		if (!quote && (cmd_line[i] == '<' || cmd_line[i] == '>' || cmd_line[i] == '|'))
 			if (check_error(cmd_line, i) == SYNTAX_ERR)
 				return (SYNTAX_ERR);
-		if (cmd_line[i] != ' ')
+		if (!quote && cmd_line[i] != ' ')
 			last = cmd_line[i];
 		i++;
 	}

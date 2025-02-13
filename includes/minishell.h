@@ -13,8 +13,8 @@
 //TODO: si on met un espace devant la premiere cmd ex: " ls -la" alors l'espace est garder
 
 # define SYNTAX_ERR	2
-# define NOT_FOUND	3
-# define IS_DIR		4
+# define NOT_FOUND	127
+# define IS_DIR		126
 # define MALLOC_ERR	-1
 
 # define DEBUG 0
@@ -77,11 +77,13 @@ int		token_error(char c1, char c2);
 
 // checker.c
 int		check_cmd_line( const char *process_line );
-// t_list	*split_line(char *line);
+t_list	*split_line(char *line);
+int		check_path(const char *cmd_part);int	check_cmd_line( const char *process_line );
+
 
 // lexer.c
 char	*process_line(const char *cmd_line, char **env, int *code);
-// char	toggle_quote(char quote, char c);
+char	toggle_quote(char quote, char c);
 
 // quotes_processing.c
 t_list	*process_quotes(const char *line);
@@ -95,7 +97,7 @@ int		check_syntax(const char *cmd_line);
 // path_checker.c
 int		check_cmd_path(const char *cmd);
 int		check_dir_validity(const char *path);
-// int		check_cmd_validity(const char *cmd_part);
+int		check_cmd_validity(const char *cmd_part);
 
 /* ------------------------------ built-in cmd ------------------------------ */
 // echo.c
