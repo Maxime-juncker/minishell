@@ -15,7 +15,7 @@ int	export_test( void )
 {
 	t_command_table	table;
 
-	init_table((char *)"export TEST=hello", environ, &table, 0);
+	init_table((char *)"export TEST=hello", &table, 0);
 	table.env = environ;
 
 

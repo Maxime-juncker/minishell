@@ -11,7 +11,7 @@ int	cd_relative( void )
 
 	t_command_table	table;
 	table.env = environ;
-	init_table(ft_strdup("cd .."), table.env, &table, 0);
+	init_table(ft_strdup("cd .."), &table, 0);
 
 	getcwd(buffer, 100);
 	std::string line = buffer;
@@ -33,7 +33,7 @@ int	cd_absolute( void )
 
 	t_command_table	table;
 	table.env = environ;
-	init_table((char*)"cd /bin", table.env, &table, 0);
+	init_table((char*)"cd /bin", &table, 0);
 
     run_pipeline(&table);
 	pwd = getenv("PWD");
@@ -49,7 +49,7 @@ int	cd_nothing( void )
 
 	t_command_table	table;
 	table.env = environ;
-	init_table((char*)"cd", table.env, &table, 0);
+	init_table((char*)"cd", &table, 0);
 
     run_pipeline(&table);
 	pwd = getenv("PWD");

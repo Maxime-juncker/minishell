@@ -85,7 +85,6 @@ void	cleanup_table(t_command_table *table)
 	while (i < table->n_commands)
 	{
 		cleanup_arr((void **)table->commands[i].args);
-		free(table->commands[i].path);
 		i++;
 	}
 	free(table->commands);

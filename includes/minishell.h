@@ -24,7 +24,6 @@
 
 typedef struct s_command
 {
-	char	*path;
 	char	**args; // args[0] = cmd name (ex: ls)
 	size_t	n_args;
 

@@ -22,7 +22,6 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last)
 	else
 	{
 		cleanup_arr((void **)cmd->args);
-		free(cmd->path);
 		return (0);
 	}
 	redir(cmd, cmd_str, is_last);

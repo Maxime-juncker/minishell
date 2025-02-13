@@ -46,7 +46,6 @@ int	main(void)
 			{
 				continue ;
 			}
-			code = check_cmd_line(process_cmd);
 			if (code == SYNTAX_ERR || code == IS_DIR || code == NOT_FOUND)
 			{
 				free(process_cmd);

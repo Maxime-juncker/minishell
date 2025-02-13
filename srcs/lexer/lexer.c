@@ -91,7 +91,8 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 	ft_lstclear(&quotes_lst, free);
 	ft_lstclear(&var_lst, free);
 
-	*code = check_cmd_line(process_str);
+	if (code)
+		*code = check_cmd_line(process_str);
 	return (process_str);
 }
 

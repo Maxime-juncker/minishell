@@ -90,7 +90,7 @@ char	*remove_quotes_pair(const char *s)
 	i = 0;
 	while (*s)
 	{
-		if (quote == 0 && *s == '\'' || *s == '\"')
+		if (quote == 0 && (*s == '\'' || *s == '\"'))
 		{
 			quote = *s;
 			s++;

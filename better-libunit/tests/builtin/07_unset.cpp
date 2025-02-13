@@ -19,10 +19,10 @@ int	unset_test( void )
 	std::string before = get_last_env_var(table);
 
 	// set a env var
-	init_table((char *)"export TEST=hello", environ, &table, 0);
+	init_table((char *)"export TEST=hello", &table, 0);
 	run_pipeline(&table);
 
-	init_table((char *)"unset TEST=hello", environ, &table, 0);
+	init_table((char *)"unset TEST=hello", &table, 0);
 	run_pipeline(&table);
 
 	std::string last = get_last_env_var(table);
