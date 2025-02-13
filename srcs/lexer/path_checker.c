@@ -81,7 +81,7 @@ int	check_path(const char *cmd_part)
 	t_list	*lst;
 	char	*name;
 	char	*name_no_quote;
-	char	*tmp;
+	const char	*tmp;
 
 	lst = split_line((char *)cmd_part);
 

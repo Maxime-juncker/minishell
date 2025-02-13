@@ -48,4 +48,5 @@ int synt_err_29( void );
 int synt_err_30( void );
 int synt_err_31( void );
 int synt_err_32( void );
+int	synt_err_33( void );
 
