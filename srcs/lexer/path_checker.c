@@ -97,7 +97,7 @@ int	check_path(const char *cmd_part)
 	if (name_no_quote == NULL)
 		return (MALLOC_ERR);
 	
-	if (ft_strchr(name_no_quote, '/') == NULL)
+	if (ft_strchr(name_no_quote, '/') == NULL || name_no_quote[0] == '.')
 	{
 		return (check_cmd_validity(name_no_quote));
 	}

@@ -19,8 +19,6 @@
 
 # define DEBUG 0
 # define SHOW_LEXER 0
-# define DEBUG 0
-# define SHOW_LEXER 0
 
 typedef struct s_command
 {
