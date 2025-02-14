@@ -103,7 +103,7 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 	handle_fd(cmd, file, c, db_redir);
 }
 
-void	redir(t_command *cmd, char *command, int is_last)
+void	redir(t_command *cmd, char *command, int is_last, int i)
 {
 	char	*temp;
 
@@ -132,6 +132,6 @@ void	redir(t_command *cmd, char *command, int is_last)
 	}
 	if (is_last && !ft_strchr(temp, '>'))
 		cmd->fd_out = 1;
-	if (!ft_strchr(temp, '<'))
+	if (!i && !ft_strchr(temp, '<'))
 		cmd->fd_in = 0;
 }

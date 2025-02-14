@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static int	init_cmd(t_command *cmd, char *cmd_str, int is_last)
+static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
 {
 	char		**paths;
 	static int	pipefd[2] = {-1};
@@ -25,7 +25,7 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last)
 		cleanup_arr((void **)cmd->args);
 		return (0);
 	}
-	redir(cmd, cmd_str, is_last);
+	redir(cmd, cmd_str, is_last, nb);
 	i = -1;
 	while (i < cmd->n_args)
 		cmd->args[i] = remove_quotes_pair(cmd->args[i]);
@@ -51,7 +51,7 @@ int	init_table(char *line, t_command_table *table, int last_cmd)
 	i = 0;
 	while (i < table->n_commands)
 	{
-		if (!init_cmd(&table->commands[i], commands[i], i == table->n_commands - 1))
+		if (!init_cmd(&table->commands[i], commands[i], i == table->n_commands - 1, i))
 			return (free_all(commands), free(table->commands), 127);
 		i++;
 	}

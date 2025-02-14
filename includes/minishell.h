@@ -52,7 +52,7 @@ int		run_pipeline(t_command_table *table);
 void	cleanup_table(t_command_table *table);
 
 // redirect.c
-void	redir(t_command *cmd, char *cmd_str, int is_last);
+void	redir(t_command *cmd, char *cmd_str, int is_last, int i);
 
 // init.c
 int		init_table(char *line, t_command_table *table, int last_cmd);
