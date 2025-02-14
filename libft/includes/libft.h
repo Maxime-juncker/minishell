@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:49:29 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/11 14:51:09 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:22:39 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@
 # define B_PURPLE	"\033[45m"
 # define B_CYAN		"\033[46m"
 # define B_WHITE		"\033[47m"
-
 
 # define FREE1 0b0001
 # define FREE2 0b0010
@@ -106,7 +105,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strdup(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char *s1, char const *s2);
-char	*ft_strjoin_free(char *s1, char const *s2, const int flags);
+char	*ft_strjoin_free(char *s1, char *s2, const int flags);
 char	*ft_charjoin(char *s1, char const c);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_strtrim_free(char *s1, char const *set);
