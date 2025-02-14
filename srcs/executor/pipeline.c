@@ -119,10 +119,8 @@ int	run_pipeline(t_command_table *table)
 	while (1)
 	{
 		pid = wait(&code);
-		printf("pid: %d\n", pid);
 		if (pid == -1)
 		{
-			printf("errno: %d\n", errno);
 			if (errno == ECHILD)
 				break ;
 			else if (errno == EINTR)
@@ -131,6 +129,5 @@ int	run_pipeline(t_command_table *table)
 				error("wait failed");
 		}
 	}
-	success("pipeline done");
 	return (code);
 }
