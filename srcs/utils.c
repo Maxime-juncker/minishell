@@ -67,7 +67,8 @@ int	replace_env_var(char **env, char *to_find, const char *replace)
 		if (ft_strncmp(env[i], to_find, len) == 0)
 		{
 			free(env[i]);
-			path = ft_strjoin_free(ft_strjoin(to_find, "="), ft_strdup(replace), FREE1 | FREE2);
+			path = ft_strjoin_free(ft_strjoin(to_find, "="), \
+			ft_strdup(replace), FREE1 | FREE2);
 			env[i] = path;
 			return (0);
 		}
@@ -83,7 +84,7 @@ char	*remove_quotes_pair(const char *s)
 	char	quote;
 	int		i;
 
-	tmp = ft_calloc(ft_strlen(s) + 1, sizeof(char)); // dup will make the right calloc
+	tmp = ft_calloc(ft_strlen(s) + 1, sizeof(char));
 	if (!tmp)
 		return (NULL);
 	quote = 0;
@@ -92,8 +93,8 @@ char	*remove_quotes_pair(const char *s)
 	{
 		if (*s == quote)
 		{
-			s++;
 			quote = 0;
+			s++;
 			continue ;
 		}
 		else if (quote == 0 && (*s == '\'' || *s == '\"'))

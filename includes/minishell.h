@@ -10,7 +10,8 @@
 /*                                command table                               */
 /* -------------------------------------------------------------------------- */
 
-//TODO: si on met un espace devant la premiere cmd ex: " ls -la" alors l'espace est garder
+//TODO: si on met un espace devant la premiere cmd
+// ex: " ls -la" alors l'espace est garder
 
 # define SYNTAX_ERR	2
 # define NOT_FOUND	127
@@ -36,6 +37,8 @@ typedef struct s_command_table
 
 	char		**env;
 }	t_command_table;
+
+extern int	g_signal_received;
 
 // pipex.c
 char	**get_paths(char **env);
@@ -123,5 +126,7 @@ void	show_cmd(t_command cmd);
 void	show_table(t_command_table table);
 
 char	*remove_quotes(const char *line);
+
+void	print_pid(char *msg);
 
 #endif

@@ -5,6 +5,8 @@
 #include <readline/history.h>
 #include <signal.h>
 
+int g_signal_received = 0;
+
 void	handle_signal(int signal)
 {
 	(void)signal;
@@ -14,11 +16,15 @@ void	handle_signal(int signal)
 	rl_redisplay();
 }
 
+void	print_pid(char *msg)
+{
+	printf("%s%d: %s%s\n", GRAY, getpid(), msg, RESET);
+}
+
 int	main(void)
 {
 	char			*line;
 	t_command_table	table;
-	int				last_cmd;
 	int				code;
 	char			*process_cmd;
 
@@ -27,18 +33,22 @@ int	main(void)
 	table.env = duplicate_env(__environ);
 	if (table.env == NULL)
 		return (EXIT_FAILURE);
-	last_cmd = 0;
+	code = 0;
+	// print_pid("init new minishell");
 	while (1)
 	{
 		line = readline("\033[0mminishell$ ");
 		if (!line || (ft_strlen(line) == 4 && !ft_strncmp(line, "exit", 4)))
 		{
+			// print_pid("minishell is exiting");
 			cleanup_arr((void **)table.env);
 			return (printf("exit\n"), 0);
 		}
 		else if (ft_strncmp(line, "\n", ft_strlen(line)))
 			add_history(line);
-		if (ft_strncmp(line, "\n", ft_strlen(line)) && ft_strncmp(line, "!", ft_strlen(line)) && ft_strncmp(line, ":", ft_strlen(line)))
+		if (ft_strncmp(line, "\n", ft_strlen(line)) && \
+			ft_strncmp(line, "!", ft_strlen(line))
+			&& ft_strncmp(line, ":", ft_strlen(line)))
 		{
 			process_cmd = process_line(line, table.env, &code);
 			free(line);
@@ -59,13 +69,13 @@ int	main(void)
 			}
 			else
 			{
-				last_cmd = init_table(process_cmd, &table, last_cmd);
+				code = init_table(process_cmd, &table, code);
 				free(process_cmd);
-				if (last_cmd != 127)
-					last_cmd = run_pipeline(&table);
+				if (code == 0)
+					code = run_pipeline(&table);
 			}
 		}
 	}
-	return (0);
+	exit (0);
 }
 

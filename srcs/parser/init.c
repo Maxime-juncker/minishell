@@ -56,5 +56,5 @@ int	init_table(char *line, t_command_table *table, int last_cmd)
 		i++;
 	}
 	free_all(commands);
-	return (1);
+	return (0);
 }

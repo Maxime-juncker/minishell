@@ -52,8 +52,7 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	if (tmp[0] != '\0')
 	{
 		lst_size = ft_lstsize(*lst);
-		ft_lstadd_back(lst, ft_lstnew(ft_strdup(tmp)));
-		if (lst_size == ft_lstsize(*lst) || ft_lstlast(*lst)->content == NULL)
+		if (ft_lstadd_back(lst, ft_lstnew(ft_strdup(tmp))) == -1)
 			return (MALLOC_ERR);
 		*i += ft_strlen(tmp);
 	}
@@ -127,10 +126,9 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 	if (!new_str)
 		return (MALLOC_ERR);
 	lst_size = ft_lstsize(*lst);
-	ft_lstadd_back(lst, ft_lstnew(ft_strdup(new_str)));
+	if (ft_lstadd_back(lst, ft_lstnew(ft_strdup(new_str))) == -1)
+		return (free(new_str), MALLOC_ERR);
 	free(new_str);
-	if (lst_size == ft_lstsize(*lst) || ft_lstlast(*lst)->content == NULL)
-		return (MALLOC_ERR);
 	return (0);
 }
 

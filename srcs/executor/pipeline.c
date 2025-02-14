@@ -1,5 +1,6 @@
 #include "minishell.h"
 #include <sys/wait.h>
+#include <errno.h>
 
 /// @brief Run a built-in command
 /// @param cmd The command to run
@@ -97,6 +98,7 @@ int	run_pipeline(t_command_table *table)
 {
 	size_t	i;
 	int		code;
+	int		pid;
 
 	i = 0;
 	while (i < table->n_commands)
@@ -114,9 +116,21 @@ int	run_pipeline(t_command_table *table)
 		run_command(table->commands[i], table);
 		i++;
 	}
-	while (wait(&code) > 0)
+	while (1)
 	{
+		pid = wait(&code);
+		printf("pid: %d\n", pid);
+		if (pid == -1)
+		{
+			printf("errno: %d\n", errno);
+			if (errno == ECHILD)
+				break ;
+			else if (errno == EINTR)
+				continue ;
+			else
+				error("wait failed");
+		}
 	}
-	// cleanup_table(table);
+	success("pipeline done");
 	return (code);
 }

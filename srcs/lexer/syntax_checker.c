@@ -10,7 +10,7 @@ int	count_occ_reverse(const char *str, const char to_find, int i)
 	int	occ;
 
 	occ = 0;
-	while (i >= 0 && str[i] == to_find)
+	while (i >= 0 && (str[i] == to_find || str[i] == ' '))
 	{
 		occ++;
 		i--;
@@ -20,7 +20,7 @@ int	count_occ_reverse(const char *str, const char to_find, int i)
 
 int	check_token_error(const char *cmd_line, int i, int max_occ, char to_find)
 {
-	int		occ;
+	int	occ;
 
 	occ = count_occ_reverse(cmd_line, to_find, i);
 	if (occ > max_occ)

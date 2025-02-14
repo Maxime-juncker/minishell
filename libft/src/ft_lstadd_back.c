@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 17:37:15 by mjuncker          #+#    #+#             */
-/*   Updated: 2024/11/11 16:24:27 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:46:56 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+int	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	if (lst == NULL)
-		return ;
+		return (-1);
 	if (*lst == NULL)
 		*lst = new;
 	else
@@ -23,4 +23,5 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 		if (ft_lstlast(*lst))
 			ft_lstlast(*lst)->next = new;
 	}
+	return (0);
 }
