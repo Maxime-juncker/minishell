@@ -16,9 +16,13 @@ void	handle_signal(int signal)
 	rl_redisplay();
 }
 
-void	print_pid(char *msg)
+void check_piped_execution(void)
 {
-	printf("%s%d: %s%s\n", GRAY, getpid(), msg, RESET);
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	{
+		printf("minishell: must run interactively (need a tty)\n");
+		exit(EXIT_FAILURE);
+	}
 }
 
 int	main(void)
@@ -28,6 +32,7 @@ int	main(void)
 	int				code;
 	char			*process_cmd;
 
+	check_piped_execution();
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, SIG_IGN);
 	table.env = duplicate_env(__environ);

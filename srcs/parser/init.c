@@ -27,7 +27,7 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last)
 	}
 	redir(cmd, cmd_str, is_last);
 	i = -1;
-	while (cmd->args[++i])
+	while (i < cmd->n_args)
 		cmd->args[i] = remove_quotes_pair(cmd->args[i]);
 	return (1);
 }

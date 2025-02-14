@@ -105,9 +105,9 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 
 void	redir(t_command *cmd, char *command, int is_last)
 {
-	int	temp;
+	char	*temp;
 
-	temp = is_last && !ft_strchr(command, '>');
+	temp = command;
 	if (ft_strchr(command, '>') || ft_strchr(command, '<'))
 	{
 		cmd->n_args = 0;
@@ -127,7 +127,11 @@ void	redir(t_command *cmd, char *command, int is_last)
 			handle_redir(cmd, &command, '>', *(command + 1) == '>');
 		else
 			command++;
+		if (cmd->fd_in == -1)
+			break ;
 	}
-	if (temp)
+	if (is_last && !ft_strchr(temp, '>'))
 		cmd->fd_out = 1;
+	if (!ft_strchr(temp, '<'))
+		cmd->fd_in = 0;
 }
