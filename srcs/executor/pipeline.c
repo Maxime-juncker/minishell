@@ -1,6 +1,9 @@
 #include "minishell.h"
 #include <sys/wait.h>
 #include <errno.h>
+#include <signal.h>
+
+int g_signal_received = 0;
 
 /// @brief Run a built-in command
 /// @param cmd The command to run
@@ -46,7 +49,7 @@ static int	run_env_cmd(t_command_table *table, t_command cmd)
 /// @brief run a command
 /// @param cmd the command to run
 /// @param table command table
-/// @return exit code of the command
+/// @return child process pid
 static int	run_command(t_command cmd, const t_command_table *table)
 {
 	int	pid;
@@ -75,7 +78,7 @@ static int	run_command(t_command cmd, const t_command_table *table)
 		close(cmd.fd_out);
 	if (cmd.fd_in != STDIN_FILENO)
 		close(cmd.fd_in);
-	return (0);
+	return (pid);
 }
 
 void	cleanup_table(t_command_table *table)
@@ -91,6 +94,35 @@ void	cleanup_table(t_command_table *table)
 	free(table->commands);
 }
 
+int	wait_for_childs()
+{
+	int	pid;
+	int	code;
+
+	while (1)
+	{
+		pid = wait(&code);
+		if (pid == -1)
+		{
+			if (errno == ECHILD)
+			{
+				break ;
+			}
+			else if (errno == EINTR) // signal received
+			{
+				
+				continue ;
+			}
+			else
+			{
+				error("wait failed");
+				return (-1);
+			}
+		}
+	}
+	return (code);
+}
+
 /// @brief Run every command in the command table
 /// @param table The command table to run
 /// @return the exit value of the last command
@@ -99,8 +131,14 @@ int	run_pipeline(t_command_table *table)
 	size_t	i;
 	int		code;
 	int		pid;
+	int		*childs;
+
+	childs = ft_calloc(table->n_commands, sizeof(int));
+	if (!childs)
+		return (MALLOC_ERR);
 
 	i = 0;
+	signal(SIGQUIT, handle_signal);
 	while (i < table->n_commands)
 	{
 		if (table->commands[i].n_args == 0)
@@ -113,21 +151,30 @@ int	run_pipeline(t_command_table *table)
 			i++;
 			continue ;
 		}
-		run_command(table->commands[i], table);
+		childs[i] = run_command(table->commands[i], table);
 		i++;
 	}
+
+	g_signal_received = 0;
 	while (1)
 	{
 		pid = wait(&code);
 		if (pid == -1)
 		{
-			if (errno == ECHILD)
-				break ;
-			else if (errno == EINTR)
-				continue ;
-			else
-				error("wait failed");
+			if (g_signal_received) // wait interupted by sign
+			{
+				i = 0;
+				while (i < table->n_commands)
+				{
+					kill(childs[i], g_signal_received);
+					i++;
+				}
+				printf("\n");
+			}
+			break;
 		}
 	}
+	signal(SIGQUIT, SIG_IGN);
+
 	return (code);
 }

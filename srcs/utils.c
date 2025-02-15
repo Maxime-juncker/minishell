@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+
+void	handle_signal(int signal)
+{
+	g_signal_received = signal;
+}
+
+
 size_t	get_biggest_len(const char *s1, const char *s2)
 {
 	size_t	len1;

@@ -1,9 +1,13 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <wait.h>
 #include <unistd.h>
 
-int main() 
+int	main( void )
 {
-	printf("Hello, World!\n");
-	return EXIT_SUCCESS;
+	while (1)
+	{
+		printf("I'm still alive\n");
+		usleep(100 * 1000);
+	}
+	
 }

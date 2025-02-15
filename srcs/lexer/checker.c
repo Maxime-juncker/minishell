@@ -55,6 +55,8 @@ int	check_cmd_line( const char *process_line )
 	int		i;
 	int		tmp;
 
+	if (!process_line)
+		return (0);
 	code = check_syntax(process_line);
 	if (code != 0)
 		return (code);
