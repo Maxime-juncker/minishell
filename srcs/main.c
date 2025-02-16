@@ -12,8 +12,6 @@ void	print_pid(void)
 	printf("%s%d: %s", GRAY, getpid(), RESET);
 }
 
-
-
 void	new_prompt(void)
 {
 	char	*line;
@@ -23,6 +21,11 @@ void	new_prompt(void)
 
 	g_signal_received = 0;
 	line = readline("\033[0mminishell$ ");
+	if (g_signal_received)
+	{
+		g_signal_received = 0;
+		return;
+	}
 	if (!line || (ft_strlen(line) == 4 && !ft_strncmp(line, "exit", 4)))
 	{
 		cleanup_arr((void **)table.env);
@@ -74,10 +77,7 @@ void check_piped_execution(void)
 int	check_interrupt( void )
 {
 	if (g_signal_received)
-	{
-		g_signal_received = 0;
 		rl_done = 1;
-	}
 	return (0);
 }
 

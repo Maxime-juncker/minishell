@@ -48,6 +48,7 @@ t_list	*split_line(char *line)
 	return (lst);
 }
 
+// syntax check in the following order: pipe, redirection, cmd / dir
 int	check_cmd_line( const char *process_line )
 {
 	int		code;

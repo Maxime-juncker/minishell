@@ -46,3 +46,5 @@ int	echo_34( void );
 int	echo_35( void );
 int	echo_36( void );
 int	echo_37( void );
+int	echo_38( void );
+int	echo_39( void );

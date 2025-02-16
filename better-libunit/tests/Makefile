@@ -42,6 +42,7 @@ SRCS = 		main.cpp					\
 			00_tests.cpp				\
 			01_br.cpp					\
 			02_syntax_err.cpp			\
+			03_dollars.cpp				\
 			00_echo.cpp					\
 			01_echo_test.cpp			\
 

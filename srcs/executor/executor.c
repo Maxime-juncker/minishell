@@ -40,7 +40,9 @@ char	*get_cmd_path(char **paths, t_command cmd)
 	if (relative_path(cmd.args[0]))
 	{
 		cleanup_arr((void **)paths);
-		return (ft_strdup(cmd.args[0]));
+		if (access(cmd.args[0], F_OK) == 0)
+			return (ft_strdup(cmd.args[0]));
+		return (NULL);
 	}
 	i = 0;
 	while (paths[i] != NULL)

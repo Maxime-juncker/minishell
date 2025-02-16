@@ -6,6 +6,11 @@ void	handle_signal(int signal)
 	g_signal_received = signal;
 }
 
+void	void_signal(int signal)
+{
+	(void)signal;	
+}
+
 
 size_t	get_biggest_len(const char *s1, const char *s2)
 {

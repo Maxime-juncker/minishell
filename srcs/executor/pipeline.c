@@ -139,6 +139,7 @@ int	run_pipeline(t_command_table *table)
 
 	i = 0;
 	signal(SIGQUIT, handle_signal);
+	// signal(SIGINT, void_signal);
 	while (i < table->n_commands)
 	{
 		if (table->commands[i].n_args == 0)
@@ -175,6 +176,7 @@ int	run_pipeline(t_command_table *table)
 		}
 	}
 	signal(SIGQUIT, SIG_IGN);
+	// signal(SIGINT, handle_signal);
 
 	return (code);
 }

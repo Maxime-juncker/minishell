@@ -68,6 +68,7 @@ char	*find_env_var(char **env, const char *to_find, int *index);
 int		replace_env_var(char **env, char *to_find, const char *replace);
 char	*ft_strcpy_expect_char(char *s, char c);
 char	*remove_quotes_pair(const char *s);
+void	void_signal(int signal);
 
 // checker_utils.c
 int		check_needed(char **cmd, const char c_operator);

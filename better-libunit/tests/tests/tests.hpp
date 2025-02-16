@@ -50,3 +50,13 @@ int synt_err_31( void );
 int synt_err_32( void );
 int	synt_err_33( void );
 
+// dollars
+int	dolars_01( void );
+int	dolars_02( void );
+int	dolars_03( void );
+int	dolars_04( void );
+int	dolars_05( void );
+int	dolars_06( void );
+int	dolars_07( void );
+int	dolars_08( void );
+int	dolars_09( void );

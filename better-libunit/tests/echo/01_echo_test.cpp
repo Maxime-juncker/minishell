@@ -548,3 +548,83 @@ int	echo_35( void )
 	else
 		return (1);
 }
+
+int	echo_36( void )
+{
+	const char *exepted_file[]
+	{
+		"test",
+	};
+
+	t_command_table	table;
+	table.env = environ;
+
+	init_table(process_line("echo \"$DONTEXIST\"test", environ, NULL), &table, 0);
+	Libunit::Redirect_log();
+	run_pipeline(&table);
+
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+		return (0);
+	else
+		return (1);
+}
+
+int	echo_37( void )
+{
+	const char *exepted_file[]
+	{
+		"test",
+	};
+
+	t_command_table	table;
+	table.env = environ;
+
+	init_table(process_line("echo \"$DONTEXIST\"\"test\"", environ, NULL), &table, 0);
+	Libunit::Redirect_log();
+	run_pipeline(&table);
+
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+		return (0);
+	else
+		return (1);
+}
+
+int	echo_38( void )
+{
+	const char *exepted_file[]
+	{
+		" test",
+	};
+
+	t_command_table	table;
+	table.env = environ;
+
+	init_table(process_line("echo \"$DONTEXIST\" \"test\"", environ, NULL), &table, 0);
+	Libunit::Redirect_log();
+	run_pipeline(&table);
+
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+		return (0);
+	else
+		return (1);
+}
+
+int	echo_39( void )
+{
+	const char *exepted_file[]
+	{
+		" test",
+	};
+
+	t_command_table	table;
+	table.env = environ;
+
+	init_table(process_line("echo \"$DONTEXIST\"       \"test\"", environ, NULL), &table, 0);
+	Libunit::Redirect_log();
+	run_pipeline(&table);
+
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+		return (0);
+	else
+		return (1);
+}
