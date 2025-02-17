@@ -10,7 +10,7 @@ static int	ft_arraylen(char **env)
 	return (i);
 }
 
-static int	ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
 
@@ -71,7 +71,7 @@ int	print_export(t_command_table table, int fd)
 				ft_putchar_fd('"', fd);
 				n++;
 			}
-			else if (!table.exp[i][j + 1] && n)
+			if (!table.exp[i][j + 1] && n)
 				ft_putchar_fd('"', fd);
 			j++;
 		}
@@ -80,7 +80,6 @@ int	print_export(t_command_table table, int fd)
 	return (0);
 }
 
-// +2 because 1 for the new var and 1 for the final null;
 static int	get_env_len(char **env)
 {
 	int	len;
@@ -91,7 +90,7 @@ static int	get_env_len(char **env)
 	return (len);
 }
 
-char	**update_env(t_command cmd, char **env)
+char	**update_env(char *arg, char **env)
 {
 	char	**cpy;
 	int		i;
@@ -105,7 +104,7 @@ char	**update_env(t_command cmd, char **env)
 		cpy[i] = env[i];
 		i++;
 	}
-	cpy[i] = ft_strdup(cmd.args[1]);
+	cpy[i] = ft_strdup(arg);
 	if (!cpy[i])
 	{
 		cleanup_arr((void **)cpy);
@@ -115,16 +114,69 @@ char	**update_env(t_command cmd, char **env)
 	return (cpy);
 }
 
+int	check_arg(char *arg)
+{
+	int	i;
+
+	if (!ft_isalpha(arg[0]) && arg[0] != '_')
+		return (1);
+	i = 1;
+	while (arg[i])
+	{
+		if (!ft_isalnum(arg[i]) && arg[i] != '_' && arg[i] != '=')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+static char	*ft_strndup(const char *s, char c)
+{
+	const char	*start;
+	char		*res;
+	size_t		i;
+
+	start = s;
+	while (*s && *s != c)
+		s++;
+	res = malloc(s - start + 1);
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (start != s)
+		res[i++] = *start++;
+	return (res[i] = 0, res);
+}
+
 int	export_cmd(t_command_table *table, t_command cmd)
 {
+	int	i;
+
 	ft_sort_export(table->exp);
 	if (cmd.n_args == 1)
 	{
 		print_export(*table, cmd.fd_out);
 		return (0);
 	}
-	if (ft_strchr(cmd.args[1], '='))
-		table->env = update_env(cmd, table->env);
-	table->exp = update_env(cmd, table->exp);
+	i = 1;
+	while (cmd.args[i] != NULL)
+	{
+		if (check_arg(cmd.args[i]))
+		{
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(cmd.args[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			return (1);
+		}
+		else
+		{
+			table->env = unset(table->env, ft_strndup(cmd.args[i], '='));
+			table->exp = unset(table->exp, ft_strndup(cmd.args[i], '='));
+			if (ft_strchr(cmd.args[i], '='))
+				table->env = update_env(cmd.args[i], table->env);
+			table->exp = update_env(cmd.args[i], table->exp);
+		}
+		i++;
+	}
 	return (0);
 }
