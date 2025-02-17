@@ -12,24 +12,15 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
 	cmd->fd_out = 1;
 	if (pipefd[0] != -1)
 		cmd->fd_in = pipefd[0];
-	cmd->args = ft_split_1space(cmd_str, ' ');
-	if (!cmd->args)
-		return (0);
-	cmd->n_args = 0;
-	while (cmd->args[cmd->n_args])
-		cmd->n_args++;
 	if (pipe(pipefd) != -1)
 		cmd->fd_out = pipefd[1];
 	else
-	{
-		cleanup_arr((void **)cmd->args);
-		return (0);
-	}
+		return (cleanup_arr((void **)cmd->args), 1);
+	cmd->args = ft_split_1space(cmd_str, ' ');
+	if (!cmd->args)
+		return (1);
 	redir(cmd, cmd_str, is_last, nb);
-	i = -1;
-	while (i < cmd->n_args)
-		cmd->args[i] = remove_quotes_pair(cmd->args[i]);
-	return (1);
+	return (0);
 }
 
 int	init_table(char *line, t_command_table *table, int last_cmd)
@@ -47,14 +38,15 @@ int	init_table(char *line, t_command_table *table, int last_cmd)
 		table->n_commands++;
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
 	if (!table->commands)
-		return (free_all(commands), 127);
+		return (cleanup_arr((void **)commands), 127);
 	i = 0;
 	while (i < table->n_commands)
 	{
-		if (!init_cmd(&table->commands[i], commands[i], i == table->n_commands - 1, i))
-			return (free_all(commands), free(table->commands), 127);
+		if (init_cmd(&table->commands[i], commands[i],
+				i == table->n_commands - 1, i))
+			return (cleanup_arr((void **)commands), free(table->commands), 127);
 		i++;
 	}
-	free_all(commands);
+	cleanup_arr((void **)commands);
 	return (0);
 }

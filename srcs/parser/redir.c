@@ -10,8 +10,9 @@ static char	*append_str(char *old, char *append_str, int new_len)
 	if (!new_str)
 		return (NULL);
 	ft_strlcpy(new_str, old, new_len);
-	ft_strlcat(new_str, append_str, new_len);
 	free(old);
+	ft_strlcat(new_str, append_str, new_len);
+	// free(append_str);
 	return (new_str);
 }
 
@@ -108,12 +109,9 @@ void	redir(t_command *cmd, char *command, int is_last, int i)
 	char	*temp;
 
 	temp = command;
-	if (ft_strchr(command, '>') || ft_strchr(command, '<'))
-	{
-		cmd->n_args = 0;
-		while (cmd->args[cmd->n_args][0] != '>' && cmd->args[cmd->n_args][0] != '<')
-			cmd->n_args++;
-	}
+	cmd->n_args = 0;
+	while (cmd->args[cmd->n_args] && cmd->args[cmd->n_args][0] != '>' && cmd->args[cmd->n_args][0] != '<')
+		cmd->n_args++;
 	while (*command)
 	{
 		if (*command == '<' && *command == '>')
