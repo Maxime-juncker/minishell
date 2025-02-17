@@ -51,32 +51,31 @@ void	ft_sort_export(char **argv)
 	}
 }
 
-int	print_export(t_command_table table)
+int	print_export(t_command_table table, int fd)
 {
 	int	i;
 	int	j;
 	int	n;
 
-	i = 0;
-	while (table.exp[i] != NULL)
+	i = -1;
+	while (table.exp[++i] != NULL)
 	{
-		printf("export ");
+		ft_putstr_fd("export ", fd);
 		j = 0;
 		n = 0;
 		while (table.exp[i][j])
 		{
-			printf("%c", table.exp[i][j]);
+			ft_putchar_fd(table.exp[i][j], fd);
 			if (table.exp[i][j] == '=' && !n)
 			{
-				printf("%c", '"');
+				ft_putchar_fd('"', fd);
 				n++;
 			}
 			else if (!table.exp[i][j + 1] && n)
-				printf("\"");
+				ft_putchar_fd('"', fd);
 			j++;
 		}
-		printf("\n");
-		i++;
+		ft_putchar_fd('\n', fd);
 	}
 	return (0);
 }
@@ -121,7 +120,7 @@ int	export_cmd(t_command_table *table, t_command cmd)
 	ft_sort_export(table->exp);
 	if (cmd.n_args == 1)
 	{
-		print_export(*table);
+		print_export(*table, cmd.fd_out);
 		return (0);
 	}
 	if (ft_strchr(cmd.args[1], '='))

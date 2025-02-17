@@ -110,7 +110,7 @@ int	wait_for_childs()
 			}
 			else if (errno == EINTR) // signal received
 			{
-				
+
 				continue ;
 			}
 			else
