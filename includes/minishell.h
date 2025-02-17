@@ -60,7 +60,6 @@ int		init_table(char *line, t_command_table *table, int last_cmd);
 
 // ft_split_1space.c
 char	**ft_split_1space(const char *s, char c);
-void	*free_all(char **res);
 
 // utils.c
 int		is_builtin(char *name);
