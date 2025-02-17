@@ -46,6 +46,7 @@ char	**get_paths(char **env);
 // executor
 char	*get_cmd_path(char **paths, t_command cmd);
 void	setup_redirection(t_command cmd);
+int		relative_path(char *path);
 
 // pipeline.c
 int		run_pipeline(t_command_table *table);
