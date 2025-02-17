@@ -6,7 +6,7 @@ int	ls_basic( void )
 	t_command_table table;
 	table.env = environ;
 
-	init_table((char *)"ls", &table, 0);
+	init_table((char *)"ls", &table);
 
 	Libunit::Redirect_log();
 	run_pipeline(&table);

@@ -30,8 +30,15 @@ int	cd_command(const t_command_table *table, const t_command cmd)
 	int		code;
 
 	path = NULL;
-	if (cmd.n_args > 1)
+	if (cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
+		return (0);
+	if (cmd.n_args == 2)
 		path = cmd.args[1];
+	else if (cmd.n_args > 2)
+	{
+		printf("minishell: cd: too many arguments\n");
+		return (1);
+	}
 	code = change_directory(path, table->env);
 	return (code);
 }
