@@ -2,6 +2,95 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+static int	count_args(char *cmd_str)
+{
+	int	n_args;
+	int	i;
+	int	quote;
+
+	quote = 0;
+	n_args = 1;
+	i = 0;
+	while (cmd_str[i])
+	{
+		if (cmd_str[i] == '\'' || cmd_str[i] == '\"')
+			quote = toggle_quote(quote, cmd_str[i]);
+		if (!quote && cmd_str[i] == ' ' && cmd_str[i + 1])
+			n_args++;
+		i++;
+	}
+	return (n_args + 1);
+}
+
+static char	*create_arg(char *str)
+{
+	char	*arg;
+	int		i;
+	int	quote;
+
+	if (str[i] == '\'' || str[i] == '\"')
+		quote = str[i];
+	if (str[1] == quote && quote != 0)
+		return (ft_strdup(""));
+
+	quote = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'' || str[i] == '\"')
+			quote = toggle_quote(quote, str[i]);
+		if (!quote && str[i] == ' ')
+			break ;
+		i++;
+	}
+
+	arg = malloc(sizeof(char) * (i + 1));
+	if (!arg)
+		return (NULL);
+	ft_strlcpy(arg, str, i + 1);
+	arg = remove_quotes_pair(arg);
+	return (arg);
+}
+
+static char **get_args(char *cmd_str)
+{
+	char	**args;
+	int	i;
+	int	quote;
+	int	new_arg;
+	int	n_args;
+
+	args = malloc(sizeof(char *) * count_args(cmd_str));
+	if (!args)
+		return (NULL);
+	quote = 0;
+	i = 0;
+	new_arg = 1;
+	n_args = 0;
+	while (cmd_str[i] == ' ')
+		i++;
+	while (cmd_str[i])
+	{
+		if (cmd_str[i] == '\'' || cmd_str[i] == '\"')
+			quote = toggle_quote(quote, cmd_str[i]);
+		if (new_arg)
+		{
+			args[n_args] = create_arg(&cmd_str[i]);
+			if (!args[n_args])
+				return (cleanup_arr((void **)args), NULL);
+			n_args++;
+		}
+		new_arg = 0;
+		if (!quote && cmd_str[i] == ' ' && cmd_str[i + 1])
+		{
+			new_arg = 1;
+		}
+		i++;
+	}
+	args[n_args] = NULL;
+	return (args);
+}
+
 static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
 {
 	char		**paths;
@@ -12,13 +101,13 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
 	cmd->fd_out = 1;
 	if (pipefd[0] != -1)
 		cmd->fd_in = pipefd[0];
-	if (pipe(pipefd) != -1)
+	if (pipe(pipefd) != -1 && is_last == 0)
 		cmd->fd_out = pipefd[1];
-	else
-		return (cleanup_arr((void **)cmd->args), 1);
-	cmd->args = ft_split_1space(cmd_str, ' ');
+	// else
+	// 	return (cleanup_arr((void **)cmd->args), 1);
+	cmd->args = get_args(cmd_str);
 	if (!cmd->args)
-		return (1);
+		return (MALLOC_ERR);
 	redir(cmd, cmd_str, is_last, nb);
 	return (0);
 }

@@ -1,27 +1,24 @@
 #include "builtin.hpp"
 
-static char*	get_last_env_var(t_command_table table)
-{
-	int	i = 0;
-
-	while (table.env[i] != NULL)
-	{
-		i++;
-	}
-	return (table.env[i - 1]);
-}
-
 int	export_test( void )
 {
+	const char *expected[]
+	{
+		"hello",
+	};
+
 	t_command_table	table;
+	table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);
 
-	init_table((char *)"export TEST=hello", &table, 0);
-	table.env = environ;
-
-
+	init_table(process_line("export TEST=hello", table.env, NULL), &table, 0);
 	run_pipeline(&table);
-	std::string last = get_last_env_var(table);
-	if (last == "TEST=hello")
+
+	Libunit::Redirect_log();
+
+	init_table(process_line("echo $TEST", table.env, NULL), &table, 0);
+	run_pipeline(&table);
+	if (Libunit::CheckFile("log.txt", expected, 1) == 0)
 		return (0);
 	else
 		return (1);

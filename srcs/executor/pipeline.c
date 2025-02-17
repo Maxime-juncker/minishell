@@ -167,6 +167,8 @@ int	run_pipeline(t_command_table *table)
 				i = 0;
 				while (i < table->n_commands)
 				{
+					if (g_signal_received == SIGQUIT)
+						printf("Quit (core dumped)");
 					kill(childs[i], g_signal_received);
 					i++;
 				}

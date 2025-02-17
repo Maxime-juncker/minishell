@@ -51,12 +51,16 @@ int	check_cmd_validity(const char *cmd_name)
 	if (create_dummy_cmd(cmd_name, &dummy_cmd) == MALLOC_ERR)
 		return (MALLOC_ERR);
 	path = get_cmd_path(get_paths(__environ), dummy_cmd); //TODO: change le __environ
-	cleanup_arr((void **)dummy_cmd.args);
 	if (path == NULL)
 	{
-		printf("minishell: %s: command not found\n", cmd_name);
+		if (relative_path(dummy_cmd.args[0]))
+			printf("minishell: %s: No such file or directory\n", cmd_name);
+		else
+			printf("minishell: %s: command not found\n", cmd_name);
+		cleanup_arr((void **)dummy_cmd.args);
 		return (NOT_FOUND);
 	}
+	cleanup_arr((void **)dummy_cmd.args);
 	free(path);
 	return (0);
 }

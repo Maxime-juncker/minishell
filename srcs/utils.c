@@ -1,9 +1,21 @@
 #include "minishell.h"
-
+#include <signal.h>
 
 void	handle_signal(int signal)
 {
 	g_signal_received = signal;
+}
+
+void	print_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i] != NULL)
+	{
+		printf("%s\n", arr[i]);
+		i++;
+	}
 }
 
 void	void_signal(int signal)

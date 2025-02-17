@@ -36,11 +36,11 @@ int	process_args(char **args, int n)
 	return (found_args);
 }
 
-// @brief Print the arguments to the standard output.
-// @param args The arguments to print (each args are separated by a space).
-// @param n The number of arguments.
-// @note if args[0] == -n then the function will not print a newline at the end.
-// @return 0 if the function succeed, 1 otherwise.
+/// @brief Print the arguments to the standard output.
+/// @param args The arguments to print (each args are separated by a space).
+/// @param n The number of arguments.
+/// @note if args[0] == -n then the function will not print a newline at the end.
+/// @return 0 if the function succeed, 1 otherwise.
 int	echo(char **args, int n)
 {
 	int	i;
@@ -50,11 +50,6 @@ int	echo(char **args, int n)
 	no_br = i;
 	while (i < n)
 	{
-		if (args[i][0] == '\0')
-		{
-			i++;
-			continue ;
-		}
 		printf("%s", args[i]);
 		if (i < n - 1)
 			printf(" ");

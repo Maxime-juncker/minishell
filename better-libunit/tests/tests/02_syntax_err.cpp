@@ -462,3 +462,11 @@ int	synt_err_33( void )
 	else
 		return (1);
 }
+
+int	synt_err_34( void )
+{
+	if (check_cmd_line(process_line("ls>1", environ, NULL)) == 0)
+		return (0);
+	else
+		return (1);
+}
