@@ -43,7 +43,8 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	char	*tmp;
 	int		lst_size;
 
-	tmp = remove_quotes(line);
+	// tmp = remove_quotes(line);
+	tmp = ft_strdup(line);
 	if (!tmp)
 	{
 		ft_lstclear(lst, free);
