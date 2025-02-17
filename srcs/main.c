@@ -12,15 +12,14 @@ void	print_pid(void)
 	printf("%s%d: %s", GRAY, getpid(), RESET);
 }
 
-void	new_prompt(void)
+void	new_prompt(t_command_table *table)
 {
 	char	*line;
 	int		code;
-	t_command_table	table;
 	char	*process_cmd;
 
 	g_signal_received = 0;
-	line = readline("\033[0mminishell$ ");
+	line = readline("\033[0;32mminishell$\033[0m ");
 	if (g_signal_received)
 	{
 		g_signal_received = 0;
@@ -28,7 +27,7 @@ void	new_prompt(void)
 	}
 	if (!line || (ft_strlen(line) == 4 && !ft_strncmp(line, "exit", 4)))
 	{
-		cleanup_arr((void **)table.env);
+		cleanup_arr((void **)table->env);
 		printf("exit\n");
 		exit(EXIT_SUCCESS);
 	}
@@ -38,7 +37,7 @@ void	new_prompt(void)
 		ft_strncmp(line, "!", ft_strlen(line))
 		&& ft_strncmp(line, ":", ft_strlen(line)))
 	{
-		process_cmd = process_line(line, table.env, &code);
+		process_cmd = process_line(line, table->env, &code);
 		free(line);
 		if (!process_cmd)
 		{
@@ -51,16 +50,16 @@ void	new_prompt(void)
 		}
 		else if (code == MALLOC_ERR)
 		{
-			cleanup_arr((void **)table.env);
+			cleanup_arr((void **)table->env);
 			error("malloc failed");
 			exit(EXIT_FAILURE);
 		}
 		else
 		{
-			code = init_table(process_cmd, &table, code);
+			code = init_table(process_cmd, table, code);
 			free(process_cmd);
 			if (code == 0)
-				code = run_pipeline(&table);
+				code = run_pipeline(table);
 		}
 	}
 }
@@ -93,12 +92,13 @@ int	main(void)
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, SIG_IGN);
 	table.env = duplicate_env(__environ);
-	if (table.env == NULL)
+	table.exp = duplicate_env(__environ);
+	if (table.env == NULL || table.exp == NULL)
 		return (EXIT_FAILURE);
 	code = 0;
 	while (1)
 	{
-		new_prompt();
+		new_prompt(&table);
 	}
 	exit (0);
 }

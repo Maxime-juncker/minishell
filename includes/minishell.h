@@ -33,12 +33,13 @@ typedef struct s_command_table
 	size_t		n_commands;
 
 	char		**env;
+	char		**exp;
 }	t_command_table;
 
 extern int	g_signal_received;
 
 void	handle_signal(int signal);
-void	new_prompt(void);
+void	new_prompt(t_command_table *table);
 
 // pipex.c
 char	**get_paths(char **env);
