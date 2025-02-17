@@ -71,10 +71,11 @@ int	print_export(t_command_table table)
 				printf("%c", '"');
 				n++;
 			}
-			else if (!table.exp[i][j + 1])
-				printf("\"\n");
+			else if (!table.exp[i][j + 1] && n)
+				printf("\"");
 			j++;
 		}
+		printf("\n");
 		i++;
 	}
 	return (0);
@@ -91,28 +92,40 @@ static int	get_env_len(char **env)
 	return (len);
 }
 
-int	export_cmd(t_command_table *table, t_command cmd)
+char	**update_env(t_command cmd, char **env)
 {
 	char	**cpy;
 	int		i;
 
+	cpy = malloc((ft_arraylen(env) + 2) * sizeof(char *));
+	if (cpy == NULL)
+		return (NULL);
+	i = 0;
+	while (env[i] != NULL)
+	{
+		cpy[i] = env[i];
+		i++;
+	}
+	cpy[i] = ft_strdup(cmd.args[1]);
+	if (!cpy[i])
+	{
+		cleanup_arr((void **)cpy);
+		return (NULL);
+	}
+	cpy[i + 1] = NULL;
+	return (cpy);
+}
+
+int	export_cmd(t_command_table *table, t_command cmd)
+{
 	ft_sort_export(table->exp);
 	if (cmd.n_args == 1)
 	{
 		print_export(*table);
 		return (0);
 	}
-	cpy = malloc((ft_arraylen(table->exp) + 2) * sizeof(char *));
-	if (cpy == NULL)
-		return (MALLOC_ERR);
-	i = 0;
-	while (table->exp[i] != NULL)
-	{
-		cpy[i] = table->exp[i];
-		i++;
-	}
-	cpy[i] = ft_strdup(cmd.args[1]);
-	cpy[i + 1] = NULL;
-	table->exp = cpy;
+	if (ft_strchr(cmd.args[1], '='))
+		table->env = update_env(cmd, table->env);
+	table->exp = update_env(cmd, table->exp);
 	return (0);
 }
