@@ -143,6 +143,8 @@ int	run_pipeline(t_command_table *table)
 		{
 			if (g_signal_received) // wait interupted by sign
 			{
+				if (g_signal_received == SIGINT)
+					code = 130;
 				i = 0;
 				while (i < table->n_commands)
 				{

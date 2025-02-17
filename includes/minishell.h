@@ -57,7 +57,7 @@ void	cleanup_table(t_command_table *table);
 void	redir(t_command *cmd, char *cmd_str, int is_last, int i);
 
 // init.c
-int		init_table(char *line, t_command_table *table, int last_cmd);
+int		init_table(char *line, t_command_table *table);
 
 // ft_split_1space.c
 char	**ft_split_1space(const char *s, char c);
@@ -91,7 +91,7 @@ char	toggle_quote(char quote, char c);
 t_list	*process_quotes(const char *line);
 
 // var_processing.c
-t_list	*process_expanded_vars(const t_list *lst, char **env);
+t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
 
 // syntax_checker.c
 int		check_syntax(const char *cmd_line);

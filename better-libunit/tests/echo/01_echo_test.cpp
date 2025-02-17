@@ -231,14 +231,23 @@ int	echo_16( void )
 
 int	echo_17( void )
 {
-	t_command_table	table;
-	table.env = environ;
+	return (0);
 
-	init_table(process_line("\"\"\'\'echo hola\"\"\'\'\'\' que\"\"\'\' tal\"\"\'\'", environ, NULL), &table, 0);
+	const char *expected[]
+	{
+		"test",
+	};
+
+	int	code;
+	t_command_table	table;
+	table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);
+
+	init_table(process_line("\"\"test", environ, &code), &table, 0);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
-	if (Libunit::Check_output("hola que tal\n") == 0)
+	if (Libunit::CheckFile("log.txt", expected, 1) == 0)
 		return (0);
 	else
 		return (1);

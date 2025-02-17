@@ -15,13 +15,16 @@ void	print_pid(void)
 void	new_prompt(t_command_table *table)
 {
 	char	*line;
-	int		code;
 	char	*process_cmd;
+	static int	code = 0;
+	int	tmp;
 
 	g_signal_received = 0;
 	line = readline("\033[0;32mminishell$\033[0m ");
 	if (g_signal_received)
 	{
+		if (g_signal_received == SIGINT)
+			code = 130;
 		g_signal_received = 0;
 		return;
 	}
@@ -56,10 +59,10 @@ void	new_prompt(t_command_table *table)
 		}
 		else
 		{
-			code = init_table(process_cmd, table, code);
+			tmp = init_table(process_cmd, table);
 			free(process_cmd);
-			if (code == 0)
-				code = run_pipeline(table);
+			if (tmp == 0)
+				code = run_pipeline(table) % 255;
 		}
 	}
 }
@@ -84,7 +87,6 @@ int	main(void)
 {
 	char			*line;
 	t_command_table	table;
-	int				code;
 	char			*process_cmd;
 
 	rl_event_hook = check_interrupt;
@@ -95,7 +97,6 @@ int	main(void)
 	table.exp = duplicate_env(__environ);
 	if (table.env == NULL || table.exp == NULL)
 		return (EXIT_FAILURE);
-	code = 0;
 	while (1)
 	{
 		new_prompt(&table);
