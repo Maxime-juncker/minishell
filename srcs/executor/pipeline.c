@@ -68,6 +68,10 @@ static int	run_command(t_command cmd, const t_command_table *table)
 		if (is_builtin(cmd.args[0]) == 1)
 		{
 			code = run_built_in(cmd, table);
+			if (cmd.fd_out != STDOUT_FILENO)
+				close(cmd.fd_out);
+			if (cmd.fd_in != STDIN_FILENO)
+				close(cmd.fd_in);
 			cleanup_table((t_command_table *)table);
 			exit (code);
 		}
@@ -92,35 +96,6 @@ void	cleanup_table(t_command_table *table)
 		i++;
 	}
 	free(table->commands);
-}
-
-int	wait_for_childs()
-{
-	int	pid;
-	int	code;
-
-	while (1)
-	{
-		pid = wait(&code);
-		if (pid == -1)
-		{
-			if (errno == ECHILD)
-			{
-				break ;
-			}
-			else if (errno == EINTR) // signal received
-			{
-
-				continue ;
-			}
-			else
-			{
-				error("wait failed");
-				return (-1);
-			}
-		}
-	}
-	return (code);
 }
 
 /// @brief Run every command in the command table
@@ -149,6 +124,10 @@ int	run_pipeline(t_command_table *table)
 		}
 		if (run_env_cmd(table, table->commands[i]))
 		{
+			if (table->commands[i].fd_out != STDOUT_FILENO)
+				close(table->commands[i].fd_out);
+			if (table->commands[i].fd_in != STDIN_FILENO)
+				close(table->commands[i].fd_in);
 			i++;
 			continue ;
 		}
@@ -167,8 +146,8 @@ int	run_pipeline(t_command_table *table)
 				i = 0;
 				while (i < table->n_commands)
 				{
-					if (g_signal_received == SIGQUIT)
-						printf("Quit (core dumped)");
+					// if (g_signal_received == SIGQUIT)
+					// 	printf("Quit (core dumped)");
 					kill(childs[i], g_signal_received);
 					i++;
 				}
