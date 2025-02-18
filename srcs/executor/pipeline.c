@@ -39,7 +39,6 @@ int	run_pipeline(t_command_table *table)
 {
 	size_t	i;
 	int		code;
-	int		pid;
 	int		*childs;
 
 	childs = ft_calloc(table->n_commands + 1, sizeof(int));
@@ -59,9 +58,11 @@ int	run_pipeline(t_command_table *table)
 				i++;
 				continue ;
 			}
-			childs[i] = run_command(table->commands[i], table);
+			childs[i] = run_command(table->commands[i], table, childs);
 		}
 		i++;
 	}
-	return (wait_for_process(table, childs, code));
+	code = wait_for_process(table, childs, code);
+	free(childs);
+	return (code);
 }

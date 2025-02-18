@@ -54,7 +54,7 @@ int		run_pipeline(t_command_table *table);
 void	cleanup_table(t_command_table *table);
 
 // executor.c
-int		run_command(t_command cmd, const t_command_table *table);
+int		run_command(t_command cmd, const t_command_table *table, int *childs);
 int		run_env_cmd(t_command_table *table, t_command cmd);
 void	close_fds(t_command cmd);
 
