@@ -12,15 +12,47 @@ void	print_pid(void)
 	printf("%s%d: %s", GRAY, getpid(), RESET);
 }
 
+char	*get_folder( char **env )
+{
+	char	*folder;
+
+	folder = ft_strdup(find_env_var(env, "PWD", NULL));
+	if (folder[1] != '\0')
+	{
+		while (*folder && ft_strchr(folder, '/') != NULL)
+		{
+			folder++;
+		}
+	}
+
+	folder = ft_strjoin(folder, ":");
+	return (folder);
+}
+
+char	*new_prompt_txt( char **env )
+{
+	char	*txt;
+
+	txt = NULL;
+	txt = ft_strjoin(BLUE, NULL);
+	txt = ft_strjoin(txt, get_folder(env));
+	txt = ft_charjoin(txt, ' ');
+	txt = ft_strjoin(txt, GREEN);
+	txt = ft_strjoin(txt, find_env_var(env, "USER", NULL));
+	txt = ft_strjoin(txt, "$\033[0m ");
+	return (txt);
+}
+
 void	new_prompt(t_command_table *table)
 {
 	char	*line;
 	char	*process_cmd;
 	static int	code = 0;
 	int	tmp;
+	char *prompt_char = new_prompt_txt(table->env);
 
 	g_signal_received = 0;
-	line = readline("\033[0;32mminishell$\033[0m ");
+	line = readline(prompt_char);
 	if (g_signal_received)
 	{
 		if (g_signal_received == SIGINT)
