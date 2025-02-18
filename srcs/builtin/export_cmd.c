@@ -77,6 +77,7 @@ char	**update_env(char *arg, char **env)
 		return (NULL);
 	}
 	cpy[i + 1] = NULL;
+	cleanup_arr((void **)env);
 	return (cpy);
 }
 

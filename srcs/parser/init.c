@@ -26,7 +26,7 @@ static char	*create_arg(char *str)
 {
 	char	*arg;
 	int		i;
-	int	quote;
+	int		quote;
 
 	i = 0;
 	quote = 0;
@@ -38,7 +38,6 @@ static char	*create_arg(char *str)
 			break ;
 		i++;
 	}
-
 	arg = malloc(sizeof(char) * (i + 1));
 	if (!arg)
 		return (NULL);
@@ -50,10 +49,10 @@ static char	*create_arg(char *str)
 static char **get_args(char *cmd_str)
 {
 	char	**args;
-	int	i;
-	int	quote;
-	int	new_arg;
-	int	n_args;
+	int		i;
+	int		quote;
+	int		new_arg;
+	int		n_args;
 
 	args = malloc(sizeof(char *) * count_args(cmd_str));
 	if (!args)

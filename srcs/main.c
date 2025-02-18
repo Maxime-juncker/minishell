@@ -62,8 +62,6 @@ void	new_prompt(t_command_table *table)
 	{
 		cleanup_arr((void **)table->env);
 		cleanup_arr((void **)table->exp);
-		cleanup_arr((void **)table->commands->args);
-		free(table->commands);
 		printf("exit\n");
 		exit(EXIT_SUCCESS);
 	}
@@ -88,8 +86,6 @@ void	new_prompt(t_command_table *table)
 		{
 			cleanup_arr((void **)table->env);
 			cleanup_arr((void **)table->exp);
-			cleanup_arr((void **)table->commands->args);
-			free(table->commands);
 			error("malloc failed");
 			exit(EXIT_FAILURE);
 		}
@@ -99,6 +95,7 @@ void	new_prompt(t_command_table *table)
 			free(process_cmd);
 			if (tmp == 0)
 				code = run_pipeline(table) % 255;
+			// cleanup_table((t_command_table *)table);
 		}
 	}
 }
