@@ -44,7 +44,7 @@ void	new_prompt(t_command_table *table);
 // pipex.c
 char	**get_paths(char **env);
 
-// executor
+// paths.c
 char	*get_cmd_path(char **paths, t_command cmd);
 void	setup_redirection(t_command cmd);
 int		relative_path(char *path);
@@ -52,6 +52,11 @@ int		relative_path(char *path);
 // pipeline.c
 int		run_pipeline(t_command_table *table);
 void	cleanup_table(t_command_table *table);
+
+// executor.c
+int		run_command(t_command cmd, const t_command_table *table);
+int		run_env_cmd(t_command_table *table, t_command cmd);
+void	close_fds(t_command cmd);
 
 // redirect.c
 void	redir(t_command *cmd, char *cmd_str, int is_last, int i);
@@ -80,8 +85,8 @@ int		token_error(char c1, char c2);
 // checker.c
 int		check_cmd_line( const char *process_line );
 t_list	*split_line(char *line);
-int		check_path(const char *cmd_part);int	check_cmd_line( const char *process_line );
-
+int		check_path(const char *cmd_part);
+int		check_cmd_line( const char *process_line );
 
 // lexer.c
 char	*process_line(const char *cmd_line, char **env, int *code);
@@ -117,9 +122,9 @@ int		pwd(char **env);
 int		export_cmd(t_command_table *table, t_command cmd);
 
 // unset.c
-int	unset_cmd(t_command_table *table, t_command cmd);
+int		unset_cmd(t_command_table *table, t_command cmd);
 char	**unset(char **env, char *arg);
-int	ft_strcmp(char *s1, char *s2);
+int		ft_strcmp(char *s1, char *s2);
 
 // dirs.c
 int		cd_command(const t_command_table *table, const t_command cmd);

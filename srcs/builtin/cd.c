@@ -1,8 +1,5 @@
 #include "minishell.h"
-#include <stdio.h>
 #include <dirent.h>
-#include <string.h>
-#include <unistd.h>
 
 static char	*get_absolute_path(const char *new_path)
 {
