@@ -26,6 +26,7 @@ static int	run_built_in(const t_command cmd, const t_command_table *table)
 static int	run_env_cmd(t_command_table *table, t_command cmd)
 {
 	char	*name;
+	int		i;
 
 	name = cmd.args[0];
 	if (ft_strncmp(name, "export", ft_strlen(name)) == 0)
@@ -34,7 +35,7 @@ static int	run_env_cmd(t_command_table *table, t_command cmd)
 	}
 	if (ft_strncmp(name, "unset", ft_strlen(name)) == 0)
 	{
-		return (unset(table, cmd));
+		return (unset(table->env, cmd.args));
 	}
 	if (ft_strncmp(cmd.args[0], "cd", ft_strlen(name)) == 0)
 	{
@@ -133,7 +134,7 @@ int	run_pipeline(t_command_table *table)
 		childs[i] = run_command(table->commands[i], table);
 		i++;
 	}
-	
+
 	// if (childs[0] == 0) // no child process created
 	// 	return (code);
 	g_signal_received = 0;

@@ -10,27 +10,39 @@ static int	get_env_len(char **env)
 	return (len);
 }
 
-int	unset(t_command_table *table, const t_command cmd)
+char	**unset(char **env, char *arg)
 {
 	char	**cpy;
 	int		i;
 	int		len;
 
-	len = 0;
-	cpy = malloc(get_env_len(table->env) * sizeof(char *));
+	cpy = malloc(get_env_len(env) * sizeof(char *) + 1);
 	if (cpy == NULL)
-		return (1);
+		return (NULL);
 	i = 0;
-	while (table->env[i] != NULL)
+	len = 0;
+	while (env[i] != NULL)
 	{
-		if (ft_strncmp(table->env[i], cmd.args[1], ft_strlen(cmd.args[1])) != 0)
+		if (ft_strncmp(env[i], arg, ft_strlen(arg)))
 		{
-			cpy[i] = table->env[i];
+			cpy[len] = ft_strdup(env[i]);
 			len++;
 		}
 		i++;
 	}
 	cpy[len] = NULL;
-	table->env = cpy;
-	return (0);
+	return (cpy);
+}
+
+void	unset_cmd(t_command_table *table, t_command cmd)
+{
+	int	i;
+
+	i = 1;
+	while (cmd.args[i])
+	{
+		table->env = unset(table->env, cmd.args[i]);
+		table->exp = unset(table->exp, cmd.args[i]);
+		i++;
+	}
 }
