@@ -1,7 +1,6 @@
 #include "builtin.hpp"
 #include <dirent.h>
 
-//TODO: need to redo these tests
 
 int	cd_relative( void )
 {

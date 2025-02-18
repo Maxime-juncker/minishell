@@ -1,8 +1,5 @@
 #include "minishell.h"
 
-//TODO: ls <<>> file dont trigger synt error 
-//TODO: cat << eof trigger error 
-
 int	count_occ_reverse(const char *str, const char to_find, int i)
 {
 	int	occ;

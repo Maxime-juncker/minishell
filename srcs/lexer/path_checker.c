@@ -43,14 +43,14 @@ static const char	*get_cmd_name(t_list *lst)
 	return (NULL);
 }
 
-int	check_cmd_validity(char *cmd_name)
+int	check_cmd_validity(char *cmd_name, char **env)
 {
 	t_command	dummy_cmd;
 	char		*path;
 
 	if (create_dummy_cmd(cmd_name, &dummy_cmd) == MALLOC_ERR)
 		return (MALLOC_ERR);
-	path = get_cmd_path(get_paths(__environ), dummy_cmd); //TODO: change le __environ
+	path = get_cmd_path(get_paths(env), dummy_cmd);
 	if (path == NULL)
 	{
 		if (relative_path(dummy_cmd.args[0]))
@@ -82,7 +82,7 @@ int	check_dir_validity(char *path)
 	return (IS_DIR);
 }
 
-int	check_path(const char *cmd_part)
+int	check_path(const char *cmd_part, char **env)
 {
 	t_list		*lst;
 	char		*name;
@@ -103,7 +103,7 @@ int	check_path(const char *cmd_part)
 		return (MALLOC_ERR);
 	if (ft_strchr(name_no_quote, '/') == NULL || name_no_quote[0] == '.')
 	{
-		return (check_cmd_validity(name_no_quote));
+		return (check_cmd_validity(name_no_quote, env));
 	}
 	return (check_dir_validity(name_no_quote));
 }

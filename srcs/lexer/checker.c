@@ -49,7 +49,7 @@ t_list	*split_line(char *line)
 }
 
 // syntax check in the following order: pipe, redirection, cmd / dir
-int	check_cmd_line( const char *process_line )
+int	check_cmd_line( const char *process_line, char **env )
 {
 	int		code;
 	char	**cmd_parts;
@@ -68,7 +68,7 @@ int	check_cmd_line( const char *process_line )
 	code = 0;
 	while (cmd_parts[i])
 	{
-		tmp = check_path(cmd_parts[i]);
+		tmp = check_path(cmd_parts[i], env);
 		if (tmp != 0)
 			code = tmp;
 		i++;
