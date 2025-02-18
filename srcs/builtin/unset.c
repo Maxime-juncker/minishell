@@ -34,7 +34,7 @@ char	**unset(char **env, char *arg)
 	return (cpy);
 }
 
-void	unset_cmd(t_command_table *table, t_command cmd)
+int	unset_cmd(t_command_table *table, t_command cmd)
 {
 	int	i;
 
@@ -43,6 +43,9 @@ void	unset_cmd(t_command_table *table, t_command cmd)
 	{
 		table->env = unset(table->env, cmd.args[i]);
 		table->exp = unset(table->exp, cmd.args[i]);
+		if (table->env == NULL || table->exp == NULL)
+			return (MALLOC_ERR);
 		i++;
 	}
+	return (0);
 }
