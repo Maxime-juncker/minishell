@@ -12,6 +12,13 @@ char	toggle_quote(char c, char quote)
 	return (quote);
 }
 
+int	is_symbol(char c)
+{
+	if (c == '|' || c == '<' || c == '>')
+		return (1);
+	return (0);
+}
+
 char	*join_lst(t_list *lst)
 {
 	char	*str;
@@ -39,6 +46,13 @@ char	*join_lst(t_list *lst)
 			{
 				i++;
 				continue;
+			}
+			if ((str && !is_symbol(str[len - 1]) && str[len - 1] != ' ' && is_symbol(content[i])) ||
+				(str && is_symbol(str[len - 1]) && content[i] != ' ' && !is_symbol(content[i])))
+			{
+				str = ft_charjoin(str, ' ');
+				len++;
+				continue ;
 			}
 			str = ft_charjoin(str, content[i]);
 			len++;

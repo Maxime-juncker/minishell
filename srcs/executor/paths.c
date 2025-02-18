@@ -54,7 +54,7 @@ char	*get_cmd_path(char **paths, t_command cmd)
 	int		i;
 	char	*cmd_path;
 
-	if (paths == NULL)
+	if (paths == NULL || cmd.args[0][0] == '\0')
 		return (NULL);
 	if (is_builtin(cmd.args[0]))
 	{
