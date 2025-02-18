@@ -44,7 +44,6 @@ void	new_prompt(t_command_table *table)
 	char		*line;
 	char		*process_cmd;
 	static int	code = 0;
-	int			tmp;
 	char		*prompt_char;
 
 	prompt_char = new_prompt_txt(table->env);
@@ -84,6 +83,7 @@ void	new_prompt(t_command_table *table)
 		}
 		else if (code == MALLOC_ERR)
 		{
+			free(process_cmd);
 			cleanup_arr((void **)table->env);
 			cleanup_arr((void **)table->exp);
 			error("malloc failed");
@@ -91,9 +91,7 @@ void	new_prompt(t_command_table *table)
 		}
 		else
 		{
-			tmp = init_table(process_cmd, table);
-			free(process_cmd);
-			if (tmp == 0)
+			if (!init_table(process_cmd, table))
 				code = run_pipeline(table) % 255;
 			cleanup_table((t_command_table *)table);
 		}

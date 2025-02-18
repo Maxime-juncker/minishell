@@ -48,7 +48,7 @@ static char	*create_arg(char *str)
 	return (temp);
 }
 
-static char **get_args(char *cmd_str)
+static void	get_args(t_command *cmd, char *cmd_str)
 {
 	char	**args;
 	int		i;
@@ -56,9 +56,9 @@ static char **get_args(char *cmd_str)
 	int		new_arg;
 	int		n_args;
 
-	args = malloc(sizeof(char *) * count_args(cmd_str));
-	if (!args)
-		return (NULL);
+	cmd->args = malloc(sizeof(char *) * count_args(cmd_str));
+	if (!cmd->args)
+		return ;
 	quote = 0;
 	i = 0;
 	new_arg = 1;
@@ -71,9 +71,9 @@ static char **get_args(char *cmd_str)
 			quote = toggle_quote(quote, cmd_str[i]);
 		if (new_arg)
 		{
-			args[n_args] = create_arg(&cmd_str[i]);
-			if (!args[n_args])
-				return (cleanup_arr((void **)args), NULL);
+			cmd->args[n_args] = create_arg(&cmd_str[i]);
+			if (!cmd->args[n_args])
+				cleanup_arr((void **)cmd->args);
 			n_args++;
 		}
 		new_arg = 0;
@@ -83,8 +83,7 @@ static char **get_args(char *cmd_str)
 		}
 		i++;
 	}
-	args[n_args] = NULL;
-	return (args);
+	cmd->args[n_args] = NULL;
 }
 
 static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
@@ -106,7 +105,7 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
 		else
 			return (cleanup_arr((void **)cmd->args), 1);
 	}
-	cmd->args = get_args(cmd_str);
+	get_args(cmd, cmd_str);
 	if (!cmd->args)
 		return (MALLOC_ERR);
 	redir(cmd, cmd_str, is_last, nb);
@@ -138,5 +137,6 @@ int	init_table(char *line, t_command_table *table)
 		i++;
 	}
 	cleanup_arr((void **)commands);
+	free(line);
 	return (0);
 }

@@ -12,7 +12,6 @@ static char	*append_str(char *old, char *append_str, int new_len)
 	ft_strlcpy(new_str, old, new_len);
 	free(old);
 	ft_strlcat(new_str, append_str, new_len);
-	// free(append_str);
 	return (new_str);
 }
 
@@ -32,7 +31,11 @@ static int	heredoc(t_command *cmd, char *deli)
 				"here-document delimited by end-of-file", deli);
 		len = ft_strlen(line) - 1;
 		if (!line || !ft_strncmp(line, deli, len) && ft_strlen(deli) == len)
+		{
+			if (line)
+				free(line);
 			break ;
+		}
 		doc = append_str(doc, line, ft_strlen(doc) + len + 2);
 		free(line);
 		if (!doc)
@@ -68,7 +71,7 @@ static void	handle_fd(t_command *cmd, char *file, char c, int db_redir)
 	free(file);
 }
 
-static char *get_file_name(char **s)
+static char	*get_file_name(char **s)
 {
 	int		i;
 	char	quote;
@@ -105,29 +108,33 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 	char	*start;
 	char	**args;
 	int		i;
+	char	*temp;
 
 	file = get_file_name(command);
 	if (!file)
-		return ; // free_all(cmd->args);
+		return ;
 	while (command && **command == ' ')
 		(*command)++;
 	start = *command;
 	while (**command && **command != '>' && **command != '<')
 		(*command)++;
-	args = ft_split(ft_substr(start, 0, *command - start), ' ');
+	temp = ft_substr(start, 0, *command - start);
+	args = ft_split(temp, ' ');
+	free(temp);
 	if (!args)
-		return ; // free_all(cmd->args);
+		return ;
 	if (args[0])
 	{
 		i = 0;
 		while (args[i])
 		{
-			cmd->args[cmd->n_args] = args[i];
+			cmd->args[cmd->n_args] = ft_strdup(args[i]);
+			free(args[i]);
 			cmd->n_args++;
 			i++;
 		}
 	}
-	cleanup_arr((void **)args);
+	free(args);
 	handle_fd(cmd, file, c, db_redir);
 }
 
@@ -137,7 +144,8 @@ void	redir(t_command *cmd, char *command, int is_last, int i)
 
 	temp = command;
 	cmd->n_args = 0;
-	while (cmd->args[cmd->n_args] && cmd->args[cmd->n_args][0] != '>' && cmd->args[cmd->n_args][0] != '<')
+	while (cmd->args[cmd->n_args] && cmd->args[cmd->n_args][0] != '>'
+		&& cmd->args[cmd->n_args][0] != '<')
 		cmd->n_args++;
 	while (*command)
 	{

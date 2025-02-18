@@ -23,7 +23,6 @@ void	void_signal(int signal)
 	(void)signal;
 }
 
-
 size_t	get_biggest_len(const char *s1, const char *s2)
 {
 	size_t	len1;
@@ -36,28 +35,30 @@ size_t	get_biggest_len(const char *s1, const char *s2)
 
 int	is_builtin(char *name)
 {
-	if (ft_strncmp(name, "echo", get_biggest_len(name, "echo")) == 0)
+	if (!name)
+		return (0);
+	if (ft_strcmp(name, "echo") == 0)
 		return (1);
-	if (ft_strncmp(name, "export", get_biggest_len(name, "export")) == 0)
+	if (ft_strcmp(name, "export") == 0)
 		return (1);
-	if (ft_strncmp(name, "unset", get_biggest_len(name, "unset")) == 0)
+	if (ft_strcmp(name, "unset") == 0)
 		return (1);
-	if (ft_strncmp(name, "env", get_biggest_len(name, "env")) == 0)
+	if (ft_strcmp(name, "env") == 0)
 		return (1);
-	if (ft_strncmp(name, "cd", get_biggest_len(name, "cd")) == 0)
+	if (ft_strcmp(name, "cd") == 0)
 		return (1);
-	if (ft_strncmp(name, "heredoc", get_biggest_len(name, "heredoc")) == 0)
+	if (ft_strcmp(name, "heredoc") == 0)
 		return (1);
 	return (0);
 }
 
 int	is_env_cmd(char *name)
 {
-	if (ft_strncmp(name, "export", get_biggest_len(name, "export")) == 0)
+	if (ft_strcmp(name, "export") == 0)
 		return (1);
-	if (ft_strncmp(name, "unset", get_biggest_len(name, "unset")) == 0)
+	if (ft_strcmp(name, "unset") == 0)
 		return (1);
-	if (ft_strncmp(name, "cd", get_biggest_len(name, "cd")) == 0)
+	if (ft_strcmp(name, "cd") == 0)
 		return (1);
 	return (0);
 }
@@ -115,7 +116,6 @@ int	replace_env_var(char **env, char *to_find, const char *replace)
 char	*remove_quotes_pair(char *s)
 {
 	char	*tmp;
-	char	*result;
 	char	quote;
 	int		i;
 
@@ -142,7 +142,5 @@ char	*remove_quotes_pair(char *s)
 		i++;
 		s++;
 	}
-	result = ft_strdup(tmp);
-	free(tmp);
-	return (result);
+	return (tmp);
 }

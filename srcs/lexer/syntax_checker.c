@@ -87,7 +87,7 @@ static int	check_redir_out(const char *cmd_line, int i)
 	return (0);
 }
 
-static char *get_file_name(const char *s)
+static char	*get_file_name(const char *s)
 {
 	int		i;
 	char	quote;
@@ -119,14 +119,15 @@ static int	check_redir_in(const char *cmd_line, int i)
 {
 	char	*file;
 
-	if (cmd_line[i + 1] == '<' || cmd_line[i - 1] == '<' || cmd_line[i + 1] == '>' || cmd_line[i + 1] == ' ' || cmd_line[i + 1] == '\0')
+	if (cmd_line[i + 1] == '<' || cmd_line[i - 1] == '<'
+		|| cmd_line[i + 1] == '>' || cmd_line[i + 1] == ' '
+		|| cmd_line[i + 1] == '\0')
 		return (0);
 	file = get_file_name(cmd_line + i);
 	if (file == NULL)
 	{
 		return (new_line_error(cmd_line + i, '<'));
 	}
-
 	if (access(file, F_OK) == -1)
 	{
 		printf("minishell: %s: No such file or directory\n", file);
@@ -177,7 +178,8 @@ int	check_syntax(const char *cmd_line)
 	while (cmd_line[i])
 	{
 		quote = toggle_quote(cmd_line[i], quote);
-		if (!quote && (cmd_line[i] == '<' || cmd_line[i] == '>' || cmd_line[i] == '|'))
+		if (!quote && (cmd_line[i] == '<' || cmd_line[i] == '>'
+				|| cmd_line[i] == '|'))
 		{
 			code = check_error(cmd_line, i);
 			if (code != 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_next_line.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 08:23:03 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/01/05 12:07:16 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:29:07 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ static int	dump_buffer(char *buffer, char **line)
 				BUFFER_SIZE);
 			if (*line)
 				free(*line);
-			*line = new;
-			return (1);
+			*line = ft_strdup(new);
+			return (free(new), 1);
 		}
-		return (full_dump(buffer, line));
+		return (free(new), full_dump(buffer, line));
 	}
 	return (1);
 }

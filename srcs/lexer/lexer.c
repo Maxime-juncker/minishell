@@ -40,15 +40,18 @@ char	*join_lst(t_list *lst)
 			if (content[i] == ' ' && !str)
 			{
 				i++;
-				continue;
+				continue ;
 			}
-			if (!quote && content[i] == ' ' && str && len > 0 && str[len - 1] == ' ')
+			if (!quote && content[i] == ' ' && str && len > 0
+				&& str[len - 1] == ' ')
 			{
 				i++;
-				continue;
+				continue ;
 			}
-			if ((str && !is_symbol(str[len - 1]) && str[len - 1] != ' ' && is_symbol(content[i])) ||
-				(str && is_symbol(str[len - 1]) && content[i] != ' ' && !is_symbol(content[i])))
+			if ((str && !is_symbol(str[len - 1]) && str[len - 1] != ' '
+					&& is_symbol(content[i]))
+				(str && is_symbol(str[len - 1]) && content[i] != ' '
+					&& !is_symbol(content[i])))
 			{
 				str = ft_charjoin(str, ' ');
 				len++;
@@ -62,7 +65,6 @@ char	*join_lst(t_list *lst)
 	}
 	return (str);
 }
-
 
 #if SHOW_LEXER
 
@@ -84,7 +86,6 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 	ft_printf("--------------------------------------------------------------------------\n");
 	ft_lstclear(&quotes_lst, free);
 	ft_lstclear(&var_lst, free);
-
 	*code = check_cmd_line(process_str, env);
 	return (process_str);
 }
@@ -104,11 +105,9 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 	process_str = join_lst(var_lst);
 	ft_lstclear(&quotes_lst, free);
 	ft_lstclear(&var_lst, free);
-
 	if (code)
 		*code = check_cmd_line(process_str, env);
 	return (process_str);
 }
-
 
 #endif

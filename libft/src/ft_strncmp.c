@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:58:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/18 12:36:01 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:52:12 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,13 @@ int	ft_strcmp(char *s1, char *s2)
 	int	i;
 
 	i = 0;
-	while (s1[i] || s2[i])
+	while (s1[i] && s2[i])
 	{
 		if (s1[i] != s2[i])
 			return (s1[i] - s2[i]);
 		i++;
 	}
+	if (s1[i] || s2[i])
+		return (s1[i] - s2[i]);
 	return (0);
 }
