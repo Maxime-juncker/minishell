@@ -10,8 +10,10 @@
 char	*get_folder( char **env )
 {
 	char	*folder;
+	char	*temp;
 
 	folder = ft_strdup(find_env_var(env, "PWD", NULL));
+	temp = folder;
 	if (folder[1] != '\0')
 	{
 		while (*folder && ft_strchr(folder, '/') != NULL)
@@ -20,6 +22,7 @@ char	*get_folder( char **env )
 		}
 	}
 	folder = ft_strjoin(folder, ":");
+	free(temp);
 	return (folder);
 }
 
@@ -27,13 +30,12 @@ char	*new_prompt_txt( char **env )
 {
 	char	*txt;
 
-	txt = NULL;
 	txt = ft_strjoin(BLUE, NULL);
-	txt = ft_strjoin(txt, get_folder(env));
+	txt = ft_strjoin_free(txt, get_folder(env), FREE1 | FREE2);
 	txt = ft_charjoin(txt, ' ');
-	txt = ft_strjoin(txt, GREEN);
-	txt = ft_strjoin(txt, find_env_var(env, "USER", NULL));
-	txt = ft_strjoin(txt, "$\033[0m ");
+	txt = ft_strjoin_free(txt, GREEN, FREE1);
+	txt = ft_strjoin_free(txt, find_env_var(env, "USER", NULL), FREE1);
+	txt = ft_strjoin_free(txt, "$\033[0m ", FREE1);
 	return (txt);
 }
 
@@ -48,6 +50,7 @@ void	new_prompt(t_command_table *table)
 	prompt_char = new_prompt_txt(table->env);
 	g_signal_received = 0;
 	line = readline(prompt_char);
+	free(prompt_char);
 	if (g_signal_received)
 	{
 		if (g_signal_received == SIGINT)

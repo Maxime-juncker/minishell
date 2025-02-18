@@ -24,7 +24,7 @@ static const char	*get_cmd_name(t_list *lst)
 	const char	*last;
 
 	last = NULL;
-	while (lst) //* case: >file ls -la
+	while (lst)
 	{
 		name = (const char *)lst->content;
 		if (in_base(name[0], "><") != -1)
@@ -43,7 +43,7 @@ static const char	*get_cmd_name(t_list *lst)
 	return (NULL);
 }
 
-int	check_cmd_validity(const char *cmd_name)
+int	check_cmd_validity(char *cmd_name)
 {
 	t_command	dummy_cmd;
 	char		*path;
@@ -62,12 +62,13 @@ int	check_cmd_validity(const char *cmd_name)
 	}
 	cleanup_arr((void **)dummy_cmd.args);
 	free(path);
+	free(cmd_name);
 	return (0);
 }
 
-int	check_dir_validity(const char *path)
+int	check_dir_validity(char *path)
 {
-	DIR		*dir;
+	DIR	*dir;
 
 	dir = opendir(path);
 	if (!dir)
@@ -77,18 +78,18 @@ int	check_dir_validity(const char *path)
 	}
 	closedir(dir);
 	printf("minishell: %s: Is a directory\n", path);
+	free(path);
 	return (IS_DIR);
 }
 
 int	check_path(const char *cmd_part)
 {
-	t_list	*lst;
-	char	*name;
-	char	*name_no_quote;
+	t_list		*lst;
+	char		*name;
+	char		*name_no_quote;
 	const char	*tmp;
 
 	lst = split_line((char *)cmd_part);
-
 	tmp = get_cmd_name(lst);
 	if (!tmp)
 		return (0);
@@ -100,7 +101,6 @@ int	check_path(const char *cmd_part)
 	free(name);
 	if (name_no_quote == NULL)
 		return (MALLOC_ERR);
-	
 	if (ft_strchr(name_no_quote, '/') == NULL || name_no_quote[0] == '.')
 	{
 		return (check_cmd_validity(name_no_quote));

@@ -31,7 +31,6 @@ SRCS = 		main.c				\
 			checker.c			\
 			redir.c				\
 			init.c				\
-			ft_split_1space.c	\
 			lexer.c				\
 			checker_utils.c		\
 			cmd_debug.c			\
@@ -54,7 +53,6 @@ LIB_SRC = 	utils.c				\
 			checker.c			\
 			redir.c				\
 			init.c				\
-			ft_split_1space.c	\
 			lexer.c				\
 			checker_utils.c		\
 			cmd_debug.c			\

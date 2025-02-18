@@ -95,9 +95,17 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
 	cmd->fd_in = 0;
 	cmd->fd_out = 1;
 	if (pipefd[0] != -1)
+	{
+		// if (cmd->fd_in != 0 && cmd->fd_in != 1)
+		// 	close(cmd->fd_out);
 		cmd->fd_in = pipefd[0];
+	}
 	if (pipe(pipefd) != -1 && is_last == 0)
+	{
+		// if (cmd->fd_out != 0 && cmd->fd_out != 1)
+		// 	close(cmd->fd_out);
 		cmd->fd_out = pipefd[1];
+	}
 	// else
 	// 	return (cleanup_arr((void **)cmd->args), 1);
 	cmd->args = get_args(cmd_str);
