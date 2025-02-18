@@ -104,7 +104,7 @@ int	dolars_06( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd_line("\"$HOMEgfehgeuohge\"") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd_line(process_line("\"$HOMEgfehgeuohge\"", environ, &code)) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);

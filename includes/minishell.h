@@ -88,6 +88,7 @@ int		check_cmd_line( const char *process_line );
 // lexer.c
 char	*process_line(const char *cmd_line, char **env, int *code);
 char	toggle_quote(char quote, char c);
+int		is_symbol(char c);
 
 // quotes_processing.c
 t_list	*process_quotes(const char *line);
