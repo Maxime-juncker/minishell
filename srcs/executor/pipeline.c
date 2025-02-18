@@ -35,7 +35,7 @@ static int	run_env_cmd(t_command_table *table, t_command cmd)
 	}
 	if (ft_strncmp(name, "unset", ft_strlen(name)) == 0)
 	{
-		return (unset(table, cmd));
+		return (unset(table->env, cmd.args));
 	}
 	if (ft_strncmp(cmd.args[0], "cd", ft_strlen(name)) == 0)
 	{
