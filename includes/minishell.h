@@ -69,7 +69,7 @@ int		is_builtin(char *name);
 size_t	get_biggest_len(const char *s1, const char *s2);
 char	*find_env_var(char **env, const char *to_find, int *index);
 int		replace_env_var(char **env, char *to_find, const char *replace);
-char	*remove_quotes_pair(const char *s);
+char	*remove_quotes_pair(char *s);
 void	void_signal(int signal);
 int		is_env_cmd(char *name);
 

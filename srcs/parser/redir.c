@@ -74,6 +74,7 @@ static char *get_file_name(char **s)
 	char	quote;
 	char	*file;
 	int		start;
+	char	*temp;
 
 	i = 0;
 	quote = 0;
@@ -89,10 +90,11 @@ static char *get_file_name(char **s)
 			break ;
 		i++;
 	}
-	file = ft_substr((*s), start, i - start);
-	if (file == NULL)
+	temp = ft_substr((*s), start, i - start);
+	if (temp == NULL)
 		return (NULL);
-	file = remove_quotes_pair(file);
+	file = remove_quotes_pair(temp);
+	free(temp);
 	*s += i;
 	return (file);
 }
@@ -125,6 +127,7 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 			i++;
 		}
 	}
+	cleanup_arr((void **)args);
 	handle_fd(cmd, file, c, db_redir);
 }
 

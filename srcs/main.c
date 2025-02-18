@@ -95,7 +95,7 @@ void	new_prompt(t_command_table *table)
 			free(process_cmd);
 			if (tmp == 0)
 				code = run_pipeline(table) % 255;
-			// cleanup_table((t_command_table *)table);
+			cleanup_table((t_command_table *)table);
 		}
 	}
 }

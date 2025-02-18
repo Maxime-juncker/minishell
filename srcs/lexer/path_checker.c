@@ -61,7 +61,6 @@ int	check_cmd_validity(char *cmd_name, char **env)
 		return (NOT_FOUND);
 	}
 	cleanup_arr((void **)dummy_cmd.args);
-	free(path);
 	free(cmd_name);
 	return (0);
 }
@@ -98,7 +97,7 @@ int	check_path(const char *cmd_part, char **env)
 	if (name == NULL)
 		return (NOT_FOUND);
 	name_no_quote = remove_quotes_pair(name);
-	free(name);
+	// free(name);
 	if (name_no_quote == NULL)
 		return (MALLOC_ERR);
 	if (ft_strchr(name_no_quote, '/') == NULL || name_no_quote[0] == '.')

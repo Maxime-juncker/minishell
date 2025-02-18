@@ -20,7 +20,7 @@ void	print_arr(char **arr)
 
 void	void_signal(int signal)
 {
-	(void)signal;	
+	(void)signal;
 }
 
 
@@ -112,7 +112,7 @@ int	replace_env_var(char **env, char *to_find, const char *replace)
 	return (-1);
 }
 
-char	*remove_quotes_pair(const char *s)
+char	*remove_quotes_pair(char *s)
 {
 	char	*tmp;
 	char	*result;

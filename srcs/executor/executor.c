@@ -87,16 +87,11 @@ int	run_command(t_command cmd, const t_command_table *table, int *childs)
 			close_fds(cmd);
 			cleanup_arr((void **)table->env);
 			cleanup_table((t_command_table *)table);
-
 			exit (code);
 		}
-
-		cleanup_table(table);
-
 		if (execve(get_cmd_path(get_paths(table->env), cmd), \
 			cmd.args, table->env) == -1)
 			alert("execve failed");
 	}
-	cleanup_arr(cmd.args);
 	return (close_fds(cmd), pid);
 }

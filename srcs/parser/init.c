@@ -27,6 +27,7 @@ static char	*create_arg(char *str)
 	char	*arg;
 	int		i;
 	int		quote;
+	char	*temp;
 
 	i = 0;
 	quote = 0;
@@ -42,8 +43,9 @@ static char	*create_arg(char *str)
 	if (!arg)
 		return (NULL);
 	ft_strlcpy(arg, str, i + 1);
-	arg = remove_quotes_pair(arg);
-	return (arg);
+	temp = remove_quotes_pair(arg);
+	free(arg);
+	return (temp);
 }
 
 static char **get_args(char *cmd_str)
