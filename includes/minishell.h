@@ -117,7 +117,7 @@ int		pwd(char **env);
 int		export_cmd(t_command_table *table, t_command cmd);
 
 // unset.c
-void	unset_cmd(t_command_table *table, t_command cmd);
+int	unset_cmd(t_command_table *table, t_command cmd);
 char	**unset(char **env, char *arg);
 int	ft_strcmp(char *s1, char *s2);
 
