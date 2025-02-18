@@ -117,9 +117,9 @@ int		pwd(char **env);
 int		export_cmd(t_command_table *table, t_command cmd);
 
 // unset.c
-int	unset_cmd(t_command_table *table, t_command cmd);
-char	**unset(char **env, char *arg);
-int	ft_strcmp(char *s1, char *s2);
+int		unset_cmd(t_command_table *table, t_command cmd);
+void	handle_cmd(t_command_table *table, char *arg);
+int		ft_strcmp(char *s1, char *s2);
 
 // dirs.c
 int		cd_command(const t_command_table *table, const t_command cmd);
