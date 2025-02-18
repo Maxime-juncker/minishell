@@ -50,6 +50,7 @@ int synt_err_31( void );
 int synt_err_32( void );
 int	synt_err_33( void );
 int	synt_err_34( void );
+int	synt_err_35( void );
 
 // dollars
 int	dolars_01( void );

@@ -472,3 +472,18 @@ int	synt_err_34( void )
 	else
 		return (1);
 }
+
+int	synt_err_35( void )
+{
+	const char *exepted_file[]
+	{
+		"minishell: : command not found",
+	};
+
+	Libunit::Redirect_log();
+	check_cmd_line(process_line("\"$HOGNGERbrknie\"", environ, &code));
+	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0 && code == NOT_FOUND)
+		return (0);
+	else
+		return (1);
+}

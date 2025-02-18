@@ -181,6 +181,10 @@ test:
 	$(MAKE) test -C better-libunit/
 	# $(MAKE) $(BIN)/libminishell.a
 
+.PHONY: leaks
+leaks: all
+	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=ignore_readline.supp -s ./bin/minishell
+
 # ---------------------------------------------------------------------------- #
 #                              create directories                              #
 # ---------------------------------------------------------------------------- #

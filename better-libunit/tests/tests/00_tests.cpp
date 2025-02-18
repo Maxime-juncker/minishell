@@ -42,6 +42,7 @@ int	tests_routine( void )
 	routine.AddNewTest(Libunit::Test("syntax", "\"\'\'\"/bin", &synt_err_32));
 	routine.AddNewTest(Libunit::Test("syntax", "\"e\"\' c\'\"o\"\'h\'", &synt_err_33));
 	routine.AddNewTest(Libunit::Test("syntax", "ls>1", &synt_err_34));
+	routine.AddNewTest(Libunit::Test("syntax", "\"$HOGNGERbrknie\"", &synt_err_35));
 
 	routine.AddNewTest(Libunit::Test("DOLLAR", "echo $?", &dolars_01));
 	routine.AddNewTest(Libunit::Test("DOLLAR", "echo $?$?", &dolars_02));
