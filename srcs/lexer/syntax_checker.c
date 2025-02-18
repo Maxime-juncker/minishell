@@ -1,11 +1,14 @@
 #include "minishell.h"
 
+//TODO: ls <<>> file dont trigger synt error 
+//TODO: cat << eof trigger error 
+
 int	count_occ_reverse(const char *str, const char to_find, int i)
 {
 	int	occ;
 
 	occ = 0;
-	while (i >= 0 && str[i] == to_find)
+	while (i >= 0 && is_symbol(str[i]))
 	{
 		occ++;
 		i--;
@@ -72,10 +75,7 @@ static int	check_redir_out(const char *cmd_line, int i)
 			printf("minishell: syntax error near unexpected token `<>\'\n");
 			return (SYNTAX_ERR);
 		}
-		if (error_symb == '|' || error_symb == '>')
-			max_occ = 2;
-		else if (error_symb == '<')
-			max_occ = 3;
+		max_occ = 2;
 		printf("minishell: syntax error near unexpected token `");
 		occ = 0;
 		while (cmd_line[i] == error_symb && occ < max_occ)
@@ -111,8 +111,6 @@ static char *get_file_name(const char *s)
 			break ;
 		i++;
 	}
-	if (i == start)
-		return (NULL);
 	file = ft_substr(s, start, i - start);
 	if (file == NULL)
 		return (NULL);
@@ -124,7 +122,7 @@ static int	check_redir_in(const char *cmd_line, int i)
 {
 	char	*file;
 
-	if (cmd_line[i + 1] == '<')
+	if (cmd_line[i + 1] == '<' || cmd_line[i - 1] == '<' || cmd_line[i + 1] == '>' || cmd_line[i + 1] == ' ' || cmd_line[i + 1] == '\0')
 		return (0);
 	file = get_file_name(cmd_line + i);
 	if (file == NULL)
@@ -155,7 +153,7 @@ static int	check_error(const char *cmd_line, int i)
 	}
 	if (to_find == '<')
 	{
-		code = check_token_error(cmd_line, i, 3, '<');
+		code = check_token_error(cmd_line, i, 2, '<');
 		if (code != 0)
 			return (code);
 		return (check_redir_in(cmd_line, i));

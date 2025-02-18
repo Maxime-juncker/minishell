@@ -20,7 +20,7 @@
 
 typedef struct s_command
 {
-	char	**args; // args[0] = cmd name (ex: ls)
+	char	**args;
 	size_t	n_args;
 
 	int		fd_in;
@@ -66,6 +66,7 @@ int		init_table(char *line, t_command_table *table);
 
 // ft_split_1space.c
 char	**ft_split_1space(const char *s, char c);
+int		is_symbol(char c);
 
 // utils.c
 int		is_builtin(char *name);
