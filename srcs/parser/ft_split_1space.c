@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:20:53 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/10 13:56:49 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/18 12:39:25 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,33 +39,6 @@ static int	ft_count_words(const char *s, char c)
 		}
 	}
 	return (rep);
-}
-
-static char	*ft_strndup(const char *s, char c)
-{
-	const char	*start;
-	char		*res;
-	size_t		i;
-
-	start = s;
-	if (*s != c)
-		while (*s && *s != c)
-			s++;
-	else
-		while (*(s + 1) && *(s + 1) == c)
-			s++;
-	res = malloc(s - start + 1);
-	if (!res)
-		return (NULL);
-	i = 0;
-	while (start != s)
-	{
-		res[i] = *start;
-		i++;
-		start++;
-	}
-	res[i] = 0;
-	return (res);
 }
 
 void	*free_all(char **res)

@@ -61,7 +61,7 @@ int	check_cmd_line( const char *process_line )
 	code = check_syntax(process_line);
 	if (code != 0)
 		return (code);
-	cmd_parts = ft_split_1space(process_line, '|');
+	cmd_parts = ft_split(process_line, '|');
 	if (cmd_parts == NULL)
 		return (MALLOC_ERR);
 	i = 0;

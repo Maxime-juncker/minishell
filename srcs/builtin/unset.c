@@ -18,7 +18,7 @@ static int	get_env_len(char **env, char *arg)
 	return (len);
 }
 
-void free_env(char **env)
+void	free_env(char **env)
 {
 	int	i;
 
