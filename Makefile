@@ -39,6 +39,7 @@ SRCS = 		main.c				\
 			var_processing.c	\
 			syntax_checker.c	\
 			path_checker.c		\
+			paths.c				\
 
 LIB_SRC = 	utils.c				\
 			echo.c				\
@@ -61,6 +62,7 @@ LIB_SRC = 	utils.c				\
 			var_processing.c	\
 			syntax_checker.c	\
 			path_checker.c		\
+			paths.c				\
 
 OBJ := $(SRCS:.c=.o)
 

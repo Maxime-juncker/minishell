@@ -1,71 +1,94 @@
 #include "minishell.h"
 
-static void	cleanup(char **arr)
+/// @brief Run a built-in command
+/// @param cmd The command to run
+/// @param table command table
+/// @return the exit value of the run command, -1 if the command isn't builtin
+static int	run_built_in(const t_command cmd, const t_command_table *table)
 {
-	int	i;
+	size_t	len;
 
-	i = 0;
-	while (arr[i] != NULL)
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
+	len = ft_strlen(cmd.args[0]);
+	if (ft_strncmp(cmd.args[0], "echo", len) == 0)
+		return (echo(&cmd.args[1], cmd.n_args - 1));
+	if (ft_strncmp(cmd.args[0], "env", len) == 0)
+		return (env(*table));
+	if (ft_strncmp(cmd.args[0], "pwd", len) == 0)
+		return (pwd(table->env));
+	return (-1);
 }
 
-int	relative_path(char *path)
+int	run_env_cmd(t_command_table *table, t_command cmd)
 {
-	if (path[0] == '.')
-		return (1);
+	char	*name;
+	int		i;
+
+	name = cmd.args[0];
+	if (ft_strncmp(name, "export", ft_strlen(name)) == 0)
+	{
+		return (export_cmd(table, cmd));
+	}
+	if (ft_strncmp(name, "unset", ft_strlen(name)) == 0)
+	{
+		return (unset_cmd(table, cmd));
+	}
+	if (ft_strncmp(cmd.args[0], "cd", ft_strlen(name)) == 0)
+	{
+		return (cd_command(table, cmd));
+	}
 	return (0);
 }
 
-/// @brief return the full path of a command if it exists
-/// @param paths the env paths variable
-/// @param cmd the command to search
-/// @return the full path of the command if it exists, NULL otherwise
-char	*get_cmd_path(char **paths, t_command cmd)
+void	cleanup_table(t_command_table *table)
 {
-	int		i;
-	char	*cmd_path;
-	
-	if (paths == NULL)
-		return (NULL);
-	if (is_builtin(cmd.args[0]))
-	{
-		cleanup_arr((void **)paths);
-		return (ft_strdup(cmd.args[0]));
-	}
-	if (relative_path(cmd.args[0]))
-	{
-		cleanup_arr((void **)paths);
-		if (access(cmd.args[0], F_OK) == 0)
-			return (ft_strdup(cmd.args[0]));
-		return (NULL);
-	}
+	size_t	i;
+
 	i = 0;
-	while (paths[i] != NULL)
+	while (i < table->n_commands)
 	{
-		cmd_path = ft_strjoin("/", cmd.args[0]);
-		if (cmd_path == NULL)
-		{
-			cleanup(paths);
-			return (NULL);
-		}
-		cmd_path = ft_strjoin_free(paths[i], cmd_path, FREE2);
-		if (cmd_path == NULL)
-		{
-			cleanup(paths);
-			return (NULL);
-		}
-		if (access(cmd_path, F_OK) == 0)
-		{
-			cleanup(paths);
-			return (cmd_path);
-		}
-		free(cmd_path);
+		cleanup_arr((void **)table->commands[i].args);
 		i++;
 	}
-	cleanup(paths);
-	return (NULL);
+	free(table->commands);
+}
+
+void	close_fds(t_command cmd)
+{
+	if (cmd.fd_out != STDOUT_FILENO)
+		close(cmd.fd_out);
+	if (cmd.fd_in != STDIN_FILENO)
+		close(cmd.fd_in);
+}
+
+/// @brief run a command
+/// @param cmd the command to run
+/// @param table command table
+/// @return child process pid
+int	run_command(t_command cmd, const t_command_table *table)
+{
+	int	pid;
+	int	code;
+
+	show_cmd(cmd);
+	cmd.args[cmd.n_args] = NULL;
+	pid = fork();
+	if (pid == -1)
+		return (-1);
+	if (pid == 0)
+	{
+		setup_redirection(cmd);
+		if (cmd.fd_out != STDOUT_FILENO)
+			close(cmd.fd_out);
+		if (is_builtin(cmd.args[0]) == 1)
+		{
+			code = run_built_in(cmd, table);
+			close_fds(cmd);
+			cleanup_table((t_command_table *)table);
+			exit (code);
+		}
+		if (execve(get_cmd_path(get_paths(table->env), cmd), \
+			cmd.args, table->env) == -1)
+			alert("execve failed");
+	}
+	return (close_fds(cmd), pid);
 }

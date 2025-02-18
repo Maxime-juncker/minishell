@@ -10,10 +10,10 @@ size_t	arrlen(void **arr)
 	return (i);
 }
 
-char **duplicate_env(char **old_env)
+char	**duplicate_env(char **old_env)
 {
 	char	**new_env;
-	int 	i;
+	int		i;
 
 	new_env = malloc(sizeof(char *) * (arrlen((void **)old_env) + 1));
 	if (new_env == NULL)

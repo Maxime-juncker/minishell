@@ -5,12 +5,26 @@ int	count_occ_reverse(const char *str, const char to_find, int i)
 	int	occ;
 
 	occ = 0;
-	while (i >= 0 && (str[i] == to_find || str[i] == ' '))
+	while (i >= 0 && str[i] == to_find)
 	{
 		occ++;
 		i--;
+		while (i >= 0 && str[i] == ' ')
+			i--;
 	}
 	return (occ);
+}
+
+static int	new_line_error(const char *str, const char last)
+{
+	if (last == '|')
+		return (token_error('|', *(str - 2)));
+	if (last == '>' || last == '<')
+	{
+		printf("minishell: syntax error near unexpected token `newline\'\n");
+		return (SYNTAX_ERR);
+	}
+	return (0);
 }
 
 int	check_token_error(const char *cmd_line, int i, int max_occ, char to_find)
@@ -52,7 +66,6 @@ static int	check_redir_out(const char *cmd_line, int i)
 		}
 		if (cmd_line[i] != '|' && cmd_line[i] != '<' && cmd_line[i] != '>')
 			return (0);
-
 		error_symb = cmd_line[i];
 		if (error_symb == '<' && cmd_line[i + 1] == '>')
 		{
@@ -77,6 +90,56 @@ static int	check_redir_out(const char *cmd_line, int i)
 	return (0);
 }
 
+static char *get_file_name(const char *s)
+{
+	int		i;
+	char	quote;
+	char	*file;
+	int		start;
+
+	i = 0;
+	quote = 0;
+	start = 0;
+	while (s[start] == ' ' || s[start] == '>' || s[start] == '<')
+		start++;
+	i = start;
+	while (s[i])
+	{
+		if (s[i] == '\'' || s[i] == '\"')
+			quote = toggle_quote(quote, s[i]);
+		if (s[i] == ' ' && !quote)
+			break ;
+		i++;
+	}
+	if (i == start)
+		return (NULL);
+	file = ft_substr(s, start, i - start);
+	if (file == NULL)
+		return (NULL);
+	file = remove_quotes_pair(file);
+	return (file);
+}
+
+static int	check_redir_in(const char *cmd_line, int i)
+{
+	char	*file;
+
+	if (cmd_line[i + 1] == '<')
+		return (0);
+	file = get_file_name(cmd_line + i);
+	if (file == NULL)
+	{
+		return (new_line_error(cmd_line + i, '<'));
+	}
+
+	if (access(file, F_OK) == -1)
+	{
+		printf("minishell: %s: No such file or directory\n", file);
+		return (NOT_FOUND);
+	}
+	return (0);
+}
+
 static int	check_error(const char *cmd_line, int i)
 {
 	char	to_find;
@@ -88,26 +151,17 @@ static int	check_error(const char *cmd_line, int i)
 		code = check_token_error(cmd_line, i, 2, '>');
 		if (code != 0)
 			return (code);
-		code = check_redir_out(cmd_line, i);
-		if (code != 0)
-			return (code);
+		return (check_redir_out(cmd_line, i));
 	}
 	if (to_find == '<')
-		return (check_token_error(cmd_line, i, 3, '<'));
+	{
+		code = check_token_error(cmd_line, i, 3, '<');
+		if (code != 0)
+			return (code);
+		return (check_redir_in(cmd_line, i));
+	}
 	if (to_find == '|')
 		return (check_token_error(cmd_line, i, 2, '|'));
-	return (0);
-}
-
-static int	new_line_error(const char *str, const char last)
-{
-	if (last == '|')
-		return (token_error('|', *(str - 2)));
-	if (last == '>' || last == '<')
-	{
-		printf("minishell: syntax error near unexpected token `newline\'\n");
-		return (SYNTAX_ERR);
-	}
 	return (0);
 }
 
@@ -116,6 +170,7 @@ int	check_syntax(const char *cmd_line)
 	int		i;
 	char	last;
 	char	quote;
+	int		code;
 
 	i = 0;
 	last = 0;
@@ -128,8 +183,11 @@ int	check_syntax(const char *cmd_line)
 	{
 		quote = toggle_quote(cmd_line[i], quote);
 		if (!quote && (cmd_line[i] == '<' || cmd_line[i] == '>' || cmd_line[i] == '|'))
-			if (check_error(cmd_line, i) == SYNTAX_ERR)
-				return (SYNTAX_ERR);
+		{
+			code = check_error(cmd_line, i);
+			if (code != 0)
+				return (code);
+		}
 		if (!quote && cmd_line[i] != ' ')
 			last = cmd_line[i];
 		i++;
