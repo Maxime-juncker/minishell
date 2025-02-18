@@ -85,7 +85,7 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 	ft_lstclear(&quotes_lst, free);
 	ft_lstclear(&var_lst, free);
 
-	*code = check_cmd_line(process_str);
+	*code = check_cmd_line(process_str, env);
 	return (process_str);
 }
 
@@ -106,7 +106,7 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 	ft_lstclear(&var_lst, free);
 
 	if (code)
-		*code = check_cmd_line(process_str);
+		*code = check_cmd_line(process_str, env);
 	return (process_str);
 }
 

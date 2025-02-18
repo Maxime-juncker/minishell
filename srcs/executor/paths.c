@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include <sys/stat.h>
 
 static void	cleanup(char **arr)
 {
@@ -24,6 +25,7 @@ static char	*get_path(char **paths, t_command cmd)
 {
 	int		i;
 	char	*cmd_path;
+	struct stat	st;
 
 	i = -1;
 	while (paths[++i] != NULL)
@@ -37,6 +39,9 @@ static char	*get_path(char **paths, t_command cmd)
 		if (access(cmd_path, F_OK) == 0)
 		{
 			cleanup(paths);
+			stat(cmd.args[0], &st);
+			if (S_ISDIR(st.st_mode))
+				return (NULL);
 			return (cmd_path);
 		}
 		free(cmd_path);
@@ -53,6 +58,7 @@ char	*get_cmd_path(char **paths, t_command cmd)
 {
 	int		i;
 	char	*cmd_path;
+	struct stat	st;
 
 	if (paths == NULL || cmd.args[0][0] == '\0')
 		return (NULL);
@@ -65,7 +71,12 @@ char	*get_cmd_path(char **paths, t_command cmd)
 	{
 		cleanup_arr((void **)paths);
 		if (access(cmd.args[0], F_OK) == 0)
+		{
+			stat(cmd.args[0], &st);
+			if (S_ISDIR(st.st_mode))
+				return (NULL);
 			return (ft_strdup(cmd.args[0]));
+		}
 		return (NULL);
 	}
 	return (get_path(paths, cmd));
