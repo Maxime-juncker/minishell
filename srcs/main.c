@@ -7,11 +7,6 @@
 #include <sys/wait.h>
 #include <errno.h>
 
-void	print_pid(void)
-{
-	printf("%s%d: %s", GRAY, getpid(), RESET);
-}
-
 char	*get_folder( char **env )
 {
 	char	*folder;
@@ -24,7 +19,6 @@ char	*get_folder( char **env )
 			folder++;
 		}
 	}
-
 	folder = ft_strjoin(folder, ":");
 	return (folder);
 }
@@ -45,12 +39,13 @@ char	*new_prompt_txt( char **env )
 
 void	new_prompt(t_command_table *table)
 {
-	char	*line;
-	char	*process_cmd;
+	char		*line;
+	char		*process_cmd;
 	static int	code = 0;
-	int	tmp;
-	char *prompt_char = new_prompt_txt(table->env);
+	int			tmp;
+	char		*prompt_char;
 
+	prompt_char = new_prompt_txt(table->env);
 	g_signal_received = 0;
 	line = readline(prompt_char);
 	if (g_signal_received)
@@ -101,7 +96,7 @@ void	new_prompt(t_command_table *table)
 	}
 }
 
-void check_piped_execution(void)
+void	check_piped_execution(void)
 {
 	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
 	{
@@ -123,18 +118,19 @@ int	main(void)
 	t_command_table	table;
 	char			*process_cmd;
 
-	rl_event_hook = check_interrupt;
 	check_piped_execution();
+	rl_event_hook = check_interrupt;
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, SIG_IGN);
 	table.env = duplicate_env(__environ);
-	table.exp = duplicate_env(__environ);
-	if (table.env == NULL || table.exp == NULL)
+	if (table.env == NULL)
 		return (EXIT_FAILURE);
+	table.exp = duplicate_env(__environ);
+	if (table.exp == NULL)
+		return (cleanup_arr((void **)table.env), EXIT_FAILURE);
 	while (1)
 	{
 		new_prompt(&table);
 	}
 	exit (0);
 }
-

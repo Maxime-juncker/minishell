@@ -64,10 +64,6 @@ void	redir(t_command *cmd, char *cmd_str, int is_last, int i);
 // init.c
 int		init_table(char *line, t_command_table *table);
 
-// ft_split_1space.c
-char	**ft_split_1space(const char *s, char c);
-int		is_symbol(char c);
-
 // utils.c
 int		is_builtin(char *name);
 size_t	get_biggest_len(const char *s1, const char *s2);
