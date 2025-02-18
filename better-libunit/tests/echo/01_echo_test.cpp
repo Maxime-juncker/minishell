@@ -56,7 +56,7 @@ int	echo_04( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd_line("echoHola") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd_line("echoHola", environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -70,7 +70,7 @@ int	echo_05( void )
 	};
 
 	Libunit::Redirect_log();
-	if (check_cmd_line("echo-nHola") == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd_line("echo-nHola", environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
