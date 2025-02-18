@@ -28,13 +28,8 @@ static char	*create_arg(char *str)
 	int		i;
 	int	quote;
 
-	if (str[i] == '\'' || str[i] == '\"')
-		quote = str[i];
-	if (str[1] == quote && quote != 0)
-		return (ft_strdup(""));
-
-	quote = 0;
 	i = 0;
+	quote = 0;
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '\"')

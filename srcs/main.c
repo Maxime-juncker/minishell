@@ -58,11 +58,12 @@ void	new_prompt(t_command_table *table)
 		if (g_signal_received == SIGINT)
 			code = 130;
 		g_signal_received = 0;
-		return;
+		return ;
 	}
 	if (!line || (ft_strlen(line) == 4 && !ft_strncmp(line, "exit", 4)))
 	{
 		cleanup_arr((void **)table->env);
+		cleanup_arr((void **)table->exp);
 		printf("exit\n");
 		exit(EXIT_SUCCESS);
 	}
@@ -86,6 +87,7 @@ void	new_prompt(t_command_table *table)
 		else if (code == MALLOC_ERR)
 		{
 			cleanup_arr((void **)table->env);
+			cleanup_arr((void **)table->exp);
 			error("malloc failed");
 			exit(EXIT_FAILURE);
 		}
