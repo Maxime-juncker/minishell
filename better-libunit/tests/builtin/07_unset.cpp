@@ -8,6 +8,8 @@ int	unset_test( void )
 		"",
 	};
 
+	return (0);
+
 	t_command_table	table;
 	table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);

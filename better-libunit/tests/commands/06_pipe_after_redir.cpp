@@ -7,9 +7,10 @@ int	pipe_after_redir( void )
 		"0",
 	};
 	t_command_table	table;
-	table.env = environ;
-	init_table((char *)"echo test | wc -c > 1 | wc -l", &table);
+	table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);
 
+	init_table(ft_strdup("echo test | wc -c > 1 | wc -l"), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 

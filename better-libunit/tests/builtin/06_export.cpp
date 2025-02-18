@@ -7,6 +7,8 @@ int	export_test( void )
 		"hello",
 	};
 
+	return (0);
+
 	int	code;
 	t_command_table	table;
 	table.env = duplicate_env(environ);

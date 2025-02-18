@@ -3,7 +3,8 @@
 int	create_mulitple_pipes( void )
 {
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table((char *)"sleep 1 | echo test | wc -c | wc -l", &table);
 	Libunit::Redirect_log();

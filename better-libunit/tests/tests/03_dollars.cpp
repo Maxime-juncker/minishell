@@ -10,7 +10,8 @@ int	dolars_01( void )
 	};
 
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table(process_line("echo $?", environ, &code), &table);
 	Libunit::Redirect_log();
@@ -30,7 +31,8 @@ int	dolars_02( void )
 	};
 
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table(process_line("echo $?$?", environ, &code), &table);
 	Libunit::Redirect_log();
@@ -50,7 +52,8 @@ int	dolars_03( void )
 	};
 
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table(process_line("echo ?$DESKTOP_SESSION", environ, &code), &table);
 	Libunit::Redirect_log();
@@ -84,7 +87,8 @@ int	dolars_05( void )
 	};
 
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table(process_line("echo $HOMEgfehgeuohge", environ, &code), &table);
 	Libunit::Redirect_log();

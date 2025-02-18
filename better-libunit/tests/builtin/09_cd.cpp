@@ -9,7 +9,8 @@ int	cd_relative( void )
 	char	buffer[100];
 
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 	init_table(ft_strdup("cd .."), &table);
 
 	getcwd(buffer, 100);
@@ -31,7 +32,8 @@ int	cd_absolute( void )
 	std::string	pwd;
 
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 	init_table((char*)"cd /bin", &table);
 
     run_pipeline(&table);
@@ -47,7 +49,8 @@ int	cd_nothing( void )
 	std::string	pwd;
 
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 	init_table((char*)"cd", &table);
 
     run_pipeline(&table);

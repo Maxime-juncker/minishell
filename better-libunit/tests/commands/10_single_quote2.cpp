@@ -5,7 +5,8 @@ int	single_quote_hard( void )
 	int	code;
 
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table(process_line("echo \'\"$HOME\"\'", environ, &code), &table);
 	Libunit::Redirect_log();

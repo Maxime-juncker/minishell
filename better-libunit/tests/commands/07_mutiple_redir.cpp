@@ -4,7 +4,8 @@
 int	mutiple_redir( void )
 {
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table((char *)"echo test > 1 > 2 > 3 > 4", &table);
 	run_pipeline(&table);

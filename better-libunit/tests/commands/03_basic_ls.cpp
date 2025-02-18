@@ -4,7 +4,8 @@
 int	ls_basic( void )
 {
 	t_command_table table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table((char *)"ls", &table);
 

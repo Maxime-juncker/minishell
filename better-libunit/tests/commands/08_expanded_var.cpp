@@ -9,7 +9,8 @@ int	expanded_var( void )
 	};
 	int	code;
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	Libunit::Redirect_log();
 	init_table(process_line("echo $DESKTOP_SESSION", environ, &code), &table);

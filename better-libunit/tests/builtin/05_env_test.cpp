@@ -3,7 +3,8 @@
 int	env_test( void )
 {
 	t_command_table table;
-	table.env = environ;
+	table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	Libunit::Redirect_log();
 	env(table);

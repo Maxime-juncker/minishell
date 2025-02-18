@@ -3,7 +3,8 @@
 int	input_new_line( void )
 {
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table((char *)"\n", &table);
 
@@ -18,7 +19,8 @@ int	input_new_line( void )
 int	input_tabs( void )
 {
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table((char *)"\t", &table);
 
@@ -33,7 +35,8 @@ int	input_tabs( void )
 int	input_exclamation( void )
 {
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table((char *)"!", &table);
 
@@ -48,7 +51,8 @@ int	input_exclamation( void )
 int	input_colon( void )
 {
 	t_command_table	table;
-	table.env = environ;
+		table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);;
 
 	init_table((char *)":", &table);
 
