@@ -9,5 +9,4 @@ int	main( void )
 		printf("I'm still alive\n");
 		usleep(100 * 1000);
 	}
-	
 }

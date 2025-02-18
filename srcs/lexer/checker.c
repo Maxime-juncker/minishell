@@ -73,5 +73,6 @@ int	check_cmd_line( const char *process_line )
 			code = tmp;
 		i++;
 	}
+	cleanup_arr((void **)cmd_parts);
 	return (code);
 }
