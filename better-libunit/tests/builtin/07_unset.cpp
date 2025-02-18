@@ -13,10 +13,10 @@ int	unset_test( void )
 	table.exp = duplicate_env(environ);
 
 	// set a env var
-	init_table((char *)"export TEST=hello", &table, 0);
+	init_table((char *)"export TEST=hello", &table);
 	run_pipeline(&table);
 
-	init_table((char *)"unset TEST", &table, 0);
+	init_table((char *)"unset TEST", &table);
 
 	Libunit::Redirect_log();
 	run_pipeline(&table);

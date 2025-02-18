@@ -6,7 +6,7 @@ int	mutiple_redir( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table((char *)"echo test > 1 > 2 > 3 > 4", &table, 0);
+	init_table((char *)"echo test > 1 > 2 > 3 > 4", &table);
 	run_pipeline(&table);
 	if (open("4", O_RDONLY, 0777) != -1)
 		return (0);

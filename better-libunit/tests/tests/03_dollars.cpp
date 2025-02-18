@@ -1,5 +1,7 @@
 #include "tests.hpp"
 
+static int code;
+
 int	dolars_01( void )
 {
 	const char *exepted_file[]
@@ -10,7 +12,7 @@ int	dolars_01( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo $?", environ, NULL), &table, 0);
+	init_table(process_line("echo $?", environ, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -30,7 +32,7 @@ int	dolars_02( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo $?$?", environ, NULL), &table, 0);
+	init_table(process_line("echo $?$?", environ, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -50,7 +52,7 @@ int	dolars_03( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo ?$DESKTOP_SESSION", environ, NULL), &table, 0);
+	init_table(process_line("echo ?$DESKTOP_SESSION", environ, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -84,7 +86,7 @@ int	dolars_05( void )
 	t_command_table	table;
 	table.env = environ;
 
-	init_table(process_line("echo $HOMEgfehgeuohge", environ, NULL), &table, 0);
+	init_table(process_line("echo $HOMEgfehgeuohge", environ, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -124,7 +126,7 @@ int	dolars_07( void )
 
 int	dolars_08( void )
 {
-	char *line = process_line("$DONTEXIST", environ, NULL);
+	char *line = process_line("$DONTEXIST", environ, &code);
 	if (line == NULL)
 		return (0);
 	else
@@ -133,7 +135,7 @@ int	dolars_08( void )
 
 int	dolars_09( void )
 {
-	char *line = process_line("$DONTEXIST$VAR", environ, NULL);
+	char *line = process_line("$DONTEXIST$VAR", environ, &code);
 	if (line == NULL)
 		return (0);
 	else

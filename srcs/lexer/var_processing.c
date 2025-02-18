@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-static char	*handle_dollar(char **str, int last_cmd)
+static char	*handle_dollar(char **str, int last_code)
 {
 	size_t	j;
 	char	*var_name;
 	char	*var_value;
 
 	if (**str == '?')
-		return ((*str)++, ft_itoa(last_cmd));
+		return ((*str)++, ft_itoa(last_code));
 	else if (**str == '0')
 		return ((*str)++, ft_strdup("minishell"));
 	else if (ft_isdigit(**str))
@@ -29,7 +29,7 @@ static char	*handle_dollar(char **str, int last_cmd)
 	return (ft_strdup("$"));
 }
 
-static char	*process_var(char *str, char **env)
+static char	*process_var(char *str, char **env, int last_code)
 {
 	char	*result;
 
@@ -39,7 +39,7 @@ static char	*process_var(char *str, char **env)
 		if (*str == '$')
 		{
 			str++;
-			result = ft_strjoin_free(result, handle_dollar(&str, 0),
+			result = ft_strjoin_free(result, handle_dollar(&str, last_code),
 					FREE1 | FREE2);
 		}
 		else
@@ -53,7 +53,7 @@ static char	*process_var(char *str, char **env)
 	return (result);
 }
 
-t_list	*process_expanded_vars(const t_list *lst, char **env)
+t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code)
 {
 	t_list	*process_lst;
 	char	*content;
@@ -67,7 +67,7 @@ t_list	*process_expanded_vars(const t_list *lst, char **env)
 		if (str_content[0] == '\'')
 			content = ft_strdup(str_content);
 		else
-			content = process_var(str_content, env);
+			content = process_var(str_content, env, last_code);
 		// if (!(str_content[0] == str_content[1]
 		// 		&& (str_content[0] == '\'' || str_content[0] == '\"')))
 		// {

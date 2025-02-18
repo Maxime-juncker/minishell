@@ -112,7 +112,7 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
 	return (0);
 }
 
-int	init_table(char *line, t_command_table *table, int last_cmd)
+int	init_table(char *line, t_command_table *table)
 {
 	char	**commands;
 	size_t	i;

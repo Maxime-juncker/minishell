@@ -51,6 +51,17 @@ int	is_builtin(char *name)
 	return (0);
 }
 
+int	is_env_cmd(char *name)
+{
+	if (ft_strncmp(name, "export", get_biggest_len(name, "export")) == 0)
+		return (1);
+	if (ft_strncmp(name, "unset", get_biggest_len(name, "unset")) == 0)
+		return (1);
+	if (ft_strncmp(name, "cd", get_biggest_len(name, "cd")) == 0)
+		return (1);
+	return (0);
+}
+
 /// @brief find an env variable
 /// @param env the env variable
 /// @param to_find var to find

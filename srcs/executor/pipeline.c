@@ -31,18 +31,15 @@ static int	run_env_cmd(t_command_table *table, t_command cmd)
 	name = cmd.args[0];
 	if (ft_strncmp(name, "export", ft_strlen(name)) == 0)
 	{
-		export_cmd(table, cmd);
-		return (1);
+		return (export_cmd(table, cmd));
 	}
 	if (ft_strncmp(name, "unset", ft_strlen(name)) == 0)
 	{
-		unset_cmd(table, cmd);
-		return (1);
+		return (unset(table, cmd));
 	}
 	if (ft_strncmp(cmd.args[0], "cd", ft_strlen(name)) == 0)
 	{
-		cd_command(table, cmd);
-		return (1);
+		return (cd_command(table, cmd));
 	}
 	return (0);
 }
@@ -123,8 +120,10 @@ int	run_pipeline(t_command_table *table)
 			i++;
 			continue ;
 		}
-		if (run_env_cmd(table, table->commands[i]))
+		if (is_env_cmd(table->commands[i].args[0]))
 		{
+			show_cmd(table->commands[i]);
+			code = run_env_cmd(table, table->commands[i]);
 			if (table->commands[i].fd_out != STDOUT_FILENO)
 				close(table->commands[i].fd_out);
 			if (table->commands[i].fd_in != STDIN_FILENO)
@@ -136,6 +135,8 @@ int	run_pipeline(t_command_table *table)
 		i++;
 	}
 
+	// if (childs[0] == 0) // no child process created
+	// 	return (code);
 	g_signal_received = 0;
 	while (1)
 	{
@@ -144,6 +145,8 @@ int	run_pipeline(t_command_table *table)
 		{
 			if (g_signal_received) // wait interupted by sign
 			{
+				if (g_signal_received == SIGINT)
+					code = 130;
 				i = 0;
 				while (i < table->n_commands)
 				{
