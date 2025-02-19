@@ -170,5 +170,6 @@ int		is_builtin(char *name);
 void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);
 void	new_prompt(t_command_table *table);
+int		check_interrupt(void);
 
 #endif

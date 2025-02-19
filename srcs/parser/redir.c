@@ -54,6 +54,33 @@ static char	*get_file_name(char **s)
 	return (file);
 }
 
+// static char	*get_file_name(char **s)
+// {
+// 	char	quote;
+// 	char	*file;
+// 	char	*start;
+// 	char	*temp;
+
+// 	quote = 0;
+// 	while (**s == ' ' || **s == '>' || **s == '<')
+// 		(*s)++;
+// 	start = *s;
+// 	while (**s)
+// 	{
+// 		if (**s == '\'' || **s == '\"')
+// 			quote = toggle_quote(quote, **s);
+// 		if (**s == ' ' && !quote)
+// 			break ;
+// 		(*s)++;
+// 	}
+// 	temp = ft_substr(start, 0, *s - start);
+// 	if (!temp)
+// 		return (NULL);
+// 	file = remove_quotes_pair(temp);
+// 	free(temp);
+// 	return (file);
+// }
+
 static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 {
 	char	*file;
@@ -65,8 +92,6 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 	file = get_file_name(command);
 	if (!file)
 		return ;
-	while (command && **command == ' ')
-		(*command)++;
 	start = *command;
 	while (**command && **command != '>' && **command != '<')
 		(*command)++;
@@ -75,16 +100,11 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 	free(temp);
 	if (!args)
 		return ;
-	if (args[0])
+	i = 0;
+	while (args[i])
 	{
-		i = 0;
-		while (args[i])
-		{
-			cmd->args[cmd->n_args] = ft_strdup(args[i]);
-			free(args[i]);
-			cmd->n_args++;
-			i++;
-		}
+		cmd->args[cmd->n_args++] = ft_strdup(args[i]);
+		free(args[i++]);
 	}
 	free(args);
 	handle_fd(cmd, file, c, db_redir);
