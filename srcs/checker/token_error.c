@@ -1,0 +1,37 @@
+#include "minishell.h"
+
+static int	count_occ_reverse(const char *str, const char to_find, int i)
+{
+	int	occ;
+
+	occ = 0;
+	while (i >= 0 && is_symbol(str[i]))
+	{
+		occ++;
+		i--;
+		while (i >= 0 && str[i] == ' ')
+			i--;
+	}
+	return (occ);
+}
+
+int	check_token_error(const char *cmd_line, int i, int max_occ, char to_find)
+{
+	int	occ;
+
+	occ = count_occ_reverse(cmd_line, to_find, i);
+	if (occ > max_occ)
+	{
+		printf("minishell: syntax error near unexpected token `");
+		occ = 0;
+		while (cmd_line[i] == to_find && occ < max_occ)
+		{
+			printf("%c", to_find);
+			i++;
+			occ++;
+		}
+		printf("\'\n");
+		return (SYNTAX_ERR);
+	}
+	return (0);
+}

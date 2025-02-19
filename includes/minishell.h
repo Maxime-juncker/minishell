@@ -95,11 +95,12 @@ t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
 
 // syntax_checker.c
 int		check_syntax(const char *cmd_line);
+int		new_line_error(const char *str, const char last);
 
 // path_checker.c
 int		check_cmd_path(const char *cmd);
 int		check_dir_validity(char **path);
-int		check_cmd_validity(char *cmd_part, char **env);
+int		check_cmd_validity(char **cmd_part, char **env);
 
 // split_line.c
 t_list	*split_line(char *line);
@@ -110,6 +111,18 @@ int		is_symbol(char c);
 
 // join_lst.c
 char	*join_lst(t_list *lst);
+
+// quote_utils.c
+size_t	count_space(const char *str);
+size_t	get_str_len(const char *str);
+
+// redir_checker.c
+int		check_redir_in(const char *cmd_line, int i);
+int		check_redir_out(const char *cmd_line, int i);
+
+// token_error.c
+int		check_token_error(const char *cmd_line,
+			int i, int max_occ, char to_find);
 
 /* ------------------------------ built-in cmd ------------------------------ */
 // echo.c

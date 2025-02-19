@@ -42,25 +42,26 @@ static const char	*get_cmd_name(t_list *lst)
 	return (NULL);
 }
 
-int	check_cmd_validity(char *cmd_name, char **env)
+int	check_cmd_validity(char **cmd_name, char **env)
 {
 	t_command	dummy_cmd;
 	char		*path;
 
-	if (create_dummy_cmd(cmd_name, &dummy_cmd) == MALLOC_ERR)
+	if (create_dummy_cmd(*cmd_name, &dummy_cmd) == MALLOC_ERR)
 		return (MALLOC_ERR);
 	path = get_cmd_path(get_paths(env), dummy_cmd);
 	if (path == NULL)
 	{
 		if (relative_path(dummy_cmd.args[0]))
-			printf("minishell: %s: No such file or directory\n", cmd_name);
+			return (check_dir_validity(cmd_name));
 		else
-			printf("minishell: %s: command not found\n", cmd_name);
+			printf("minishell: %s: command not found\n", *cmd_name);
 		cleanup_arr((void **)dummy_cmd.args);
+		free(*cmd_name);
 		return (NOT_FOUND);
 	}
 	cleanup_arr((void **)dummy_cmd.args);
-	free(cmd_name);
+	free(*cmd_name);
 	free(path);
 	return (0);
 }
@@ -102,43 +103,7 @@ int	check_path(const char *cmd_part, char **env)
 		return (MALLOC_ERR);
 	if (ft_strchr(name_no_quote, '/') == NULL || name_no_quote[0] == '.')
 	{
-		return (check_cmd_validity(name_no_quote, env));
+		return (check_cmd_validity(&name_no_quote, env));
 	}
 	return (check_dir_validity(&name_no_quote));
 }
-
-#if OLD
-
-int	check_cmd_path(const char *cmd)
-{
-	int			i;
-	t_command	cmd_tmp;
-	char		*path;
-
-	i = 0;
-	while (cmd[i] && in_base(cmd[i], "><") == -1 && cmd[i] != ' ')
-	{
-		i++;
-	}
-	cmd_tmp.args = malloc(2 * sizeof(char *));
-	if (!cmd_tmp.args)
-		return (MALLOC_ERR);
-	cmd_tmp.args[0] = malloc(i + 1);
-	cmd_tmp.args[1] = NULL;
-	if (cmd_tmp.args[0] == NULL)
-		return (MALLOC_ERR);
-	ft_strlcpy(cmd_tmp.args[0], cmd, i + 1);
-	path = get_cmd_path(get_paths(__environ), cmd_tmp);
-	if (path == NULL)
-	{
-		printf("minishell: %s: command not found\n", cmd_tmp.args[0]);
-		cleanup_arr((void **)cmd_tmp.args);
-		free(path);
-		return (NOT_FOUND);
-	}
-	free(path);
-	cleanup_arr((void **)cmd_tmp.args);
-	return (0);
-}
-
-#endif

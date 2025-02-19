@@ -12,7 +12,7 @@ OBJ_D = obj/
 BIN_D = bin/
 INCLUDES_D = -Iincludes/ -Ilibft/includes/ -I/usr/include/readline/
 
-VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser
+VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser:srcs/checker
 
 # ---------------------------------------------------------------------------- #
 #                                  srcs / objs                                 #
@@ -42,6 +42,9 @@ SRCS = 		main.c				\
 			split_line.c		\
 			lexer_utils.c		\
 			join_lst.c			\
+			quote_utils.c		\
+			redir_checker.c		\
+			token_error.c		\
 
 LIB_SRC = 	utils.c				\
 			echo.c				\
@@ -67,6 +70,9 @@ LIB_SRC = 	utils.c				\
 			split_line.c		\
 			lexer_utils.c		\
 			join_lst.c			\
+			quote_utils.c		\
+			redir_checker.c		\
+			token_error.c		\
 
 OBJ := $(SRCS:.c=.o)
 

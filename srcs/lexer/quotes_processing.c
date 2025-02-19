@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-static size_t	get_str_len(const char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] && !(str[i] == '\'' || str[i] == '\"'))
-		i++;
-	return (i);
-}
-
 char	*remove_quotes(const char *line)
 {
 	char	*new_line;
@@ -62,16 +52,6 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	return (0);
 }
 
-static size_t	count_space(const char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] == ' ')
-		i++;
-	return (i);
-}
-
 static char	*remove_spaces(char *str)
 {
 	char	*buff;
@@ -97,10 +77,8 @@ static char	*remove_spaces(char *str)
 		i++;
 		str++;
 	}
-	buff[i] = '\0';
 	new_str = ft_strdup(buff);
-	free(buff);
-	return (new_str);
+	return (free(buff), new_str);
 }
 
 static int	add_str(t_list **lst, const char *line, size_t *i)
@@ -146,18 +124,12 @@ t_list	*process_quotes(const char *line)
 		if (line[i] == '\'' || line[i] == '\"')
 		{
 			if (add_quotes(&lst, &line[i], &i) == MALLOC_ERR)
-			{
-				ft_lstclear(&lst, free);
-				return (NULL);
-			}
+				return (ft_lstclear(&lst, free), NULL);
 		}
 		else
 		{
 			if (add_str(&lst, line, &i) == MALLOC_ERR)
-			{
-				ft_lstclear(&lst, free);
-				return (NULL);
-			}
+				return (ft_lstclear(&lst, free), NULL);
 		}
 	}
 	return (lst);

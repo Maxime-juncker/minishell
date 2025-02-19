@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static int skip_spaces( char content_c, char *str_ref, char quote, int len )
+static int	skip_spaces( char content_c, char *str_ref, char quote, int len )
 {
 	if (content_c == ' ' && !str_ref)
 	{
@@ -14,29 +14,28 @@ static int skip_spaces( char content_c, char *str_ref, char quote, int len )
 	return (0);
 }
 
-static void join_loop(char *content, char **str_ref)
+static void	join_loop(char *content, char **str_ref, int *len)
 {
-	int len;
-	int i;
-	char quote;
+	int		i;
+	char	quote;
 
 	i = 0;
-	quote = 0;
-	len = 0;
 	while (content[i])
 	{
-		while (skip_spaces(content[i], *str_ref, quote, len))
-			i++;
 		quote = toggle_quote(content[i], quote);
-		if ((*str_ref && !is_symbol((*str_ref)[len - 1]) && (*str_ref)[len - 1] != ' ' && is_symbol(content[i])) ||
-			(*str_ref && is_symbol((*str_ref)[len - 1]) && content[i] != ' ' && !is_symbol(content[i])))
+		while (skip_spaces(content[i], *str_ref, quote, *len))
+			i++;
+		if ((*str_ref && !is_symbol((*str_ref)[*len - 1])
+			&& (*str_ref)[*len - 1] != ' ' && is_symbol(content[i]))
+			|| (*str_ref && is_symbol((*str_ref)[*len - 1])
+			&& content[i] != ' ' && !is_symbol(content[i])))
 		{
 			*str_ref = ft_charjoin(*str_ref, ' ');
-			len++;
+			(*len)++;
 			continue ;
 		}
 		*str_ref = ft_charjoin(*str_ref, content[i]);
-		len++;
+		(*len)++;
 		i++;
 	}
 }
@@ -44,12 +43,17 @@ static void join_loop(char *content, char **str_ref)
 char	*join_lst(t_list *lst)
 {
 	char	*str;
+	int		i;
 	char	*content;
+	int		len;
+	char	quote;
 
 	str = NULL;
+	len = 0;
+	quote = 0;
 	while (lst)
 	{
-		join_loop(lst->content, &str);
+		join_loop(lst->content, &str, &len);
 		lst = lst->next;
 	}
 	return (str);
