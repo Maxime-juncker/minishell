@@ -140,27 +140,33 @@ int		is_builtin(char *name);
 // pipeline.c
 int		run_pipeline(t_command_table *table);
 
+/* ------------------------------ executor ------------------------------ */
+
+// join_lst.c
+char	*join_lst(t_list *lst);
+
+// lexer_utils.c
+char	toggle_quote(char c, char quote);
+int		is_symbol(char c);
+
+// lexer.c
+char	*process_line(const char *cmd_line, char **env, int *code);
+
+// quote_utils.c
+size_t	get_str_len(const char *str);
+
+// quotes_processing.c
+t_list	*process_quotes(const char *line);
+char	*remove_quotes(const char *line);
+
+// var_processing.c
+t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
+
+/* ------------------------------ lexer ------------------------------ */
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* ------------------------------ other ------------------------------ */
 
 char	*remove_quotes(const char *line);
 char	*remove_quotes_pair(char *s);

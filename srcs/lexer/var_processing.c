@@ -39,8 +39,8 @@ static char	*process_var(char *str, char **env, int last_code)
 		if (*str == '$')
 		{
 			str++;
-			result = ft_strjoin_free(result, handle_dollar(&str, last_code, env),
-					FREE1 | FREE2);
+			result = ft_strjoin_free(result,
+					handle_dollar(&str, last_code, env), FREE1 | FREE2);
 		}
 		else
 		{

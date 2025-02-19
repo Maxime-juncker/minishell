@@ -11,7 +11,6 @@ static int	skip_spaces( char content_c, char *str_ref, char quote, int len )
 	{
 		return (1);
 	}
-
 	return (0);
 }
 
