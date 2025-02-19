@@ -73,8 +73,6 @@ static char	*get_path(char **paths, t_command cmd)
 /// @return the full path of the command if it exists, NULL otherwise
 char	*get_cmd_path(char **paths, t_command cmd)
 {
-	int		i;
-	char	*cmd_path;
 	struct stat	st;
 
 	if (paths == NULL || cmd.args[0][0] == '\0')

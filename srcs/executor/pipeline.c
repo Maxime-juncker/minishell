@@ -33,7 +33,7 @@ int	is_env_cmd(char *name)
 static int	wait_for_process(t_command_table *table, int *childs, int code)
 {
 	int	pid;
-	int	i;
+	size_t	i;
 
 	signal(SIGQUIT, handle_signal);
 	g_signal_received = 0;

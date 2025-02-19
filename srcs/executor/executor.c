@@ -21,7 +21,6 @@ static int	run_built_in(const t_command cmd, const t_command_table *table)
 int	run_env_cmd(t_command_table *table, t_command cmd)
 {
 	char	*name;
-	int		i;
 
 	name = cmd.args[0];
 	if (ft_strncmp(name, "export", ft_strlen(name)) == 0)

@@ -18,7 +18,6 @@ static int	create_dummy_cmd(const char *name, t_command *cmd)
 
 static const char	*get_cmd_name(t_list *lst)
 {
-	int			i;
 	const char	*name;
 	const char	*last;
 

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static char	*handle_dollar(char **str, int last_code)
+static char	*handle_dollar(char **str, int last_code, char **env)
 {
 	size_t	j;
 	char	*var_name;
@@ -20,7 +20,7 @@ static char	*handle_dollar(char **str, int last_code)
 		var_name = ft_substr(*str, 0, j);
 		if (!var_name)
 			return (NULL);
-		var_value = getenv(var_name);
+		var_value = find_env_var(env, var_name, NULL);
 		free(var_name);
 		if (var_value)
 			return (*str += j, ft_strdup(var_value));
@@ -39,7 +39,7 @@ static char	*process_var(char *str, char **env, int last_code)
 		if (*str == '$')
 		{
 			str++;
-			result = ft_strjoin_free(result, handle_dollar(&str, last_code),
+			result = ft_strjoin_free(result, handle_dollar(&str, last_code, env),
 					FREE1 | FREE2);
 		}
 		else

@@ -30,7 +30,7 @@ static int	heredoc(t_command *cmd, char *deli)
 			printf("minishell: warning: %s (wanted `%s')\n",
 				"here-document delimited by end-of-file", deli);
 		len = ft_strlen(line) - 1;
-		if (!line || !ft_strncmp(line, deli, len) && ft_strlen(deli) == len)
+		if (!line || (!ft_strncmp(line, deli, len) && ft_strlen(deli) == len))
 		{
 			if (line)
 				free(line);

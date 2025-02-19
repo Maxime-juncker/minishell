@@ -25,8 +25,6 @@ static int	error_symbol(char error_symb, const char *cmd_line, int i)
 
 static int	check_redir_out(const char *cmd_line, int i)
 {
-	int		occ;
-	int		max_occ;
 	char	error_symb;
 
 	i++;

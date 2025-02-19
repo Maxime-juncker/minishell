@@ -24,7 +24,7 @@ static int	replace_env_var(char **env, char *to_find, const char *replace)
 	return (-1);
 }
 
-static char	*get_absolute_path(const char *new_path)
+static char	*get_absolute_path()
 {
 	char	*buff;
 	int		cur_size;
@@ -62,7 +62,7 @@ int	change_directory(const char *path, char **env)
 		perror("chdir failed");
 		return (1);
 	}
-	abs_path = get_absolute_path(path);
+	abs_path = get_absolute_path();
 	if (!abs_path)
 		return (MALLOC_ERR);
 	replace_env_var(env, "PWD", abs_path);

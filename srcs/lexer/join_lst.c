@@ -11,6 +11,7 @@ static int	skip_spaces( char content_c, char *str_ref, char quote, int len )
 	{
 		return (1);
 	}
+
 	return (0);
 }
 
@@ -20,11 +21,14 @@ static void	join_loop(char *content, char **str_ref, int *len)
 	char	quote;
 
 	i = 0;
+	quote = 0;
 	while (content[i])
 	{
 		quote = toggle_quote(content[i], quote);
 		while (skip_spaces(content[i], *str_ref, quote, *len))
+		{
 			i++;
+		}
 		if ((*str_ref && !is_symbol((*str_ref)[*len - 1])
 			&& (*str_ref)[*len - 1] != ' ' && is_symbol(content[i]))
 			|| (*str_ref && is_symbol((*str_ref)[*len - 1])
@@ -43,14 +47,10 @@ static void	join_loop(char *content, char **str_ref, int *len)
 char	*join_lst(t_list *lst)
 {
 	char	*str;
-	int		i;
-	char	*content;
 	int		len;
-	char	quote;
 
 	str = NULL;
 	len = 0;
-	quote = 0;
 	while (lst)
 	{
 		join_loop(lst->content, &str, &len);
