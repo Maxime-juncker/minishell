@@ -85,7 +85,6 @@ static void	get_args(t_command *cmd, char *cmd_str)
 static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
 {
 	static int	pipefd[2] = {-1};
-	int			i;
 
 	cmd->fd_in = 0;
 	cmd->fd_out = 1;

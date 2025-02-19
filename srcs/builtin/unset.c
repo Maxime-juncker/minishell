@@ -81,7 +81,6 @@ void	handle_cmd(t_command_table *table, char *arg)
 int	unset_cmd(t_command_table *table, t_command cmd)
 {
 	int	i;
-	int	len;
 
 	i = 1;
 	while (cmd.args[i])

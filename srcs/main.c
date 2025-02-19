@@ -116,9 +116,7 @@ int	check_interrupt( void )
 
 int	main(void)
 {
-	char			*line;
 	t_command_table	table;
-	char			*process_cmd;
 
 	check_piped_execution();
 	rl_event_hook = check_interrupt;
