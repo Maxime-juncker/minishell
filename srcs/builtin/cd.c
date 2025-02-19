@@ -24,7 +24,7 @@ static int	replace_env_var(char **env, char *to_find, const char *replace)
 	return (-1);
 }
 
-static char	*get_absolute_path()
+static char	*get_absolute_path(void)
 {
 	char	*buff;
 	int		cur_size;

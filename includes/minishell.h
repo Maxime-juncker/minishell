@@ -38,38 +38,6 @@ typedef struct s_command_table
 
 extern int	g_signal_received;
 
-void	handle_signal(int signal);
-void	new_prompt(t_command_table *table);
-
-// pipex.c
-char	**get_paths(char **env);
-
-// redirect.c
-void	redir(t_command *cmd, char *cmd_str, int is_last, int i);
-
-// init.c
-int		init_table(char *line, t_command_table *table);
-
-// lexer.c
-char	*process_line(const char *cmd_line, char **env, int *code);
-
-// quotes_processing.c
-t_list	*process_quotes(const char *line);
-
-// var_processing.c
-t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
-
-// lexer_utils.c
-char	toggle_quote(char c, char quote);
-int		is_symbol(char c);
-
-// join_lst.c
-char	*join_lst(t_list *lst);
-
-// quote_utils.c
-size_t	count_space(const char *str);
-size_t	get_str_len(const char *str);
-
 /* ------------------------------ builtin ------------------------------ */
 
 // cd.c
@@ -164,14 +132,47 @@ t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
 
 /* ------------------------------ lexer ------------------------------ */
 
+// join_lst.c
+char	*join_lst(t_list *lst);
 
+// lexer_utils.c
+char	toggle_quote(char c, char quote);
+int		is_symbol(char c);
+
+// lexer.c
+char	*process_line(const char *cmd_line, char **env, int *code);
+
+// quote_utils.c
+size_t	get_str_len(const char *str);
+
+// quotes_processing.c
+t_list	*process_quotes(const char *line);
+char	*remove_quotes(const char *line);
+
+// var_processing.c
+t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
+
+/* ------------------------------ parser ------------------------------ */
+
+// init.c
+int		init_table(char *line, t_command_table *table);
+
+// redir.c
+// void	redir(t_command *cmd, char *command);
+
+// heredoc.c
+// int		heredoc(t_command *cmd, char *deli);
+void    redir(t_command *cmd, char *command, int is_last, int i);
 
 /* ------------------------------ other ------------------------------ */
 
-char	*remove_quotes(const char *line);
 char	*remove_quotes_pair(char *s);
 int		is_builtin(char *name);
-int		ft_strcmp(char *s1, char *s2);
 void	cleanup_table(t_command_table *table);
+void	handle_signal(int signal);
+void	new_prompt(t_command_table *table);
+int		check_interrupt(void);
+void	init_env(t_command_table *table);
+void	check_piped_execution(void);
 
 #endif
