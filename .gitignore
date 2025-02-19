@@ -52,8 +52,6 @@ Mkfile.old
 dkms.conf
 bin/
 obj/
-.vscode/
-.idea/
 *.txt
 1
 2
@@ -71,3 +69,4 @@ test1
 test2
 test3
 test.c
+.*
