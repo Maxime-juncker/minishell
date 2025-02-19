@@ -6,7 +6,7 @@
 #    By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 18:00:56 by mjuncker          #+#    #+#              #
-#    Updated: 2025/01/29 16:01:20 by mjuncker         ###   ########.fr        #
+#    Updated: 2025/02/19 13:12:37 by mjuncker         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,7 @@ SRCS := $(addprefix $(SRCS_D), $(SRCS))
 
 # compiler settings
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES_D) -g3 -D BUFFER_SIZE=4
+CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES_D) -g3 -D BUFFER_SIZE=4 -fPIC
 MAKEFLAGS += -s
 
 # commands

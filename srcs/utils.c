@@ -37,3 +37,16 @@ char	*remove_quotes_pair(char *s)
 	}
 	return (tmp);
 }
+
+void	cleanup_table(t_command_table *table)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < table->n_commands)
+	{
+		cleanup_arr((void **)table->commands[i].args);
+		i++;
+	}
+	free(table->commands);
+}

@@ -45,13 +45,26 @@ static void	clean(t_command cmd, const t_command_table *table)
 		close(cmd.fd_out);
 }
 
+static void	setup_args(t_command *cmd)
+{
+	size_t  i;
+	
+	i = cmd->n_args;
+	while (cmd->args[i])
+	{
+		free(cmd->args[i]);
+		i++;
+	}
+	show_cmd(*cmd);
+	cmd->args[cmd->n_args] = NULL;
+}
+
 int	run_command(t_command cmd, const t_command_table *table, int *childs)
 {
 	int	pid;
 	int	code;
 
-	show_cmd(cmd);
-	cmd.args[cmd.n_args] = NULL;
+	setup_args(&cmd);
 	pid = fork();
 	if (pid == -1)
 		return (-1);

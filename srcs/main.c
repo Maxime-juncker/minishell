@@ -7,19 +7,6 @@
 #include <sys/wait.h>
 #include <errno.h>
 
-void	cleanup_table(t_command_table *table)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < table->n_commands)
-	{
-		cleanup_arr((void **)table->commands[i].args);
-		i++;
-	}
-	free(table->commands);
-}
-
 char	*get_folder( char **env )
 {
 	char	*folder;
