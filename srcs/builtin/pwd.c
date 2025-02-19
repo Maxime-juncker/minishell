@@ -1,4 +1,4 @@
-#include <stddef.h>
+#include "minishell.h"
 
 char	*find_env_var(char **env, const char *to_find, int *index)
 {

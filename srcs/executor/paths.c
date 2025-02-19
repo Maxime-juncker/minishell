@@ -1,6 +1,25 @@
 #include "minishell.h"
 #include <sys/stat.h>
 
+int	is_builtin(char *name)
+{
+	if (!name)
+		return (0);
+	if (ft_strcmp(name, "echo") == 0)
+		return (1);
+	if (ft_strcmp(name, "export") == 0)
+		return (1);
+	if (ft_strcmp(name, "unset") == 0)
+		return (1);
+	if (ft_strcmp(name, "env") == 0)
+		return (1);
+	if (ft_strcmp(name, "cd") == 0)
+		return (1);
+	if (ft_strcmp(name, "heredoc") == 0)
+		return (1);
+	return (0);
+}
+
 static void	cleanup(char **arr)
 {
 	int	i;

@@ -144,5 +144,8 @@ void	show_cmd(t_command cmd);
 void	show_table(t_command_table table);
 
 char	*remove_quotes(const char *line);
+char	*remove_quotes_pair(char *s);
+char	*find_env_var(char **env, const char *to_find, int *index);
+int		is_builtin(char *name);
 
 #endif

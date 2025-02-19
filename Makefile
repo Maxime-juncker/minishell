@@ -22,12 +22,11 @@ SRCS = 		main.c				\
 			echo.c				\
 			cd.c				\
 			env.c				\
-			export_cmd.c		\
+			export.c			\
 			pwd.c				\
 			unset.c				\
 			executor.c			\
 			pipeline.c			\
-			pipeline_utils.c	\
 			checker.c			\
 			redir.c				\
 			init.c				\
@@ -50,12 +49,11 @@ LIB_SRC = 	utils.c				\
 			echo.c				\
 			cd.c				\
 			env.c				\
-			export_cmd.c		\
+			export.c			\
 			pwd.c				\
 			unset.c				\
 			executor.c			\
 			pipeline.c			\
-			pipeline_utils.c	\
 			checker.c			\
 			redir.c				\
 			init.c				\

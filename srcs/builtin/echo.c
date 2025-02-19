@@ -1,3 +1,5 @@
+#include "minishell.h"
+
 static int	is_arg(const char *arg)
 {
 	int	i;

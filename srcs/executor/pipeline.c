@@ -5,6 +5,31 @@
 
 int	g_signal_received = 0;
 
+char	**get_paths(char **env)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (env[i] != NULL && ft_strncmp(env[i], "PATH=", 5) != 0)
+	{
+		i++;
+	}
+	tmp = env[i] + 5;
+	return (ft_split(tmp, ':'));
+}
+
+int	is_env_cmd(char *name)
+{
+	if (ft_strcmp(name, "export") == 0)
+		return (1);
+	if (ft_strcmp(name, "unset") == 0)
+		return (1);
+	if (ft_strcmp(name, "cd") == 0)
+		return (1);
+	return (0);
+}
+
 static int	wait_for_process(t_command_table *table, int *childs, int code)
 {
 	int	pid;

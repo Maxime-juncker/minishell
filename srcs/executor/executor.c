@@ -78,7 +78,8 @@ int	run_command(t_command cmd, const t_command_table *table, int *childs)
 	{
 		cleanup_arr((void **)table->exp);
 		free(childs);
-		setup_redirection(cmd);
+		dup2(cmd.fd_out, STDOUT_FILENO);
+		dup2(cmd.fd_in, STDIN_FILENO);
 		if (cmd.fd_out != STDOUT_FILENO)
 			close(cmd.fd_out);
 		if (is_builtin(cmd.args[0]) == 1)
