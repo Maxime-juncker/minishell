@@ -8,7 +8,7 @@
 
 void	show_table(t_command_table table)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (i < table.n_commands)
@@ -23,7 +23,7 @@ void	show_table(t_command_table table)
 
 void	show_cmd(t_command cmd)
 {
-	int	i;
+	size_t	i;
 
 	printf("%srunning %s (%zu args)\nargs: ", GRAY, cmd.args[0], cmd.n_args);
 	i = 0;

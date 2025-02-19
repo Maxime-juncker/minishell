@@ -166,6 +166,6 @@ char	*remove_quotes(const char *line);
 char	*remove_quotes_pair(char *s);
 int		is_builtin(char *name);
 int		ft_strcmp(char *s1, char *s2);
-void	cleanup_table(t_command_table *table);
+// void	cleanup_table(t_command_table *table);
 
 #endif
