@@ -75,19 +75,29 @@ static char	*get_file_name(const char *s)
 	return (file);
 }
 
+int	skip_check_in(const char *cmd_line, int i)
+{
+	if (i > 0)
+	{
+		if (cmd_line[i + 1] == '<' || cmd_line[i - 1] == '<'
+			|| cmd_line[i + 1] == '>' || cmd_line[i + 1] == '\0')
+			return (1);
+	}
+	else if (cmd_line[i + 1] == '<' || cmd_line[i + 1] == '>'
+		|| cmd_line[i + 1] == '\0')
+		return (1);
+	while (cmd_line[i] == ' ')
+		i++;
+	if (cmd_line[i] == '\0')
+		return (1);
+	return (0);
+}
+
 int	check_redir_in(const char *cmd_line, int i)
 {
 	char	*file;
 
-	if (i > 0)
-	{
-		if (cmd_line[i + 1] == '<' || cmd_line[i - 1] == '<'
-			|| cmd_line[i + 1] == '>' || cmd_line[i + 1] == ' '
-			|| cmd_line[i + 1] == '\0')
-			return (0);
-	}
-	else if (cmd_line[i + 1] == '<' || cmd_line[i + 1] == '>'
-		|| cmd_line[i + 1] == ' ' || cmd_line[i + 1] == '\0')
+	if (skip_check_in(cmd_line, i))
 		return (0);
 	file = get_file_name(cmd_line + i);
 	if (file == NULL)
@@ -97,7 +107,7 @@ int	check_redir_in(const char *cmd_line, int i)
 	if (access(file, F_OK) == -1)
 	{
 		printf("minishell: %s: No such file or directory\n", file);
-		return (NOT_FOUND);
+		return (1);
 	}
 	return (0);
 }

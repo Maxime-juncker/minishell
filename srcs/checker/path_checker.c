@@ -1,6 +1,8 @@
 #include "minishell.h"
 #include <dirent.h>
 
+// < wekweofj
+
 int	create_dummy_cmd(const char *name, t_command *cmd)
 {
 	cmd->args = malloc(2 * sizeof(char *));

@@ -32,6 +32,18 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 	return (signal(SIGQUIT, SIG_IGN), code);
 }
 
+int	env_stage( t_command_table *table, t_command cmd, int *code)
+{
+	if (is_env_cmd(cmd.args[0]))
+	{
+		show_cmd(cmd);
+		*code = run_env_cmd(table, cmd);
+		close_fds(cmd);
+		return (1);
+	}
+	return (0);
+}
+
 /// @brief Run every command in the command table
 /// @param table The command table to run
 /// @return the exit value of the last command
@@ -50,11 +62,8 @@ int	run_pipeline(t_command_table *table)
 	{
 		if (table->commands[i].n_args != 0)
 		{
-			if (is_env_cmd(table->commands[i].args[0]))
+			if (env_stage(table, table->commands[i], &code))
 			{
-				show_cmd(table->commands[i]);
-				code = run_env_cmd(table, table->commands[i]);
-				close_fds(table->commands[i]);
 				i++;
 				continue ;
 			}
@@ -63,6 +72,5 @@ int	run_pipeline(t_command_table *table)
 		i++;
 	}
 	code = wait_for_process(table, childs, code);
-	free(childs);
-	return (code);
+	return (free(childs), code);
 }
