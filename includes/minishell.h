@@ -124,6 +124,7 @@ int		check_path(const char *cmd_part, char **env);
 
 // redir_checker.c
 int		check_redir_in(const char *cmd_line, int i);
+int		new_line_error(const char *str, const char last);
 
 // split_line.c
 t_list	*split_line(char *line);
