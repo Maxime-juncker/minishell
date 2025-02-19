@@ -158,10 +158,11 @@ t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
 int		init_table(char *line, t_command_table *table);
 
 // redir.c
-void	redir(t_command *cmd, char *command);
+// void	redir(t_command *cmd, char *command);
+void	redir(t_command *cmd, char *command, int is_last, int i);
 
 // heredoc.c
-int		heredoc(t_command *cmd, char *deli);
+// int		heredoc(t_command *cmd, char *deli);
 
 /* ------------------------------ other ------------------------------ */
 
@@ -169,7 +170,10 @@ char	*remove_quotes_pair(char *s);
 int		is_builtin(char *name);
 void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);
-void	new_prompt(t_command_table *table);
-int		check_interrupt(void);
+// void	handle_signal(int signal);
+// void	new_prompt(t_command_table *table);
+// int		check_interrupt(void);
+// // void	init_env(t_command_table *table);
+// void	check_piped_execution(void);
 
 #endif

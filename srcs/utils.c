@@ -6,6 +6,24 @@ void	handle_signal(int signal)
 	g_signal_received = signal;
 }
 
+void	void_signal(int signal)
+{
+	(void)signal;
+}
+
+void	cleanup_table(t_command_table *table)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < table->n_commands)
+	{
+		cleanup_arr((void **)table->commands[i].args);
+		i++;
+	}
+	free(table->commands);
+}
+
 char	*remove_quotes_pair(char *s)
 {
 	char	*tmp;
@@ -36,17 +54,4 @@ char	*remove_quotes_pair(char *s)
 		s++;
 	}
 	return (tmp);
-}
-
-void	cleanup_table(t_command_table *table)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < table->n_commands)
-	{
-		cleanup_arr((void **)table->commands[i].args);
-		i++;
-	}
-	free(table->commands);
 }

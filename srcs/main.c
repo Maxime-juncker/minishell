@@ -76,18 +76,18 @@ void	new_prompt(t_command_table *table)
 		{
 			return ;
 		}
-		if (code == MALLOC_ERR)
+		if (code == SYNTAX_ERR || code == IS_DIR || code == NOT_FOUND)
+		{
+			free(process_cmd);
+			return ;
+		}
+		else if (code == MALLOC_ERR)
 		{
 			free(process_cmd);
 			cleanup_arr((void **)table->env);
 			cleanup_arr((void **)table->exp);
 			error("malloc failed");
 			exit(EXIT_FAILURE);
-		}
-		else if (code != 0)
-		{
-			free(process_cmd);
-			return ;
 		}
 		else
 		{
