@@ -1,7 +1,6 @@
 #include "minishell.h"
 #include <dirent.h>
 
-
 int	create_dummy_cmd(const char *name, t_command *cmd)
 {
 	cmd->args = malloc(2 * sizeof(char *));
@@ -66,19 +65,19 @@ int	check_cmd_validity(char *cmd_name, char **env)
 	return (0);
 }
 
-int	check_dir_validity(char *path)
+int	check_dir_validity(char **path)
 {
 	DIR	*dir;
 
-	dir = opendir(path);
+	dir = opendir(*path);
 	if (!dir)
 	{
-		printf("minishell: %s: No such file or directory\n", path);
+		printf("minishell: %s: No such file or directory\n", *path);
 		return (NOT_FOUND);
 	}
 	closedir(dir);
-	printf("minishell: %s: Is a directory\n", path);
-	free(path);
+	printf("minishell: %s: Is a directory\n", *path);
+	free(*path);
 	return (IS_DIR);
 }
 
@@ -105,9 +104,8 @@ int	check_path(const char *cmd_part, char **env)
 	{
 		return (check_cmd_validity(name_no_quote, env));
 	}
-	return (check_dir_validity(name_no_quote));
+	return (check_dir_validity(&name_no_quote));
 }
-
 
 #if OLD
 
@@ -142,7 +140,5 @@ int	check_cmd_path(const char *cmd)
 	cleanup_arr((void **)cmd_tmp.args);
 	return (0);
 }
-
-
 
 #endif

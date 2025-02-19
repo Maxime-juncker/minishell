@@ -43,7 +43,6 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	char	*tmp;
 	int		lst_size;
 
-	// tmp = remove_quotes(line);
 	tmp = ft_strdup(line);
 	if (!tmp)
 	{
@@ -73,7 +72,7 @@ static size_t	count_space(const char *str)
 	return (i);
 }
 
-static char *remove_spaces(char *str)
+static char	*remove_spaces(char *str)
 {
 	char	*buff;
 	char	*new_str;
@@ -135,8 +134,8 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 
 t_list	*process_quotes(const char *line)
 {
-	size_t	i;
-	t_list	*lst;
+	size_t		i;
+	t_list		*lst;
 	size_t		line_len;
 
 	i = 0;

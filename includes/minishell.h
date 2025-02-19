@@ -98,7 +98,7 @@ int		check_syntax(const char *cmd_line);
 
 // path_checker.c
 int		check_cmd_path(const char *cmd);
-int		check_dir_validity(char *path);
+int		check_dir_validity(char **path);
 int		check_cmd_validity(char *cmd_part, char **env);
 
 // split_line.c

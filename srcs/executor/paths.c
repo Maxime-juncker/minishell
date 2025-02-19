@@ -23,8 +23,8 @@ int	relative_path(char *path)
 
 static char	*get_path(char **paths, t_command cmd)
 {
-	int		i;
-	char	*cmd_path;
+	int			i;
+	char		*cmd_path;
 	struct stat	st;
 
 	i = -1;
