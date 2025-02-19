@@ -44,20 +44,6 @@ void	new_prompt(t_command_table *table);
 // pipex.c
 char	**get_paths(char **env);
 
-// paths.c
-char	*get_cmd_path(char **paths, t_command cmd);
-void	setup_redirection(t_command cmd);
-int		relative_path(char *path);
-
-// pipeline.c
-int		run_pipeline(t_command_table *table);
-void	cleanup_table(t_command_table *table);
-
-// executor.c
-int		run_command(t_command cmd, const t_command_table *table, int *childs);
-int		run_env_cmd(t_command_table *table, t_command cmd);
-void	close_fds(t_command cmd);
-
 // redirect.c
 void	redir(t_command *cmd, char *cmd_str, int is_last, int i);
 
@@ -136,13 +122,50 @@ int		check_syntax(const char *cmd_line);
 int		check_token_error(const char *cmd_line, int i, int max_occ,
 			char to_find);
 
-// debug
-void	show_cmd(t_command cmd);
+/* ------------------------------ executor ------------------------------ */
+
+// cmd_debug.c
 void	show_table(t_command_table table);
+void	show_cmd(t_command cmd);
+
+// executor.c
+int		run_command(t_command cmd, const t_command_table *table, int *childs);
+void	close_fds(t_command cmd);
+void	cleanup_table(t_command_table *table);
+
+// paths.c
+char	*get_cmd_path(char **paths, t_command cmd);
+int		is_builtin(char *name);
+
+// pipeline.c
+int		run_pipeline(t_command_table *table);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 char	*remove_quotes(const char *line);
 char	*remove_quotes_pair(char *s);
 int		is_builtin(char *name);
 int		ft_strcmp(char *s1, char *s2);
+void	cleanup_table(t_command_table *table);
 
 #endif

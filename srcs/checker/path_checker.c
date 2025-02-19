@@ -67,7 +67,7 @@ static int	check_cmd_validity(char **cmd_name, char **env)
 	path = get_cmd_path(get_paths(env), dummy_cmd);
 	if (path == NULL)
 	{
-		if (relative_path(dummy_cmd.args[0]))
+		if (dummy_cmd.args[0][0] == '.')
 			return (check_dir_validity(cmd_name));
 		else
 			printf("minishell: %s: command not found\n", *cmd_name);

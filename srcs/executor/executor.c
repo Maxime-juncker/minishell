@@ -1,9 +1,27 @@
 #include "minishell.h"
 
-/// @brief Run a built-in command
-/// @param cmd The command to run
-/// @param table command table
-/// @return the exit value of the run command, -1 if the command isn't builtin
+void	close_fds(t_command cmd)
+{
+	if (cmd.fd_out != STDOUT_FILENO)
+		close(cmd.fd_out);
+	if (cmd.fd_in != STDIN_FILENO)
+		close(cmd.fd_in);
+}
+
+char	**get_paths(char **env)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (env[i] != NULL && ft_strncmp(env[i], "PATH=", 5) != 0)
+	{
+		i++;
+	}
+	tmp = env[i] + 5;
+	return (ft_split(tmp, ':'));
+}
+
 static int	run_built_in(const t_command cmd, const t_command_table *table)
 {
 	size_t	len;
@@ -18,51 +36,15 @@ static int	run_built_in(const t_command cmd, const t_command_table *table)
 	return (-1);
 }
 
-int	run_env_cmd(t_command_table *table, t_command cmd)
+static void	clean(t_command cmd, const t_command_table *table)
 {
-	char	*name;
-
-	name = cmd.args[0];
-	if (ft_strncmp(name, "export", ft_strlen(name)) == 0)
-	{
-		return (export_cmd(table, cmd));
-	}
-	if (ft_strncmp(name, "unset", ft_strlen(name)) == 0)
-	{
-		return (unset_cmd(table, cmd));
-	}
-	if (ft_strncmp(cmd.args[0], "cd", ft_strlen(name)) == 0)
-	{
-		return (cd_command(table, cmd));
-	}
-	return (0);
-}
-
-void	cleanup_table(t_command_table *table)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < table->n_commands)
-	{
-		cleanup_arr((void **)table->commands[i].args);
-		i++;
-	}
-	free(table->commands);
-}
-
-void	close_fds(t_command cmd)
-{
+	cleanup_arr((void **)table->exp);
+	dup2(cmd.fd_out, STDOUT_FILENO);
+	dup2(cmd.fd_in, STDIN_FILENO);
 	if (cmd.fd_out != STDOUT_FILENO)
 		close(cmd.fd_out);
-	if (cmd.fd_in != STDIN_FILENO)
-		close(cmd.fd_in);
 }
 
-/// @brief run a command
-/// @param cmd the command to run
-/// @param table command table
-/// @return child process pid
 int	run_command(t_command cmd, const t_command_table *table, int *childs)
 {
 	int	pid;
@@ -75,12 +57,8 @@ int	run_command(t_command cmd, const t_command_table *table, int *childs)
 		return (-1);
 	if (pid == 0)
 	{
-		cleanup_arr((void **)table->exp);
+		clean(cmd, table);
 		free(childs);
-		dup2(cmd.fd_out, STDOUT_FILENO);
-		dup2(cmd.fd_in, STDIN_FILENO);
-		if (cmd.fd_out != STDOUT_FILENO)
-			close(cmd.fd_out);
 		if (is_builtin(cmd.args[0]) == 1)
 		{
 			code = run_built_in(cmd, table);

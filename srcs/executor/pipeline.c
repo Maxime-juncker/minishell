@@ -5,21 +5,7 @@
 
 int	g_signal_received = 0;
 
-char	**get_paths(char **env)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	while (env[i] != NULL && ft_strncmp(env[i], "PATH=", 5) != 0)
-	{
-		i++;
-	}
-	tmp = env[i] + 5;
-	return (ft_split(tmp, ':'));
-}
-
-int	is_env_cmd(char *name)
+static int	is_env_cmd(char *name)
 {
 	if (ft_strcmp(name, "export") == 0)
 		return (1);
@@ -32,7 +18,7 @@ int	is_env_cmd(char *name)
 
 static int	wait_for_process(t_command_table *table, int *childs, int code)
 {
-	int	pid;
+	int		pid;
 	size_t	i;
 
 	signal(SIGQUIT, handle_signal);
@@ -57,7 +43,27 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 	return (signal(SIGQUIT, SIG_IGN), code);
 }
 
-int	env_stage( t_command_table *table, t_command cmd, int *code)
+static int	run_env_cmd(t_command_table *table, t_command cmd)
+{
+	char	*name;
+
+	name = cmd.args[0];
+	if (ft_strncmp(name, "export", ft_strlen(name)) == 0)
+	{
+		return (export_cmd(table, cmd));
+	}
+	if (ft_strncmp(name, "unset", ft_strlen(name)) == 0)
+	{
+		return (unset_cmd(table, cmd));
+	}
+	if (ft_strncmp(cmd.args[0], "cd", ft_strlen(name)) == 0)
+	{
+		return (cd_command(table, cmd));
+	}
+	return (0);
+}
+
+static int	env_stage( t_command_table *table, t_command cmd, int *code)
 {
 	if (is_env_cmd(cmd.args[0]))
 	{
@@ -69,9 +75,6 @@ int	env_stage( t_command_table *table, t_command cmd, int *code)
 	return (0);
 }
 
-/// @brief Run every command in the command table
-/// @param table The command table to run
-/// @return the exit value of the last command
 int	run_pipeline(t_command_table *table)
 {
 	size_t	i;
