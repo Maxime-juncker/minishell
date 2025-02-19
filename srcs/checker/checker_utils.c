@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-int	check_needed(char **cmd, const char c_operator)
-{
-	int	i;
-
-	i = 0;
-	while (cmd[i])
-	{
-		if (ft_strchr(cmd[i], c_operator) != NULL)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 void	cleanup_arr(void **arr)
 {
 	int	i;
@@ -25,6 +11,15 @@ void	cleanup_arr(void **arr)
 		i++;
 	}
 	free(arr);
+}
+
+int	token_error(char c1, char c2)
+{
+	printf("minishell: syntax error near unexpected token `%c", c1);
+	if (c1 == c2)
+		printf("%c", c2);
+	printf("\'\n");
+	return (SYNTAX_ERR);
 }
 
 int	in_base(const char c, const char *base)
@@ -39,14 +34,4 @@ int	in_base(const char c, const char *base)
 		i++;
 	}
 	return (-1);
-}
-
-int	token_error(char c1, char c2)
-{
-	printf("minishell: syntax error near unexpected token `%c", \
-			c1);
-	if (c1 == c2)
-		printf("%c", c2);
-	printf("\'\n");
-	return (SYNTAX_ERR);
 }

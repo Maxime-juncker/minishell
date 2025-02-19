@@ -1,9 +1,7 @@
 #include "minishell.h"
 #include <dirent.h>
 
-// < wekweofj
-
-int	create_dummy_cmd(const char *name, t_command *cmd)
+static int	create_dummy_cmd(const char *name, t_command *cmd)
 {
 	cmd->args = malloc(2 * sizeof(char *));
 	if (!cmd->args)
@@ -44,7 +42,23 @@ static const char	*get_cmd_name(t_list *lst)
 	return (NULL);
 }
 
-int	check_cmd_validity(char **cmd_name, char **env)
+static int	check_dir_validity(char **path)
+{
+	DIR	*dir;
+
+	dir = opendir(*path);
+	if (!dir)
+	{
+		printf("minishell: %s: No such file or directory\n", *path);
+		return (NOT_FOUND);
+	}
+	closedir(dir);
+	printf("minishell: %s: Is a directory\n", *path);
+	free(*path);
+	return (IS_DIR);
+}
+
+static int	check_cmd_validity(char **cmd_name, char **env)
 {
 	t_command	dummy_cmd;
 	char		*path;
@@ -66,22 +80,6 @@ int	check_cmd_validity(char **cmd_name, char **env)
 	free(*cmd_name);
 	free(path);
 	return (0);
-}
-
-int	check_dir_validity(char **path)
-{
-	DIR	*dir;
-
-	dir = opendir(*path);
-	if (!dir)
-	{
-		printf("minishell: %s: No such file or directory\n", *path);
-		return (NOT_FOUND);
-	}
-	closedir(dir);
-	printf("minishell: %s: Is a directory\n", *path);
-	free(*path);
-	return (IS_DIR);
 }
 
 int	check_path(const char *cmd_part, char **env)

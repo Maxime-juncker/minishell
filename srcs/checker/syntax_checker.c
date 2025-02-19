@@ -1,13 +1,48 @@
 #include "minishell.h"
 
-int	new_line_error(const char *str, const char last)
+static int	error_symbol(char error_symb, const char *cmd_line, int i)
 {
-	if (last == '|')
-		return (token_error('|', *(str - 2)));
-	if (last == '>' || last == '<')
+	int	occ;
+	int	max_occ;
+
+	if (error_symb == '<' && cmd_line[i + 1] == '>')
 	{
-		printf("minishell: syntax error near unexpected token `newline\'\n");
+		printf("minishell: syntax error near unexpected token `<>\'\n");
 		return (SYNTAX_ERR);
+	}
+	max_occ = 2;
+	occ = 0;
+	printf("minishell: syntax error near unexpected token `");
+	while (cmd_line[i] == error_symb && occ < max_occ)
+	{
+		printf("%c", error_symb);
+		i++;
+		occ++;
+	}
+	printf("\'\n");
+	return (SYNTAX_ERR);
+}
+
+static int	check_redir_out(const char *cmd_line, int i)
+{
+	int		occ;
+	int		max_occ;
+	char	error_symb;
+
+	i++;
+	if (cmd_line[i] == '>')
+		return (0);
+	while (cmd_line[i])
+	{
+		if (cmd_line[i] == ' ')
+		{
+			i++;
+			continue ;
+		}
+		if (cmd_line[i] != '|' && cmd_line[i] != '<' && cmd_line[i] != '>')
+			return (0);
+		error_symb = cmd_line[i];
+		return (error_symbol(error_symb, cmd_line, i));
 	}
 	return (0);
 }
