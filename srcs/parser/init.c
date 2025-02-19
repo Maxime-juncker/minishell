@@ -48,7 +48,6 @@ static void	create_arg(char **cmd_arg, char *str)
 
 static void	get_args(t_command *cmd, char *cmd_str)
 {
-	int		i;
 	int		quote;
 	int		new_arg;
 	int		n_args;
@@ -57,27 +56,21 @@ static void	get_args(t_command *cmd, char *cmd_str)
 	if (!cmd->args)
 		return ;
 	quote = 0;
-	i = 0;
 	new_arg = 1;
 	n_args = 0;
-	while (cmd_str[i] == ' ')
-		i++;
-	while (cmd_str[i])
+	while (*cmd_str)
 	{
-		if (cmd_str[i] == '\'' || cmd_str[i] == '\"')
-			quote = toggle_quote(quote, cmd_str[i]);
+		if (*cmd_str == '\'' || *cmd_str == '\"')
+			quote = toggle_quote(quote, *cmd_str);
 		if (new_arg)
+			create_arg(&cmd->args[n_args], cmd_str);
+		if (new_arg && !cmd->args[n_args++])
 		{
-			create_arg(&cmd->args[n_args], &cmd_str[i]);
-			if (!cmd->args[n_args])
-			{
-				cleanup_arr((void **)cmd->args);
-				return ;
-			}
-			n_args++;
+			cleanup_arr((void **)cmd->args);
+			return ;
 		}
-		new_arg = (!quote && cmd_str[i] == ' ' && cmd_str[i + 1]);
-		i++;
+		new_arg = (!quote && *cmd_str == ' ' && *(cmd_str + 1));
+		cmd_str++;
 	}
 	cmd->args[n_args] = NULL;
 }
@@ -102,7 +95,11 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
 	get_args(cmd, cmd_str);
 	if (!cmd->args)
 		return (MALLOC_ERR);
-	redir(cmd, cmd_str, is_last, nb);
+	redir(cmd, cmd_str);
+	if (is_last && !ft_strchr(cmd_str, '>'))
+		cmd->fd_out = 1;
+	if (!nb && !ft_strchr(cmd_str, '<'))
+		cmd->fd_in = 0;
 	return (0);
 }
 
@@ -122,13 +119,12 @@ int	init_table(char *line, t_command_table *table)
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
 	if (!table->commands)
 		return (cleanup_arr((void **)commands), MALLOC_ERR);
-	i = 0;
-	while (i < table->n_commands)
-	{
-		if (init_cmd(&table->commands[i], commands[i], i == table->n_commands - 1, i))
-			return (cleanup_arr((void **)commands), free(table->commands), MALLOC_ERR);
-		i++;
-	}
+	i = -1;
+	while (++i < table->n_commands)
+		if (init_cmd(&table->commands[i], commands[i],
+				i == table->n_commands - 1, i))
+			return (cleanup_arr((void **)commands),
+				free(table->commands), MALLOC_ERR);
 	cleanup_arr((void **)commands);
 	free(line);
 	return (0);

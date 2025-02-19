@@ -28,6 +28,7 @@ SRCS = 		main.c				\
 			executor.c			\
 			pipeline.c			\
 			checker.c			\
+			heredoc.c			\
 			redir.c				\
 			init.c				\
 			lexer.c				\
@@ -55,6 +56,7 @@ LIB_SRC = 	utils.c				\
 			executor.c			\
 			pipeline.c			\
 			checker.c			\
+			heredoc.c			\
 			redir.c				\
 			init.c				\
 			lexer.c				\
