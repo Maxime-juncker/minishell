@@ -79,6 +79,7 @@ int		check_path(const char *cmd_part, char **env);
 // redir_checker.c
 int		check_redir_in(const char *cmd_line, int i);
 int		new_line_error(const char *str, const char last);
+char	*remove_quotes_pair(char *s);
 
 // split_line.c
 t_list	*split_line(char *line);
@@ -166,14 +167,13 @@ void	redir(t_command *cmd, char *command, int is_last, int i);
 
 /* ------------------------------ other ------------------------------ */
 
-char	*remove_quotes_pair(char *s);
+void	new_prompt(t_command_table *table);
+void	init_env(t_command_table *table, char **env);
 int		is_builtin(char *name);
 void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);
-// void	handle_signal(int signal);
-// void	new_prompt(t_command_table *table);
-// int		check_interrupt(void);
-// // void	init_env(t_command_table *table);
-// void	check_piped_execution(void);
+int		check_interrupt(void);
+void	check_piped_execution(void);
+char	*get_folder(char **env);
 
 #endif

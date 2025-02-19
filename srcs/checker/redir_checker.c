@@ -12,6 +12,35 @@ int	new_line_error(const char *str, const char last)
 	return (0);
 }
 
+char	*remove_quotes_pair(char *s)
+{
+	char	*tmp;
+	char	quote;
+	int		i;
+
+	tmp = ft_calloc(ft_strlen(s) + 1, sizeof(char));
+	if (!tmp)
+		return (NULL);
+	quote = 0;
+	i = 0;
+	while (*s)
+	{
+		if (*s == quote)
+		{
+			quote = 0;
+			s++;
+			continue ;
+		}
+		else if (quote == 0 && (*s == '\'' || *s == '\"'))
+		{
+			quote = *s++;
+			continue ;
+		}
+		tmp[i++] = *s++;
+	}
+	return (tmp);
+}
+
 static char	*get_file_name(const char *s)
 {
 	int		i;
