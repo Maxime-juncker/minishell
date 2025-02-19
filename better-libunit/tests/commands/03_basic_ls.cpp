@@ -4,10 +4,11 @@
 int	ls_basic( void )
 {
 	t_command_table table;
-		table.env = duplicate_env(environ);
+	table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"ls", &table);
+	int code;
+	init_table(process_line("ls", table.env, &code), &table);
 
 	Libunit::Redirect_log();
 	run_pipeline(&table);

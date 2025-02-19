@@ -6,10 +6,10 @@ int code;
 int	echo_01( void )
 {
 	t_command_table	table;
-		table.env = duplicate_env(environ);
+	table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo", &table);
+	init_table(process_line("echo", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -25,7 +25,7 @@ int	echo_02( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -n", &table);
+	init_table(process_line("echo -n", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -41,7 +41,7 @@ int	echo_03( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo Test", &table);
+	init_table(process_line("echo Test", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -85,7 +85,7 @@ int	echo_07( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -n test", &table);
+	init_table(process_line("echo -n test", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -122,7 +122,7 @@ int	echo_09( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -ntest", &table);
+	init_table(process_line("echo -ntest", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -138,7 +138,7 @@ int	echo_10( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo test -n", &table);
+	init_table(process_line("echo test -n", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -154,7 +154,7 @@ int	echo_11( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo test1 test2 test3", &table);
+	init_table(process_line("echo test1 test2 test3", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -202,7 +202,7 @@ int	echo_14( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo    \\n test", &table);
+	init_table(process_line("echo    \\n test", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -274,7 +274,7 @@ int	echo_18( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -n -n", &table);
+	init_table(process_line("echo -n -n", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -290,7 +290,7 @@ int	echo_19( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -n -n test oui", &table);
+	init_table(process_line("echo -n -n test oui", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -306,7 +306,7 @@ int	echo_20( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -p", &table);
+	init_table(process_line("echo -p", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -322,7 +322,7 @@ int	echo_21( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -nnnnnnnn", &table);
+	init_table(process_line("echo -nnnnnnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -338,7 +338,7 @@ int	echo_22( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -nnnn -n -nnnn", &table);
+	init_table(process_line("echo -nnnn -n -nnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -354,7 +354,7 @@ int	echo_23( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -nnnn-n -nnnn", &table);
+	init_table(process_line("echo -nnnn-n -nnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -370,7 +370,7 @@ int	echo_24( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -n -nnn test -n -nnnn", &table);
+	init_table(process_line("echo -n -nnn test -n -nnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -386,7 +386,7 @@ int	echo_25( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -n -nnn-nnnn", &table);
+	init_table(process_line("echo -n -nnn-nnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -402,7 +402,7 @@ int	echo_26( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -----n", &table);
+	init_table(process_line("echo -----n", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -418,7 +418,7 @@ int	echo_27( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -nnn -----n", &table);
+	init_table(process_line("echo -nnn -----n", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 
@@ -434,7 +434,7 @@ int	echo_28( void )
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
-	init_table((char *)"echo -nnn -----nn---nnnn", &table);
+	init_table(process_line("echo -nnn -----nn---nnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 

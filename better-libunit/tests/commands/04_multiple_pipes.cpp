@@ -3,10 +3,11 @@
 int	create_mulitple_pipes( void )
 {
 	t_command_table	table;
-		table.env = duplicate_env(environ);
-	table.exp = duplicate_env(environ);;
+	table.env = duplicate_env(environ);
+	table.exp = duplicate_env(environ);
+	int code;
 
-	init_table((char *)"sleep 1 | echo test | wc -c | wc -l", &table);
+	init_table(process_line("sleep 1 | echo test | wc -c | wc -l", table.env, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table);
 	if (Libunit::Check_output("1\n") == 0)
