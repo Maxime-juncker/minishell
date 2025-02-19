@@ -131,11 +131,11 @@ void	show_cmd(t_command cmd);
 // executor.c
 int		run_command(t_command cmd, const t_command_table *table, int *childs);
 void	close_fds(t_command cmd);
-void	cleanup_table(t_command_table *table);
 
 // paths.c
 char	*get_cmd_path(char **paths, t_command cmd);
 int		is_builtin(char *name);
+char	**get_paths(char **env);
 
 // pipeline.c
 int		run_pipeline(t_command_table *table);
@@ -172,6 +172,6 @@ char	*remove_quotes(const char *line);
 char	*remove_quotes_pair(char *s);
 int		is_builtin(char *name);
 int		ft_strcmp(char *s1, char *s2);
-// void	cleanup_table(t_command_table *table);
+void	cleanup_table(t_command_table *table);
 
 #endif
