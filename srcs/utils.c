@@ -6,31 +6,9 @@ void	handle_signal(int signal)
 	g_signal_received = signal;
 }
 
-void	print_arr(char **arr)
-{
-	int	i;
-
-	i = 0;
-	while (arr[i] != NULL)
-	{
-		printf("%s\n", arr[i]);
-		i++;
-	}
-}
-
 void	void_signal(int signal)
 {
 	(void)signal;
-}
-
-size_t	get_biggest_len(const char *s1, const char *s2)
-{
-	size_t	len1;
-	size_t	len2;
-
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	return (ft_max(len1, len2));
 }
 
 int	is_builtin(char *name)

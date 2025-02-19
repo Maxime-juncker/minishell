@@ -22,12 +22,11 @@ static int	count_args(char *cmd_str)
 	return (n_args + 1);
 }
 
-static char	*create_arg(char *str)
+static void	create_arg(char **cmd_arg, char *str)
 {
 	char	*arg;
 	int		i;
 	int		quote;
-	char	*temp;
 
 	i = 0;
 	quote = 0;
@@ -41,16 +40,14 @@ static char	*create_arg(char *str)
 	}
 	arg = malloc(sizeof(char) * (i + 1));
 	if (!arg)
-		return (NULL);
+		return ;
 	ft_strlcpy(arg, str, i + 1);
-	temp = remove_quotes_pair(arg);
+	*cmd_arg = remove_quotes_pair(arg);
 	free(arg);
-	return (temp);
 }
 
 static void	get_args(t_command *cmd, char *cmd_str)
 {
-	char	**args;
 	int		i;
 	int		quote;
 	int		new_arg;
@@ -71,16 +68,15 @@ static void	get_args(t_command *cmd, char *cmd_str)
 			quote = toggle_quote(quote, cmd_str[i]);
 		if (new_arg)
 		{
-			cmd->args[n_args] = create_arg(&cmd_str[i]);
+			create_arg(&cmd->args[n_args], &cmd_str[i]);
 			if (!cmd->args[n_args])
+			{
 				cleanup_arr((void **)cmd->args);
+				return ;
+			}
 			n_args++;
 		}
-		new_arg = 0;
-		if (!quote && cmd_str[i] == ' ' && cmd_str[i + 1])
-		{
-			new_arg = 1;
-		}
+		new_arg = (!quote && cmd_str[i] == ' ' && cmd_str[i + 1]);
 		i++;
 	}
 	cmd->args[n_args] = NULL;
@@ -88,7 +84,6 @@ static void	get_args(t_command *cmd, char *cmd_str)
 
 static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
 {
-	char		**paths;
 	static int	pipefd[2] = {-1};
 	int			i;
 
@@ -121,19 +116,18 @@ int	init_table(char *line, t_command_table *table)
 		line++;
 	commands = ft_split(line, '|');
 	if (!commands)
-		return (127);
+		return (MALLOC_ERR);
 	table->n_commands = 0;
 	while (commands[table->n_commands])
 		table->n_commands++;
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
 	if (!table->commands)
-		return (cleanup_arr((void **)commands), 127);
+		return (cleanup_arr((void **)commands), MALLOC_ERR);
 	i = 0;
 	while (i < table->n_commands)
 	{
-		if (init_cmd(&table->commands[i], commands[i],
-				i == table->n_commands - 1, i))
-			return (cleanup_arr((void **)commands), free(table->commands), 127);
+		if (init_cmd(&table->commands[i], commands[i], i == table->n_commands - 1, i))
+			return (cleanup_arr((void **)commands), free(table->commands), MALLOC_ERR);
 		i++;
 	}
 	cleanup_arr((void **)commands);

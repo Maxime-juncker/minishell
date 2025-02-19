@@ -74,9 +74,11 @@ char	**update_env(char *arg, char **env)
 	if (!cpy[i])
 	{
 		cleanup_arr((void **)cpy);
+		free(env);
 		return (NULL);
 	}
 	cpy[i + 1] = NULL;
+	free(env);
 	return (cpy);
 }
 
@@ -111,6 +113,8 @@ int	export_cmd(t_command_table *table, t_command cmd)
 	int		i;
 	char	*temp;
 
+	if (cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
+		return (0);
 	ft_sort_export(table->exp);
 	if (cmd.n_args == 1)
 		return (print_export(*table, cmd.fd_out), 0);
