@@ -21,6 +21,8 @@ static void join_loop(char *content, char **str_ref)
 	char quote;
 
 	i = 0;
+	quote = 0;
+	len = 0;
 	while (content[i])
 	{
 		while (skip_spaces(content[i], *str_ref, quote, len))
@@ -42,14 +44,9 @@ static void join_loop(char *content, char **str_ref)
 char	*join_lst(t_list *lst)
 {
 	char	*str;
-	int		i;
 	char	*content;
-	int		len;
-	char	quote;
 
 	str = NULL;
-	len = 0;
-	quote = 0;
 	while (lst)
 	{
 		join_loop(lst->content, &str);
