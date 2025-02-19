@@ -108,7 +108,7 @@ static char *get_file_name(const char *s)
 			break ;
 		i++;
 	}
-	file = ft_substr(s, start, i - start);
+	file = ft_strdup(ft_substr(s, start, i - start));
 	if (file == NULL)
 		return (NULL);
 	file = remove_quotes_pair(file);
@@ -119,8 +119,14 @@ static int	check_redir_in(const char *cmd_line, int i)
 {
 	char	*file;
 
-	if (cmd_line[i + 1] == '<' || cmd_line[i - 1] == '<' || cmd_line[i + 1] == '>' || cmd_line[i + 1] == ' ' || cmd_line[i + 1] == '\0')
+	if (i > 0)
+	{
+		if (cmd_line[i + 1] == '<' || cmd_line[i - 1] == '<' || cmd_line[i + 1] == '>' || cmd_line[i + 1] == ' ' || cmd_line[i + 1] == '\0')
+			return (0);
+	}
+	else if (cmd_line[i + 1] == '<' ||  cmd_line[i + 1] == '>' || cmd_line[i + 1] == ' ' || cmd_line[i + 1] == '\0') 
 		return (0);
+	
 	file = get_file_name(cmd_line + i);
 	if (file == NULL)
 	{

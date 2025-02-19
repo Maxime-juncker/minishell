@@ -40,8 +40,6 @@ static char	*get_path(char **paths, t_command cmd)
 		{
 			cleanup(paths);
 			stat(cmd.args[0], &st);
-			// if (S_ISDIR(st.st_mode))
-			// 	return (NULL);
 			return (cmd_path);
 		}
 		free(cmd_path);

@@ -86,8 +86,6 @@ int		check_path(const char *cmd_part, char **env);
 
 // lexer.c
 char	*process_line(const char *cmd_line, char **env, int *code);
-char	toggle_quote(char quote, char c);
-int		is_symbol(char c);
 
 // quotes_processing.c
 t_list	*process_quotes(const char *line);
@@ -102,6 +100,16 @@ int		check_syntax(const char *cmd_line);
 int		check_cmd_path(const char *cmd);
 int		check_dir_validity(char *path);
 int		check_cmd_validity(char *cmd_part, char **env);
+
+// split_line.c
+t_list	*split_line(char *line);
+
+// lexer_utils.c
+char	toggle_quote(char c, char quote);
+int		is_symbol(char c);
+
+// join_lst.c
+char	*join_lst(t_list *lst);
 
 /* ------------------------------ built-in cmd ------------------------------ */
 // echo.c
