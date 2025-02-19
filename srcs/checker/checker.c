@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-// syntax check in the following order: pipe, redirection, cmd / dir
 int	check_cmd_line( const char *process_line, char **env )
 {
 	int		code;

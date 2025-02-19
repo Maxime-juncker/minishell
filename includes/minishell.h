@@ -64,16 +64,6 @@ void	redir(t_command *cmd, char *cmd_str, int is_last, int i);
 // init.c
 int		init_table(char *line, t_command_table *table);
 
-// checker_utils.c
-void	cleanup_arr(void **arr);
-int		in_base(const char c, const char *base);
-int		token_error(char c1, char c2);
-
-// checker.c
-int		check_cmd_line( const char *process_line, char **env );
-t_list	*split_line(char *line);
-int		check_path(const char *cmd_part, char **env);
-
 // lexer.c
 char	*process_line(const char *cmd_line, char **env, int *code);
 
@@ -82,16 +72,6 @@ t_list	*process_quotes(const char *line);
 
 // var_processing.c
 t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
-
-// syntax_checker.c
-int		check_syntax(const char *cmd_line);
-int		new_line_error(const char *str, const char last);
-
-// path_checker.c
-int		check_cmd_path(const char *cmd);
-
-// split_line.c
-t_list	*split_line(char *line);
 
 // lexer_utils.c
 char	toggle_quote(char c, char quote);
@@ -104,14 +84,7 @@ char	*join_lst(t_list *lst);
 size_t	count_space(const char *str);
 size_t	get_str_len(const char *str);
 
-// redir_checker.c
-int		check_redir_in(const char *cmd_line, int i);
-
-// token_error.c
-int		check_token_error(const char *cmd_line,
-			int i, int max_occ, char to_find);
-
-/* ------------------------------ built-in cmd ------------------------------ */
+/* ------------------------------ builtin ------------------------------ */
 
 // cd.c
 int		cd_command(const t_command_table *table, const t_command cmd);
@@ -135,6 +108,32 @@ char	*find_env_var(char **env, const char *to_find, int *index);
 // unset.c
 int		unset_cmd(t_command_table *table, t_command cmd);
 void	handle_cmd(t_command_table *table, char *arg);
+
+/* ------------------------------ checker ------------------------------ */
+
+// checker_utils.c
+int		in_base(const char c, const char *base);
+int		token_error(char c1, char c2);
+void	cleanup_arr(void **arr);
+
+// checker.c
+int		check_cmd_line( const char *process_line, char **env );
+
+// path_checker.c
+int		check_path(const char *cmd_part, char **env);
+
+// redir_checker.c
+int		check_redir_in(const char *cmd_line, int i);
+
+// split_line.c
+t_list	*split_line(char *line);
+
+// syntax_checker.c
+int		check_syntax(const char *cmd_line);
+
+// token_error.c
+int		check_token_error(const char *cmd_line, int i, int max_occ,
+			char to_find);
 
 // debug
 void	show_cmd(t_command cmd);
