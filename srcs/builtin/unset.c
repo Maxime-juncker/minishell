@@ -18,7 +18,7 @@ static int	get_env_len(char **env, char *arg)
 	return (len);
 }
 
-void	free_env(char **env)
+static void	free_env(char **env)
 {
 	int	i;
 
@@ -33,7 +33,7 @@ void	free_env(char **env)
 	free(env);
 }
 
-char	**unset(char **env, char *arg, int len)
+static char	**unset(char **env, char *arg, int len)
 {
 	char	**cpy;
 	int		i;

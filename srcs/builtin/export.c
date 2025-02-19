@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	ft_sort_export(char **argv)
+static void	ft_sort_export(char **argv)
 {
 	int		i;
 	int		diff;
@@ -27,7 +27,7 @@ void	ft_sort_export(char **argv)
 	}
 }
 
-int	print_export(t_command_table table, int fd)
+static int	print_export(t_command_table table, int fd)
 {
 	int	i;
 	int	j;
@@ -56,7 +56,7 @@ int	print_export(t_command_table table, int fd)
 	return (0);
 }
 
-char	**update_env(char *arg, char **env)
+static char	**update_env(char *arg, char **env)
 {
 	char	**cpy;
 	int		i;
@@ -82,7 +82,7 @@ char	**update_env(char *arg, char **env)
 	return (cpy);
 }
 
-int	check_arg(char *arg)
+static int	check_arg(char *arg)
 {
 	int	i;
 
@@ -118,8 +118,8 @@ int	export_cmd(t_command_table *table, t_command cmd)
 	ft_sort_export(table->exp);
 	if (cmd.n_args == 1)
 		return (print_export(*table, cmd.fd_out), 0);
-	i = 1;
-	while (cmd.args[i] != NULL)
+	i = 0;
+	while (cmd.args[++i] != NULL)
 	{
 		if (check_arg(cmd.args[i]))
 			return (1);
@@ -133,7 +133,6 @@ int	export_cmd(t_command_table *table, t_command cmd)
 		if (ft_strchr(cmd.args[i], '='))
 			table->env = update_env(cmd.args[i], table->env);
 		table->exp = update_env(cmd.args[i], table->exp);
-		i++;
 	}
 	return (0);
 }

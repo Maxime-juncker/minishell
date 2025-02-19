@@ -1,4 +1,26 @@
-#include "minishell.h"
+#include <stddef.h>
+
+char	*find_env_var(char **env, const char *to_find, int *index)
+{
+	int		i;
+	size_t	len;
+
+	i = 0;
+	len = ft_strlen(to_find);
+	while (env[i] != NULL)
+	{
+		if (ft_strncmp(env[i], to_find, len) == 0)
+		{
+			if (index != NULL)
+				*index = i;
+			return (env[i] + len + 1);
+		}
+		i++;
+	}
+	if (index != NULL)
+		*index = -1;
+	return (NULL);
+}
 
 int	pwd(char **env)
 {

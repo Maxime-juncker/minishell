@@ -12,6 +12,19 @@ size_t	arrlen(void **arr)
 	return (i);
 }
 
+int	env(t_command_table table)
+{
+	int	i;
+
+	i = 0;
+	while (table.env[i] != NULL)
+	{
+		printf("%s\n", table.env[i]);
+		i++;
+	}
+	return (0);
+}
+
 char	**duplicate_env(char **old_env)
 {
 	char	**new_env;
@@ -33,19 +46,4 @@ char	**duplicate_env(char **old_env)
 	}
 	new_env[i] = NULL;
 	return (new_env);
-}
-
-/// @brief Print the environment variables
-/// @param table The environment variables
-int	env(t_command_table table)
-{
-	int	i;
-
-	i = 0;
-	while (table.env[i] != NULL)
-	{
-		printf("%s\n", table.env[i]);
-		i++;
-	}
-	return (0);
 }
