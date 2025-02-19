@@ -1,6 +1,4 @@
-#include "minishell.h"
-
-int	is_arg(const char *arg)
+static int	is_arg(const char *arg)
 {
 	int	i;
 
@@ -16,7 +14,7 @@ int	is_arg(const char *arg)
 	return (1);
 }
 
-int	process_args(char **args, int n)
+static int	process_args(char **args, int n)
 {
 	int	i;
 	int	found_args;
@@ -36,10 +34,6 @@ int	process_args(char **args, int n)
 	return (found_args);
 }
 
-/// @brief Print the arguments to the standard output.
-/// @param args The arguments to print (each args are separated by a space).
-/// @param n The number of arguments.
-/// @return 0 if the function succeed, 1 otherwise.
 int	echo(char **args, int n)
 {
 	int	i;

@@ -1,6 +1,29 @@
 #include "minishell.h"
 #include <dirent.h>
 
+static int	replace_env_var(char **env, char *to_find, const char *replace)
+{
+	int		i;
+	size_t	len;
+	char	*path;
+
+	i = 0;
+	len = ft_strlen(to_find);
+	while (env[i] != NULL)
+	{
+		if (ft_strncmp(env[i], to_find, len) == 0)
+		{
+			free(env[i]);
+			path = ft_strjoin_free(ft_strjoin(to_find, "="), \
+			ft_strdup(replace), FREE1 | FREE2);
+			env[i] = path;
+			return (0);
+		}
+		i++;
+	}
+	return (-1);
+}
+
 static char	*get_absolute_path(const char *new_path)
 {
 	char	*buff;
@@ -19,25 +42,6 @@ static char	*get_absolute_path(const char *new_path)
 			return (NULL);
 	}
 	return (buff);
-}
-
-int	cd_command(const t_command_table *table, const t_command cmd)
-{
-	char	*path;
-	int		code;
-
-	path = NULL;
-	if (cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
-		return (0);
-	if (cmd.n_args == 2)
-		path = cmd.args[1];
-	else if (cmd.n_args > 2)
-	{
-		printf("minishell: cd: too many arguments\n");
-		return (1);
-	}
-	code = change_directory(path, table->env);
-	return (code);
 }
 
 int	change_directory(const char *path, char **env)
@@ -65,4 +69,23 @@ int	change_directory(const char *path, char **env)
 	closedir(dir);
 	free(abs_path);
 	return (0);
+}
+
+int	cd_command(const t_command_table *table, const t_command cmd)
+{
+	char	*path;
+	int		code;
+
+	path = NULL;
+	if (cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
+		return (0);
+	if (cmd.n_args == 2)
+		path = cmd.args[1];
+	else if (cmd.n_args > 2)
+	{
+		printf("minishell: cd: too many arguments\n");
+		return (1);
+	}
+	code = change_directory(path, table->env);
+	return (code);
 }
