@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:49:29 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/18 12:37:43 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/20 12:49:57 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 // colors
 # define RESET	"\033[0m"
 # define BLACK	"\033[0;30m"
-# define RED		"\033[0;31m"
+# define RED	"\033[0;31m"
 # define GREEN	"\033[0;32m"
 # define YELLOW	"\033[0;33m"
 # define BLUE	"\033[0;34m"
@@ -35,6 +35,7 @@
 # define CYAN	"\033[0;36m"
 # define WHITE	"\033[0;37m"
 # define GRAY	"\033[90m"
+# define ORANGE	"\033[38;5;208m"
 
 // Background
 # define B_BLACK		"\033[40m"

@@ -18,7 +18,7 @@ static char	*append_str(char *old, char *append_str, int new_len)
 static void	handle_eof(char **line, char *deli)
 {
 	if (!*line)
-		printf("minishell: warning: %s (wanted `%s')\n",
+		printf("\033[38;5;208mminishell: warning: %s (wanted `%s')\n\033[0m",
 			"here-document delimited by end-of-file", deli);
 	else
 		free(*line);

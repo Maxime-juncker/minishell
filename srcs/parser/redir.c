@@ -20,15 +20,19 @@ static int	heredoc(t_command *cmd, char *deli)
 	char	*doc;
 	char	*line;
 	size_t	len;
+	int		nb;
 
 	cmd->fd_in = open("/tmp/temp.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	doc = NULL;
+	nb = 0;
 	while (1)
 	{
+		ft_putstr_fd("> ", 0);
 		line = get_next_line(0);
 		if (!line)
-			printf("minishell: warning: %s (wanted `%s')\n",
-				"here-document delimited by end-of-file", deli);
+			printf("%s%d delimited by end-of-file (wanted `%s')\033[0m\n",
+				"\n\033[38;5;208mminishell: warning: here-document at line ",
+					nb, deli);
 		len = ft_strlen(line) - 1;
 		if (!line || (!ft_strncmp(line, deli, len) && ft_strlen(deli) == len))
 		{
@@ -36,6 +40,7 @@ static int	heredoc(t_command *cmd, char *deli)
 				free(line);
 			break ;
 		}
+		nb++;
 		doc = append_str(doc, line, ft_strlen(doc) + len + 2);
 		free(line);
 		if (!doc)

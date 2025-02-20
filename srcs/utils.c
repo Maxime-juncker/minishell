@@ -23,7 +23,6 @@ void init_env(t_command_table *table, char **env)
 
 void	handle_signal(int signal)
 {
-	// printf("%d %d\n", getpgrp(), signal);
 	g_signal_received = signal;
 }
 

@@ -48,11 +48,11 @@ static int	check_dir_validity(char **path)
 	dir = opendir(*path);
 	if (!dir)
 	{
-		printf("minishell: %s: No such file or directory\n", *path);
+		printf("\033[0;31mminishell: %s: No such file or directory\n\033[0m", *path);
 		return (NOT_FOUND);
 	}
 	closedir(dir);
-	printf("minishell: %s: Is a directory\n", *path);
+	printf("\033[0;31mminishell: %s: Is a directory\n\033[0m", *path);
 	free(*path);
 	return (IS_DIR);
 }
@@ -70,7 +70,7 @@ static int	check_cmd_validity(char **cmd_name, char **env)
 		if (dummy_cmd.args[0][0] == '.')
 			return (check_dir_validity(cmd_name));
 		else
-			printf("minishell: %s: command not found\n", *cmd_name);
+			printf("\033[0;31mminishell: %s: command not found\n\033[0m", *cmd_name);
 		cleanup_arr((void **)dummy_cmd.args);
 		free(*cmd_name);
 		return (NOT_FOUND);

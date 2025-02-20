@@ -51,7 +51,7 @@ int	change_directory(const char *path, char **env)
 
 	if (getcwd(NULL, 0) == NULL)
 	{
-		printf("minishell: cd: %s: No such file or directory\n", path);
+		printf("\033[0;31mminishell: cd: %s: No such file or directory\n\033[0m", path);
 		return (1);
 	}
 	if (path == NULL || ft_strncmp(path, "~", ft_strlen(path)) == 0)
@@ -59,12 +59,12 @@ int	change_directory(const char *path, char **env)
 	dir = opendir(path);
 	if (dir == NULL)
 	{
-		perror("can't open dir");
+		perror("\033[0;31mcan't open dir\033[0m");
 		return (1);
 	}
 	if (chdir(path) == -1)
 	{
-		perror("chdir failed");
+		perror("\033[0;31mchdir failed\033[0m");
 		return (1);
 	}
 	abs_path = get_absolute_path();
@@ -88,7 +88,7 @@ int	cd_command(const t_command_table *table, const t_command cmd)
 		path = cmd.args[1];
 	else if (cmd.n_args > 2)
 	{
-		printf("minishell: cd: too many arguments\n");
+		printf("\033[0;31mminishell: cd: too many arguments\n\033[0;31m");
 		return (1);
 	}
 	code = change_directory(path, table->env);
