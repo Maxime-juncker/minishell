@@ -18,7 +18,7 @@ int	cd_relative( void )
 
 	Libunit::Redirect_log();
 	run_pipeline(&table);
-	pwd(table.env);
+	pwd();
 	if (Libunit::Check_output(line) == 0)
 		return (0);
 	else
