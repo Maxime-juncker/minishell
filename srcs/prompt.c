@@ -10,18 +10,17 @@ int is_whitespace(char c)
 
 int	ignore_prompt( char *prompt)
 {
-	int    i;
+	int	i;
 
-    i = 0;
-    while (prompt[i])
-    {
-        if (!is_whitespace(prompt[i]) && in_base(prompt[i], ":!") == -1)
-            return (0);
-        i++;
-    }
-    return (1);
+	i = 0;
+	while (prompt[i])
+	{
+		if (!is_whitespace(prompt[i]) && in_base(prompt[i], ":!") == -1)
+			return (0);
+		i++;
+	}
+	return (1);
 }
-
 char	*new_prompt_txt( char **env )
 {
 	char	*txt;

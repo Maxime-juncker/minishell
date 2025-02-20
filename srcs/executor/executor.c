@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include "sys/wait.h"
 
 void	close_fds(t_command cmd)
 {
@@ -51,6 +52,7 @@ int	run_command(t_command cmd, const t_command_table *table, int *childs)
 	int	code;
 
 	setup_args(&cmd);
+
 	pid = fork();
 	if (pid == -1)
 		return (-1);
@@ -69,6 +71,14 @@ int	run_command(t_command cmd, const t_command_table *table, int *childs)
 		if (execve(get_cmd_path(get_paths(table->env), cmd), \
 			cmd.args, table->env) == -1)
 			alert("execve failed");
+	}
+	else
+	{
+		if (cmd.args[0][0] == '.')
+		{
+			int status;
+			waitpid(pid, &status, WUNTRACED);
+		}
 	}
 	return (close_fds(cmd), pid);
 }
