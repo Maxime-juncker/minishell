@@ -54,10 +54,11 @@ size_t	arrlen(void **arr);
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);
+char	**update_env(char *arg, char **env);
 
 // pwd.c
 int		pwd(char **env);
-char	*find_env_var(char **env, const char *to_find, int *index);
+char	*find_env_var(char **env, char *to_find, int *index);
 
 // unset.c
 int		unset_cmd(t_command_table *table, t_command cmd);
@@ -169,7 +170,6 @@ void	redir(t_command *cmd, char *command, int is_last, int i);
 
 void	new_prompt(t_command_table *table);
 void	init_env(t_command_table *table, char **env);
-int		is_builtin(char *name);
 void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);
 int		check_interrupt(void);

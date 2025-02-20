@@ -11,6 +11,8 @@ char	**get_paths(char **env)
 	{
 		i++;
 	}
+	if (!env[i])
+		return (NULL);
 	tmp = env[i] + 5;
 	return (ft_split(tmp, ':'));
 }
@@ -56,7 +58,7 @@ int	is_builtin(char *name)
 		return (1);
 	if (ft_strcmp(name, "cd") == 0)
 		return (1);
-	if (ft_strcmp(name, "heredoc") == 0)
+	if (ft_strcmp(name, "pwd") == 0)
 		return (1);
 	return (0);
 }

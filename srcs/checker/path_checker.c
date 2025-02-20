@@ -65,7 +65,7 @@ static int	check_cmd_validity(char **cmd_name, char **env)
 	if (create_dummy_cmd(*cmd_name, &dummy_cmd) == MALLOC_ERR)
 		return (MALLOC_ERR);
 	path = get_cmd_path(get_paths(env), dummy_cmd);
-	if (path == NULL)
+	if (path == NULL && !is_builtin(*cmd_name))
 	{
 		if (dummy_cmd.args[0][0] == '.')
 			return (check_dir_validity(cmd_name));

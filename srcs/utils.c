@@ -14,16 +14,16 @@ int is_whitespace(char c)
 
 int	ignore_prompt( char *prompt)
 {
-	int    i;
+	int	i;
 
-    i = 0;
-    while (prompt[i])
-    {
-        if (!is_whitespace(prompt[i]) && in_base(prompt[i], ":!") == -1)
-            return (0);
-        i++;
-    }
-    return (1);
+	i = 0;
+	while (prompt[i])
+	{
+		if (!is_whitespace(prompt[i]) && in_base(prompt[i], ":!") == -1)
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 void init_env(t_command_table *table, char **env)
@@ -57,12 +57,14 @@ void	cleanup_table(t_command_table *table)
 	free(table->commands);
 }
 
-char	*get_folder( char **env )
+char	*get_folder(char **env)
 {
 	char	*folder;
 	char	*temp;
 
 	folder = ft_strdup(find_env_var(env, "PWD", NULL));
+	if (!folder)
+		return (NULL);
 	temp = folder;
 	if (folder[1] != '\0')
 	{
@@ -76,7 +78,7 @@ char	*get_folder( char **env )
 	return (folder);
 }
 
-char	*new_prompt_txt( char **env )
+char	*new_prompt_txt(char **env)
 {
 	char	*txt;
 	char	*folder;

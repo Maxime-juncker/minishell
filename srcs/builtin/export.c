@@ -27,27 +27,27 @@ static void	ft_sort_export(char **argv)
 	}
 }
 
-static int	print_export(t_command_table table, int fd)
+static int	print_export(char **exp, int fd)
 {
 	int	i;
 	int	j;
 	int	n;
 
 	i = -1;
-	while (table.exp[++i] != NULL)
+	while (exp[++i] != NULL)
 	{
 		ft_putstr_fd("export ", fd);
 		j = 0;
 		n = 0;
-		while (table.exp[i][j])
+		while (exp[i][j])
 		{
-			ft_putchar_fd(table.exp[i][j], fd);
-			if (table.exp[i][j] == '=' && !n)
+			ft_putchar_fd(exp[i][j], fd);
+			if (exp[i][j] == '=' && !n)
 			{
 				ft_putchar_fd('"', fd);
 				n++;
 			}
-			if (!table.exp[i][j + 1] && n)
+			if (!exp[i][j + 1] && n)
 				ft_putchar_fd('"', fd);
 			j++;
 		}
@@ -56,16 +56,17 @@ static int	print_export(t_command_table table, int fd)
 	return (0);
 }
 
-static char	**update_env(char *arg, char **env)
+char	**update_env(char *arg, char **env)
 {
 	char	**cpy;
 	int		i;
 
+	(void)arg;
 	cpy = malloc((arrlen((void **)env) + 2) * sizeof(char *));
 	if (cpy == NULL)
 		return (NULL);
 	i = 0;
-	while (env[i] != NULL)
+	while (env && env[i])
 	{
 		cpy[i] = env[i];
 		i++;
@@ -117,7 +118,7 @@ int	export_cmd(t_command_table *table, t_command cmd)
 		return (0);
 	ft_sort_export(table->exp);
 	if (cmd.n_args == 1)
-		return (print_export(*table, cmd.fd_out), 0);
+		return (print_export(table->exp, cmd.fd_out), 0);
 	i = 0;
 	while (cmd.args[++i] != NULL)
 	{
