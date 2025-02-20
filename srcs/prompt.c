@@ -14,12 +14,12 @@ int	ignore_prompt(char *prompt)
 	}
 	return (1);
 }
-char	*new_prompt_txt( char **env )
+char	*new_prompt_txt(char **env)
 {
 	char	*txt;
 	char	*folder;
 
-	folder = get_folder(env);
+	folder = get_folder();
 	if (!folder)
 		return (NULL);
 	txt = ft_strjoin(BLUE, NULL);

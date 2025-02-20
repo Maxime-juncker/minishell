@@ -7,8 +7,7 @@
 #include <sys/wait.h>
 #include <errno.h>
 
-
-void init_env(t_command_table *table, char **env)
+void	init_env(t_command_table *table, char **env)
 {
 	table->env = duplicate_env(env);
 	if (table->env == NULL)
@@ -39,12 +38,12 @@ void	cleanup_table(t_command_table *table)
 	free(table->commands);
 }
 
-char	*get_folder(char **env)
+char	*get_folder(void)
 {
 	char	*folder;
 	char	*temp;
 
-	folder = find_env_var(env, "PWD", NULL);
+	folder = get_pwd();
 	if (!folder)
 		return (NULL);
 	temp = folder;

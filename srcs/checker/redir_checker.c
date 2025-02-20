@@ -6,7 +6,8 @@ int	new_line_error(const char *str, const char last)
 		return (token_error('|', *(str - 2)));
 	if (last == '>' || last == '<')
 	{
-		printf("\033[0;31mminishell: syntax error near unexpected token `newline\'\n\033[0m");
+		printf("\033[0;31mminishell: syntax error near unexpected token %s",
+			"`newline\'\n\033[0m");
 		return (SYNTAX_ERR);
 	}
 	return (0);
@@ -47,6 +48,7 @@ static char	*get_file_name(const char *s)
 	char	quote;
 	char	*file;
 	int		start;
+	char	*res;
 
 	i = 0;
 	quote = 0;
@@ -62,11 +64,12 @@ static char	*get_file_name(const char *s)
 			break ;
 		i++;
 	}
-	file = ft_strdup(ft_substr(s, start, i - start));
-	if (file == NULL)
+	file = ft_substr(s, start, i - start);
+	if (!file)
 		return (NULL);
-	file = remove_quotes_pair(file);
-	return (file);
+	res = remove_quotes_pair(file);
+	free(file);
+	return (res);
 }
 
 static int	skip_check_in(const char *cmd_line, int i)
@@ -100,8 +103,11 @@ int	check_redir_in(const char *cmd_line, int i)
 	}
 	if (access(file, F_OK) == -1)
 	{
-		printf("\033[0;31mminishell: %s: No such file or directory\n\033[0m", file);
+		printf("\033[0;31mminishell: %s: No such file or directory\n\033[0m",
+			file);
+		free(file);
 		return (1);
 	}
+	free(file);
 	return (0);
 }
