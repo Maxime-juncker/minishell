@@ -3,21 +3,14 @@
 #include <readline/history.h>
 #include <signal.h>
 
-int is_whitespace(char c)
+int	ignore_prompt(char *prompt)
 {
-	return (c == ' ' || (c >= 9 && c <= 13));
-}
-
-int	ignore_prompt( char *prompt)
-{
-	int	i;
-
-	i = 0;
-	while (prompt[i])
+	while (*prompt)
 	{
-		if (!is_whitespace(prompt[i]) && in_base(prompt[i], ":!") == -1)
+		if (!(*prompt == ' ' || (*prompt >= 9 && *prompt <= 13))
+				&& in_base(*prompt, ":!") == -1)
 			return (0);
-		i++;
+		prompt++;
 	}
 	return (1);
 }

@@ -45,7 +45,7 @@ char	*get_folder(char **env)
 	char	*folder;
 	char	*temp;
 
-	folder = ft_strdup(find_env_var(env, "PWD", NULL));
+	folder = find_env_var(env, "PWD", NULL);
 	if (!folder)
 		return (NULL);
 	temp = folder;
