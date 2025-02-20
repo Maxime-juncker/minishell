@@ -46,39 +46,54 @@ static void	setup_args(t_command *cmd)
 	cmd->args[cmd->n_args] = NULL;
 }
 
-int	run_command(t_command cmd, const t_command_table *table, int *childs)
+
+void	close_all_fd(const t_command_table *table)
+{
+	size_t i = 0;
+
+	while (i < table->n_commands)
+	{
+		close_fds(table->commands[i]);
+		i++;
+	}
+}
+
+int	run_command(t_command *cmd, const t_command_table *table, int *childs, int i)
 {
 	int	pid;
 	int	code;
 
-	setup_args(&cmd);
+	setup_args(cmd);
 
 	pid = fork();
 	if (pid == -1)
 		return (-1);
 	if (pid == 0)
 	{
-		clean(cmd, table);
+		clean(*cmd, table);
 		free(childs);
-		if (is_builtin(cmd.args[0]) == 1)
+		if (is_builtin(cmd->args[0]) == 1)
 		{
-			code = run_built_in(cmd, table);
-			close_fds(cmd);
+			code = run_built_in(*cmd, table);
 			cleanup_arr((void **)table->env);
 			cleanup_table((t_command_table *)table);
 			exit (code);
 		}
-		if (execve(get_cmd_path(get_paths(table->env), cmd), \
-			cmd.args, table->env) == -1)
+		(void)i;
+		close_all_fd(table);
+		if (execve(get_cmd_path(get_paths(table->env), *cmd), \
+			cmd->args, table->env) == -1)
 			alert("execve failed");
 	}
 	else
 	{
-		if (cmd.args[0][0] == '.')
+		cmd->pid = pid;
+		if (cmd->args[0][0] == '.')
 		{
 			int status;
 			waitpid(pid, &status, WUNTRACED);
 		}
+		close_fds(*cmd);
 	}
-	return (close_fds(cmd), pid);
+	return (pid);
 }

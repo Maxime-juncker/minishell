@@ -22,6 +22,7 @@ typedef struct s_command
 {
 	char	**args;
 	size_t	n_args;
+	int 	pid;
 
 	int		fd_in;
 	int		fd_out;
@@ -99,7 +100,7 @@ void	show_table(t_command_table table);
 void	show_cmd(t_command cmd);
 
 // executor.c
-int		run_command(t_command cmd, const t_command_table *table, int *childs);
+int		run_command(t_command *cmd, const t_command_table *table, int *childs, int i);
 void	close_fds(t_command cmd);
 
 // paths.c
@@ -176,4 +177,7 @@ int		check_interrupt(void);
 void	check_piped_execution(void);
 char	*get_folder(char **env);
 
+
+void check_fd(t_command_table table);
+void	close_all_fd(const t_command_table *table);
 #endif
