@@ -46,6 +46,7 @@ SRCS = 		main.c				\
 			quote_utils.c		\
 			redir_checker.c		\
 			token_error.c		\
+			quote_checker.c		\
 
 LIB_SRC = 	utils.c				\
 			echo.c				\
@@ -74,6 +75,7 @@ LIB_SRC = 	utils.c				\
 			quote_utils.c		\
 			redir_checker.c		\
 			token_error.c		\
+			quote_checker.c		\
 
 OBJ := $(SRCS:.c=.o)
 

@@ -69,7 +69,7 @@ int	dolars_04( void )
 {
 	const char *exepted_file[]
 	{
-		"minishell: $: command not found",
+		"\033[0;31mminishell: $: command not found",
 	};
 
 	Libunit::Redirect_log();
@@ -104,7 +104,7 @@ int	dolars_06( void )
 {
 	const char *exepted_file[]
 	{
-		"minishell: : command not found",
+		"\033[0;31mminishell: : command not found",
 	};
 
 	Libunit::Redirect_log();
@@ -120,7 +120,7 @@ int	dolars_07( void )
 {
 	const char *exepted_file[]
 	{
-		"minishell: $HOMEgfehgeuohge: command not found",
+		"\033[0;31mminishell: $HOMEgfehgeuohge: command not found",
 	};
 
 	Libunit::Redirect_log();

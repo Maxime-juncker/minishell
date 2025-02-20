@@ -93,6 +93,8 @@ int		check_syntax(const char *cmd_line);
 int		check_token_error(const char *cmd_line, int i, int max_occ,
 			char to_find);
 
+int		check_quotes(const char *cmd_line);
+
 /* ------------------------------ executor ------------------------------ */
 
 // cmd_debug.c

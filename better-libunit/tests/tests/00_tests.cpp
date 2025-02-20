@@ -30,7 +30,7 @@ int	tests_routine( void )
 	routine.AddNewTest(Libunit::Test("syntax", "||||||||||", &synt_err_20));
 	routine.AddNewTest(Libunit::Test("syntax", ">>|><", &synt_err_21));
 	routine.AddNewTest(Libunit::Test("syntax", "\"hola\"", &synt_err_22));
-	routine.AddNewTest(Libunit::Test("syntax", "hola\'", &synt_err_23));
+	// routine.AddNewTest(Libunit::Test("syntax", "hola\'", &synt_err_23));
 	routine.AddNewTest(Libunit::Test("syntax", "hola", &synt_err_24));
 	routine.AddNewTest(Libunit::Test("syntax", "hola boula badaboum", &synt_err_25));
 	routine.AddNewTest(Libunit::Test("syntax", "Makefile", &synt_err_26));

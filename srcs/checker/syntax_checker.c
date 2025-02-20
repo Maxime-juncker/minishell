@@ -101,8 +101,12 @@ static int	check_line(const char *cmd_line)
 
 int	check_syntax(const char *cmd_line)
 {
-	int		i;
+	int	i;
+	int	code;
 
+	code = check_quotes(cmd_line);
+	if (code != 0)
+		return (code);
 	i = 0;
 	while (cmd_line[i] == ' ')
 		i++;

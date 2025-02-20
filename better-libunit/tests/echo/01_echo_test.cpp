@@ -55,7 +55,7 @@ int	echo_04( void )
 {
 	const char *exepted_file[]
 	{
-		"minishell: echoHola: command not found",
+		"\033[0;31mminishell: echoHola: command not found",
 	};
 
 	Libunit::Redirect_log();
@@ -69,7 +69,7 @@ int	echo_05( void )
 {
 	const char *exepted_file[]
 	{
-		"minishell: echo-nHola: command not found",
+		"\033[0;31mminishell: echo-nHola: command not found",
 	};
 
 	Libunit::Redirect_log();
