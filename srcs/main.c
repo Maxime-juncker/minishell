@@ -19,7 +19,6 @@ int	main(int argc, char **argv, char **env)
 	signal(SIGINT, handle_signal);
 	signal(SIGTSTP, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-
 	signal(SIGPIPE, handle_signal);
 	while (1)
 	{

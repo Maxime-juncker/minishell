@@ -1,44 +1,27 @@
 #include "minishell.h"
 
-char	*find_env_var(char **env, char *to_find, int *index)
+char	*get_pwd(void)
 {
-	int		i;
-	size_t	len;
 	char	buffer[1024];
 
-	if (!ft_strcmp(to_find, "PWD"))
+	if (!getcwd(buffer, sizeof(buffer)))
 	{
-		if (!getcwd(buffer, sizeof(buffer)))
-		{
-			error("Error using getcwd()");
-			return (NULL);
-		}
-		return (ft_strdup(buffer));
+		printf("%spwd: error retrieving current directory: getcwd:%s%s",
+			RED, " cannot access parent directories: No such file or directory",
+			RESET);
+		return (NULL);
 	}
-	i = 0;
-	len = ft_strlen(to_find);
-	while (env[i] != NULL)
-	{
-		if (ft_strncmp(env[i], to_find, len) == 0)
-		{
-			if (index != NULL)
-				*index = i;
-			return (env[i] + len + 1);
-		}
-		i++;
-	}
-	if (index != NULL)
-		*index = -1;
-	return (NULL);
+	return (ft_strdup(buffer));
 }
 
-int	pwd(char **env)
+int	pwd(void)
 {
 	char	*path;
 
-	path = find_env_var(env, "PWD", NULL);
+	path = get_pwd();
 	if (!path)
 		return (1);
 	printf("%s\n", path);
+	free(path);
 	return (0);
 }

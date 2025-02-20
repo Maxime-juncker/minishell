@@ -19,7 +19,7 @@ static int	run_built_in(const t_command cmd, const t_command_table *table)
 	if (ft_strncmp(cmd.args[0], "env", len) == 0)
 		return (env(*table));
 	if (ft_strncmp(cmd.args[0], "pwd", len) == 0)
-		return (pwd(table->env));
+		return (pwd());
 	return (-1);
 }
 

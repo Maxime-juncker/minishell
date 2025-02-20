@@ -22,7 +22,7 @@ typedef struct s_command
 {
 	char	**args;
 	size_t	n_args;
-	int 	pid;
+	int		pid;
 
 	int		fd_in;
 	int		fd_out;
@@ -43,7 +43,7 @@ extern int	g_signal_received;
 
 // cd.c
 int		cd_command(const t_command_table *table, const t_command cmd);
-int		change_directory(const char *path, char **env);
+char	*find_env_var(char **env, char *to_find, int *index);
 
 // echo.c
 int		echo(char **args, int n);
@@ -58,8 +58,8 @@ int		export_cmd(t_command_table *table, t_command cmd);
 char	**update_env(char *arg, char **env);
 
 // pwd.c
-int		pwd(char **env);
-char	*find_env_var(char **env, char *to_find, int *index);
+int		pwd(void);
+char	*get_pwd(void);
 
 // unset.c
 int		unset_cmd(t_command_table *table, t_command cmd);
@@ -102,7 +102,8 @@ void	show_table(t_command_table table);
 void	show_cmd(t_command cmd);
 
 // executor.c
-int		run_command(t_command *cmd, const t_command_table *table, int *childs, int i);
+int		run_command(t_command *cmd, const t_command_table *table, int *childs,
+			int i);
 void	close_fds(t_command cmd);
 
 // paths.c
@@ -177,9 +178,6 @@ void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);
 int		check_interrupt(void);
 void	check_piped_execution(void);
-char	*get_folder(char **env);
+char	*get_folder(void);
 
-
-void check_fd(t_command_table table);
-void	close_all_fd(const t_command_table *table);
 #endif
