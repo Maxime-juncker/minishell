@@ -19,26 +19,28 @@ static int	is_env_cmd(char *name)
 static int	wait_for_process(t_command_table *table, int *childs, int code)
 {
 	int		pid;
-	size_t	i;
+	size_t	i = 0;
 
 	signal(SIGQUIT, handle_signal);
 	g_signal_received = 0;
-	while (1)
+	while (childs[i])
 	{
-		pid = wait(&code);
+		// pid = wait(&code);
+		pid = waitpid(childs[i], &code, WUNTRACED);
 		if (pid == -1)
 		{
 			if (g_signal_received)
 			{
 				if (g_signal_received == SIGINT)
 					code = 130;
-				i = -1;
+				i--;
 				while (++i < table->n_commands)
 					kill(childs[i], g_signal_received);
 				printf("\n");
 			}
 			return (code);
 		}
+		i++;
 	}
 	return (signal(SIGQUIT, SIG_IGN), code);
 }

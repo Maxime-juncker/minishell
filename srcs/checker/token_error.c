@@ -3,9 +3,11 @@
 static int	count_occ_reverse(const char *str, int i)
 {
 	int	occ;
+	int	c;
 
 	occ = 0;
-	while (i >= 0 && is_symbol(str[i]))
+	c = str[i];
+	while (i >= 0 && str[i] == c)
 	{
 		occ++;
 		i--;

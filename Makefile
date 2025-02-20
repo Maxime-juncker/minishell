@@ -18,6 +18,7 @@ VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser:srcs/checker
 #                                  srcs / objs                                 #
 # ---------------------------------------------------------------------------- #
 SRCS = 		main.c				\
+			prompt.c			\
 			utils.c				\
 			echo.c				\
 			cd.c				\
