@@ -102,8 +102,7 @@ void	show_table(t_command_table table);
 void	show_cmd(t_command cmd);
 
 // executor.c
-int		run_command(t_command *cmd, const t_command_table *table, int *childs,
-			int i);
+int		run_command(t_command *cmd, const t_command_table *table, int *childs);
 void	close_fds(t_command cmd);
 
 // paths.c
@@ -113,8 +112,6 @@ char	**get_paths(char **env);
 
 // pipeline.c
 int		run_pipeline(t_command_table *table);
-
-/* ------------------------------ executor ------------------------------ */
 
 // join_lst.c
 char	*join_lst(t_list *lst);

@@ -16,15 +16,16 @@ static int	is_env_cmd(char *name)
 	return (0);
 }
 
-int fd_is_valid(int fd)
+int	fd_is_valid(int fd)
 {
-    return fcntl(fd, F_GETFD) != -1 || errno != EBADF;
+	return (fcntl(fd, F_GETFD) != -1 || errno != EBADF);
 }
 
-void check_fd(t_command_table table)
+void	check_fd(t_command_table table)
 {
-	size_t i = 0;
+	size_t	i;
 
+	i = 0;
 	while (i < table.n_commands)
 	{
 		printf("%s:\n", table.commands[i].args[0]);
@@ -32,7 +33,6 @@ void check_fd(t_command_table table)
 			printf("in is valid\n");
 		else
 			printf("in is closed\n");
-
 		if (fd_is_valid(table.commands[i].fd_out))
 			printf("out is valid\n");
 		else
@@ -46,19 +46,16 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 	int		pid;
 	size_t	i;
 
-	i = 0;
-
 	signal(SIGQUIT, handle_signal);
 	g_signal_received = 0;
+	i = 0;
 	while (childs[i])
 	{
 		pid = wait(&code);
 		if (pid == -1)
 		{
 			if (WIFSIGNALED(code) && WTERMSIG(code) == SIGPIPE)
-			{
 				return (code);
-			}
 			if (g_signal_received)
 			{
 				if (g_signal_received == SIGINT)
@@ -127,7 +124,7 @@ int	run_pipeline(t_command_table *table)
 				i++;
 				continue ;
 			}
-			childs[i] = run_command(&table->commands[i], table, childs, i);
+			childs[i] = run_command(&table->commands[i], table, childs);
 		}
 		i++;
 	}

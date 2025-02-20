@@ -46,11 +46,11 @@ static void	setup_args(t_command *cmd)
 	cmd->args[cmd->n_args] = NULL;
 }
 
-
 void	close_all_fd(const t_command_table *table)
 {
-	size_t i = 0;
+	size_t	i;
 
+	i = 0;
 	while (i < table->n_commands)
 	{
 		close_fds(table->commands[i]);
@@ -58,13 +58,13 @@ void	close_all_fd(const t_command_table *table)
 	}
 }
 
-int	run_command(t_command *cmd, const t_command_table *table, int *childs, int i)
+int	run_command(t_command *cmd, const t_command_table *table, int *childs)
 {
 	int	pid;
 	int	code;
+	int status;
 
 	setup_args(cmd);
-
 	pid = fork();
 	if (pid == -1)
 		return (-1);
@@ -79,7 +79,6 @@ int	run_command(t_command *cmd, const t_command_table *table, int *childs, int i
 			cleanup_table((t_command_table *)table);
 			exit (code);
 		}
-		(void)i;
 		close_all_fd(table);
 		if (execve(get_cmd_path(get_paths(table->env), *cmd), \
 			cmd->args, table->env) == -1)
@@ -90,7 +89,6 @@ int	run_command(t_command *cmd, const t_command_table *table, int *childs, int i
 		cmd->pid = pid;
 		if (cmd->args[0][0] == '.')
 		{
-			int status;
 			waitpid(pid, &status, WUNTRACED);
 		}
 		close_fds(*cmd);

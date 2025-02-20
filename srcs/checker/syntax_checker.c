@@ -7,7 +7,7 @@ static int	error_symbol(char error_symb, const char *cmd_line, int i)
 
 	if (error_symb == '<' && cmd_line[i + 1] == '>')
 	{
-		printf("\033[0;31mminishell: syntax error near unexpected token `<>\'\n\033[0m");
+		error("minishell: syntax error near unexpected token `<>\'\n");
 		return (SYNTAX_ERR);
 	}
 	max_occ = 2;

@@ -68,8 +68,7 @@ static char	*get_file_name(const char *s)
 	if (!file)
 		return (NULL);
 	res = remove_quotes_pair(file);
-	free(file);
-	return (res);
+	return (free(file), res);
 }
 
 static int	skip_check_in(const char *cmd_line, int i)
