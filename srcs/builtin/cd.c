@@ -49,6 +49,11 @@ int	change_directory(const char *path, char **env)
 	DIR		*dir;
 	char	*abs_path;
 
+	if (getcwd(NULL, 0) == NULL)
+	{
+		printf("minishell: cd: %s: No such file or directory\n", path);
+		return (1);
+	}
 	if (path == NULL || ft_strncmp(path, "~", ft_strlen(path)) == 0)
 		path = find_env_var(env, "HOME", NULL);
 	dir = opendir(path);
