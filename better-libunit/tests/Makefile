@@ -39,6 +39,8 @@ SRCS = 		main.cpp					\
 			11_double_quote1.cpp		\
 			12_double_quote2.cpp		\
 			13_redir_in.cpp				\
+			14_redir_in_hard.cpp		\
+			15_redir_middle_cmd.cpp		\
 			00_tests.cpp				\
 			01_br.cpp					\
 			02_syntax_err.cpp			\

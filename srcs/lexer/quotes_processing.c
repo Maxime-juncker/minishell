@@ -31,7 +31,6 @@ char	*remove_quotes(const char *line)
 static int	add_quotes(t_list **lst, const char *line, size_t *i)
 {
 	char	*tmp;
-	int		lst_size;
 
 	tmp = ft_strdup(line);
 	if (!tmp)
@@ -41,7 +40,6 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	}
 	if (tmp[0] != '\0')
 	{
-		lst_size = ft_lstsize(*lst);
 		if (ft_lstadd_back(lst, ft_lstnew(ft_strdup(tmp))) == -1)
 			return (MALLOC_ERR);
 		*i += ft_strlen(tmp);
@@ -86,7 +84,6 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 	char	*tmp;
 	char	*new_str;
 	size_t	j;
-	size_t	lst_size;
 
 	tmp = ft_calloc(get_str_len(&line[*i]) + 1, sizeof(char));
 	if (!tmp)
@@ -103,7 +100,6 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 	free(tmp);
 	if (!new_str)
 		return (MALLOC_ERR);
-	lst_size = ft_lstsize(*lst);
 	if (ft_lstadd_back(lst, ft_lstnew(ft_strdup(new_str))) == -1)
 		return (free(new_str), MALLOC_ERR);
 	free(new_str);

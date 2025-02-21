@@ -30,5 +30,7 @@ int	double_quote_hard( void );
 
 // redir
 int	redir_in( void );
+int	redir_in_hard( void );
+int	redir_middle_cmd( void );
 int redir_after_pipe( void );
 int	pipe_after_redir( void );

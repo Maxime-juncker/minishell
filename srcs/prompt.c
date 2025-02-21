@@ -67,12 +67,10 @@ void	new_prompt(t_command_table *table)
 		g_signal_received = 0;
 		return ;
 	}
-	if (!line || (ft_strlen(line) == 4 && !ft_strncmp(line, "exit", 4)))
+	if (!line)
 	{
-		cleanup_arr((void **)table->env);
-		cleanup_arr((void **)table->exp);
-		printf("exit\n");
-		exit(EXIT_SUCCESS);
+		if (!init_table(ft_strdup("exit"), table))
+			run_pipeline(table);
 	}
 	else if (ignore_prompt(line))
 	{

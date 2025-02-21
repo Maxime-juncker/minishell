@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:28:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/01/13 12:52:53 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/21 09:38:09 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,6 @@ int	ft_atoi(const char *nptr)
 
 static int	call_func(int n, void (*f)(int, void *), void *param)
 {
-	if (n < 0)
-		warning("underflow atoi");
-	else
-		warning("overflow atoi");
 	if (f == NULL)
 		return (n);
 	f(n, param);
