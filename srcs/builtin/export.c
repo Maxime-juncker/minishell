@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/21 17:30:34 by abidolet          #+#    #+#             */
+/*   Updated: 2025/02/21 18:18:27 by abidolet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	ft_sort_export(char **argv)
@@ -56,35 +68,6 @@ static int	print_export(char **exp, int fd)
 	return (0);
 }
 
-static char	**update_env(char *arg, char **env, int append)
-{
-	char	**cpy;
-	int		i;
-
-	cpy = malloc((arrlen((void **)env) + 2 - append) * sizeof(char *));
-	if (cpy == NULL)
-		return (NULL);
-	i = 0;
-	while (env && env[i])
-	{
-		if (append && !ft_strscmp(env[i], arg, "+="))
-			cpy[i] = ft_strjoin(env[i], ft_strchr(arg, '=') + 1);
-		else
-			cpy[i] = env[i];
-		i++;
-	}
-	if (!append)
-	{
-		cpy[i] = ft_strdup(arg);
-		if (!cpy[i++])
-		{
-			cleanup_arr((void **)cpy);
-			return (NULL);
-		}
-	}
-	return (free(env), cpy[i] = NULL, cpy);
-}
-
 static int	check_arg(char *arg, int *append)
 {
 	int	i;
@@ -92,9 +75,10 @@ static int	check_arg(char *arg, int *append)
 	i = 0;
 	while (arg[i] && arg[i] != '=')
 	{
-		if ((!i && !ft_isalpha(arg[i]) && arg[i] != '_') || (i &&
-			(!(ft_isalnum(arg[i]) || arg[i] == '_' || arg[i] == '='
-			|| (arg[i] == '+' && arg[i + 1] == '=')))))
+		if ((!i && !ft_isalpha(arg[i]) && arg[i] != '_')
+			|| (i && (!(ft_isalnum(arg[i]) || arg[i] == '_'
+						|| arg[i] == '=' || (arg[i] == '+'
+							&& arg[i + 1] == '=')))))
 		{
 			ft_putstr_fd("\033[0;31mminishell: export: `", 2);
 			ft_putstr_fd(arg, 2);
@@ -106,7 +90,7 @@ static int	check_arg(char *arg, int *append)
 	if (!i)
 		return (1);
 	else if (!*append && (arg[i - 1] == '+' && arg[i] == '='))
-			(*append)++;
+		(*append)++;
 	return (0);
 }
 
@@ -115,7 +99,8 @@ int	export_cmd(t_command_table *table, t_command cmd)
 	int		i;
 	int		append;
 
-	if ((cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO) && table->n_commands == 1)
+	if ((cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
+		&& table->n_commands)
 		return (0);
 	ft_sort_export(table->exp);
 	if (cmd.n_args == 1)
@@ -128,16 +113,11 @@ int	export_cmd(t_command_table *table, t_command cmd)
 			return (1);
 		if (!append)
 			unset_if_needed(table, cmd.args[i]);
-		if (append && get_env_len(table->exp, cmd.args[i]) == -1)
-		{
+		if (append && get_env_len(table->exp, cmd.args[i]) == -1 && !--append)
 			cmd.args[i] = ft_strdup_except_char(cmd.args[i], '+');
-			if (!cmd.args[i])
-				return (MALLOC_ERR);
-			append = 0;
-		}
-		if (ft_strchr(cmd.args[i], '='))
-			table->env = update_env(cmd.args[i], table->env, append);
-		table->exp = update_env(cmd.args[i], table->exp, append);
+		if (!cmd.args[i])
+			return (MALLOC_ERR);
+		export(table, cmd.args[i], append);
 	}
 	return (0);
 }

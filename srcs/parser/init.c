@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
+/*   Updated: 2025/02/21 17:27:53 by abidolet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include <stdlib.h>
 #include <unistd.h>
@@ -82,7 +94,7 @@ static void	get_args(t_command *cmd, char *cmd_str)
 	cmd->args[n_args] = NULL;
 }
 
-static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
+static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
 {
 	static int	pipefd[2] = {-1};
 
@@ -102,7 +114,11 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int nb)
 	get_args(cmd, cmd_str);
 	if (!cmd->args)
 		return (MALLOC_ERR);
-	redir(cmd, cmd_str, is_last, nb);
+	redir(cmd, cmd_str);
+	if (is_last && !ft_strchr(cmd_str, '>'))
+		cmd->fd_out = 1;
+	if (!i && !ft_strchr(cmd_str, '<'))
+		cmd->fd_in = 0;
 	return (0);
 }
 
@@ -125,11 +141,12 @@ int	init_table(char *line, t_command_table *table)
 	i = 0;
 	while (i < table->n_commands)
 	{
-		if (init_cmd(&table->commands[i], commands[i], i == table->n_commands - 1, i))
-			return (cleanup_arr((void **)commands), free(table->commands), MALLOC_ERR);
+		if (init_cmd(&table->commands[i], commands[i],
+				i == table->n_commands - 1, i))
+			return (cleanup_arr((void **)commands), free(table->commands),
+				MALLOC_ERR);
 		i++;
 	}
 	cleanup_arr((void **)commands);
-	free(line);
-	return (0);
+	return (free(line), 0);
 }

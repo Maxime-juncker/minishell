@@ -24,6 +24,7 @@ SRCS = 		main.c				\
 			cd.c				\
 			env.c				\
 			export.c			\
+			export_utils.c		\
 			pwd.c				\
 			unset.c				\
 			executor.c			\
@@ -54,6 +55,7 @@ LIB_SRC = 	utils.c				\
 			cd.c				\
 			env.c				\
 			export.c			\
+			export_utils.c		\
 			pwd.c				\
 			unset.c				\
 			executor.c			\

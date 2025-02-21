@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_dprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:15:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 10:30:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:30:11 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,3 @@ int	ft_dprintf(const int fd, const char *s, ...)
 	}
 	return (nb_write);
 }
-
-

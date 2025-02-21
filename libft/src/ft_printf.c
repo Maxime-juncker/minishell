@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:15:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 10:29:08 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:29:28 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,3 @@ int	ft_printf(const char *s, ...)
 	}
 	return (nb_write);
 }
-
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 15:37:44 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:18:56 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ int		echo(char **args, int n);
 int		env(t_command_table table);
 char	**duplicate_env(char **old_env);
 size_t	arrlen(void **arr);
+
+// export_utils.c
+void	export(t_command_table *table, char *arg, int append);
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);
@@ -154,11 +157,10 @@ t_list	*process_quotes(const char *line);
 int		init_table(char *line, t_command_table *table);
 
 // redir.c
-// void	redir(t_command *cmd, char *command);
-void	redir(t_command *cmd, char *command, int is_last, int i);
+void	redir(t_command *cmd, char *command);
 
 // heredoc.c
-// int		heredoc(t_command *cmd, char *deli);
+int		heredoc(t_command *cmd, char *deli);
 
 /* ------------------------------ other ------------------------------ */
 
@@ -167,7 +169,6 @@ void	init_env(t_command_table *table, char **env);
 void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);
 int		check_interrupt(void);
-void	check_piped_execution(void);
 char	*get_folder(void);
 int		ignore_prompt(char *prompt);
 

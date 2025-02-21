@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/21 15:09:47 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:28:51 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,7 @@ static char	*get_file_name(char **s)
 	if (temp == NULL)
 		return (NULL);
 	file = remove_quotes_pair(temp);
-	free(temp);
-	*s += i;
-	return (file);
+	return (free(temp), *s += i, file);
 }
 
 static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
@@ -87,22 +85,19 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 	free(temp);
 	if (!args)
 		return ;
-	if (args[0])
+	i = 0;
+	while (args[i])
 	{
-		i = 0;
-		while (args[i])
-		{
-			cmd->args[cmd->n_args] = ft_strdup(args[i]);
-			free(args[i]);
-			cmd->n_args++;
-			i++;
-		}
+		cmd->args[cmd->n_args] = ft_strdup(args[i]);
+		free(args[i]);
+		cmd->n_args++;
+		i++;
 	}
 	free(args);
 	handle_fd(cmd, file, c, db_redir);
 }
 
-void	redir(t_command *cmd, char *command, int is_last, int i)
+void	redir(t_command *cmd, char *command)
 {
 	char	*temp;
 	char	quote;
@@ -119,7 +114,7 @@ void	redir(t_command *cmd, char *command, int is_last, int i)
 		if (quote != 0)
 		{
 			command++;
-			continue;
+			continue ;
 		}
 		if (*command == '<' && *command == '>')
 		{
@@ -135,8 +130,4 @@ void	redir(t_command *cmd, char *command, int is_last, int i)
 		if (cmd->fd_in == -1)
 			break ;
 	}
-	if (is_last && !ft_strchr(temp, '>'))
-		cmd->fd_out = 1;
-	if (!i && !ft_strchr(temp, '<'))
-		cmd->fd_in = 0;
 }

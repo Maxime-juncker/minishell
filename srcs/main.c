@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
+/*   Updated: 2025/02/21 17:29:43 by abidolet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +26,6 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	// check_piped_execution();
 	init_env(&table, env);
 	rl_event_hook = check_interrupt;
 	signal(SIGINT, handle_signal);
