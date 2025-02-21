@@ -60,6 +60,8 @@ int	is_builtin(char *name)
 		return (1);
 	if (ft_strcmp(name, "pwd") == 0)
 		return (1);
+	if (ft_strcmp(name, "exit") == 0)
+		return (1);
 	return (0);
 }
 

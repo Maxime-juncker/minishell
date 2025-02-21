@@ -21,6 +21,8 @@ int	commands_routine( void )
 	routine.AddNewTest(Libunit::Test("QUOTE", "double hard", &double_quote_hard));
 	routine.AddNewTest(Libunit::Test("LS", "ls_basic", &ls_basic));
 	routine.AddNewTest(Libunit::Test("REDIR", "cat < out", &redir_in));
+	routine.AddNewTest(Libunit::Test("REDIR", "< out cat", &redir_in_hard));
+	routine.AddNewTest(Libunit::Test("REDIR", "echo test | wc > tmp -c", &redir_middle_cmd));
 	// ==================================================
 
 	routine.Run();

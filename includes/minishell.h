@@ -65,6 +65,9 @@ int		unset_cmd(t_command_table *table, t_command cmd);
 void	handle_cmd(t_command_table *table, char *arg);
 int		get_env_len(char **env, char *arg);
 
+// exit.c
+void	exit_shell(t_command_table *table, t_command cmd, int *childs);
+
 /* ------------------------------ checker ------------------------------ */
 
 // checker_utils.c
