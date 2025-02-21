@@ -55,7 +55,6 @@ size_t	arrlen(void **arr);
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);
-char	**update_env(char *arg, char **env);
 
 // pwd.c
 int		pwd(void);
@@ -64,6 +63,7 @@ char	*get_pwd(void);
 // unset.c
 int		unset_cmd(t_command_table *table, t_command cmd);
 void	handle_cmd(t_command_table *table, char *arg);
+int		get_env_len(char **env, char *arg);
 
 /* ------------------------------ checker ------------------------------ */
 
@@ -112,26 +112,6 @@ char	**get_paths(char **env);
 
 // pipeline.c
 int		run_pipeline(t_command_table *table);
-
-// join_lst.c
-char	*join_lst(t_list *lst);
-
-// lexer_utils.c
-char	toggle_quote(char c, char quote);
-int		is_symbol(char c);
-
-// lexer.c
-char	*process_line(const char *cmd_line, char **env, int *code);
-
-// quote_utils.c
-size_t	get_str_len(const char *str);
-
-// quotes_processing.c
-t_list	*process_quotes(const char *line);
-char	*remove_quotes(const char *line);
-
-// var_processing.c
-t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
 
 /* ------------------------------ lexer ------------------------------ */
 
