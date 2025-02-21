@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   join_lst.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
+/*   Updated: 2025/02/21 15:37:57 by mjuncker         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	skip_spaces( char content_c, char *str_ref, char quote, int len )
@@ -21,6 +33,8 @@ static void	join_loop(char *content, char **str_ref, int *len)
 
 	i = 0;
 	quote = 0;
+	if (ignore_prompt(content))
+		return ;
 	while (content[i])
 	{
 		quote = toggle_quote(content[i], quote);

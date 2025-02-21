@@ -3,18 +3,6 @@
 #include <readline/history.h>
 #include <signal.h>
 
-int	ignore_prompt(char *prompt)
-{
-	while (*prompt)
-	{
-		if (!(*prompt == ' ' || (*prompt >= 9 && *prompt <= 13))
-			&& in_base(*prompt, ":!") == -1)
-			return (0);
-		prompt++;
-	}
-	return (1);
-}
-
 char	*new_prompt_txt(char **env)
 {
 	char	*txt;
@@ -73,6 +61,7 @@ int	new_prompt(t_command_table *table)
 	process_cmd = process_line(line, table->env, &code);
 	if (ignore_prompt(line))
 	{
+		free(process_cmd);
 		free(line);
 		return (0);
 	}

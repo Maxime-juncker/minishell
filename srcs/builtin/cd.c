@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/21 14:56:07 by mjuncker          #+#    #+#             */
+/*   Updated: 2025/02/21 15:30:20 by mjuncker         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include <dirent.h>
 
@@ -70,20 +82,14 @@ static int	change_directory(const char *path, char **env)
 {
 	DIR		*dir;
 	char	*abs_path;
-	char	*temp;
 
-	temp = getcwd(NULL, 0);
-	if (!temp)
-		return (ft_dprintf(2, "%sminishell: cd: %s: No such file or directory%s",
-				RED, path, RESET), 1);
-	free(temp);
 	if (path == NULL || ft_strncmp(path, "~", ft_strlen(path)) == 0)
 		path = find_env_var(env, "HOME", NULL);
 	dir = opendir(path);
 	if (dir == NULL)
-		return (perror("\033[0;31mcan't open dir"), 1);
+		return (perror("\033[0;31mminishell: cd: can't open dir"), 1);
 	if (chdir(path) == -1)
-		return (perror("\033[0;31mchdir failed\033[0m"), 1);
+		return (perror("\033[0;31mminishell: cd: chdir failed\033[0m"), 1);
 	abs_path = get_absolute_path();
 	if (!abs_path)
 		return (MALLOC_ERR);

@@ -7,7 +7,7 @@ char	*get_pwd(void)
 	if (!getcwd(buffer, sizeof(buffer)))
 	{
 		printf("%spwd: error retrieving current directory: getcwd:%s%s", RED,
-		" cannot access parent directories: No such file or directory", RESET);
+		" cannot access parent directories: No such file or directory\n", RESET);
 		return (NULL);
 	}
 	return (ft_strdup(buffer));
