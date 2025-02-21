@@ -68,11 +68,10 @@ t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code)
 			content = ft_strdup(str_content);
 		else
 			content = process_var(str_content, env, last_code);
-		if (ft_lstadd_back(&process_lst, ft_lstnew(content)) == -1)
-		{
-			ft_lstclear(&process_lst, free);
+		if (!content)
 			return (NULL);
-		}
+		if (ft_lstadd_back(&process_lst, ft_lstnew(content)) == -1)
+			return (NULL);
 		lst = lst->next;
 	}
 	return (process_lst);

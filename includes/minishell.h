@@ -131,7 +131,6 @@ size_t	get_str_len(const char *str);
 
 // quotes_processing.c
 t_list	*process_quotes(const char *line);
-char	*remove_quotes(const char *line);
 
 // var_processing.c
 t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
@@ -151,10 +150,6 @@ char	*process_line(const char *cmd_line, char **env, int *code);
 // quote_utils.c
 size_t	get_str_len(const char *str);
 
-// quotes_processing.c
-t_list	*process_quotes(const char *line);
-char	*remove_quotes(const char *line);
-
 // var_processing.c
 t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
 
@@ -172,7 +167,7 @@ void	redir(t_command *cmd, char *command, int is_last, int i);
 
 /* ------------------------------ other ------------------------------ */
 
-void	new_prompt(t_command_table *table);
+int		new_prompt(t_command_table *table);
 void	init_env(t_command_table *table, char **env);
 void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);

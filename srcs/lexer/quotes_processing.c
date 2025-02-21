@@ -1,33 +1,5 @@
 #include "minishell.h"
 
-char	*remove_quotes(const char *line)
-{
-	char	*new_line;
-	int		i;
-	char	quote_type;
-
-	new_line = ft_calloc(ft_strlen(line) + 1, sizeof(char));
-	if (!new_line)
-		return (NULL);
-	i = 1;
-	quote_type = line[0];
-	if (line[1] == quote_type)
-	{
-		new_line[0] = '\0';
-		return (new_line);
-	}
-	new_line[0] = quote_type;
-	while (line[i])
-	{
-		new_line[i] = line[i];
-		i++;
-		if (line[i - 1] == quote_type)
-			break ;
-	}
-	new_line[i] = '\0';
-	return (new_line);
-}
-
 static int	add_quotes(t_list **lst, const char *line, size_t *i)
 {
 	char	*tmp;

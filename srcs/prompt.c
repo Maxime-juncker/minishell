@@ -42,14 +42,15 @@ char	*new_prompt_txt(char **env)
 	return (txt);
 }
 
-void	new_prompt(t_command_table *table)
+int	new_prompt(t_command_table *table)
 {
 	char		*line;
 	char		*process_cmd;
-	static int	code = 0;
+	static int	code;
 	char		*prompt_char;
 
 	g_signal_received = 0;
+	code = 0;
 	prompt_char = new_prompt_txt(table->env);
 	if (!prompt_char)
 	{
@@ -65,7 +66,7 @@ void	new_prompt(t_command_table *table)
 		if (g_signal_received == SIGINT)
 			code = 130;
 		g_signal_received = 0;
-		return ;
+		return (0);
 	}
 	if (!line)
 	{
@@ -76,7 +77,7 @@ void	new_prompt(t_command_table *table)
 	if (ignore_prompt(line))
 	{
 		free(line);
-		return ;
+		return (0);
 	}
 	else if (ft_strcmp(line, "\n"))
 		add_history(line);
@@ -85,28 +86,26 @@ void	new_prompt(t_command_table *table)
 		free(line);
 		if (!process_cmd)
 		{
-			return ;
+			return (MALLOC_ERR);
 		}
 		if (code == MALLOC_ERR)
 		{
 			free(process_cmd);
-			cleanup_arr((void **)table->env);
-			cleanup_arr((void **)table->exp);
-			error("malloc failed");
-			exit(EXIT_FAILURE);
+			return (MALLOC_ERR);
 		}
 		else if (code != 0)
 		{
 			free(process_cmd);
-			return ;
+			return (0);
 		}
 		else
 		{
 			if (!init_table(process_cmd, table))
-				code = run_pipeline(table) % 255;
+				code = run_pipeline(table) % 256;
 			cleanup_table((t_command_table *)table);
 		}
 	}
+	return (0);
 }
 
 int	check_interrupt( void )

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:56:58 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/13 16:20:40 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:26:54 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*ft_charjoin(char *s1, char const c)
 	len1 = ft_strlen(s1);
 	result = malloc(len1 + 2);
 	if (!result)
-		return (NULL);
+		return (free(s1), NULL);
 	ft_strlcpy(result, s1, len1 + 1);
 	free(s1);
 	result[len1] = c;

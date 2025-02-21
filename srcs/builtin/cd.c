@@ -99,7 +99,8 @@ int	cd_command(const t_command_table *table, const t_command cmd)
 	int		code;
 
 	path = NULL;
-	if (cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
+	if ((cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
+		&& table->n_commands > 1)
 		return (0);
 	if (cmd.n_args == 2)
 		path = cmd.args[1];

@@ -25,19 +25,21 @@ static void	join_loop(char *content, char **str_ref, int *len)
 	{
 		quote = toggle_quote(content[i], quote);
 		while (skip_spaces(content[i], *str_ref, quote, *len))
-		{
 			i++;
-		}
 		if ((*str_ref && !is_symbol((*str_ref)[*len - 1])
 			&& (*str_ref)[*len - 1] != ' ' && is_symbol(content[i]))
 			|| (*str_ref && is_symbol((*str_ref)[*len - 1])
 			&& content[i] != ' ' && !is_symbol(content[i])))
 		{
 			*str_ref = ft_charjoin(*str_ref, ' ');
+			if (*str_ref == NULL)
+				return ;
 			(*len)++;
 			continue ;
 		}
 		*str_ref = ft_charjoin(*str_ref, content[i]);
+		if (*str_ref == NULL)
+			return ;
 		(*len)++;
 		i++;
 	}
@@ -53,6 +55,8 @@ char	*join_lst(t_list *lst)
 	while (lst)
 	{
 		join_loop(lst->content, &str, &len);
+		if (str == NULL)
+			return (NULL);
 		lst = lst->next;
 	}
 	return (str);

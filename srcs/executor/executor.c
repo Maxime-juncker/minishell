@@ -87,7 +87,8 @@ int	run_command(t_command *cmd, const t_command_table *table, int *childs)
 	else
 	{
 		cmd->pid = pid;
-		if (cmd->args[0][0] == '.')
+		(void)status;
+		if (cmd->args[0][0] == '.' && table->n_commands == 1)
 		{
 			waitpid(pid, &status, WUNTRACED);
 		}

@@ -146,14 +146,22 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 void	redir(t_command *cmd, char *command, int is_last, int i)
 {
 	char	*temp;
+	char	quote;
 
 	temp = command;
 	cmd->n_args = 0;
+	quote = 0;
 	while (cmd->args[cmd->n_args] && cmd->args[cmd->n_args][0] != '>'
 		&& cmd->args[cmd->n_args][0] != '<')
 		cmd->n_args++;
 	while (*command)
 	{
+		quote = toggle_quote(*command, quote);
+		if (quote != 0)
+		{
+			command++;
+			continue;
+		}
 		if (*command == '<' && *command == '>')
 		{
 			handle_redir(cmd, &command, '>', *(command + 1) == '<');

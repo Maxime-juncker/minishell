@@ -39,6 +39,11 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 	process_str = join_lst(var_lst);
 	ft_lstclear(&quotes_lst, free);
 	ft_lstclear(&var_lst, free);
+	if (process_str == NULL)
+	{
+		*code = MALLOC_ERR;
+		return (NULL);
+	}
 	if (code)
 		*code = check_cmd_line(process_str, env);
 	return (process_str);
