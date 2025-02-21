@@ -40,10 +40,13 @@ void	cleanup_table(t_command_table *table)
 
 char	*get_folder(void)
 {
-	char	*folder;
 	char	*temp;
+	char	buffer[1024];
+	char	*folder;
 
-	folder = get_pwd();
+	if (!getcwd(buffer, sizeof(buffer)))
+		return (ft_strdup(""));
+	folder = ft_strdup(buffer);
 	if (!folder)
 		return (NULL);
 	temp = folder;
@@ -59,11 +62,14 @@ char	*get_folder(void)
 	return (folder);
 }
 
-void	check_piped_execution(void)
+int	ignore_prompt(char *prompt)
 {
-	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	while (*prompt)
 	{
-		ft_dprintf(2, "minishell: must run interactively (need a tty)\n");
-		exit(EXIT_FAILURE);
+		if (!(*prompt == ' ' || (*prompt >= 9 && *prompt <= 13))
+			&& in_base(*prompt, ":!") == -1)
+			return (0);
+		prompt++;
 	}
+	return (1);
 }

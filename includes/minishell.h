@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:10 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:37:44 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,5 +169,6 @@ void	handle_signal(int signal);
 int		check_interrupt(void);
 void	check_piped_execution(void);
 char	*get_folder(void);
+int		ignore_prompt(char *prompt);
 
 #endif
