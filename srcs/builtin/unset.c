@@ -1,10 +1,12 @@
 #include "minishell.h"
 
-static int	get_env_len(char **env, char *arg)
+int	get_env_len(char **env, char *arg)
 {
 	int	len;
 	int	diff;
 
+	if (!env)
+		return (-1);
 	len = 0;
 	diff = 0;
 	while (env[len])
@@ -16,21 +18,6 @@ static int	get_env_len(char **env, char *arg)
 	if (diff == 0)
 		return (-1);
 	return (len);
-}
-
-static void	free_env(char **env)
-{
-	int	i;
-
-	if (!env)
-		return ;
-	i = 0;
-	while (env[i])
-	{
-		free(env[i]);
-		i++;
-	}
-	free(env);
 }
 
 static char	**unset(char **env, char *arg, int len)
@@ -45,7 +32,7 @@ static char	**unset(char **env, char *arg, int len)
 	len = 0;
 	while (env[i] != NULL)
 	{
-		if (ft_strncmp(env[i], arg, ft_strlen(arg)))
+		if (!ft_strcmp(env[i], arg))
 		{
 			cpy[len] = ft_strdup(env[i]);
 			if (!cpy[len])
@@ -57,25 +44,21 @@ static char	**unset(char **env, char *arg, int len)
 		}
 		i++;
 	}
-	free_env(env);
+	cleanup_arr((void **)env);
 	cpy[len] = NULL;
 	return (cpy);
 }
 
-void	handle_cmd(t_command_table *table, char *arg)
+void	unset_if_needed(t_command_table *table, char *arg)
 {
 	int		len;
 
 	len = get_env_len(table->env, arg);
 	if (len != -1)
-	{
 		table->env = unset(table->env, arg, len);
-	}
 	len = get_env_len(table->exp, arg);
 	if (len != -1)
-	{
 		table->exp = unset(table->exp, arg, len);
-	}
 }
 
 int	unset_cmd(t_command_table *table, t_command cmd)
@@ -85,7 +68,7 @@ int	unset_cmd(t_command_table *table, t_command cmd)
 	i = 1;
 	while (cmd.args[i])
 	{
-		handle_cmd(table, cmd.args[i]);
+		unset_if_needed(table, cmd.args[i]);
 		if (table->env == NULL || table->exp == NULL)
 			return (MALLOC_ERR);
 		i++;

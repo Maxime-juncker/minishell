@@ -105,7 +105,7 @@ int	cd_command(const t_command_table *table, const t_command cmd)
 		path = cmd.args[1];
 	else if (cmd.n_args > 2)
 	{
-		printf("\033[0;31mminishell: cd: too many arguments\n\033[0;31m");
+		perror("\033[0;31mminishell: cd: too many arguments\n\033[0;31m");
 		return (1);
 	}
 	code = change_directory(path, table->env);

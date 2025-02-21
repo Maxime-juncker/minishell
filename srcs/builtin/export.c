@@ -56,65 +56,60 @@ static int	print_export(char **exp, int fd)
 	return (0);
 }
 
-char	**update_env(char *arg, char **env)
+static char	**update_env(char *arg, char **env, int append)
 {
 	char	**cpy;
 	int		i;
 
-	(void)arg;
-	cpy = malloc((arrlen((void **)env) + 2) * sizeof(char *));
+	cpy = malloc((arrlen((void **)env) + 2 - append) * sizeof(char *));
 	if (cpy == NULL)
 		return (NULL);
 	i = 0;
 	while (env && env[i])
 	{
-		cpy[i] = env[i];
+		if (append && !ft_strccmp(env[i], arg, '='))
+			cpy[i] = arg;
+		else
+			cpy[i] = env[i];
 		i++;
 	}
-	cpy[i] = ft_strdup(arg);
-	if (!cpy[i])
-	{
-		cleanup_arr((void **)cpy);
-		free(env);
-		return (NULL);
-	}
-	cpy[i + 1] = NULL;
-	free(env);
+	if (!append)
+		cpy[i++] = arg;
+	cpy[i] = NULL;
 	return (cpy);
 }
 
-static int	check_arg(char *arg)
+static int	check_arg(char *arg, int *append)
 {
 	int	i;
 
-	if (!ft_isalpha(arg[0]) && arg[0] != '_')
+	i = 0;
+	while (arg[i] && arg[i] != '=')
 	{
-		ft_putstr_fd("\033[0;31mminishell: export: `", 2);
-		ft_putstr_fd(arg, 2);
-		ft_putstr_fd("': not a valid identifier\n\033[0m", 2);
-		return (1);
-	}
-	i = 1;
-	while (arg[i])
-	{
-		if (!ft_isalnum(arg[i]) && arg[i] != '_' && arg[i] != '=')
+		if ((!i && !ft_isalpha(arg[i]) && arg[i] != '_') || (i &&
+			(!(ft_isalnum(arg[i]) || arg[i] == '_' || arg[i] == '='
+			|| (arg[i] == '+' && arg[i + 1] == '=')))))
 		{
 			ft_putstr_fd("\033[0;31mminishell: export: `", 2);
 			ft_putstr_fd(arg, 2);
 			ft_putstr_fd("': not a valid identifier\n\033[0m", 2);
 			return (1);
 		}
+		if (!append && (arg[i] == '+' && arg[i + 1] == '='))
+			(*append)++;
 		i++;
 	}
+	if (!i)
+		return (1);
 	return (0);
 }
 
 int	export_cmd(t_command_table *table, t_command cmd)
 {
 	int		i;
-	char	*temp;
+	int		append;
 
-	if (cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
+	if ((cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO) && table->n_commands == 1)
 		return (0);
 	ft_sort_export(table->exp);
 	if (cmd.n_args == 1)
@@ -122,18 +117,21 @@ int	export_cmd(t_command_table *table, t_command cmd)
 	i = 0;
 	while (cmd.args[++i] != NULL)
 	{
-		if (check_arg(cmd.args[i]))
+		append = 0;
+		if (check_arg(cmd.args[i], &append))
 			return (1);
-		temp = ft_strndup(cmd.args[i], '=');
-		if (!temp)
-			return (MALLOC_ERR);
-		handle_cmd(table, temp);
-		free(temp);
-		if (table->env == NULL || table->exp == NULL)
-			return (MALLOC_ERR);
+		if (!append)
+			unset_if_needed(table, cmd.args[i]);
+		if (append && get_env_len(table->exp, cmd.args[i]) == -1)
+		{
+			cmd.args[i] = ft_strdup_except_char(cmd.args[i], '+');
+			if (!cmd.args[i])
+				return (MALLOC_ERR);
+			append = 0;
+		}
 		if (ft_strchr(cmd.args[i], '='))
-			table->env = update_env(cmd.args[i], table->env);
-		table->exp = update_env(cmd.args[i], table->exp);
+			table->env = update_env(cmd.args[i], table->env, append);
+		table->exp = update_env(cmd.args[i], table->exp, append);
 	}
 	return (0);
 }
