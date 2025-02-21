@@ -7,19 +7,19 @@ static int	error_symbol(char error_symb, const char *cmd_line, int i)
 
 	if (error_symb == '<' && cmd_line[i + 1] == '>')
 	{
-		error("minishell: syntax error near unexpected token `<>\'\n");
+		ft_dprintf(2, "minishell: syntax error near unexpected token `<>\'\n");
 		return (SYNTAX_ERR);
 	}
 	max_occ = 2;
 	occ = 0;
-	printf("\033[0;31mminishell: syntax error near unexpected token `");
+	ft_dprintf(2, "\033[0;31mminishell: syntax error near unexpected token `");
 	while (cmd_line[i] == error_symb && occ < max_occ)
 	{
-		printf("%c", error_symb);
+		ft_dprintf(2, "%c", error_symb);
 		i++;
 		occ++;
 	}
-	printf("\'\n\033[0m");
+	ft_dprintf(2, "\'\n\033[0m");
 	return (SYNTAX_ERR);
 }
 
@@ -114,3 +114,4 @@ int	check_syntax(const char *cmd_line)
 		return (token_error('|', '\0'));
 	return (check_line(cmd_line + i));
 }
+	

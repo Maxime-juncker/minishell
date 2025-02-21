@@ -14,6 +14,11 @@ namespace Libunit
 	void	Redirect_log(void)
 	{
 		freopen("log.txt", "w", stdout);
+	}
+
+	void	Redirect_err(void)
+	{
+		freopen("log.txt", "w", stdout);
 		freopen("log.txt", "w", stderr);
 	}
 

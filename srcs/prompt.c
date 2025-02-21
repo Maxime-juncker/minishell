@@ -72,7 +72,8 @@ void	new_prompt(t_command_table *table)
 		if (!init_table(ft_strdup("exit"), table))
 			run_pipeline(table);
 	}
-	else if (ignore_prompt(line))
+	process_cmd = process_line(line, table->env, &code);
+	if (ignore_prompt(line))
 	{
 		free(line);
 		return ;
@@ -81,7 +82,6 @@ void	new_prompt(t_command_table *table)
 		add_history(line);
 	if (ft_strcmp(line, "\n") && ft_strcmp(line, "!") && ft_strcmp(line, ":"))
 	{
-		process_cmd = process_line(line, table->env, &code);
 		free(line);
 		if (!process_cmd)
 		{

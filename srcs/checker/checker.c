@@ -7,7 +7,7 @@ int	check_cmd_line( const char *process_line, char **env )
 	int		i;
 	int		tmp;
 
-	if (!process_line)
+	if (!process_line || ft_strcmp((char*)process_line, ":") == 0 || ft_strcmp((char*)process_line, "!") == 0)
 		return (0);
 	code = check_syntax(process_line);
 	if (code != 0)

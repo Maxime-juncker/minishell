@@ -43,6 +43,7 @@ namespace Libunit
 		int	total_routine;
 	}	t_FinalResult;
 	void	Redirect_log(void);
+	void	Redirect_err(void);
 	int		Check_output(std::string expected);
 	int CheckFile(const std::string &filename, const char *expected_line[], const int number_of_line);
 

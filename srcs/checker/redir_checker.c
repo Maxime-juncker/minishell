@@ -6,7 +6,7 @@ int	new_line_error(const char *str, const char last)
 		return (token_error('|', *(str - 2)));
 	if (last == '>' || last == '<')
 	{
-		printf("\033[0;31mminishell: syntax error near unexpected token %s",
+		ft_dprintf(2, "\033[0;31mminishell: syntax error near unexpected token %s",
 			"`newline\'\n\033[0m");
 		return (SYNTAX_ERR);
 	}
@@ -102,7 +102,7 @@ int	check_redir_in(const char *cmd_line, int i)
 	}
 	if (access(file, F_OK) == -1)
 	{
-		printf("\033[0;31mminishell: %s: No such file or directory\n\033[0m",
+		ft_dprintf(2, "\033[0;31mminishell: %s: No such file or directory\n\033[0m",
 			file);
 		free(file);
 		return (1);

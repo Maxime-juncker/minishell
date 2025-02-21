@@ -20,7 +20,7 @@ int	check_quotes(const char *cmd_line)
 	}
 	if (quote == 0)
 		return (0);
-	printf("%sminishell: syntax error missing `%c\' quote%s\n",
+	ft_dprintf(2, "%sminishell: syntax error missing `%c\' quote%s\n",
 		RED, quote, RESET);
 	return (SYNTAX_ERR);
 }

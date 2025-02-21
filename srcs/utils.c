@@ -63,7 +63,7 @@ void	check_piped_execution(void)
 {
 	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
 	{
-		error("minishell: must run interactively (need a tty)");
+		ft_dprintf(2, "minishell: must run interactively (need a tty)\n");
 		exit(EXIT_FAILURE);
 	}
 }

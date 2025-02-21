@@ -44,12 +44,12 @@ static int get_code(t_command cmd)
 	nb = overflow_check(cmd.args[1], &overflow_feedback, &code);
 	if (code != 0 || is_number(cmd.args[1]) == 0)
 	{
-		dprintf(2, "%sminishell: exit: %s: numeric argument required%s\n", RED, cmd.args[1], RESET);
+		ft_dprintf(2, "%sminishell: exit: %s: numeric argument required%s\n", RED, cmd.args[1], RESET);
 		return (2);
 	}
 	else if (cmd.n_args > 2)
 	{
-		dprintf(2, "%sminishell: exit: too many arguments%s\n", RED, RESET);
+		ft_dprintf(2, "%sminishell: exit: too many arguments%s\n", RED, RESET);
 		return (2);
 	}
 	return (nb);

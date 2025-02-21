@@ -30,7 +30,7 @@ static int	heredoc(t_command *cmd, char *deli)
 		ft_putstr_fd("> ", 0);
 		line = get_next_line(0);
 		if (!line)
-			printf("%s%d delimited by end-of-file (wanted `%s')\033[0m\n",
+			ft_dprintf(2, "%s%d delimited by end-of-file (wanted `%s')\033[0m\n",
 				"\n\033[38;5;208mminishell: warning: here-document at line ",
 					nb, deli);
 		len = ft_strlen(line) - 1;
