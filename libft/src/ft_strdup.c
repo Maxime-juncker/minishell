@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:56:43 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 11:24:48 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:37:12 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ char	*ft_strdup_except_char(char *s, char c)
 {
 	char	*copy;
 	int		i;
+	char	*start;
 
 	if (!s)
 		return (NULL);
@@ -56,6 +57,7 @@ char	*ft_strdup_except_char(char *s, char c)
 	if (copy == NULL)
 		return (NULL);
 	i = 0;
+	start = s;
 	while (*s)
 	{
 		if (*s != c)
@@ -63,6 +65,6 @@ char	*ft_strdup_except_char(char *s, char c)
 		s++;
 	}
 	copy[i] = 0;
-	free(s);
+	free(start);
 	return (copy);
 }

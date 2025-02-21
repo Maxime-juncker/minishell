@@ -5,13 +5,11 @@ int	get_env_len(char **env, char *arg)
 	int	len;
 	int	diff;
 
-	if (!env)
-		return (-1);
 	len = 0;
 	diff = 0;
 	while (env[len])
 	{
-		if (arg && !ft_strncmp(env[len], arg, ft_strlen(arg)))
+		if (arg && !ft_strscmp(env[len], arg, "="))
 			diff++;
 		len++;
 	}
@@ -32,7 +30,7 @@ static char	**unset(char **env, char *arg, int len)
 	len = 0;
 	while (env[i] != NULL)
 	{
-		if (!ft_strcmp(env[i], arg))
+		if (ft_strscmp(env[i], arg, "+="))
 		{
 			cpy[len] = ft_strdup(env[i]);
 			if (!cpy[len])
@@ -44,9 +42,9 @@ static char	**unset(char **env, char *arg, int len)
 		}
 		i++;
 	}
-	cleanup_arr((void **)env);
-	cpy[len] = NULL;
-	return (cpy);
+	if (env)
+		cleanup_arr((void **)env);
+	return (cpy[len] = NULL, cpy);
 }
 
 void	unset_if_needed(t_command_table *table, char *arg)

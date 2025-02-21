@@ -67,16 +67,22 @@ static char	**update_env(char *arg, char **env, int append)
 	i = 0;
 	while (env && env[i])
 	{
-		if (append && !ft_strccmp(env[i], arg, '='))
-			cpy[i] = arg;
+		if (append && !ft_strscmp(env[i], arg, "+="))
+			cpy[i] = ft_strjoin(env[i], ft_strchr(arg, '=') + 1);
 		else
 			cpy[i] = env[i];
 		i++;
 	}
 	if (!append)
-		cpy[i++] = arg;
-	cpy[i] = NULL;
-	return (cpy);
+	{
+		cpy[i] = ft_strdup(arg);
+		if (!cpy[i++])
+		{
+			cleanup_arr((void **)cpy);
+			return (NULL);
+		}
+	}
+	return (cpy[i] = NULL, cpy);
 }
 
 static int	check_arg(char *arg, int *append)
@@ -95,12 +101,12 @@ static int	check_arg(char *arg, int *append)
 			ft_putstr_fd("': not a valid identifier\n\033[0m", 2);
 			return (1);
 		}
-		if (!append && (arg[i] == '+' && arg[i + 1] == '='))
-			(*append)++;
 		i++;
 	}
 	if (!i)
 		return (1);
+	else if (!*append && (arg[i - 1] == '+' && arg[i] == '='))
+			(*append)++;
 	return (0);
 }
 

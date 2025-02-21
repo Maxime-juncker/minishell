@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:49:29 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 12:22:29 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:22:19 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int		ft_toupper(int c);
 int		ft_tolower(int c);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-int		ft_strccmp(const char *s1, const char *s2, char c);
+int		ft_strscmp(const char *s1, const char *s2, char *s);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 int		ft_atoi(const char *nptr);
 int		overflow_check(const char *s, void (*f)(int, void *), void *param);
