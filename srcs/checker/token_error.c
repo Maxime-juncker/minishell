@@ -24,15 +24,15 @@ int	check_token_error(const char *cmd_line, int i, int max_occ, char to_find)
 	occ = count_occ_reverse(cmd_line, i);
 	if (occ > max_occ)
 	{
-		printf("\033[0;31mminishell: syntax error near unexpected token `");
+		ft_dprintf(2, "\033[0;31mminishell: syntax error near unexpected token `");
 		occ = 0;
 		while (cmd_line[i] == to_find && occ < max_occ)
 		{
-			printf("%c", to_find);
+			ft_dprintf(2, "%c", to_find);
 			i++;
 			occ++;
 		}
-		printf("\'\n\033[0m");
+		ft_dprintf(2, "\'\n\033[0m");
 		return (SYNTAX_ERR);
 	}
 	return (0);

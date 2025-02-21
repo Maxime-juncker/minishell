@@ -15,10 +15,10 @@ void	cleanup_arr(void **arr)
 
 int	token_error(char c1, char c2)
 {
-	printf("\033[0;31mminishell: syntax error near unexpected token `%c", c1);
+	ft_dprintf(2, "\033[0;31mminishell: syntax error near unexpected token `%c", c1);
 	if (c1 == c2)
-		printf("%c", c2);
-	printf("\'\n\033[0m");
+		ft_dprintf(2, "%c", c2);
+	ft_dprintf(2, "\'\n\033[0m");
 	return (SYNTAX_ERR);
 }
 

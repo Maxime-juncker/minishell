@@ -72,7 +72,7 @@ int	dolars_04( void )
 		"\033[0;31mminishell: $: command not found",
 	};
 
-	Libunit::Redirect_log();
+	Libunit::Redirect_err();
 	if (check_cmd_line("$", environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
@@ -107,7 +107,7 @@ int	dolars_06( void )
 		"\033[0;31mminishell: : command not found",
 	};
 
-	Libunit::Redirect_log();
+	Libunit::Redirect_err();
 
 	process_line("\"$HOMEgfehgeuohge\"", environ, &code);
 	if (code == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
@@ -123,7 +123,7 @@ int	dolars_07( void )
 		"\033[0;31mminishell: $HOMEgfehgeuohge: command not found",
 	};
 
-	Libunit::Redirect_log();
+	Libunit::Redirect_err();
 	if (check_cmd_line("$HOMEgfehgeuohge", environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else

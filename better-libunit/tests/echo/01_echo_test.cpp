@@ -58,7 +58,7 @@ int	echo_04( void )
 		"\033[0;31mminishell: echoHola: command not found",
 	};
 
-	Libunit::Redirect_log();
+	Libunit::Redirect_err();
 	if (check_cmd_line("echoHola", environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
@@ -72,7 +72,7 @@ int	echo_05( void )
 		"\033[0;31mminishell: echo-nHola: command not found",
 	};
 
-	Libunit::Redirect_log();
+	Libunit::Redirect_err();
 	if (check_cmd_line("echo-nHola", environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else

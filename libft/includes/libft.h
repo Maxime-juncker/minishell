@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:49:29 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 11:33:51 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/21 12:22:29 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int		overflow_check(const char *s, void (*f)(int, void *), void *param);
 int		ft_lstsize(t_list *lst);
 int		ft_putaddr(long int nbr, char *base, int fd);
 int		ft_printf(const char *s, ...);
+int		ft_dprintf(const int fd, const char *s, ...);
 
 int		ft_abs(int n);
 int		ft_max(int a, int b);

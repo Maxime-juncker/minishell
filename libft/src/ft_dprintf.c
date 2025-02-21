@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_dprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:15:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 10:29:08 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/21 10:30:42 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	get_next_stop(const char *s)
 	return (ft_strlen(s));
 }
 
-static int	handle_characters(const char *type, va_list *ptr)
+static int	handle_characters(const char *type, va_list *ptr, int fd)
 {
 	void	*tmp;
 
@@ -36,14 +36,14 @@ static int	handle_characters(const char *type, va_list *ptr)
 	{
 		tmp = va_arg(*ptr, char *);
 		if (tmp == NULL)
-			return (ft_putstr_fd("(null)", 1));
-		return (ft_putstr_fd(tmp, 1));
+			return (ft_putstr_fd("(null)", fd));
+		return (ft_putstr_fd(tmp, fd));
 	}
 	else if (*type == 'p')
 	{
 		tmp = va_arg(*ptr, void *);
 		if (tmp == NULL)
-			return (ft_putstr_fd("(nil)", 1));
+			return (ft_putstr_fd("(nil)", fd));
 		return (ft_putaddr((long int)tmp, "0123456789abcdef", 1));
 	}
 	else if (*type == '%')
@@ -53,7 +53,7 @@ static int	handle_characters(const char *type, va_list *ptr)
 	return (0);
 }
 
-static int	handle_stop(const char *type, va_list *ptr)
+static int	handle_stop(const char *type, va_list *ptr, int fd)
 {
 	void	*tmp;
 	int		len;
@@ -64,7 +64,7 @@ static int	handle_stop(const char *type, va_list *ptr)
 	else if (*type == 'u')
 	{
 		tmp = (char *)ft_uitoa(va_arg(*ptr, unsigned int));
-		ft_putstr_fd(tmp, 1);
+		ft_putstr_fd(tmp, fd);
 		len = ft_strlen(tmp);
 		free(tmp);
 		return (len);
@@ -78,10 +78,10 @@ static int	handle_stop(const char *type, va_list *ptr)
 			return (ft_putnbr_hex(va_arg(*ptr, unsigned int),
 					"0123456789ABCDEF", 1));
 	}
-	return (handle_characters(type, ptr));
+	return (handle_characters(type, ptr, fd));
 }
 
-int	ft_printf(const char *s, ...)
+int	ft_dprintf(const int fd, const char *s, ...)
 {
 	size_t			nb_write;
 	va_list			ptr;
@@ -94,13 +94,13 @@ int	ft_printf(const char *s, ...)
 	while (*s)
 	{
 		block = ft_substr(s, 0, get_next_stop(s));
-		nb_write += ft_putstr_fd(block, 1);
+		nb_write += ft_putstr_fd(block, fd);
 		s += ft_strlen(block);
 		if (block)
 			free(block);
 		if (*s != '%' || (*s == '%' && s[1] == '\0'))
 			return (nb_write);
-		nb_write += handle_stop(s, &ptr);
+		nb_write += handle_stop(s, &ptr, fd);
 		s += 2;
 	}
 	return (nb_write);
