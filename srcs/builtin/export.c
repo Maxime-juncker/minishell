@@ -82,7 +82,7 @@ static char	**update_env(char *arg, char **env, int append)
 			return (NULL);
 		}
 	}
-	return (cpy[i] = NULL, cpy);
+	return (free(env), cpy[i] = NULL, cpy);
 }
 
 static int	check_arg(char *arg, int *append)

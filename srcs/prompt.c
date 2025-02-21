@@ -54,10 +54,7 @@ int	new_prompt(t_command_table *table)
 	prompt_char = new_prompt_txt(table->env);
 	if (!prompt_char)
 	{
-		cleanup_arr((void **)table->env);
-		cleanup_arr((void **)table->exp);
-		error("malloc failed");
-		exit(EXIT_FAILURE);
+		return (MALLOC_ERR);
 	}
 	line = readline(prompt_char);
 	free(prompt_char);
