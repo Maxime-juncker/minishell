@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 19:14:08 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 21:20:38 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	setup_args(t_command *cmd)
 	cmd->args[cmd->n_args] = NULL;
 }
 
-static int	handle_null_pid(t_command *cmd, const t_command_table *table,
+static void	handle_null_pid(t_command *cmd, const t_command_table *table,
 	int *childs)
 {
 	size_t	i;

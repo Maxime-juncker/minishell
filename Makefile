@@ -1,6 +1,6 @@
 NAME = minishell
 
-CFLAGS = $(INCLUDES_D) -g3 -fPIC
+CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D) -g3 -fPIC
 MAKEFLAGS += --no-print-directory
 
 LIB_UNIT = better-libunit/

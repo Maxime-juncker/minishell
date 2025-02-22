@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 19:34:39 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 21:21:59 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,13 @@ static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 		cmd->args[cmd->n_args++] = args[i++];
 	free(args);
 	handle_fd(cmd, file, c, db_redir);
+	return (0);
 }
 
 void	redir(t_command *cmd, char *command)
 {
-	char	*temp;
 	char	quote;
 
-	temp = command;
 	cmd->n_args = 0;
 	quote = 0;
 	while (cmd->args[cmd->n_args] && cmd->args[cmd->n_args][0] != '>'

@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 10:56:08 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 21:21:02 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,6 @@
 #include <signal.h>
 
 int	g_signal_received = 0;
-
-static void	check_fd(t_command_table table)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < table.n_commands)
-	{
-		printf("%s:\n", table.commands[i].args[0]);
-		if (fcntl(table.commands[i].fd_in, F_GETFD) != -1 || errno != EBADF)
-			printf("in is valid\n");
-		else
-			printf("in is closed\n");
-		if (fcntl(table.commands[i].fd_out, F_GETFD) != -1 || errno != EBADF)
-			printf("out is valid\n");
-		else
-			printf("out is closed\n");
-		i++;
-	}
-}
 
 static int	wait_for_process(t_command_table *table, int *childs, int code)
 {
