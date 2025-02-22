@@ -6,18 +6,14 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/21 17:29:43 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 23:29:04 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <readline/readline.h>
-#include <readline/history.h>
 #include <signal.h>
 #include <sys/wait.h>
-#include <errno.h>
 
 int	main(int argc, char **argv, char **env)
 {

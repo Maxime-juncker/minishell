@@ -6,18 +6,12 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:00 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 20:49:24 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 23:29:22 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <readline/readline.h>
-#include <readline/history.h>
-#include <signal.h>
-#include <sys/wait.h>
-#include <errno.h>
 
 void	init_env(t_command_table *table, char **env)
 {
