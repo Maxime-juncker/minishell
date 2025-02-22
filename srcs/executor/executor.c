@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 13:40:29 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 19:14:08 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 void	close_fds(t_command cmd)
 {
-	if (cmd.fd_out != STDOUT_FILENO)
+	if (cmd.fd_out != STDOUT_FILENO && cmd.fd_out != -1)
 		close(cmd.fd_out);
-	if (cmd.fd_in != STDIN_FILENO)
+	if (cmd.fd_in != STDIN_FILENO && cmd.fd_in != -1)
 		close(cmd.fd_in);
 }
 

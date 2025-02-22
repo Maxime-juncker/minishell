@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 14:41:20 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 20:45:16 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	count_args(char *cmd_str)
 	return (n_args + 1);
 }
 
-static void	create_arg(char **cmd_arg, char *str)
+static int	create_arg(char **cmd_arg, char *str)
 {
 	char	*arg;
 	int		i;
@@ -52,13 +52,16 @@ static void	create_arg(char **cmd_arg, char *str)
 	}
 	arg = malloc(sizeof(char) * (i + 1));
 	if (!arg)
-		return ;
+		return (MALLOC_ERR);
 	ft_strlcpy(arg, str, i + 1);
 	*cmd_arg = remove_quotes_pair(arg);
 	free(arg);
+	if (!*cmd_arg)
+		return (MALLOC_ERR);
+	return (0);
 }
 
-static void	get_args(t_command *cmd, char *cmd_str)
+static int	get_args(t_command *cmd, char *cmd_str)
 {
 	int		i;
 	int		quote;
@@ -67,7 +70,7 @@ static void	get_args(t_command *cmd, char *cmd_str)
 
 	cmd->args = malloc(sizeof(char *) * count_args(cmd_str));
 	if (!cmd->args)
-		return ;
+		return (MALLOC_ERR);
 	quote = 0;
 	i = 0;
 	new_arg = 1;
@@ -78,20 +81,13 @@ static void	get_args(t_command *cmd, char *cmd_str)
 	{
 		if (cmd_str[i] == '\'' || cmd_str[i] == '\"')
 			quote = toggle_quote(quote, cmd_str[i]);
-		if (new_arg)
-		{
-			create_arg(&cmd->args[n_args], &cmd_str[i]);
-			if (!cmd->args[n_args])
-			{
-				cleanup_arr((void **)cmd->args);
-				return ;
-			}
-			n_args++;
-		}
+		if (new_arg && create_arg(&cmd->args[n_args++], &cmd_str[i])
+			== MALLOC_ERR)
+			return (MALLOC_ERR);
 		new_arg = (!quote && cmd_str[i] == ' ' && cmd_str[i + 1]);
 		i++;
 	}
-	cmd->args[n_args] = NULL;
+	return (cmd->args[n_args] = NULL, 0);
 }
 
 static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
@@ -111,8 +107,7 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
 		else
 			return (cleanup_arr((void **)cmd->args), 1);
 	}
-	get_args(cmd, cmd_str);
-	if (!cmd->args)
+	if (get_args(cmd, cmd_str) == MALLOC_ERR)
 		return (MALLOC_ERR);
 	redir(cmd, cmd_str);
 	if (is_last && !ft_strchr(cmd_str, '>'))
@@ -142,7 +137,7 @@ int	init_table(char *line, t_command_table *table)
 	while (i < table->n_commands)
 	{
 		if (init_cmd(&table->commands[i], commands[i],
-				i == table->n_commands - 1, i))
+				i == table->n_commands - 1, i) == MALLOC_ERR)
 			return (cleanup_arr((void **)commands), free(table->commands),
 				MALLOC_ERR);
 		i++;

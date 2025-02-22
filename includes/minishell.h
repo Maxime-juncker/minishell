@@ -6,20 +6,23 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 14:40:55 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 20:58:34 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
+/* -------------------------------------------------------------------------- */
+/*                                   includes                                 */
+/* -------------------------------------------------------------------------- */
 
+# include "libft.h"
 # include <fcntl.h>
 # include <stdio.h>
 
 /* -------------------------------------------------------------------------- */
-/*                                command table                               */
+/*                                   defines                                  */
 /* -------------------------------------------------------------------------- */
 
 # define SYNTAX_ERR	2
@@ -29,6 +32,10 @@
 
 # define DEBUG 0
 # define SHOW_LEXER 0
+
+/* -------------------------------------------------------------------------- */
+/*                                command table                               */
+/* -------------------------------------------------------------------------- */
 
 typedef struct s_command
 {
@@ -51,7 +58,9 @@ typedef struct s_command_table
 
 extern int	g_signal_received;
 
-/* ------------------------------ builtin ------------------------------ */
+/* -------------------------------------------------------------------------- */
+/*                                   builtin                                  */
+/* -------------------------------------------------------------------------- */
 
 // cd.c
 int		cd_command(const t_command_table *table, const t_command cmd);
@@ -83,7 +92,9 @@ int		get_env_len(char **env, char *arg);
 // exit.c
 void	exit_shell(t_command_table *table, t_command cmd, int *childs);
 
-/* ------------------------------ checker ------------------------------ */
+/* -------------------------------------------------------------------------- */
+/*                                   checker                                  */
+/* -------------------------------------------------------------------------- */
 
 // checker_utils.c
 int		in_base(const char c, const char *base);
@@ -112,7 +123,9 @@ int		check_token_error(const char *cmd_line, int i, int max_occ,
 			char to_find);
 int		check_quotes(const char *cmd_line);
 
-/* ------------------------------ executor ------------------------------ */
+/* -------------------------------------------------------------------------- */
+/*                                   executor                                 */
+/* -------------------------------------------------------------------------- */
 
 // cmd_debug.c
 void	show_table(t_command_table table);
@@ -130,7 +143,9 @@ char	**get_paths(char **env);
 // pipeline.c
 int		run_pipeline(t_command_table *table);
 
-/* ------------------------------ lexer ------------------------------ */
+/* -------------------------------------------------------------------------- */
+/*                                    lexer                                   */
+/* -------------------------------------------------------------------------- */
 
 // join_lst.c
 char	*join_lst(t_list *lst);
@@ -150,25 +165,31 @@ t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
 
 t_list	*process_quotes(const char *line);
 
-/* ------------------------------ parser ------------------------------ */
+/* -------------------------------------------------------------------------- */
+/*                                   parser                                   */
+/* -------------------------------------------------------------------------- */
 
 // init.c
 int		init_table(char *line, t_command_table *table);
 
 // redir.c
-void		redir(t_command *cmd, char *command);
+void	redir(t_command *cmd, char *command);
 
 // heredoc.c
 int		heredoc(t_command *cmd, char *deli);
 
-/* ------------------------------ other ------------------------------ */
+/* -------------------------------------------------------------------------- */
+/*                                   others                                   */
+/* -------------------------------------------------------------------------- */
 
-int		new_prompt(t_command_table *table);
+// utils.c
 void	init_env(t_command_table *table, char **env);
 void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);
 int		check_interrupt(void);
-char	*get_folder(void);
+
+// prompt.c
+int		new_prompt(t_command_table *table);
 int		ignore_prompt(char *prompt);
 
 #endif

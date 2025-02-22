@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 14:41:14 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 19:34:39 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	handle_fd(t_command *cmd, char *file, char c, int db_redir)
 {
 	if (c == '>')
 	{
-		if (cmd->fd_out != 0 && cmd->fd_out != 1)
+		if (cmd->fd_out > 1)
 			close(cmd->fd_out);
 		if (db_redir)
 			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -25,7 +25,7 @@ static void	handle_fd(t_command *cmd, char *file, char c, int db_redir)
 	}
 	else
 	{
-		if (cmd->fd_in != 0 && cmd->fd_in != 1)
+		if (cmd->fd_in > 1)
 			close(cmd->fd_in);
 		if (db_redir)
 			heredoc(cmd, file);
@@ -58,13 +58,13 @@ static char	*get_file_name(char **s)
 		i++;
 	}
 	temp = ft_substr((*s), start, i - start);
-	if (temp == NULL)
+	if (!temp)
 		return (NULL);
 	file = remove_quotes_pair(temp);
 	return (free(temp), *s += i, file);
 }
 
-static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
+static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 {
 	char	*file;
 	char	*start;
@@ -74,25 +74,20 @@ static void	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 
 	file = get_file_name(command);
 	if (!file)
-		return ;
-	while (command && **command == ' ')
-		(*command)++;
+		return (MALLOC_ERR);
 	start = *command;
 	while (**command && **command != '>' && **command != '<')
 		(*command)++;
 	temp = ft_substr(start, 0, *command - start);
+	if (!temp)
+		return (MALLOC_ERR);
 	args = ft_split(temp, ' ');
 	free(temp);
 	if (!args)
-		return ;
+		return (MALLOC_ERR);
 	i = 0;
 	while (args[i])
-	{
-		cmd->args[cmd->n_args] = ft_strdup(args[i]);
-		free(args[i]);
-		cmd->n_args++;
-		i++;
-	}
+		cmd->args[cmd->n_args++] = args[i++];
 	free(args);
 	handle_fd(cmd, file, c, db_redir);
 }
@@ -116,15 +111,8 @@ void	redir(t_command *cmd, char *command)
 			command++;
 			continue ;
 		}
-		if (*command == '<' && *command == '>')
-		{
-			handle_redir(cmd, &command, '>', *(command + 1) == '<');
-			cmd->fd_out = 1;
-		}
-		else if (*command == '<')
-			handle_redir(cmd, &command, '<', *(command + 1) == '<');
-		else if (*command == '>')
-			handle_redir(cmd, &command, '>', *(command + 1) == '>');
+		if (*command == '<' || *command == '>')
+			handle_redir(cmd, &command, *command, *command == *(command + 1));
 		else
 			command++;
 		if (cmd->fd_in == -1)
