@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 23:27:32 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/23 00:17:04 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,10 @@ int	new_prompt(t_command_table *table)
 {
 	char		*line;
 	char		*process_cmd;
-	static int	code;
+	static int	code = 0;
 	char		*prompt_char;
 
 	g_signal_received = 0;
-	code = 0;
 	prompt_char = new_prompt_txt(table->env);
 	if (!prompt_char)
 		return (MALLOC_ERR);
