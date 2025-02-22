@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_checker.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:21 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/22 10:41:41 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ static int	check_dir_validity(char **path)
 	dir = opendir(*path);
 	if (!dir)
 	{
-		ft_dprintf(2, "\033[0;31mminishell: %s: No such file or directory\n\033[0m",
-			*path);
+		ft_dprintf(2, "%sminishell: %s: No such file or directory\n%s",
+			RED, *path, RESET);
 		return (NOT_FOUND);
 	}
 	closedir(dir);

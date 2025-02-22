@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/21 18:25:41 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 10:39:27 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	**update_env(char *arg, char **env, int append)
 	{
 		if (append && !ft_strscmp(env[i], arg, "+="))
 			cpy[i] = ft_strjoin(env[i], ft_strchr(arg, '=')
-				+ (ft_strchr(env[i], '=') != NULL));
+					+ (ft_strchr(env[i], '=') != NULL));
 		else
 			cpy[i] = env[i];
 	}

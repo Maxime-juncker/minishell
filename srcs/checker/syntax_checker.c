@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:32 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:33 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/22 10:45:27 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,4 +126,3 @@ int	check_syntax(const char *cmd_line)
 		return (token_error('|', '\0'));
 	return (check_line(cmd_line + i));
 }
-	

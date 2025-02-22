@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:07 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 15:30:20 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/22 10:37:20 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int	cd_command(const t_command_table *table, const t_command cmd)
 		path = cmd.args[1];
 	else if (cmd.n_args > 2)
 	{
-		ft_dprintf(2, "\033[0;31mminishell: cd: too many arguments\n\033[0;31m");
+		ft_dprintf(2, "%sminishell: cd: too many arguments\n%s", RED, RESET);
 		return (1);
 	}
 	code = change_directory(path, table->env);

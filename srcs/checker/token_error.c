@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:34 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:35 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/22 10:46:21 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int	check_token_error(const char *cmd_line, int i, int max_occ, char to_find)
 	occ = count_occ_reverse(cmd_line, i);
 	if (occ > max_occ)
 	{
-		ft_dprintf(2, "\033[0;31mminishell: syntax error near unexpected token `");
+		ft_dprintf(2, "%sminishell: syntax error near unexpected token `%s",
+			RED, RESET);
 		occ = 0;
 		while (cmd_line[i] == to_find && occ < max_occ)
 		{

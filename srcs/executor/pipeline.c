@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:51 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/22 10:56:08 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,7 @@
 
 int	g_signal_received = 0;
 
-static int	is_env_cmd(char *name)
-{
-	if (ft_strcmp(name, "export") == 0)
-		return (1);
-	if (ft_strcmp(name, "unset") == 0)
-		return (1);
-	if (ft_strcmp(name, "cd") == 0)
-		return (1);
-	if (ft_strcmp(name, "exit") == 0)
-		return (1);
-	return (0);
-}
-
-int	fd_is_valid(int fd)
-{
-	return (fcntl(fd, F_GETFD) != -1 || errno != EBADF);
-}
-
-void	check_fd(t_command_table table)
+static void	check_fd(t_command_table table)
 {
 	size_t	i;
 
@@ -43,11 +25,11 @@ void	check_fd(t_command_table table)
 	while (i < table.n_commands)
 	{
 		printf("%s:\n", table.commands[i].args[0]);
-		if (fd_is_valid(table.commands[i].fd_in))
+		if (fcntl(table.commands[i].fd_in, F_GETFD) != -1 || errno != EBADF)
 			printf("in is valid\n");
 		else
 			printf("in is closed\n");
-		if (fd_is_valid(table.commands[i].fd_out))
+		if (fcntl(table.commands[i].fd_out, F_GETFD) != -1 || errno != EBADF)
 			printf("out is valid\n");
 		else
 			printf("out is closed\n");
@@ -62,8 +44,8 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 
 	signal(SIGQUIT, handle_signal);
 	g_signal_received = 0;
-	i = 0;
-	while (childs[i])
+	i = -1;
+	while (childs[++i])
 	{
 		pid = wait(&code);
 		if (pid == -1)
@@ -74,14 +56,12 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 			{
 				if (g_signal_received == SIGINT)
 					code = 130;
-				i--;
-				while (++i < table->n_commands)
-					kill(childs[i], g_signal_received);
+				while (i < table->n_commands)
+					kill(childs[i++], g_signal_received);
 				printf("\n");
 			}
 			return (code);
 		}
-		i++;
 	}
 	return (signal(SIGQUIT, SIG_IGN), code);
 }
@@ -110,9 +90,13 @@ static int	run_env_cmd(t_command_table *table, t_command cmd, int *childs)
 	return (0);
 }
 
-static int	env_stage( t_command_table *table, t_command cmd, int *code, int *childs)
+static int	env_stage(t_command_table *table, t_command cmd, int *code,
+	int *childs)
 {
-	if (is_env_cmd(cmd.args[0]))
+	if (!ft_strcmp(cmd.args[0], "export")
+		|| (!ft_strcmp(cmd.args[0], "unset"))
+		|| (!ft_strcmp(cmd.args[0], "cd"))
+		|| (!ft_strcmp(cmd.args[0], "exit")))
 	{
 		show_cmd(cmd);
 		*code = run_env_cmd(table, cmd, childs);

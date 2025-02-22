@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:01 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:02 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/22 10:39:09 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/// exit quit the shell with code if any
-/// exit is ignored if mutiple cmd are input (ex with pipe)
-/// exit quit the shell even if a redirection is present (the file is created but empty)
-/// exit error out if more than one args is present
-/// exit is protected against overflow and non numerical values
-/// exit can be run with negative value
-/// in case of error, exit will print an error:
-///				bash: exit: %s: numeric argument required
-/// and will quit with return code 2
 
 static void	overflow_feedback(int overflow, void *param)
 {
@@ -45,9 +35,9 @@ int	is_number(char *s)
 	return (1);
 }
 
-static int get_code(t_command cmd)
+static int	get_code(t_command cmd)
 {
-	int nb;
+	int	nb;
 	int	code;
 
 	if (cmd.n_args == 1)
@@ -56,7 +46,8 @@ static int get_code(t_command cmd)
 	nb = overflow_check(cmd.args[1], &overflow_feedback, &code);
 	if (code != 0 || is_number(cmd.args[1]) == 0)
 	{
-		ft_dprintf(2, "%sminishell: exit: %s: numeric argument required%s\n", RED, cmd.args[1], RESET);
+		ft_dprintf(2, "%sminishell: exit: %s: numeric argument required%s\n",
+			RED, cmd.args[1], RESET);
 		return (2);
 	}
 	else if (cmd.n_args > 2)

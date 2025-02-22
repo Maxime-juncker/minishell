@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:55 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/22 11:02:54 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,6 @@ static int	run_built_in(const t_command cmd, const t_command_table *table)
 	return (-1);
 }
 
-static void	clean(t_command cmd, const t_command_table *table)
-{
-	cleanup_arr((void **)table->exp);
-	dup2(cmd.fd_out, STDOUT_FILENO);
-	dup2(cmd.fd_in, STDIN_FILENO);
-	if (cmd.fd_out != STDOUT_FILENO)
-		close(cmd.fd_out);
-}
-
 static void	setup_args(t_command *cmd)
 {
 	size_t	i;
@@ -58,7 +49,7 @@ static void	setup_args(t_command *cmd)
 	cmd->args[cmd->n_args] = NULL;
 }
 
-void	close_all_fd(const t_command_table *table)
+static void	close_all_fd(const t_command_table *table)
 {
 	size_t	i;
 
@@ -74,7 +65,7 @@ int	run_command(t_command *cmd, const t_command_table *table, int *childs)
 {
 	int	pid;
 	int	code;
-	int status;
+	int	status;
 
 	setup_args(cmd);
 	pid = fork();
@@ -82,7 +73,11 @@ int	run_command(t_command *cmd, const t_command_table *table, int *childs)
 		return (-1);
 	if (pid == 0)
 	{
-		clean(*cmd, table);
+		cleanup_arr((void **)table->exp);
+		dup2(cmd->fd_out, STDOUT_FILENO);
+		dup2(cmd->fd_in, STDIN_FILENO);
+		if (cmd->fd_out != STDOUT_FILENO)
+			close(cmd->fd_out);
 		free(childs);
 		if (is_builtin(cmd->args[0]) == 1)
 		{

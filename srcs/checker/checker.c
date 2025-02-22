@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:17 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 15:07:24 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/22 10:45:17 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	check_cmd_line( const char *process_line, char **env )
 	int		i;
 	int		tmp;
 
-	if (!process_line || ft_strcmp((char*)process_line, ":") == 0 || ft_strcmp((char*)process_line, "!") == 0)
+	if (!process_line || ft_strcmp((char *)process_line, ":") == 0
+		|| ft_strcmp((char*)process_line, "!") == 0)
 		return (0);
 	code = check_syntax(process_line);
 	if (code != 0)

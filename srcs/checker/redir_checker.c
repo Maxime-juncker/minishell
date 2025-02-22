@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_checker.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:27 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:28 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/22 10:43:35 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	new_line_error(const char *str, const char last)
 		return (token_error('|', *(str - 2)));
 	if (last == '>' || last == '<')
 	{
-		ft_dprintf(2, "\033[0;31mminishell: syntax error near unexpected token %s",
-			"`newline\'\n\033[0m");
+		ft_dprintf(2, "%sminishell: syntax error near unexpected token %s%s",
+			RED, "`newline\'\n", RESET);
 		return (SYNTAX_ERR);
 	}
 	return (0);
@@ -114,8 +114,8 @@ int	check_redir_in(const char *cmd_line, int i)
 	}
 	if (access(file, F_OK) == -1)
 	{
-		ft_dprintf(2, "\033[0;31mminishell: %s: No such file or directory\n\033[0m",
-			file);
+		ft_dprintf(2, "%sminishell: %s: No such file or directory\n%s",
+			RED, file, RESET);
 		free(file);
 		return (1);
 	}
