@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/21 17:29:52 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 13:35:33 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	new_prompt(t_command_table *table)
 	return (0);
 }
 
-int	check_interrupt( void )
+int	check_interrupt(void)
 {
 	if (g_signal_received)
 		rl_done = 1;

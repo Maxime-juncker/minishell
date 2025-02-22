@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 18:18:56 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 14:40:55 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ int		check_syntax(const char *cmd_line);
 // token_error.c
 int		check_token_error(const char *cmd_line, int i, int max_occ,
 			char to_find);
-
 int		check_quotes(const char *cmd_line);
 
 /* ------------------------------ executor ------------------------------ */
@@ -157,7 +156,7 @@ t_list	*process_quotes(const char *line);
 int		init_table(char *line, t_command_table *table);
 
 // redir.c
-void	redir(t_command *cmd, char *command);
+void		redir(t_command *cmd, char *command);
 
 // heredoc.c
 int		heredoc(t_command *cmd, char *deli);

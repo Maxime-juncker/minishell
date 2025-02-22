@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 11:02:54 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/22 13:40:29 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,22 +49,39 @@ static void	setup_args(t_command *cmd)
 	cmd->args[cmd->n_args] = NULL;
 }
 
-static void	close_all_fd(const t_command_table *table)
+static int	handle_null_pid(t_command *cmd, const t_command_table *table,
+	int *childs)
 {
 	size_t	i;
+	int		code;
 
+	cleanup_arr((void **)table->exp);
+	dup2(cmd->fd_out, STDOUT_FILENO);
+	dup2(cmd->fd_in, STDIN_FILENO);
+	if (cmd->fd_out != STDOUT_FILENO)
+		close(cmd->fd_out);
+	free(childs);
+	if (is_builtin(cmd->args[0]) == 1)
+	{
+		code = run_built_in(*cmd, table);
+		cleanup_arr((void **)table->env);
+		cleanup_table((t_command_table *)table);
+		exit(code);
+	}
 	i = 0;
 	while (i < table->n_commands)
 	{
 		close_fds(table->commands[i]);
 		i++;
 	}
+	if (execve(get_cmd_path(get_paths(table->env), *cmd), \
+		cmd->args, table->env) == -1)
+		alert("execve failed");
 }
 
 int	run_command(t_command *cmd, const t_command_table *table, int *childs)
 {
 	int	pid;
-	int	code;
 	int	status;
 
 	setup_args(cmd);
@@ -73,23 +90,7 @@ int	run_command(t_command *cmd, const t_command_table *table, int *childs)
 		return (-1);
 	if (pid == 0)
 	{
-		cleanup_arr((void **)table->exp);
-		dup2(cmd->fd_out, STDOUT_FILENO);
-		dup2(cmd->fd_in, STDIN_FILENO);
-		if (cmd->fd_out != STDOUT_FILENO)
-			close(cmd->fd_out);
-		free(childs);
-		if (is_builtin(cmd->args[0]) == 1)
-		{
-			code = run_built_in(*cmd, table);
-			cleanup_arr((void **)table->env);
-			cleanup_table((t_command_table *)table);
-			exit (code);
-		}
-		close_all_fd(table);
-		if (execve(get_cmd_path(get_paths(table->env), *cmd), \
-			cmd->args, table->env) == -1)
-			alert("execve failed");
+		handle_null_pid(cmd, table, childs);
 	}
 	else
 	{
