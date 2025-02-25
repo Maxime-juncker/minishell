@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 23:29:59 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/25 08:43:54 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define IS_DIR		126
 # define MALLOC_ERR	-1
 
-# define DEBUG 0
+# define DEBUG 1
 # define SHOW_LEXER 0
 
 /* -------------------------------------------------------------------------- */
@@ -191,5 +191,10 @@ int		check_interrupt(void);
 // prompt.c
 int		new_prompt(t_command_table *table);
 int		ignore_prompt(char *prompt);
+
+char	**ft_split_operators(const char *s);
+int 	handle_parenthesis(t_command_table *table, char *arg, int *code);
+int		handle_process_cmd(t_command_table *table, char **args, int *code);
+void	free_all(char **res, int i);
 
 #endif
