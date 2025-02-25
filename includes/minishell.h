@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/25 13:36:17 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:22:20 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,8 +164,7 @@ size_t	get_str_len(const char *str);
 t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
 
 t_list	*process_quotes(const char *line);
-
-char	*process_wildcard(char *line);
+char	*remove_spaces(char *str);
 
 /* -------------------------------------------------------------------------- */
 /*                                   parser                                   */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_processing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:41 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:34:15 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static char	*handle_dollar(char **str, int last_code, char **env)
 		var_value = find_env_var(env, var_name, NULL);
 		free(var_name);
 		if (var_value)
-			return (*str += j, ft_strdup(var_value));
+			return (*str += j, var_value);
 		return (*str += j, ft_strdup(""));
 	}
 	return (ft_strdup("$"));

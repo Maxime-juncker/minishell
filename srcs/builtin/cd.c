@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:07 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 10:37:20 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/25 12:36:07 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ char	*find_env_var(char **env, char *to_find, int *index)
 {
 	int		i;
 	size_t	len;
+	char	*temp;
 
 	i = 0;
 	len = ft_strlen(to_find);
@@ -69,7 +70,10 @@ char	*find_env_var(char **env, char *to_find, int *index)
 		{
 			if (index != NULL)
 				*index = i;
-			return (env[i] + len + 1);
+			temp = remove_spaces(env[i] + len + 1);
+			if (!temp)
+				return (NULL);
+			return (temp);
 		}
 		i++;
 	}
@@ -78,7 +82,7 @@ char	*find_env_var(char **env, char *to_find, int *index)
 	return (NULL);
 }
 
-static int	change_directory(const char *path, char **env)
+static int	change_directory(char *path, char **env)
 {
 	DIR		*dir;
 	char	*abs_path;
@@ -87,9 +91,10 @@ static int	change_directory(const char *path, char **env)
 		path = find_env_var(env, "HOME", NULL);
 	dir = opendir(path);
 	if (dir == NULL)
-		return (perror("\033[0;31mminishell: cd: can't open dir"), 1);
+		return (free(path), perror("\033[0;31mminishell: cd: can't open dir"), 1);
 	if (chdir(path) == -1)
-		return (perror("\033[0;31mminishell: cd: chdir failed\033[0m"), 1);
+		return (free(path), perror("\033[0;31mminishell: cd: chdir failed\033[0m"), 1);
+	free(path);
 	abs_path = get_absolute_path();
 	if (!abs_path)
 		return (MALLOC_ERR);

@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split_operators.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/25 10:49:02 by abidolet          #+#    #+#             */
+/*   Updated: 2025/02/25 10:49:05 by abidolet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "minishell.h"
 
 static int	is_operator(const char *s)
 {
@@ -48,7 +61,7 @@ static int	count_words(const char *s)
 	return (count);
 }
 
-static char	*ft_strndup(const char *s, size_t n)
+static char	*ft_strndup2(const char *s, size_t n)
 {
 	char	*res;
 	size_t	i;
@@ -79,6 +92,7 @@ char	**ft_split_operators(const char *s)
 	int		i;
 	size_t	len;
 	int		paren_count;
+	char	in_quote;
 
 	if (!s)
 		return (NULL);
@@ -87,6 +101,7 @@ char	**ft_split_operators(const char *s)
 		return (NULL);
 	i = 0;
 	paren_count = 0;
+	in_quote = 0;
 	while (*s)
 	{
 		while (*s == ' ' || *s == '\t')
@@ -103,7 +118,7 @@ char	**ft_split_operators(const char *s)
 					paren_count--;
 				len++;
 			}
-			res[i] = ft_strndup(s, len);
+			res[i] = ft_strndup2(s, len);
 			if (!res[i++])
 				return (free_all(res, i), NULL);
 			s += len;
@@ -112,7 +127,7 @@ char	**ft_split_operators(const char *s)
 		}
 		else if (is_operator(s))
 		{
-			res[i] = ft_strndup(s, 2);
+			res[i] = ft_strndup2(s, 2);
 			if (!res[i++])
 				return (free_all(res, i), NULL);
 			s += 2;
@@ -120,9 +135,15 @@ char	**ft_split_operators(const char *s)
 		else if (*s)
 		{
 			len = 0;
-			while (s[len] && !is_operator(s + len) && s[len] != '(')
+			while (s[len] && s[len] != '(')
+			{
+				if (s[len] == '\'' || s[len] == '\"')
+					in_quote = toggle_quote(s[len], in_quote);
+				if (in_quote == 0 && is_operator(s + len))
+					break ;
 				len++;
-			res[i] = ft_strndup(s, len);
+			}
+			res[i] = ft_strndup2(s, len);
 			if (!res[i++])
 				return (free_all(res, i), NULL);
 			s += len;
