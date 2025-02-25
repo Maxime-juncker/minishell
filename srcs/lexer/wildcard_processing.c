@@ -38,7 +38,7 @@ char	**new_patern(char *line)
 			while (line[i] && line[i] != ' ' && line[i] != '*')
 				i++;
 			
-			patern[j] = ft_strdup(ft_substr(line, 0, i));
+			patern[j] = ft_substr(line, 0, i);
 			j++;
 			line += i;
 		}
@@ -53,7 +53,6 @@ char	**new_patern(char *line)
 		}
 	}
 	patern[j] = NULL;
-	// print_arr(patern);
 	return (patern);
 }
 
@@ -101,6 +100,7 @@ int		expand_needed(char **patern)
 			return (1);
 		i++;
 	}
+	cleanup_arr((void **)patern);
 	return (0);
 }
 
@@ -117,7 +117,7 @@ char	*expand_wildcard(char *line)
 	if (patern == NULL)
 		return (NULL);
 	if (expand_needed(patern) == 0)
-		return (ft_strdup(line));
+		return (closedir(dir), ft_strdup(line));
 	if (dir)
 	{
 		infos = readdir(dir);
@@ -130,7 +130,7 @@ char	*expand_wildcard(char *line)
 					expanded = ft_strjoin_free(expanded, infos->d_name, FREE1);
 					expanded = ft_charjoin(expanded, ' ');
 					if (!expanded)
-						return (closedir(dir), NULL);
+						return (closedir(dir), cleanup_arr((void **)patern), NULL);
 				}
 			}
 			// printf("%s\n", infos->d_name);
@@ -138,6 +138,7 @@ char	*expand_wildcard(char *line)
 		}
 		closedir(dir);
 	}
+	cleanup_arr((void **)patern);
 	if (expanded == NULL)
 		return (ft_strdup(line));
 	return (expanded);
@@ -154,13 +155,16 @@ char	*add_wildcard(char *line)
 char	*process_wildcard(char *line)
 {
 	t_list	*lst;
+	t_list	*first;
 	char	*result;
 
 	if (!line)
 		return (NULL);
 	lst = split_line(line);
+	free(line);
 	if (!lst)
-		return (free(line), NULL);
+		return (NULL);
+	first = lst;
 	result = NULL;
 	while (lst)
 	{
@@ -169,6 +173,6 @@ char	*process_wildcard(char *line)
 			result = ft_charjoin(result, ' ');
 		lst = lst->next;
 	}
-	free(line);
+	ft_lstclear(&first, free);
 	return (result);
 }
