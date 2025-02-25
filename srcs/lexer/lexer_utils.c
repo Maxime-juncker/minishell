@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:48 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:49 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/25 10:42:43 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ char	toggle_quote(char c, char quote)
 {
 	if (c == '\'' || c == '\"')
 	{
-		if (quote == c)
-			return (0);
-		else
+		if (quote == 0)
 			return (c);
+		else if (quote == c)
+			return (0);
 	}
 	return (quote);
 }

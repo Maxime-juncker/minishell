@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_processing.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:54:56 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/25 11:52:47 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	return (0);
 }
 
-static char	*remove_spaces(char *str)
+char	*remove_spaces(char *str)
 {
 	char	*buff;
 	char	*new_str;

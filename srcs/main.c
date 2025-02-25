@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 23:29:04 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:42:38 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		code = new_prompt(&table);
 	}
-	if (code == MALLOC_ERR)
-	{
-		cleanup_arr((void **)table.env);
-		cleanup_arr((void **)table.exp);
-	}
+	cleanup_arr((void **)table.env);
+	cleanup_arr((void **)table.exp);
 	exit(code);
 }
