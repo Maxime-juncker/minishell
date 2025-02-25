@@ -19,39 +19,40 @@ VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser:srcs/checker
 #                                  srcs / objs                                 #
 # ---------------------------------------------------------------------------- #
 
-SRCS = 		main.c				\
-			prompt.c			\
-			utils.c				\
-			echo.c				\
-			cd.c				\
-			env.c				\
-			export.c			\
-			export_utils.c		\
-			pwd.c				\
-			unset.c				\
-			executor.c			\
-			pipeline.c			\
-			checker.c			\
-			heredoc.c			\
-			redir.c				\
-			init.c				\
-			lexer.c				\
-			checker_utils.c		\
-			cmd_debug.c			\
-			quotes_processing.c	\
-			var_processing.c	\
-			syntax_checker.c	\
-			path_checker.c		\
-			paths.c				\
-			split_line.c		\
-			lexer_utils.c		\
-			join_lst.c			\
-			quote_utils.c		\
-			redir_checker.c		\
-			token_error.c		\
-			quote_checker.c		\
-			exit.c				\
-			ft_split_operators.c\
+SRCS = 		main.c					\
+			prompt.c				\
+			utils.c					\
+			echo.c					\
+			cd.c					\
+			env.c					\
+			export.c				\
+			export_utils.c			\
+			pwd.c					\
+			unset.c					\
+			executor.c				\
+			pipeline.c				\
+			checker.c				\
+			heredoc.c				\
+			redir.c					\
+			init.c					\
+			lexer.c					\
+			checker_utils.c			\
+			cmd_debug.c				\
+			quotes_processing.c		\
+			var_processing.c		\
+			syntax_checker.c		\
+			path_checker.c			\
+			paths.c					\
+			split_line.c			\
+			lexer_utils.c			\
+			join_lst.c				\
+			quote_utils.c			\
+			redir_checker.c			\
+			token_error.c			\
+			quote_checker.c			\
+			exit.c					\
+			ft_split_operators.c	\
+			wildcard_processing.c	\
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #

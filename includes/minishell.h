@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/25 08:43:54 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:36:17 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define IS_DIR		126
 # define MALLOC_ERR	-1
 
-# define DEBUG 1
+# define DEBUG 0
 # define SHOW_LEXER 0
 
 /* -------------------------------------------------------------------------- */
@@ -164,6 +164,8 @@ size_t	get_str_len(const char *str);
 t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
 
 t_list	*process_quotes(const char *line);
+
+char	*process_wildcard(char *line);
 
 /* -------------------------------------------------------------------------- */
 /*                                   parser                                   */
