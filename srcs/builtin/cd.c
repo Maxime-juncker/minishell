@@ -19,7 +19,7 @@ char	*find_env_var(char **env, char *to_find, int *index)
 				*index = i;
 			temp = remove_spaces(env[i] + len + 1);
 			if (!temp)
-				return (print_malloc_error("cd.c", 30), NULL);
+				return (print_malloc_error(__FILE__, __LINE__), NULL);
 			return (temp);
 		}
 		i++;
@@ -45,7 +45,7 @@ static int	change_directory(char *path)
 	abs_path = getcwd(buffer, 4096);
 	closedir(dir);
 	if (!abs_path)
-		return (MALLOC_ERR);
+		return (print_malloc_error("cd.c", 48), MALLOC_ERR);
 	return (0);
 }
 

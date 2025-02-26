@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 13:24:53 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:59:49 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 
 # define DEBUG 0
 # define SHOW_LEXER 0
+
+# define ERR __FUNCTION__, __LINE__
 
 /* -------------------------------------------------------------------------- */
 /*                                command table                               */
@@ -61,7 +63,7 @@ typedef struct s_free_package
 {
 	int		*childs;
 	char	**args;
-}	t_free_package;
+}	t_free_pkg;
 
 
 extern int	g_signal_received;
@@ -98,7 +100,7 @@ int		unset_if_needed(t_command_table *table, char *arg);
 int		get_env_len(char **env, char *arg);
 
 // exit.c
-void	exit_shell(t_command_table *table, t_command cmd, t_free_package package);
+void	exit_shell(t_command_table *table, t_command cmd, t_free_pkg package);
 
 /* -------------------------------------------------------------------------- */
 /*                                   checker                                  */
@@ -142,7 +144,7 @@ void	show_table(t_command_table table);
 void	show_cmd(t_command cmd);
 
 // executor.c
-int		run_command(t_command *cmd, const t_command_table *table, t_free_package package, int *code);
+int		run_command(t_command *cmd, const t_command_table *table, t_free_pkg package, int *code);
 void	close_fds(t_command cmd);
 
 // paths.c

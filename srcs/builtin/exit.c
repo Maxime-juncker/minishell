@@ -59,7 +59,7 @@ static int	get_code(t_command cmd)
 	return (nb);
 }
 
-void	exit_shell(t_command_table *table, t_command cmd, t_free_package package)
+void	exit_shell(t_command_table *table, t_command cmd, t_free_pkg package)
 {
 	int	code;
 
