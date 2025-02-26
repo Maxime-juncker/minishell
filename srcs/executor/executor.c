@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 21:20:38 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:41:56 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,14 @@ static void	handle_null_pid(t_command *cmd, const t_command_table *table,
 		alert("execve failed");
 }
 
-int	run_command(t_command *cmd, const t_command_table *table, int *childs)
+int	run_command(t_command *cmd, const t_command_table *table, int *childs, int *code)
 {
 	int	pid;
 	int	status;
 
+	*code = check_path(cmd->args[0], table->env);
+	if (*code != 0)
+		return (-1);
 	setup_args(cmd);
 	pid = fork();
 	if (pid == -1)

@@ -53,6 +53,7 @@ SRCS = 		main.c					\
 			exit.c					\
 			ft_split_operators.c	\
 			wildcard_processing.c	\
+			and_checker.c			\
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #

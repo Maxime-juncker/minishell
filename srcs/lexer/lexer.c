@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:46 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/25 13:19:06 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 08:57:52 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 		*code = MALLOC_ERR;
 		return (NULL);
 	}
-	if (code)
-		*code = check_cmd_line(process_str, env);
 	return (process_str);
 }
 

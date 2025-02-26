@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/25 14:06:32 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 09:33:33 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,14 +121,9 @@ int	handle_process_cmd(t_command_table *table, char **args, int *code)
 				return (MALLOC_ERR);
 			if (*code == MALLOC_ERR)
 				return (free(process_cmd), MALLOC_ERR);
-			else if (*code == 0)
-			{
-				if (!init_table(process_cmd, table))
-					*code = run_pipeline(table) % 256;
-				cleanup_table((t_command_table *)table);
-			}
-			else
-				free(process_cmd);
+			if (!init_table(process_cmd, table))
+				*code = run_pipeline(table) % 256;
+			cleanup_table((t_command_table *)table);
 			i++;
 		}
 		if (!args[i])
@@ -166,8 +161,9 @@ int	new_prompt(t_command_table *table)
 		run_pipeline(table);
 	if (ft_strcmp(line, "\n"))
 		add_history(line);
+	if (check_cmd_line(process_line(line, table->env, &code), &code) == 1)
+		return (0);
 	args = ft_split_operators(line);
-	free(line);
 	if (!args)
 		return (MALLOC_ERR);
 	return (handle_process_cmd(table, args, &code));

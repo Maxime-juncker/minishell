@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:32 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 10:45:27 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 09:24:22 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	check_redir_out(const char *cmd_line, int i)
 			i++;
 			continue ;
 		}
-		if (cmd_line[i] != '|' && cmd_line[i] != '<' && cmd_line[i] != '>')
+		if (cmd_line[i] != '|' && cmd_line[i] != '<' && cmd_line[i] != '>' && cmd_line[i] != '&')
 			return (0);
 		error_symb = cmd_line[i];
 		return (error_symbol(error_symb, cmd_line, i));
@@ -79,6 +79,8 @@ static int	check_error(const char *cmd_line, int i)
 	}
 	if (to_find == '|')
 		return (check_token_error(cmd_line, i, 2, '|'));
+	if (to_find == '&')
+		return (check_and_op(cmd_line, i));
 	return (0);
 }
 
@@ -96,7 +98,7 @@ static int	check_line(const char *cmd_line)
 	{
 		quote = toggle_quote(cmd_line[i], quote);
 		if (!quote && (cmd_line[i] == '<' || cmd_line[i] == '>'
-				|| cmd_line[i] == '|'))
+				|| cmd_line[i] == '|' || cmd_line[i] == '&'))
 		{
 			code = check_error(cmd_line, i);
 			if (code != 0)

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/25 14:23:09 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 09:24:43 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int		token_error(char c1, char c2);
 void	cleanup_arr(void **arr);
 
 // checker.c
-int		check_cmd_line( const char *process_line, char **env );
+int		check_cmd_line( const char *process_line, int *code );
 
 // path_checker.c
 int		check_path(const char *cmd_part, char **env);
@@ -123,6 +123,8 @@ int		check_token_error(const char *cmd_line, int i, int max_occ,
 			char to_find);
 int		check_quotes(const char *cmd_line);
 
+int	check_and_op(const char *line, int i);
+
 /* -------------------------------------------------------------------------- */
 /*                                   executor                                 */
 /* -------------------------------------------------------------------------- */
@@ -132,7 +134,7 @@ void	show_table(t_command_table table);
 void	show_cmd(t_command cmd);
 
 // executor.c
-int		run_command(t_command *cmd, const t_command_table *table, int *childs);
+int		run_command(t_command *cmd, const t_command_table *table, int *childs, int *code);
 void	close_fds(t_command cmd);
 
 // paths.c
