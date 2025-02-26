@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 12:19:12 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:38:58 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,20 @@ typedef struct s_command
 
 typedef struct s_command_table
 {
+	char		*name;
 	t_command	*commands;
 	size_t		n_commands;
 
 	char		**env;
 	char		**exp;
 }	t_command_table;
+
+typedef struct s_free_package
+{
+	int		*childs;
+	char	**args;
+}	t_free_package;
+
 
 extern int	g_signal_received;
 
@@ -90,7 +98,7 @@ int		unset_if_needed(t_command_table *table, char *arg);
 int		get_env_len(char **env, char *arg);
 
 // exit.c
-void	exit_shell(t_command_table *table, t_command cmd, int *childs);
+void	exit_shell(t_command_table *table, t_command cmd, t_free_package package);
 
 /* -------------------------------------------------------------------------- */
 /*                                   checker                                  */
@@ -102,7 +110,7 @@ int		token_error(char c1, char c2);
 void	cleanup_arr(void **arr);
 
 // checker.c
-int		check_cmd_line( const char *process_line, char **env );
+int		check_cmd_line( const char *process_line, int *code );
 
 // path_checker.c
 int		check_path(const char *cmd_part, char **env);
@@ -123,6 +131,8 @@ int		check_token_error(const char *cmd_line, int i, int max_occ,
 			char to_find);
 int		check_quotes(const char *cmd_line);
 
+int	check_and_op(const char *line, int i);
+
 /* -------------------------------------------------------------------------- */
 /*                                   executor                                 */
 /* -------------------------------------------------------------------------- */
@@ -132,7 +142,7 @@ void	show_table(t_command_table table);
 void	show_cmd(t_command cmd);
 
 // executor.c
-int		run_command(t_command *cmd, const t_command_table *table, int *childs);
+int		run_command(t_command *cmd, const t_command_table *table, t_free_package package, int *code);
 void	close_fds(t_command cmd);
 
 // paths.c
@@ -141,7 +151,7 @@ int		is_builtin(char *name);
 char	**get_paths(char **env);
 
 // pipeline.c
-int		run_pipeline(t_command_table *table);
+int		run_pipeline(t_command_table *table, char **args);
 
 /* -------------------------------------------------------------------------- */
 /*                                    lexer                                   */
@@ -198,5 +208,7 @@ char	**ft_split_operators(const char *s);
 int 	handle_parenthesis(t_command_table *table, char *arg, int *code);
 int		handle_process_cmd(t_command_table *table, char **args, int *code);
 void	free_all(char **res, int i);
+
+char	*get_exec_name(char *name);
 
 #endif

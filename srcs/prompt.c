@@ -6,9 +6,10 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 12:23:45 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:39:25 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 #include <readline/readline.h>
@@ -121,6 +122,7 @@ int	handle_process_cmd(t_command_table *table, char **args, int *code)
 				return (MALLOC_ERR);
 			if (*code == MALLOC_ERR)
 				return (free(process_cmd), MALLOC_ERR);
+<<<<<<< HEAD
 			else if (*code == 0)
 			{
 				if (!init_table(process_cmd, table))
@@ -131,6 +133,11 @@ int	handle_process_cmd(t_command_table *table, char **args, int *code)
 			}
 			else
 				free(process_cmd);
+=======
+			if (!init_table(process_cmd, table))
+				*code = run_pipeline(table, args);
+			cleanup_table((t_command_table *)table);
+>>>>>>> refs/remotes/origin/bonus
 			i++;
 		}
 		if (!args[i])
@@ -167,11 +174,12 @@ int	new_prompt(t_command_table *table)
 		return (0);
 	}
 	if (!line && !init_table(ft_strdup("exit"), table))
-		run_pipeline(table);
+		run_pipeline(table, NULL);
 	if (ft_strcmp(line, "\n"))
 		add_history(line);
+	if (check_cmd_line(process_line(line, table->env, &code), &code) == 1)
+		return (0);
 	args = ft_split_operators(line);
-	free(line);
 	if (!args)
 		return (MALLOC_ERR);
 	return (handle_process_cmd(table, args, &code));

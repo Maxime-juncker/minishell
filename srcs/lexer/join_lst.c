@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 11:15:30 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:15:14 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static int	skip_spaces( char content_c, char *str_ref, char quote, int len )
 	return (0);
 }
 
+
 static void	join_loop(char *content, char **str_ref, int *len)
 {
 	int		i;
@@ -42,13 +43,13 @@ static void	join_loop(char *content, char **str_ref, int *len)
 	if (ignore_prompt(content))
 		return ;
 	quote = 0;
-	i = -1;
-	while (content[++i])
+	i = 0;
+	while (content[i])
 	{
 		quote = toggle_quote(content[i], quote);
 		while (skip_spaces(content[i], *str_ref, quote, *len))
 			i++;
-		if (should_we_join_a_space(*str_ref, *len, content[i]))
+		if (should_we_join_a_space(*str_ref, *len, content[i]) && !quote)
 		{
 			*str_ref = ft_charjoin(*str_ref, ' ');
 			if (*str_ref == NULL)
@@ -59,6 +60,7 @@ static void	join_loop(char *content, char **str_ref, int *len)
 		*str_ref = ft_charjoin(*str_ref, content[i]);
 		if (*str_ref == NULL)
 			return ;
+		i++;
 		(*len)++;
 	}
 }

@@ -3,40 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:17 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 10:45:17 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 10:34:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_cmd_line( const char *process_line, char **env )
+int	check_cmd_line( const char *process_line, int *code)
 {
-	int		code;
-	char	**cmd_parts;
-	int		i;
-	int		tmp;
+	int	tmp;
 
 	if (!process_line || ft_strcmp((char *)process_line, ":") == 0
 		|| ft_strcmp((char*)process_line, "!") == 0)
-		return (0);
-	code = check_syntax(process_line);
-	if (code != 0)
-		return (code);
-	cmd_parts = ft_split(process_line, '|');
-	if (cmd_parts == NULL)
-		return (MALLOC_ERR);
-	i = 0;
-	code = 0;
-	while (cmd_parts[i])
+		return (free((char *)process_line), 0);
+	tmp = check_syntax(process_line);
+	if (tmp != 0)
 	{
-		tmp = check_path(cmd_parts[i], env);
-		if (tmp != 0)
-			code = tmp;
-		i++;
+		*code = tmp;
+		return (free((char *)process_line), 1);
 	}
-	cleanup_arr((void **)cmd_parts);
-	return (code);
+	return (free((char *)process_line), 0);
 }

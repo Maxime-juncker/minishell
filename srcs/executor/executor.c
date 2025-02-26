@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 21:20:38 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 10:22:49 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ static void	setup_args(t_command *cmd)
 	cmd->args[cmd->n_args] = NULL;
 }
 
-static void	handle_null_pid(t_command *cmd, const t_command_table *table,
-	int *childs)
+static void	handle_child_process(t_command *cmd, const t_command_table *table,
+	t_free_package package)
 {
 	size_t	i;
 	int		code;
@@ -60,7 +60,8 @@ static void	handle_null_pid(t_command *cmd, const t_command_table *table,
 	dup2(cmd->fd_in, STDIN_FILENO);
 	if (cmd->fd_out != STDOUT_FILENO)
 		close(cmd->fd_out);
-	free(childs);
+	free(package.childs);
+	cleanup_arr((void **)package.args);
 	if (is_builtin(cmd->args[0]) == 1)
 	{
 		code = run_built_in(*cmd, table);
@@ -79,18 +80,21 @@ static void	handle_null_pid(t_command *cmd, const t_command_table *table,
 		alert("execve failed");
 }
 
-int	run_command(t_command *cmd, const t_command_table *table, int *childs)
+int	run_command(t_command *cmd, const t_command_table *table, t_free_package package, int *code)
 {
 	int	pid;
 	int	status;
 
+	*code = check_path(cmd->args[0], table->env);
+	if (*code != 0)
+		return (-1);
 	setup_args(cmd);
 	pid = fork();
 	if (pid == -1)
 		return (-1);
 	if (pid == 0)
 	{
-		handle_null_pid(cmd, table, childs);
+		handle_child_process(cmd, table, package);
 	}
 	else
 	{
