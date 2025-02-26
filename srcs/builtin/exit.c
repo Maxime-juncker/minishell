@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -64,12 +65,12 @@ void	exit_shell(t_command_table *table, t_command cmd, t_free_package package)
 
 	if (table->n_commands > 1)
 		return ;
+	printf("exit\n");
 	free(package.childs);
 	cleanup_arr((void **)package.args);
 	code = get_code(cmd);
 	cleanup_arr((void **)table->env);
 	cleanup_arr((void **)table->exp);
 	cleanup_table(table);
-	printf("exit\n");
 	exit(code);
 }

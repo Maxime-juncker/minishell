@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:21 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/25 16:07:28 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:39:40 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <readline/readline.h>
+#include <signal.h>
 
 static int	handle_eof(char *line, char *deli, int nb)
 {
@@ -21,8 +23,7 @@ static int	handle_eof(char *line, char *deli, int nb)
 			nb, deli, RESET);
 		return (1);
 	}
-	else if (!ft_strncmp(line, deli, ft_strlen(line) - 1)
-		&& ft_strlen(deli) == ft_strlen(line) - 1)
+	else if (!ft_strcmp(line, deli))
 	{
 		free(line);
 		return (1);
@@ -30,18 +31,22 @@ static int	handle_eof(char *line, char *deli, int nb)
 	return (0);
 }
 
-static char	*append_str(char *old, char *append_str, int new_len)
+static char	*append_str(char *old, char *append_str)
 {
+	int		new_len;
 	char	*new_str;
 
 	if (!old)
-		return (ft_strdup(append_str));
+		return (append_str);
+	new_len = ft_strlen(old) + ft_strlen(append_str) + 1;
 	new_str = malloc(new_len);
 	if (!new_str)
-		return (NULL);
+		return (free(old), free(append_str),
+			print_malloc_error("heredoc.c", 42), NULL);
 	ft_strlcpy(new_str, old, new_len);
 	free(old);
 	ft_strlcat(new_str, append_str, new_len);
+	free(append_str);
 	return (new_str);
 }
 
@@ -50,25 +55,26 @@ int	heredoc(t_command *cmd, char *deli)
 	char	*doc;
 	char	*line;
 	int		nb_line;
+	char	*new_line;
 
 	cmd->fd_in = open("/tmp/temp.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	doc = NULL;
 	nb_line = 0;
 	while (1)
 	{
-		ft_putstr_fd("> ", 0);
-		line = get_next_line(0);
-		if (handle_eof(line, deli, nb_line))
+		if (g_signal_received == SIGINT)
+			return (g_signal_received = 0, free(doc), 1);
+		line = readline("> ");
+		if (handle_eof(line, deli, nb_line++))
 			break ;
-		nb_line++;
-		doc = append_str(doc, line, ft_strlen(doc) + ft_strlen(line) + 1);
-		free(line);
+		if (line)
+			new_line = ft_charjoin(line, '\n');
+		doc = append_str(doc, new_line);
 		if (!doc)
-			return (1);
+			return (MALLOC_ERR);
 	}
 	if (doc)
 		write(cmd->fd_in, doc, ft_strlen(doc));
 	close(cmd->fd_in);
-	cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644);
-	return (free(doc), 0);
+	return (cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644), free(doc), 0);
 }

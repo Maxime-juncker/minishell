@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 08:39:44 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 09:54:51 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ static char	**update_env(char *arg, char **env, int append)
 	char	**cpy;
 	int		i;
 
-	// cpy = malloc((arrlen((void **)env) + 2 - append) * sizeof(char *));
-	cpy = NULL;
+	cpy = malloc((arrlen((void **)env) + 2 - append) * sizeof(char *));
 	if (!cpy)
 		return (print_malloc_error("export_utils.c", 26), env);
 	i = -1;
@@ -36,13 +35,13 @@ static char	**update_env(char *arg, char **env, int append)
 		else
 			cpy[i] = env[i];
 		if (!cpy[i])
-			return (free(cpy), print_malloc_error("export_utils.c", 34), env);
+			return (free(cpy), print_malloc_error("export_utils.c", 33), env);
 	}
 	if (!append)
 	{
 		cpy[i] = ft_strdup(arg);
 		if (!cpy[i++])
-			return (free(cpy), print_malloc_error("export_utils.c", 43), env);
+			return (free(cpy), print_malloc_error("export_utils.c", 42), env);
 	}
 	free(env);
 	return (cpy[i] = NULL, cpy);

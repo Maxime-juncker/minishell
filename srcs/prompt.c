@@ -6,9 +6,10 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 12:52:11 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:19:55 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 #include <readline/readline.h>
