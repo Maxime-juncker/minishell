@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 12:55:43 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:24:53 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int		token_error(char c1, char c2);
 void	cleanup_arr(void **arr);
 
 // checker.c
-int		check_cmd_line( const char *process_line, int *code );
+int	check_cmd_line(char *process_line, int *code);
 
 // path_checker.c
 int		check_path(const char *cmd_part, char **env);
