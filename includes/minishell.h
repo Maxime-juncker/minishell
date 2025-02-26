@@ -18,7 +18,7 @@
 # define IS_DIR		126
 # define MALLOC_ERR	-1
 
-# define DEBUG 0
+# define DEBUG 1
 # define SHOW_LEXER 0
 
 /* -------------------------------------------------------------------------- */
@@ -37,6 +37,7 @@ typedef struct s_command
 
 typedef struct s_command_table
 {
+	char		*name;
 	t_command	*commands;
 	size_t		n_commands;
 
@@ -196,5 +197,7 @@ char	**ft_split_operators(const char *s);
 int 	handle_parenthesis(t_command_table *table, char *arg, int *code);
 int		handle_process_cmd(t_command_table *table, char **args, int *code);
 void	free_all(char **res, int i);
+
+char	*get_exec_name(char *name);
 
 #endif

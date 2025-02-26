@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 10:21:15 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:35:19 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,30 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <signal.h>
+#include <sys/ioctl.h>
 
 int	g_signal_received = 0;
+
+static int	seek_cmd(t_command_table *table, char *name)
+{
+	size_t	i;
+	char	*tmp;
+
+	i = 0;
+	while (i < table->n_commands)
+	{
+		tmp = get_exec_name(table->commands[i].args[0]);
+		if (ft_strcmp(tmp, name) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
 
 static int	wait_for_process(t_command_table *table, int *childs, int code)
 {
 	int		pid;
 	size_t	i;
-
-	signal(SIGQUIT, handle_signal);
-	g_signal_received = 0;
 	i = -1;
 	while (childs[++i])
 	{
@@ -38,7 +52,8 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 					code = 130;
 				while (i < table->n_commands)
 					kill(childs[i++], g_signal_received);
-				printf("\n");
+				if (seek_cmd(table, table->name) == -1)
+					printf("\n");
 			}
 			return (code);
 		}
@@ -92,6 +107,7 @@ int	run_pipeline(t_command_table *table, char **args)
 	int		code;
 	int		*childs;
 
+	g_signal_received = 0;
 	childs = ft_calloc(table->n_commands + 1, sizeof(int));
 	if (!childs)
 		return (MALLOC_ERR);

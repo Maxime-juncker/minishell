@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_processing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/25 13:34:15 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:31:13 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char	*handle_dollar(char **str, int last_code, char **env)
 	char	*var_value;
 
 	if (**str == '?')
-		return ((*str)++, ft_itoa(last_code));
+		return ((*str)++, ft_itoa(last_code % 256));
 	else if (**str == '0')
 		return ((*str)++, ft_strdup("minishell"));
 	else if (ft_isdigit(**str))
