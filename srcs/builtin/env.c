@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:26 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/21 17:30:27 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/25 17:14:49 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ size_t	arrlen(void **arr)
 	if (!arr)
 		return (0);
 	i = 0;
-	while (arr[i] != NULL)
+	while (arr[i])
 		i++;
 	return (i);
 }
@@ -30,17 +30,14 @@ char	**duplicate_env(char **old_env)
 	int		i;
 
 	new_env = malloc(sizeof(char *) * (arrlen((void **)old_env) + 1));
-	if (new_env == NULL)
+	if (!new_env)
 		return (NULL);
 	i = 0;
-	while (old_env[i] != NULL)
+	while (old_env[i])
 	{
 		new_env[i] = ft_strdup(old_env[i]);
-		if (new_env[i] == NULL)
-		{
-			cleanup_arr((void **)new_env);
-			return (NULL);
-		}
+		if (!new_env[i])
+			return (cleanup_arr((void **)new_env), NULL);
 		i++;
 	}
 	new_env[i] = NULL;
@@ -52,7 +49,7 @@ int	env(t_command_table table)
 	int	i;
 
 	i = 0;
-	while (table.env[i] != NULL)
+	while (table.env[i])
 	{
 		printf("%s\n", table.env[i]);
 		i++;

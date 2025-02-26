@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:15 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 10:39:49 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/25 16:27:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	cleanup_arr(void **arr)
 {
 	int	i;
 
+	if (!arr)
+		return ;
 	i = 0;
 	while (arr[i])
 	{
