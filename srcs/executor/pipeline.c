@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 12:52:38 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:49:19 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 {
 	int		pid;
 	size_t	i;
+
 	i = -1;
 	while (childs[++i])
 	{
@@ -61,7 +62,7 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 	return (signal(SIGQUIT, SIG_IGN), code);
 }
 
-static int	run_env_cmd(t_command_table *table, t_command cmd, t_free_package package)
+static int	run_env_cmd(t_command_table *table, t_command cmd, t_free_pkg package)
 {
 	char	*name;
 
@@ -86,7 +87,7 @@ static int	run_env_cmd(t_command_table *table, t_command cmd, t_free_package pac
 }
 
 static int	env_stage(t_command_table *table, t_command cmd, int *code,
-	t_free_package package)
+	t_free_pkg package)
 {
 	if (!ft_strcmp(cmd.args[0], "export")
 		|| (!ft_strcmp(cmd.args[0], "unset"))
@@ -110,19 +111,19 @@ int	run_pipeline(t_command_table *table, char **args)
 	g_signal_received = 0;
 	childs = ft_calloc(table->n_commands + 1, sizeof(int));
 	if (!childs)
-		return (print_malloc_error("pipeline.c", 113), MALLOC_ERR);
+		return (print_malloc_error(ERR), MALLOC_ERR);
 	childs[table->n_commands] = -1;
 	i = 0;
 	while (i < table->n_commands)
 	{
 		if (table->commands[i].n_args != 0)
 		{
-			if (env_stage(table, table->commands[i], &code, (t_free_package){childs, args}))
+			if (env_stage(table, table->commands[i], &code, (t_free_pkg){childs, args}))
 			{
 				i++;
 				continue ;
 			}
-			childs[i] = run_command(&table->commands[i], table, (t_free_package){childs, args}, &code);
+			childs[i] = run_command(&table->commands[i], table, (t_free_pkg){childs, args}, &code);
 		}
 		i++;
 	}

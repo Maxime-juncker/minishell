@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 10:22:49 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:40:09 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	setup_args(t_command *cmd)
 }
 
 static void	handle_child_process(t_command *cmd, const t_command_table *table,
-	t_free_package package)
+	t_free_pkg package)
 {
 	size_t	i;
 	int		code;
@@ -80,7 +80,7 @@ static void	handle_child_process(t_command *cmd, const t_command_table *table,
 		alert("execve failed");
 }
 
-int	run_command(t_command *cmd, const t_command_table *table, t_free_package package, int *code)
+int	run_command(t_command *cmd, const t_command_table *table, t_free_pkg package, int *code)
 {
 	int	pid;
 	int	status;
@@ -91,7 +91,7 @@ int	run_command(t_command *cmd, const t_command_table *table, t_free_package pac
 	setup_args(cmd);
 	pid = fork();
 	if (pid == -1)
-		return (-1);
+		return (perror("\033[0;31mfork failed"), -1);
 	if (pid == 0)
 	{
 		handle_child_process(cmd, table, package);
