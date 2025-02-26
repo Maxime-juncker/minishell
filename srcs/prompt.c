@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/25 16:34:11 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:23:45 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,8 +124,10 @@ int	handle_process_cmd(t_command_table *table, char **args, int *code)
 			else if (*code == 0)
 			{
 				if (!init_table(process_cmd, table))
+				{
 					*code = run_pipeline(table) % 256;
-				cleanup_table((t_command_table *)table);
+					cleanup_table((t_command_table *)table);
+				}
 			}
 			else
 				free(process_cmd);
@@ -137,6 +139,8 @@ int	handle_process_cmd(t_command_table *table, char **args, int *code)
 			i++;
 		else if (args[i + 1])
 			i += 2;
+		else
+			i++;
 	}
 	cleanup_arr((void **)args);
 	return (0);
