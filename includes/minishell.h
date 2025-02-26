@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 08:33:42 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 10:13:21 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,10 @@ int		export_cmd(t_command_table *table, t_command cmd);
 
 // pwd.c
 int		pwd(void);
-char	*get_pwd(void);
 
 // unset.c
 int		unset_cmd(t_command_table *table, t_command cmd);
-void	unset_if_needed(t_command_table *table, char *arg);
+int		unset_if_needed(t_command_table *table, char *arg);
 int		get_env_len(char **env, char *arg);
 
 // exit.c

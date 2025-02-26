@@ -1,14 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/21 14:56:01 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/25 15:50:02 by abidolet         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -65,10 +55,10 @@ void	exit_shell(t_command_table *table, t_command cmd, int *childs)
 	if (table->n_commands > 1)
 		return ;
 	free(childs);
+	printf("exit\n");
 	code = get_code(cmd);
 	cleanup_arr((void **)table->env);
 	cleanup_arr((void **)table->exp);
 	cleanup_table(table);
-	printf("exit\n");
 	exit(code);
 }

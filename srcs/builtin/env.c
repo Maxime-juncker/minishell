@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:26 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/25 17:14:49 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 08:55:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,14 @@ char	**duplicate_env(char **old_env)
 
 	new_env = malloc(sizeof(char *) * (arrlen((void **)old_env) + 1));
 	if (!new_env)
-		return (NULL);
+		return (print_malloc_error("env.c", 32), NULL);
 	i = 0;
 	while (old_env[i])
 	{
 		new_env[i] = ft_strdup(old_env[i]);
 		if (!new_env[i])
-			return (cleanup_arr((void **)new_env), NULL);
+			return (print_malloc_error("env.c", 38),
+				cleanup_arr((void **)new_env), NULL);
 		i++;
 	}
 	new_env[i] = NULL;
