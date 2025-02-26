@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 12:39:25 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:41:26 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,22 +122,16 @@ int	handle_process_cmd(t_command_table *table, char **args, int *code)
 				return (MALLOC_ERR);
 			if (*code == MALLOC_ERR)
 				return (free(process_cmd), MALLOC_ERR);
-<<<<<<< HEAD
 			else if (*code == 0)
 			{
 				if (!init_table(process_cmd, table))
 				{
-					*code = run_pipeline(table) % 256;
+					*code = run_pipeline(table, args) % 256;
 					cleanup_table((t_command_table *)table);
 				}
 			}
 			else
 				free(process_cmd);
-=======
-			if (!init_table(process_cmd, table))
-				*code = run_pipeline(table, args);
-			cleanup_table((t_command_table *)table);
->>>>>>> refs/remotes/origin/bonus
 			i++;
 		}
 		if (!args[i])

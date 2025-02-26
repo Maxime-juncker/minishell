@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:35:07 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 10:30:41 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:44:34 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ static char	**unset(char **env, char *arg, int len, int *is_malloc_error)
 			cpy[len] = env[i];
 			len++;
 		}
-		else
-			free(env[i]);
 	}
 	free(env);
 	cpy[len] = NULL;

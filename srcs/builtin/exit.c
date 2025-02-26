@@ -65,13 +65,9 @@ void	exit_shell(t_command_table *table, t_command cmd, t_free_package package)
 
 	if (table->n_commands > 1)
 		return ;
-<<<<<<< HEAD
-	free(childs);
 	printf("exit\n");
-=======
 	free(package.childs);
 	cleanup_arr((void **)package.args);
->>>>>>> refs/remotes/origin/bonus
 	code = get_code(cmd);
 	cleanup_arr((void **)table->env);
 	cleanup_arr((void **)table->exp);
