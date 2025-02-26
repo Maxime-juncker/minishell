@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 09:59:28 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 10:21:15 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 	return (signal(SIGQUIT, SIG_IGN), code);
 }
 
-static int	run_env_cmd(t_command_table *table, t_command cmd, int *childs)
+static int	run_env_cmd(t_command_table *table, t_command cmd, t_free_package package)
 {
 	char	*name;
 
@@ -65,13 +65,13 @@ static int	run_env_cmd(t_command_table *table, t_command cmd, int *childs)
 	}
 	if (ft_strcmp(cmd.args[0], "exit") == 0)
 	{
-		exit_shell(table, cmd, childs);
+		exit_shell(table, cmd, package);
 	}
 	return (0);
 }
 
 static int	env_stage(t_command_table *table, t_command cmd, int *code,
-	int *childs)
+	t_free_package package)
 {
 	if (!ft_strcmp(cmd.args[0], "export")
 		|| (!ft_strcmp(cmd.args[0], "unset"))
@@ -79,14 +79,14 @@ static int	env_stage(t_command_table *table, t_command cmd, int *code,
 		|| (!ft_strcmp(cmd.args[0], "exit")))
 	{
 		show_cmd(cmd);
-		*code = run_env_cmd(table, cmd, childs);
+		*code = run_env_cmd(table, cmd, package);
 		close_fds(cmd);
 		return (1);
 	}
 	return (0);
 }
 
-int	run_pipeline(t_command_table *table)
+int	run_pipeline(t_command_table *table, char **args)
 {
 	size_t	i;
 	int		code;
@@ -101,12 +101,12 @@ int	run_pipeline(t_command_table *table)
 	{
 		if (table->commands[i].n_args != 0)
 		{
-			if (env_stage(table, table->commands[i], &code, childs))
+			if (env_stage(table, table->commands[i], &code, (t_free_package){childs, args}))
 			{
 				i++;
 				continue ;
 			}
-			childs[i] = run_command(&table->commands[i], table, childs, &code);
+			childs[i] = run_command(&table->commands[i], table, (t_free_package){childs, args}, &code);
 		}
 		i++;
 	}

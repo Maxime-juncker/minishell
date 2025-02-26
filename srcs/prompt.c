@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 09:59:20 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 10:15:09 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	handle_process_cmd(t_command_table *table, char **args, int *code)
 			if (*code == MALLOC_ERR)
 				return (free(process_cmd), MALLOC_ERR);
 			if (!init_table(process_cmd, table))
-				*code = run_pipeline(table) % 256;
+				*code = run_pipeline(table, args) % 256;
 			cleanup_table((t_command_table *)table);
 			i++;
 		}
@@ -158,7 +158,7 @@ int	new_prompt(t_command_table *table)
 		return (0);
 	}
 	if (!line && !init_table(ft_strdup("exit"), table))
-		run_pipeline(table);
+		run_pipeline(table, NULL);
 	if (ft_strcmp(line, "\n"))
 		add_history(line);
 	if (check_cmd_line(process_line(line, table->env, &code), &code) == 1)

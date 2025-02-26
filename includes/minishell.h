@@ -44,6 +44,13 @@ typedef struct s_command_table
 	char		**exp;
 }	t_command_table;
 
+typedef struct s_free_package
+{
+	int		*childs;
+	char	**args;
+}	t_free_package;
+
+
 extern int	g_signal_received;
 
 /* -------------------------------------------------------------------------- */
@@ -79,7 +86,7 @@ void	unset_if_needed(t_command_table *table, char *arg);
 int		get_env_len(char **env, char *arg);
 
 // exit.c
-void	exit_shell(t_command_table *table, t_command cmd, int *childs);
+void	exit_shell(t_command_table *table, t_command cmd, t_free_package package);
 
 /* -------------------------------------------------------------------------- */
 /*                                   checker                                  */
@@ -123,7 +130,7 @@ void	show_table(t_command_table table);
 void	show_cmd(t_command cmd);
 
 // executor.c
-int		run_command(t_command *cmd, const t_command_table *table, int *childs, int *code);
+int		run_command(t_command *cmd, const t_command_table *table, t_free_package package, int *code);
 void	close_fds(t_command cmd);
 
 // paths.c
@@ -132,7 +139,7 @@ int		is_builtin(char *name);
 char	**get_paths(char **env);
 
 // pipeline.c
-int		run_pipeline(t_command_table *table);
+int		run_pipeline(t_command_table *table, char **args);
 
 /* -------------------------------------------------------------------------- */
 /*                                    lexer                                   */

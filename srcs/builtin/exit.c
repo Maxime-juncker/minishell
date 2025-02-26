@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:01 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/25 15:50:02 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 10:25:08 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,14 @@ static int	get_code(t_command cmd)
 	return (nb);
 }
 
-void	exit_shell(t_command_table *table, t_command cmd, int *childs)
+void	exit_shell(t_command_table *table, t_command cmd, t_free_package package)
 {
 	int	code;
 
 	if (table->n_commands > 1)
 		return ;
-	free(childs);
+	free(package.childs);
+	cleanup_arr((void **)package.args);
 	code = get_code(cmd);
 	cleanup_arr((void **)table->env);
 	cleanup_arr((void **)table->exp);
