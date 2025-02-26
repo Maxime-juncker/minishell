@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 20:45:16 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:18:20 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int	init_table(char *line, t_command_table *table)
 	char	**commands;
 	size_t	i;
 
+	table->n_commands = 0;
 	while (*line == ' ' || *line == '\t')
 		line++;
 	commands = ft_split(line, '|');

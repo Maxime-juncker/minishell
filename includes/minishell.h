@@ -18,7 +18,7 @@
 # define IS_DIR		126
 # define MALLOC_ERR	-1
 
-# define DEBUG 1
+# define DEBUG 0
 # define SHOW_LEXER 0
 
 /* -------------------------------------------------------------------------- */

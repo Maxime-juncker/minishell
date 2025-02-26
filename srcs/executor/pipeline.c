@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 12:35:19 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:52:38 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	run_pipeline(t_command_table *table, char **args)
 	g_signal_received = 0;
 	childs = ft_calloc(table->n_commands + 1, sizeof(int));
 	if (!childs)
-		return (MALLOC_ERR);
+		return (print_malloc_error("pipeline.c", 113), MALLOC_ERR);
 	childs[table->n_commands] = -1;
 	i = 0;
 	while (i < table->n_commands)
