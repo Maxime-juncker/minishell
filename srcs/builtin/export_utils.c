@@ -6,20 +6,27 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 11:46:10 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 08:39:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_malloc_error(const char *file, int line)
+{
+	ft_dprintf(2, "%sminishell: malloc: %s '%s' at line %d\n%s",
+		RED, "memory allocation failed in", file, line, RESET);
+}
 
 static char	**update_env(char *arg, char **env, int append)
 {
 	char	**cpy;
 	int		i;
 
-	cpy = malloc((arrlen((void **)env) + 2 - append) * sizeof(char *));
-	if (cpy == NULL)
-		return (NULL);
+	// cpy = malloc((arrlen((void **)env) + 2 - append) * sizeof(char *));
+	cpy = NULL;
+	if (!cpy)
+		return (print_malloc_error("export_utils.c", 26), env);
 	i = -1;
 	while (env && env[++i])
 	{
@@ -28,22 +35,25 @@ static char	**update_env(char *arg, char **env, int append)
 					+ (ft_strchr(env[i], '=') != NULL), FREE1);
 		else
 			cpy[i] = env[i];
+		if (!cpy[i])
+			return (free(cpy), print_malloc_error("export_utils.c", 34), env);
 	}
-	free(env);
 	if (!append)
 	{
 		cpy[i] = ft_strdup(arg);
-		if (!cpy[i])
-			return (cleanup_arr((void **)cpy), NULL);
-		i++;
+		if (!cpy[i++])
+			return (free(cpy), print_malloc_error("export_utils.c", 43), env);
 	}
-	cpy[i] = NULL;
-	return (cpy);
+	free(env);
+	return (cpy[i] = NULL, cpy);
 }
 
-void	export(t_command_table *table, char *arg, int append)
+int	export(t_command_table *table, char *arg, int append)
 {
 	if (ft_strchr(arg, '='))
 		table->env = update_env(arg, table->env, append);
 	table->exp = update_env(arg, table->exp, append);
+	if (!table->env || !table->exp)
+		return (MALLOC_ERR);
+	return (0);
 }

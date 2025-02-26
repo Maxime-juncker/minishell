@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:01 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 10:39:09 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:50:02 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,5 @@ void	exit_shell(t_command_table *table, t_command cmd, int *childs)
 	cleanup_arr((void **)table->exp);
 	cleanup_table(table);
 	printf("exit\n");
-	exit (code);
+	exit(code);
 }

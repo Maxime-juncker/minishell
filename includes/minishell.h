@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/25 14:23:09 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 08:33:42 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ char	**duplicate_env(char **old_env);
 size_t	arrlen(void **arr);
 
 // export_utils.c
-void	export(t_command_table *table, char *arg, int append);
+int		export(t_command_table *table, char *arg, int append);
+void	print_malloc_error(const char *function, int line);
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);
