@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:34 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 10:17:10 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:20:09 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	export_cmd(t_command_table *table, t_command cmd)
 		if (append && get_env_len(table->exp, cmd.args[i]) == -1 && !--append)
 			cmd.args[i] = ft_strdup_except_char(cmd.args[i], '+');
 		if (!cmd.args[i])
-			return (print_malloc_error("export.c", 117), MALLOC_ERR);
+			return (malloc_assert(ERR), MALLOC_ERR);
 		if (export(table, cmd.args[i], append) == MALLOC_ERR)
 			return (MALLOC_ERR);
 	}

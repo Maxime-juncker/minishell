@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 13:19:05 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:18:35 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ static int	create_arg(char **cmd_arg, char *str)
 	}
 	arg = malloc(sizeof(char) * (i + 1));
 	if (!arg)
-		return (print_malloc_error("init.c", 53), MALLOC_ERR);
+		return (malloc_assert(ERR), MALLOC_ERR);
 	ft_strlcpy(arg, str, i + 1);
 	*cmd_arg = remove_quotes_pair(arg);
 	free(arg);
 	if (!*cmd_arg)
-		return (print_malloc_error("init.c", 57), MALLOC_ERR);
+		return (malloc_assert(ERR), MALLOC_ERR);
 	return (0);
 }
 
@@ -70,7 +70,7 @@ static int	get_args(t_command *cmd, char *cmd_str)
 
 	cmd->args = malloc(sizeof(char *) * count_args(cmd_str));
 	if (!cmd->args)
-		return (print_malloc_error("init.c", 71), MALLOC_ERR);
+		return (malloc_assert(ERR), MALLOC_ERR);
 	quote = 0;
 	i = 0;
 	new_arg = 1;
@@ -103,11 +103,12 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
 		if (pipe(pipefd) != -1)
 			cmd->fd_out = pipefd[1];
 		else
-			return (1);
+			return (MALLOC_ERR);
 	}
 	if (get_args(cmd, cmd_str) == MALLOC_ERR)
 		return (MALLOC_ERR);
-	redir(cmd, cmd_str);
+	if (redir(cmd, cmd_str) == MALLOC_ERR)
+		return (cleanup_arr((void **)cmd->args), MALLOC_ERR);
 	if (is_last && !ft_strchr(cmd_str, '>'))
 		cmd->fd_out = 1;
 	if (!i && !ft_strchr(cmd_str, '<'))
@@ -119,29 +120,24 @@ int	init_table(char *line, t_command_table *table)
 {
 	char	**commands;
 	size_t	i;
-	int		temp;
 
 	table->n_commands = 0;
-	while (*line == ' ' || *line == '\t')
-		line++;
 	commands = ft_split(line, '|');
 	free(line);
 	if (!commands)
-		return (MALLOC_ERR);
-	table->n_commands = 0;
+		return (malloc_assert(ERR), MALLOC_ERR);
 	while (commands[table->n_commands])
 		table->n_commands++;
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
 	if (!table->commands)
-		return (cleanup_arr((void **)commands), MALLOC_ERR);
+		return (cleanup_arr((void **)commands), malloc_assert(ERR), MALLOC_ERR);
 	i = 0;
 	while (i < table->n_commands)
 	{
-		temp = init_cmd(&table->commands[i], commands[i],
-			i == table->n_commands - 1, i);
-		if (temp != 0)
+		if (init_cmd(&table->commands[i], commands[i],
+				i == table->n_commands - 1, i) == MALLOC_ERR)
 			return (cleanup_arr((void **)commands), table->n_commands = i,
-				cleanup_table((t_command_table *)table), temp);
+				cleanup_table(table), MALLOC_ERR);
 		i++;
 	}
 	cleanup_arr((void **)commands);

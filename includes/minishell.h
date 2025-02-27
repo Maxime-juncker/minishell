@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 13:59:49 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:43:25 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define DEBUG 0
 # define SHOW_LEXER 0
 
-# define ERR __FUNCTION__, __LINE__
+# define ERR __FILE__, __LINE__, __FUNCTION__
 
 /* -------------------------------------------------------------------------- */
 /*                                command table                               */
@@ -86,7 +86,7 @@ size_t	arrlen(void **arr);
 
 // export_utils.c
 int		export(t_command_table *table, char *arg, int append);
-void	print_malloc_error(const char *function, int line);
+void	malloc_assert(const char *file, int line, const char *function);
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);
@@ -187,7 +187,7 @@ char	*process_wildcard(char *line);
 int		init_table(char *line, t_command_table *table);
 
 // redir.c
-void	redir(t_command *cmd, char *command);
+int		redir(t_command *cmd, char *command);
 
 // heredoc.c
 int		heredoc(t_command *cmd, char *deli);
@@ -207,8 +207,6 @@ int		new_prompt(t_command_table *table);
 int		ignore_prompt(char *prompt);
 
 char	**ft_split_operators(const char *s);
-int 	handle_parenthesis(t_command_table *table, char *arg, int *code);
-int		handle_process_cmd(t_command_table *table, char **args, int *code);
 void	free_all(char **res, int i);
 
 char	*get_exec_name(char *name);

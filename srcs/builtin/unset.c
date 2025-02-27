@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:35:07 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 12:44:34 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:20:09 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	**unset(char **env, char *arg, int len, int *is_malloc_error)
 
 	cpy = malloc((len + 1) * sizeof(char *));
 	if (!cpy)
-		return (*is_malloc_error = 1, print_malloc_error("unset.c", 38), env);
+		return (*is_malloc_error = 1, malloc_assert(ERR), env);
 	i = -1;
 	len = 0;
 	while (env[++i] != NULL)

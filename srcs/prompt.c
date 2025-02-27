@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 13:19:55 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:09:15 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,23 @@ static char	*get_folder(void)
 	char	*folder;
 
 	if (!getcwd(buffer, sizeof(buffer)))
-		return (ft_strdup(""));
+	{
+		temp = ft_strdup("");
+		if (!temp)
+			return (malloc_assert(ERR), NULL);
+		return (temp);
+	}
 	folder = ft_strdup(buffer);
 	if (!folder)
-		return (NULL);
+		return (malloc_assert(ERR), NULL);
 	temp = folder;
 	if (folder[1] != '\0')
-	{
 		while (*folder && ft_strchr(folder, '/') != 0)
-		{
 			folder++;
-		}
-	}
 	folder = ft_strjoin(folder, ":");
 	free(temp);
+	if (!folder)
+		return (malloc_assert(ERR), NULL);
 	return (folder);
 }
 
@@ -60,60 +63,41 @@ static char	*new_prompt_txt(char **env)
 
 	folder = get_folder();
 	if (!folder)
-		return (NULL);
+		return (malloc_assert(ERR), NULL);
 	txt = ft_strjoin_free(BLUE, folder, FREE2);
 	if (!txt)
-		return (NULL);
+		return (malloc_assert(ERR), NULL);
 	txt = ft_charjoin(txt, ' ');
 	if (!txt)
-		return (NULL);
+		return (malloc_assert(ERR), NULL);
 	txt = ft_strjoin_free(txt, GREEN, FREE1);
 	if (!txt)
-		return (NULL);
+		return (malloc_assert(ERR), NULL);
 	txt = ft_strjoin_free(txt, find_env_var(env, "USER", NULL), FREE1 | FREE2);
 	if (!txt)
-		return (NULL);
+		return (malloc_assert(ERR), NULL);
 	txt = ft_strjoin_free(txt, "$\033[0m ", FREE1);
 	return (txt);
 }
 
-int handle_parenthesis(t_command_table *table, char *arg, int *code)
+int	handle_process_cmd(t_command_table *table, char *line, int *code)
 {
-	int		status;
-	int		exit_code;
-	pid_t	pid;
-	char	**new_args;
-
-	new_args = ft_split_operators(&arg[1]);
-	if (!new_args)
-		return (MALLOC_ERR);
-	pid = fork();
-	if (pid == -1)
-		return (free(new_args), MALLOC_ERR);
-	if (pid == 0)
-	{
-		exit_code = handle_process_cmd(table, new_args, code);
-		cleanup_arr((void **)table->env);
-		cleanup_arr((void **)table->exp);
-		exit(exit_code);
-	}
-	cleanup_arr((void **)new_args);
-	waitpid(pid, &status, 0);
-	return (0);
-}
-
-int	handle_process_cmd(t_command_table *table, char **args, int *code)
-{
+	char	**args;
 	char	*process_cmd;
 	int		i;
 
 	i = 0;
+	args = ft_split_operators(line);
+	free(line);
+	if (!args)
+		return (malloc_assert(ERR), MALLOC_ERR);
 	while (args[i])
 	{
 		if (args[i][0] == '(')
 		{
-			if (handle_parenthesis(table, args[i++], code) == MALLOC_ERR)
+			if (handle_process_cmd(table, &args[i][1], code) == MALLOC_ERR)
 				return (MALLOC_ERR);
+			i++;
 		}
 		else if (ft_strcmp(args[i], "&&") && ft_strcmp(args[i], "||"))
 		{
@@ -123,8 +107,10 @@ int	handle_process_cmd(t_command_table *table, char **args, int *code)
 			if (!process_cmd && *code == MALLOC_ERR)
 				return (free(process_cmd), MALLOC_ERR);
 			if (!init_table(process_cmd, table))
+			{
 				*code = run_pipeline(table, args);
-			cleanup_table((t_command_table *)table);
+				cleanup_table(table);
+			}
 			i++;
 		}
 		if (!args[i])
@@ -143,7 +129,6 @@ int	new_prompt(t_command_table *table)
 	char		*line;
 	static int	code = 0;
 	char		*prompt_char;
-	char		**args;
 
 	g_signal_received = 0;
 	prompt_char = new_prompt_txt(table->env);
@@ -158,17 +143,15 @@ int	new_prompt(t_command_table *table)
 		g_signal_received = 0;
 		return (0);
 	}
-	if (!line && !init_table(ft_strdup("exit"), table))
+	if (!line)
 	{
-		if (run_pipeline(table, NULL) == MALLOC_ERR)
-			return (cleanup_table(table), MALLOC_ERR);
+		if (init_table(ft_strdup("exit"), table) == MALLOC_ERR || run_pipeline(table, NULL) == MALLOC_ERR)
+			return (MALLOC_ERR);
+		return (code);
 	}
 	if (ft_strcmp(line, "\n"))
 		add_history(line);
 	if (check_cmd_line(process_line(line, table->env, &code), &code) == 1)
 		return (0);
-	args = ft_split_operators(line);
-	if (!args)
-		return (MALLOC_ERR);
-	return (handle_process_cmd(table, args, &code));
+	return (handle_process_cmd(table, line, &code));
 }

@@ -6,16 +6,16 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 09:54:51 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 16:47:29 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_malloc_error(const char *file, int line)
+void	malloc_assert(const char *file, int line, const char *function)
 {
-	ft_dprintf(2, "%sminishell: malloc: %s '%s' at line %d\n%s",
-		RED, "memory allocation failed in", file, line, RESET);
+	ft_dprintf(2, "%s%s:%d: %sminishell: xmalloc: allocation failed in %s'%s'\n",
+		GRAY, file, line, RED, RESET, function);
 }
 
 static char	**update_env(char *arg, char **env, int append)
@@ -25,7 +25,7 @@ static char	**update_env(char *arg, char **env, int append)
 
 	cpy = malloc((arrlen((void **)env) + 2 - append) * sizeof(char *));
 	if (!cpy)
-		return (print_malloc_error("export_utils.c", 26), env);
+		return (malloc_assert(ERR), env);
 	i = -1;
 	while (env && env[++i])
 	{
@@ -35,13 +35,13 @@ static char	**update_env(char *arg, char **env, int append)
 		else
 			cpy[i] = env[i];
 		if (!cpy[i])
-			return (free(cpy), print_malloc_error("export_utils.c", 33), env);
+			return (free(cpy), malloc_assert(ERR), env);
 	}
 	if (!append)
 	{
 		cpy[i] = ft_strdup(arg);
 		if (!cpy[i++])
-			return (free(cpy), print_malloc_error("export_utils.c", 42), env);
+			return (free(cpy), malloc_assert(ERR), env);
 	}
 	free(env);
 	return (cpy[i] = NULL, cpy);

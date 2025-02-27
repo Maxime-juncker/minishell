@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:21 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 12:39:40 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:20:09 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*append_str(char *old, char *append_str)
 	new_str = malloc(new_len);
 	if (!new_str)
 		return (free(old), free(append_str),
-			print_malloc_error("heredoc.c", 42), NULL);
+			malloc_assert(ERR), NULL);
 	ft_strlcpy(new_str, old, new_len);
 	free(old);
 	ft_strlcat(new_str, append_str, new_len);
