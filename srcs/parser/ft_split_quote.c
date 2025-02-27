@@ -1,15 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_except_inquote.c                          :+:      :+:    :+:   */
+/*   ft_split_quote.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 09:58:06 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 10:44:59 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:13:09 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include <stdlib.h>
 
 static int	ft_count_words(const char *s, char c)
@@ -37,7 +38,7 @@ static int	ft_count_words(const char *s, char c)
 	return (res);
 }
 
-static char	*ft_strndup(const char *s, char c)
+static char	*ft_strndup2(const char *s, char c)
 {
 	const char	*start;
 	char		*res;
@@ -69,16 +70,14 @@ void	free_all(char **res, int i)
 	free(res);
 }
 
-char	**ft_split_except_inquote(const char *s, char c)
+char	**ft_split_quote(const char *s, char c)
 {
 	char		**res;
 	int			i;
 	int			in_quote;
 
-	if (!s)
-		return (NULL);
 	res = malloc(sizeof(char *) * (ft_count_words(s, c) + 1));
-	if (!res)
+	if (malloc_assert(res, INFO))
 		return (NULL);
 	i = 0;
 	in_quote = 0;
@@ -86,17 +85,16 @@ char	**ft_split_except_inquote(const char *s, char c)
 	{
 		while (*s == c && !in_quote)
 			s++;
-		if (*s)
+		if (!*s)
+			break ;
+		res[i] = ft_strndup2(s, c);
+		if (!res[i++])
+			return (free_all(res, i), NULL);
+		while (*s && (*s != c || in_quote))
 		{
-			res[i] = ft_strndup(s, c);
-			if (!res[i++])
-				return (free_all(res, i), NULL);
-			while (*s && (*s != c || in_quote))
-			{
-				if (*s == '\'' || *s == '\"')
-					in_quote = !in_quote;
-				s++;
-			}
+			if (*s == '\'' || *s == '\"')
+				in_quote = !in_quote;
+			s++;
 		}
 	}
 	res[i] = NULL;

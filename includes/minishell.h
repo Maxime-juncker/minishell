@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 10:50:55 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:12:37 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,8 +192,8 @@ int		redir(t_command *cmd, char *command);
 // heredoc.c
 int		heredoc(t_command *cmd, char *deli);
 
-// ft_split_except_inquote.c
-char	**ft_split_except_inquote(const char *s, char c);
+// ft_split_quote.c
+char	**ft_split_quote(const char *s, char c);
 
 /* -------------------------------------------------------------------------- */
 /*                                   others                                   */

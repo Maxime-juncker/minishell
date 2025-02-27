@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 14:15:22 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:58:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,37 +58,25 @@ static char	*get_file_name(char **s)
 		i++;
 	}
 	temp = ft_substr((*s), start, i - start);
-	if (!temp)
-		return (malloc_assert(NULL, INFO), NULL);
+	if (malloc_assert(NULL, INFO) == MALLOC_ERR)
+		return (NULL);
 	file = remove_quotes_pair(temp);
 	free(temp);
 	*s += i;
-	if (!file)
-		return (malloc_assert(NULL, INFO), NULL);
+	if (malloc_assert(NULL, INFO) == MALLOC_ERR)
+		return (NULL);
 	return (file);
 }
 
-static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
+static int	update_args(t_command *cmd, char *temp)
 {
-	char	*file;
-	char	*start;
 	char	**args;
 	int		i;
-	char	*temp;
 
-	file = get_file_name(command);
-	if (!file)
-		return (MALLOC_ERR);
-	start = *command;
-	while (**command && **command != '>' && **command != '<')
-		(*command)++;
-	temp = ft_substr(start, 0, *command - start);
-	if (!temp)
-		return (free(file), malloc_assert(NULL, INFO), MALLOC_ERR);
 	args = ft_split(temp, ' ');
 	free(temp);
 	if (malloc_assert(args, INFO))
-		return (free(file), MALLOC_ERR);
+		return (MALLOC_ERR);
 	i = 0;
 	while (args[i])
 	{
@@ -96,6 +84,26 @@ static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 		cmd->args[cmd->n_args++] = args[i++];
 	}
 	free(args);
+	return (0);
+}
+
+static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
+{
+	char	*file;
+	char	*start;
+	char	*temp;
+
+	start = *command;
+	while (**command && **command != '>' && **command != '<')
+		(*command)++;
+	temp = ft_substr(start, 0, *command - start);
+	if (malloc_assert(temp, INFO))
+		return (MALLOC_ERR);
+	if (update_args(cmd, temp) == MALLOC_ERR)
+		return (MALLOC_ERR);
+	file = get_file_name(command);
+	if (!file)
+		return (MALLOC_ERR);
 	handle_fd(cmd, file, c, db_redir);
 	return (0);
 }
@@ -103,12 +111,7 @@ static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 int	redir(t_command *cmd, char *command)
 {
 	char	quote;
-	int		temp;
 
-	cmd->n_args = 0;
-	while (cmd->args[cmd->n_args] && cmd->args[cmd->n_args][0] != '>'
-		&& cmd->args[cmd->n_args][0] != '<')
-		cmd->n_args++;
 	quote = 0;
 	while (*command)
 	{
@@ -121,8 +124,8 @@ int	redir(t_command *cmd, char *command)
 		}
 		if (*command == '<' || *command == '>')
 		{
-			temp = handle_redir(cmd, &command, *command, *command == *(command + 1));
-			if (temp == MALLOC_ERR)
+			if (handle_redir(cmd, &command, *command,
+					*command == *(command + 1)) == MALLOC_ERR)
 				return (MALLOC_ERR);
 		}
 		else

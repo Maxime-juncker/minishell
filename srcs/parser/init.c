@@ -6,11 +6,9 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 12:40:48 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:13:58 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// echo ls | wc -c | wc - l && sleep 1 && ls
 
 #include "minishell.h"
 #include <stdlib.h>
@@ -100,21 +98,22 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
 	cmd->fd_out = 1;
 	if (pipefd[0] != -1)
 		cmd->fd_in = pipefd[0];
-	if (is_last == 0)
-	{
-		if (pipe(pipefd) != -1)
-			cmd->fd_out = pipefd[1];
-		else
-			return (MALLOC_ERR);
-	}
+	if (is_last == 0 && pipe(pipefd) != -1)
+		cmd->fd_out = pipefd[1];
+	else if (is_last == 0)
+		return (perror("Failed pipe"), MALLOC_ERR);
 	if (get_args(cmd, cmd_str) == MALLOC_ERR)
 		return (MALLOC_ERR);
+	cmd->n_args = 0;
+	while (cmd->args[cmd->n_args] && cmd->args[cmd->n_args][0] != '>'
+		&& cmd->args[cmd->n_args][0] != '<')
+		cmd->n_args++;
 	if (redir(cmd, cmd_str) != 0)
 		return (cleanup_arr((void **)cmd->args), MALLOC_ERR);
-	if (is_last && !ft_strchr(cmd_str, '>'))
-		cmd->fd_out = 1;
 	if (!i && !ft_strchr(cmd_str, '<'))
 		cmd->fd_in = 0;
+	if (is_last && !ft_strchr(cmd_str, '>'))
+		cmd->fd_out = 1;
 	return (0);
 }
 
@@ -124,7 +123,7 @@ int	init_table(char *line, t_command_table *table)
 	size_t	i;
 
 	table->n_commands = 0;
-	commands = ft_split_except_inquote(line, '|');
+	commands = ft_split_quote(line, '|');
 	free(line);
 	if (!commands)
 		return (malloc_assert(NULL, INFO), MALLOC_ERR);
@@ -132,7 +131,8 @@ int	init_table(char *line, t_command_table *table)
 		table->n_commands++;
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
 	if (!table->commands)
-		return (cleanup_arr((void **)commands), malloc_assert(NULL, INFO), MALLOC_ERR);
+		return (cleanup_arr((void **)commands), malloc_assert(NULL, INFO),
+			MALLOC_ERR);
 	i = 0;
 	while (i < table->n_commands)
 	{
