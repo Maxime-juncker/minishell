@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 10:06:28 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ static char	*get_folder(void)
 	{
 		temp = ft_strdup("");
 		if (!temp)
-			return (malloc_assert(ERR), NULL);
+			return (malloc_assert(NULL, INFO), NULL);
 		return (temp);
 	}
 	folder = ft_strdup(buffer);
 	if (!folder)
-		return (malloc_assert(ERR), NULL);
+		return (malloc_assert(NULL, INFO), NULL);
 	temp = folder;
 	if (folder[1] != '\0')
 		while (*folder && ft_strchr(folder, '/') != 0)
@@ -52,7 +52,7 @@ static char	*get_folder(void)
 	folder = ft_strjoin(folder, ":");
 	free(temp);
 	if (!folder)
-		return (malloc_assert(ERR), NULL);
+		return (malloc_assert(NULL, INFO), NULL);
 	return (folder);
 }
 
@@ -63,22 +63,22 @@ static char	*new_prompt_txt(char **env)
 
 	folder = get_folder();
 	if (!folder)
-		return (malloc_assert(ERR), NULL);
+		return (malloc_assert(NULL, INFO), NULL);
 	txt = ft_strjoin_free(BLUE, folder, FREE2);
 	if (!txt)
-		return (malloc_assert(ERR), NULL);
+		return (malloc_assert(NULL, INFO), NULL);
 	txt = ft_charjoin(txt, ' ');
 	if (!txt)
-		return (malloc_assert(ERR), NULL);
+		return (malloc_assert(NULL, INFO), NULL);
 	txt = ft_strjoin_free(txt, GREEN, FREE1);
 	if (!txt)
-		return (malloc_assert(ERR), NULL);
+		return (malloc_assert(NULL, INFO), NULL);
 	txt = ft_strjoin_free(txt, find_env_var(env, "USER", NULL), FREE1 | FREE2);
 	if (!txt)
-		return (malloc_assert(ERR), NULL);
+		return (malloc_assert(NULL, INFO), NULL);
 	txt = ft_strjoin_free(txt, "$\033[0m ", FREE1);
 	if (!txt)
-		return (malloc_assert(ERR), NULL);
+		return (malloc_assert(NULL, INFO), NULL);
 	return (txt);
 }
 

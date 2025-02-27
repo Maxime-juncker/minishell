@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:26 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 14:20:09 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ char	**duplicate_env(char **old_env)
 
 	new_env = malloc(sizeof(char *) * (arrlen((void **)old_env) + 1));
 	if (!new_env)
-		return (malloc_assert(ERR), NULL);
+		return (malloc_assert(NULL, INFO), NULL);
 	i = 0;
 	while (old_env[i])
 	{
 		new_env[i] = ft_strdup(old_env[i]);
 		if (!new_env[i])
-			return (malloc_assert(ERR),
+			return (malloc_assert(NULL, INFO),
 				cleanup_arr((void **)new_env), NULL);
 		i++;
 	}

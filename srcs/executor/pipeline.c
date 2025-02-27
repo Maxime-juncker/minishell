@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 10:34:22 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	run_pipeline(t_command_table *table, char **args)
 	g_signal_received = 0;
 	childs = ft_calloc(table->n_commands + 2, sizeof(int));
 	if (!childs)
-		return (malloc_assert(ERR), MALLOC_ERR);
+		return (malloc_assert(NULL, INFO), MALLOC_ERR);
 	childs[table->n_commands] = -1;
 	i = 0;
 	while (i < table->n_commands)

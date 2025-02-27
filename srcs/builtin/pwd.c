@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:37:27 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 14:20:09 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	*get_pwd(int *is_malloc_error)
 	res = ft_strdup(buffer);
 	if (!res)
 	{
-		malloc_assert(ERR);
+		malloc_assert(NULL, INFO);
 		*is_malloc_error = 1;
 	}
 	return (res);

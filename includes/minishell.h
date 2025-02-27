@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 10:13:35 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:50:55 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define DEBUG 0
 # define SHOW_LEXER 0
 
-# define ERR __FILE__, __LINE__, __FUNCTION__
+# define INFO __FILE__, __LINE__, __FUNCTION__
 
 /* -------------------------------------------------------------------------- */
 /*                                command table                               */
@@ -86,7 +86,7 @@ size_t	arrlen(void **arr);
 
 // export_utils.c
 int		export(t_command_table *table, char *arg, int append);
-void	malloc_assert(const char *file, int line, const char *function);
+int	malloc_assert (void *mem, const char *file, int line, const char *function);
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);

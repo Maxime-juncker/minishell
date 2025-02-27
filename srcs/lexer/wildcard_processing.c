@@ -14,7 +14,7 @@ char	**realloc_patern(char **patern)
 	new_patern = ft_calloc(i + 1, sizeof(char*));
 	if (new_patern == NULL)
 		return (cleanup_arr((void** )patern),
-				malloc_assert(ERR), NULL);
+				malloc_assert(NULL, INFO), NULL);
 	i = 0;
 	while (patern[i])
 	{
@@ -34,7 +34,7 @@ char	**new_patern(char *line)
 
 	patern = ft_calloc(ft_strlen(line) + 1, sizeof(char *));
 	if (!patern)
-		return(malloc_assert(ERR), NULL);
+		return(malloc_assert(NULL, INFO), NULL);
 	i = 0;
 	j = 0;
 	while (*line && *line != ' ')
@@ -46,6 +46,8 @@ char	**new_patern(char *line)
 				i++;
 
 			patern[j] = ft_substr(line, 0, i);
+			if (malloc_assert(patern[j], INFO))
+				return (NULL);
 			j++;
 			line += i;
 		}
@@ -173,7 +175,7 @@ char	*process_wildcard(char *line)
 	{
 		result = ft_strjoin_free(result, add_wildcard((char *)lst->content), FREE1 | FREE2);
 		if (!result)
-			return (malloc_assert(ERR), ft_lstclear(&first, free), NULL);
+			return (malloc_assert(NULL, INFO), ft_lstclear(&first, free), NULL);
 		if (lst->next)
 			result = ft_charjoin(result, ' ');
 		lst = lst->next;

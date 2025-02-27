@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:35:07 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 14:20:09 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	**unset(char **env, char *arg, int len, int *is_malloc_error)
 
 	cpy = malloc((len + 1) * sizeof(char *));
 	if (!cpy)
-		return (*is_malloc_error = 1, malloc_assert(ERR), env);
+		return (*is_malloc_error = 1, malloc_assert(NULL, INFO), env);
 	i = -1;
 	len = 0;
 	while (env[++i] != NULL)

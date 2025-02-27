@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 17:27:34 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ static char	*get_file_name(char **s)
 	}
 	temp = ft_substr((*s), start, i - start);
 	if (!temp)
-		return (malloc_assert(ERR), NULL);
+		return (malloc_assert(NULL, INFO), NULL);
 	file = remove_quotes_pair(temp);
 	free(temp);
 	*s += i;
 	if (!file)
-		return (malloc_assert(ERR), NULL);
+		return (malloc_assert(NULL, INFO), NULL);
 	return (file);
 }
 
@@ -84,7 +84,7 @@ static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 		(*command)++;
 	temp = ft_substr(start, 0, *command - start);
 	if (!temp)
-		return (free(file), malloc_assert(ERR), MALLOC_ERR);
+		return (free(file), malloc_assert(NULL, INFO), MALLOC_ERR);
 	args = ft_split(temp, ' ');
 	free(temp);
 	if (!args)

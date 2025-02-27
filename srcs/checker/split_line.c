@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:29 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 09:01:49 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	add_tmp(char *tmp, t_list **lst)
 		{
 			ft_lstclear(lst, free);
 			free(tmp);
-			return (malloc_assert(ERR), MALLOC_ERR);
+			return (malloc_assert(NULL, INFO), MALLOC_ERR);
 		}
 		free(tmp);
 	}
@@ -47,7 +47,7 @@ static int	add_lines(char *line, t_list **lst, char **tmp)
 		quote = toggle_quote(line[i], quote);
 		*tmp = ft_charjoin(*tmp, line[i]);
 		if (*tmp == NULL)
-			return (malloc_assert(ERR), MALLOC_ERR);
+			return (malloc_assert(NULL, INFO), MALLOC_ERR);
 		i++;
 	}
 	return (0);

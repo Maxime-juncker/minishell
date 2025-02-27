@@ -3,19 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 16:47:29 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:51:59 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	malloc_assert(const char *file, int line, const char *function)
+int	malloc_assert(void *mem, const char *file, int line, const char *function)
 {
+	if (mem)
+		return (0);
 	ft_dprintf(2, "%s%s:%d: %sminishell: xmalloc: allocation failed in %s'%s'\n",
 		GRAY, file, line, RED, RESET, function);
+	return (MALLOC_ERR);
 }
 
 static char	**update_env(char *arg, char **env, int append)
@@ -25,7 +28,7 @@ static char	**update_env(char *arg, char **env, int append)
 
 	cpy = malloc((arrlen((void **)env) + 2 - append) * sizeof(char *));
 	if (!cpy)
-		return (malloc_assert(ERR), env);
+		return (malloc_assert(NULL, INFO), env);
 	i = -1;
 	while (env && env[++i])
 	{
@@ -35,13 +38,13 @@ static char	**update_env(char *arg, char **env, int append)
 		else
 			cpy[i] = env[i];
 		if (!cpy[i])
-			return (free(cpy), malloc_assert(ERR), env);
+			return (free(cpy), malloc_assert(NULL, INFO), env);
 	}
 	if (!append)
 	{
 		cpy[i] = ft_strdup(arg);
 		if (!cpy[i++])
-			return (free(cpy), malloc_assert(ERR), env);
+			return (free(cpy), malloc_assert(NULL, INFO), env);
 	}
 	free(env);
 	return (cpy[i] = NULL, cpy);
