@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:21 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 12:37:24 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*append_str(char *old, char *append_str)
 	new_str = malloc(new_len);
 	if (!new_str)
 		return (free(old), free(append_str),
-			malloc_assert(NULL, INFO), NULL);
+			malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
 	ft_strlcpy(new_str, old, new_len);
 	free(old);
 	ft_strlcat(new_str, append_str, new_len);

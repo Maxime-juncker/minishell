@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:32 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 09:24:22 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:29:02 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static int	check_redir_out(const char *cmd_line, int i)
 			i++;
 			continue ;
 		}
-		if (cmd_line[i] != '|' && cmd_line[i] != '<' && cmd_line[i] != '>' && cmd_line[i] != '&')
+		if (cmd_line[i] != '|' && cmd_line[i] != '<'
+			&& cmd_line[i] != '>' && cmd_line[i] != '&')
 			return (0);
 		error_symb = cmd_line[i];
 		return (error_symbol(error_symb, cmd_line, i));

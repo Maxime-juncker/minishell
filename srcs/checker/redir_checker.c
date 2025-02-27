@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:27 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 13:04:08 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*remove_quotes_pair(char *s)
 	int		i;
 
 	tmp = ft_calloc(ft_strlen(s) + 1, sizeof(char));
-	if (malloc_assert(tmp, INFO))
+	if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	quote = 0;
 	i = 0;
@@ -77,7 +77,7 @@ static char	*get_file_name(const char *s)
 		i++;
 	}
 	file = ft_substr(s, start, i - start);
-	if (malloc_assert(file, INFO))
+	if (malloc_assert(file, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	res = remove_quotes_pair(file);
 	return (free(file), res);

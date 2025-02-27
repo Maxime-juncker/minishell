@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 14:15:22 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ static char	*get_file_name(char **s)
 	}
 	temp = ft_substr((*s), start, i - start);
 	if (!temp)
-		return (malloc_assert(NULL, INFO), NULL);
+		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
 	file = remove_quotes_pair(temp);
 	free(temp);
 	*s += i;
 	if (!file)
-		return (malloc_assert(NULL, INFO), NULL);
+		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
 	return (file);
 }
 
@@ -84,10 +84,10 @@ static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 		(*command)++;
 	temp = ft_substr(start, 0, *command - start);
 	if (!temp)
-		return (free(file), malloc_assert(NULL, INFO), MALLOC_ERR);
+		return (free(file), malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
 	args = ft_split(temp, ' ');
 	free(temp);
-	if (malloc_assert(args, INFO))
+	if (malloc_assert(args, __FILE__, __LINE__, __FUNCTION__))
 		return (free(file), MALLOC_ERR);
 	i = 0;
 	while (args[i])

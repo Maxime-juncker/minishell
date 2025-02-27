@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:37:27 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 13:00:53 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	*get_pwd(int *is_malloc_error)
 		return (NULL);
 	}
 	res = ft_strdup(buffer);
-	if (malloc_assert(res, INFO))
+	if (malloc_assert(res, __FILE__, __LINE__, __FUNCTION__))
 		*is_malloc_error = 1;
 	return (res);
 }

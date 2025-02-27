@@ -18,7 +18,7 @@ char	*find_env_var(char **env, char *to_find, int *index)
 			if (index != NULL)
 				*index = i;
 			temp = remove_spaces(env[i] + len + 1);
-			if (malloc_assert(temp, INFO))
+			if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
 				return (NULL);
 			return (temp);
 		}
@@ -44,7 +44,7 @@ static int	change_directory(char *path)
 	free(path);
 	abs_path = getcwd(buffer, 4096);
 	closedir(dir);
-	if (malloc_assert(abs_path, INFO))
+	if (malloc_assert(abs_path, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
 	return (0);
 }
