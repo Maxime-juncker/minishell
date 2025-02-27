@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 09:01:12 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:06:54 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define IS_DIR		126
 # define MALLOC_ERR	-1
 
-# define DEBUG 1
+# define DEBUG 0
 # define SHOW_LEXER 0
 
 # define ERR __FILE__, __LINE__, __FUNCTION__
@@ -191,6 +191,9 @@ int		redir(t_command *cmd, char *command);
 
 // heredoc.c
 int		heredoc(t_command *cmd, char *deli);
+
+// ft_split_except_inquote.c
+char	**ft_split_except_inquote(const char *s, char c);
 
 /* -------------------------------------------------------------------------- */
 /*                                   others                                   */

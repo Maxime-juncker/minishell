@@ -52,6 +52,7 @@ SRCS = 		main.c					\
 			quote_checker.c			\
 			exit.c					\
 			ft_split_operators.c	\
+			ft_split_except_inquote.c \
 			wildcard_processing.c	\
 			and_checker.c			\
 
@@ -154,7 +155,7 @@ re:
 
 .PHONY: leaks
 leaks: all
-	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --suppressions=ignore_readline.supp -s ./bin/minishell
+	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=ignore_readline.supp -s ./bin/minishell
 
 # ---------------------------------------------------------------------------- #
 #                              create directories                              #

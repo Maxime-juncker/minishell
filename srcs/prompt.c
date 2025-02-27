@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 18:09:15 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:06:28 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,12 @@ static char	*new_prompt_txt(char **env)
 	if (!txt)
 		return (malloc_assert(ERR), NULL);
 	txt = ft_strjoin_free(txt, "$\033[0m ", FREE1);
+	if (!txt)
+		return (malloc_assert(ERR), NULL);
 	return (txt);
 }
 
-int	handle_process_cmd(t_command_table *table, char *line, int *code)
+int	handle_process_cmd(t_command_table *table, char *line, int *code, int rec)
 {
 	char	**args;
 	char	*process_cmd;
@@ -88,14 +90,15 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code)
 
 	i = 0;
 	args = ft_split_operators(line);
-	free(line);
+	if (!rec)
+		free(line);
 	if (!args)
-		return (malloc_assert(ERR), MALLOC_ERR);
+		return (MALLOC_ERR);
 	while (args[i])
 	{
 		if (args[i][0] == '(')
 		{
-			if (handle_process_cmd(table, &args[i][1], code) == MALLOC_ERR)
+			if (handle_process_cmd(table, &args[i][1], code, 1) == MALLOC_ERR)
 				return (MALLOC_ERR);
 			i++;
 		}
@@ -152,6 +155,6 @@ int	new_prompt(t_command_table *table)
 	if (ft_strcmp(line, "\n"))
 		add_history(line);
 	if (check_cmd_line(process_line(line, table->env, &code), &code) == 1)
-		return (0);
-	return (handle_process_cmd(table, line, &code));
+		return (MALLOC_ERR);
+	return (handle_process_cmd(table, line, &code, 0));
 }
