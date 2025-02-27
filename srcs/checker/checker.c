@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:17 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 09:26:01 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:39:19 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	check_cmd_line(char *process_line, int *code)
 	if (tmp != 0)
 	{
 		*code = tmp;
-		return (free(process_line), 1);
+		return (free(process_line), tmp);
 	}
 	return (free(process_line), 0);
 }

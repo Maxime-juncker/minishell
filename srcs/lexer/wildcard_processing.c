@@ -135,6 +135,8 @@ char	*expand_wildcard(char *line)
 			if (add_file(infos->d_name, patern))
 			{
 				expanded = ft_strjoin_free(expanded, infos->d_name, FREE1);
+				if (malloc_assert(expanded, INFO))
+					return (closedir(dir), cleanup_arr((void **)patern), NULL);
 				expanded = ft_charjoin(expanded, ' ');
 				if (!expanded)
 					return (closedir(dir), cleanup_arr((void **)patern), NULL);

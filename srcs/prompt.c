@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 11:24:53 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:39:03 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ int	new_prompt(t_command_table *table)
 	}
 	if (ft_strcmp(line, "\n"))
 		add_history(line);
-	if (check_cmd_line(process_line(line, table->env, &code), &code) == 1)
+	if (check_cmd_line(process_line(line, table->env, &code), &code) == MALLOC_ERR)
 		return (MALLOC_ERR);
 	return (handle_process_cmd(table, line, &code, 0));
 }

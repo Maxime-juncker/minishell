@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 10:51:59 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:34:49 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	malloc_assert(void *mem, const char *file, int line, const char *function)
 {
 	if (mem)
 		return (0);
-	ft_dprintf(2, "%s%s:%d: %sminishell: xmalloc: allocation failed in %s'%s'\n",
+	ft_dprintf(2, "%s%s:%d: %sminishell: malloc assertion failed in %s'%s'\n",
 		GRAY, file, line, RED, RESET, function);
 	return (MALLOC_ERR);
 }
