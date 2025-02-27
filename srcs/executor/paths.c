@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:52 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:53 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:51:09 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,16 @@ static char	*get_path(char **paths, t_command cmd)
 	char		*cmd_path;
 	struct stat	st;
 
+	if (paths == NULL)
+		return (NULL);
 	i = -1;
 	while (paths[++i] != NULL)
 	{
 		cmd_path = ft_strjoin("/", cmd.args[0]);
-		if (cmd_path == NULL)
+		if (malloc_assert(cmd_path, INFO))
 			return (cleanup_arr((void **)paths), NULL);
 		cmd_path = ft_strjoin_free(paths[i], cmd_path, FREE2);
-		if (cmd_path == NULL)
+		if (malloc_assert(cmd_path, INFO))
 			return (cleanup_arr((void **)paths), NULL);
 		if (access(cmd_path, F_OK) == 0)
 		{
@@ -81,14 +83,14 @@ char	*get_cmd_path(char **paths, t_command cmd)
 {
 	struct stat	st;
 
-	if (paths == NULL || cmd.args[0][0] == '\0')
+	if (cmd.args[0][0] == '\0')
 		return (NULL);
 	if (is_builtin(cmd.args[0]))
 	{
 		cleanup_arr((void **)paths);
 		return (ft_strdup(cmd.args[0]));
 	}
-	if (cmd.args[0][0] == '.')
+	if (ft_strchr(cmd.args[0], '/') != NULL)
 	{
 		cleanup_arr((void **)paths);
 		if (access(cmd.args[0], F_OK) == 0)

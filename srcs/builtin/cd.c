@@ -44,8 +44,8 @@ static int	change_directory(char *path)
 	free(path);
 	abs_path = getcwd(buffer, 4096);
 	closedir(dir);
-	if (!abs_path)
-		return (malloc_assert(NULL, INFO), MALLOC_ERR);
+	if (malloc_assert(abs_path, INFO))
+		return (MALLOC_ERR);
 	return (0);
 }
 

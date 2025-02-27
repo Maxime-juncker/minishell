@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 12:19:27 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:10:42 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,23 @@ static char	*new_prompt_txt(char **env)
 	char	*folder;
 
 	folder = get_folder();
-	if (!folder)
-		return (malloc_assert(NULL, INFO), NULL);
+	if (malloc_assert(folder, INFO))
+		return (NULL);
 	txt = ft_strjoin_free(BLUE, folder, FREE2);
-	if (!txt)
-		return (malloc_assert(NULL, INFO), NULL);
+	if (malloc_assert(txt, INFO))
+		return (NULL);
 	txt = ft_charjoin(txt, ' ');
-	if (!txt)
-		return (malloc_assert(NULL, INFO), NULL);
+	if (malloc_assert(txt, INFO))
+		return (NULL);
 	txt = ft_strjoin_free(txt, GREEN, FREE1);
-	if (!txt)
-		return (malloc_assert(NULL, INFO), NULL);
+	if (malloc_assert(txt, INFO))
+		return (NULL);
 	txt = ft_strjoin_free(txt, find_env_var(env, "USER", NULL), FREE1 | FREE2);
-	if (!txt)
-		return (malloc_assert(NULL, INFO), NULL);
+	if (malloc_assert(txt, INFO))
+		return (NULL);
 	txt = ft_strjoin_free(txt, "$\033[0m ", FREE1);
-	if (!txt)
-		return (malloc_assert(NULL, INFO), NULL);
+	if (malloc_assert(txt, INFO))
+		return (NULL);
 	return (txt);
 }
 
