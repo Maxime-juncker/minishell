@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:49:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 16:23:40 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 09:56:17 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,13 @@ char	*ft_strrstr(const char *big, const char *little)
 	i = ft_strlen(big);
 	len = ft_strlen(little);
 	j = 0;
-	while (i >= 0)
+	while (i > 0)
 	{
-		if (big[i] == little[len])
+		if (big[i - 1] == little[len - 1])
 		{
-			while (big[i - j - 1] == little[len - j - 1] && i - j - 1 >= 0 && len - j - 1>= 0)
-				j++;
+			while (i - j - 1 >= 0 && len - j - 1 >= 0 &&
+				big[i - j - 1] == little[len - j - 1])
+			 	j++;
 			if (j == len)
 				return ((char *)(big + i - len));
 			j = 0;

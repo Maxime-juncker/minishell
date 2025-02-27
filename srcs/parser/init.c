@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 10:06:12 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:19:32 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// echo ls | wc -c | wc - l && sleep 1 && ls
 
 #include "minishell.h"
 #include <stdlib.h>

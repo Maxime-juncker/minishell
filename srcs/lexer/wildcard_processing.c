@@ -1,15 +1,40 @@
 #include "minishell.h"
 #include <dirent.h>
 
+char	**realloc_patern(char **patern)
+{
+	char	**new_patern;
+	int		i;
+
+	if (patern == NULL)
+		return (NULL);
+	i = 0;
+	while (patern[i])
+		i++;
+	new_patern = ft_calloc(i + 1, sizeof(char*));
+	if (new_patern == NULL)
+		return (cleanup_arr((void** )patern),
+				malloc_assert(ERR), NULL);
+	i = 0;
+	while (patern[i])
+	{
+		new_patern[i] = patern[i];
+		i++;
+	}
+	new_patern[i] = NULL;
+	free(patern);
+	return (new_patern);
+}
+
 char	**new_patern(char *line)
 {
 	char	**patern;
 	int		i;
 	int		j;
 
-	patern = malloc(500);
+	patern = ft_calloc(ft_strlen(line) + 1, sizeof(char *));
 	if (!patern)
-		return(NULL);
+		return(malloc_assert(ERR), NULL);
 	i = 0;
 	j = 0;
 	while (*line && *line != ' ')
@@ -36,7 +61,7 @@ char	**new_patern(char *line)
 		}
 	}
 	patern[j] = NULL;
-	return (patern);
+	return (realloc_patern(patern));
 }
 
 int	add_file(char *file_name, char **patern)
@@ -84,21 +109,6 @@ int	add_file(char *file_name, char **patern)
 	return (0);
 }
 
-int		expand_needed(char **patern)
-{
-	int	i;
-
-	i = 0;
-	while (patern[i])
-	{
-		if (ft_strchr(patern[i], '*') != NULL)
-			return (1);
-		i++;
-	}
-	cleanup_arr((void **)patern);
-	return (0);
-}
-
 char	*expand_wildcard(char *line)
 {
 	DIR				*dir;
@@ -106,14 +116,14 @@ char	*expand_wildcard(char *line)
 	char			*expanded;
 	char			**patern;
 
+	if (ft_strchr(line, '*') == NULL)
+		return (ft_strdup(line));
 	dir = opendir(".");
 	if (!dir)
 		return (perror("can't open dir"), NULL);
 	patern = new_patern(line);
 	if (patern == NULL)
 		return (closedir(dir), NULL);
-	if (expand_needed(patern) == 0)
-		return (closedir(dir), ft_strdup(line));
 	expanded = NULL;
 	infos = readdir(dir);
 	while (infos)
@@ -128,7 +138,6 @@ char	*expand_wildcard(char *line)
 					return (closedir(dir), cleanup_arr((void **)patern), NULL);
 			}
 		}
-		// printf("%s\n", infos->d_name);
 		infos = readdir(dir);
 	}
 	closedir(dir);

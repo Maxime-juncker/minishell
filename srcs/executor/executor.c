@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 08:21:26 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:38:39 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,21 @@ static void	setup_args(t_command *cmd)
 	cmd->args[cmd->n_args] = NULL;
 }
 
+void	close_all_fds(const t_command_table *table)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < table->n_commands)
+	{
+		close_fds(table->commands[i]);
+		i++;
+	}
+}
+
 static void	handle_child_process(t_command *cmd, const t_command_table *table,
 	t_free_pkg package)
 {
-	size_t	i;
 	int		code;
 
 	cleanup_arr((void **)table->exp);
@@ -65,16 +76,12 @@ static void	handle_child_process(t_command *cmd, const t_command_table *table,
 	if (is_builtin(cmd->args[0]) == 1)
 	{
 		code = run_built_in(*cmd, table);
+		close_all_fds(table);
 		cleanup_arr((void **)table->env);
 		cleanup_table((t_command_table *)table);
 		exit(code);
 	}
-	i = 0;
-	while (i < table->n_commands)
-	{
-		close_fds(table->commands[i]);
-		i++;
-	}
+	close_all_fds(table);
 	if (execve(get_cmd_path(get_paths(table->env), *cmd), \
 		cmd->args, table->env) == -1)
 		alert("execve failed");
@@ -87,7 +94,7 @@ int	run_command(t_command *cmd, const t_command_table *table, t_free_pkg package
 
 	*code = check_path(cmd->args[0], table->env);
 	if (*code != 0)
-		return (-1);
+		return (close_fds(*cmd), -1);
 	setup_args(cmd);
 	pid = fork();
 	if (pid == -1)

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 11:57:01 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 09:52:06 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	main(int argc, char **argv, char **env)
 	t_command_table	table;
 	int				code;
 
-	// setpgid(0, 0); // Set child as a new process group leader
 	(void)argc;
 	init_env(&table, env);
 	rl_event_hook = check_interrupt;

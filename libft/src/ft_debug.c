@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:51:52 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 13:38:21 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 09:06:30 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	warning(const char *msg)
 void	alert(const char *msg)
 {
 	ft_dprintf(STDERR_FILENO, "%s%s\033[0m\n", B_RED, msg);
-	// debug_color(msg, B_RED);
 }
 
 void	error(const char *msg)
