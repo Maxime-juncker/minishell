@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:29 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:04:44 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ static int	add_lines(char *line, t_list **lst, char **tmp)
 		}
 		quote = toggle_quote(line[i], quote);
 		*tmp = ft_charjoin(*tmp, line[i]);
-		if (*tmp == NULL)
-			return (malloc_assert(NULL, INFO), MALLOC_ERR);
+		if (malloc_assert(*tmp, INFO))
+			return (MALLOC_ERR);
 		i++;
 	}
 	return (0);

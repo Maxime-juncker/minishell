@@ -170,17 +170,21 @@ char	*process_wildcard(char *line)
 		return (NULL);
 	lst = split_line(line);
 	free(line);
-	if (!lst)
+	if (malloc_assert(lst, INFO))
 		return (NULL);
 	first = lst;
 	result = NULL;
 	while (lst)
 	{
 		result = ft_strjoin_free(result, add_wildcard((char *)lst->content), FREE1 | FREE2);
-		if (!result)
-			return (malloc_assert(NULL, INFO), ft_lstclear(&first, free), NULL);
+		if (malloc_assert(result, INFO))
+			return (ft_lstclear(&first, free), NULL);
 		if (lst->next)
+		{
 			result = ft_charjoin(result, ' ');
+			if (malloc_assert(result, INFO))
+				return (ft_lstclear(&first, free), NULL);
+		}
 		lst = lst->next;
 	}
 	ft_lstclear(&first, free);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_checker.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:27 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 10:43:35 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:04:08 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*remove_quotes_pair(char *s)
 	int		i;
 
 	tmp = ft_calloc(ft_strlen(s) + 1, sizeof(char));
-	if (!tmp)
+	if (malloc_assert(tmp, INFO))
 		return (NULL);
 	quote = 0;
 	i = 0;
@@ -77,7 +77,7 @@ static char	*get_file_name(const char *s)
 		i++;
 	}
 	file = ft_substr(s, start, i - start);
-	if (!file)
+	if (malloc_assert(file, INFO))
 		return (NULL);
 	res = remove_quotes_pair(file);
 	return (free(file), res);
