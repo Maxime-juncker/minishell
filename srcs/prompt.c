@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:24:53 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ int	new_prompt(t_command_table *table)
 	char		*prompt_char;
 
 	g_signal_received = 0;
+	signal(SIGQUIT, SIG_IGN);
 	prompt_char = new_prompt_txt(table->env);
 	if (!prompt_char)
 		return (MALLOC_ERR);

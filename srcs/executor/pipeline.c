@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:24:32 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,16 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 				while (i < table->n_commands)
 					kill(childs[i++], g_signal_received);
 				if (seek_cmd(table, table->name) == -1)
+				{
+					if (g_signal_received == SIGQUIT)
+						printf("Quit (core dumped)");	
 					printf("\n");
+				}
 			}
 			return (code);
 		}
 	}
-	return (signal(SIGQUIT, SIG_IGN), code);
+	return (code);
 }
 
 static int	run_env_cmd(t_command_table *table, t_command cmd, t_free_pkg package)
@@ -109,6 +113,7 @@ int	run_pipeline(t_command_table *table, char **args)
 	int		*childs;
 
 	g_signal_received = 0;
+	signal(SIGQUIT, handle_signal);
 	childs = ft_calloc(table->n_commands + 2, sizeof(int));
 	if (!childs)
 		return (malloc_assert(NULL, INFO), MALLOC_ERR);
