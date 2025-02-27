@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 10:13:00 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:53:35 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ static int	skip_spaces( char content_c, char *str_ref, char quote, int len )
 }
 
 
-static void	join_loop(char *content, char **str_ref, int *len)
+static int	join_loop(char *content, char **str_ref, int *len)
 {
 	int		i;
 	char	quote;
 
 	if (ignore_prompt(content))
-		return ;
+		return (0);
 	quote = 0;
 	i = 0;
 	while (content[i])
@@ -49,8 +49,8 @@ static void	join_loop(char *content, char **str_ref, int *len)
 		if (should_we_join_a_space(*str_ref, *len, content[i]) && !quote)
 		{
 			*str_ref = ft_charjoin(*str_ref, ' ');
-			if (*str_ref == NULL)
-				return ;
+			if (malloc_assert(*str_ref, INFO))
+				return (MALLOC_ERR);
 			(*len)++;
 			continue ;
 		}
@@ -58,11 +58,12 @@ static void	join_loop(char *content, char **str_ref, int *len)
 		while (skip_spaces(content[i], *str_ref, quote, *len))
 			i++;
 		*str_ref = ft_charjoin(*str_ref, content[i]);
-		if (*str_ref == NULL)
-			return ;
+		if (malloc_assert(*str_ref, INFO))
+			return (MALLOC_ERR);
 		i++;
 		(*len)++;
 	}
+	return (0);
 }
 
 char	*join_lst(t_list *lst)
@@ -74,8 +75,7 @@ char	*join_lst(t_list *lst)
 	len = 0;
 	while (lst)
 	{
-		join_loop(lst->content, &str, &len);
-		if (str == NULL)
+		if (join_loop(lst->content, &str, &len) == MALLOC_ERR)
 			return (NULL);
 		lst = lst->next;
 	}

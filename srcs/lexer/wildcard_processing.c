@@ -12,9 +12,8 @@ char	**realloc_patern(char **patern)
 	while (patern[i])
 		i++;
 	new_patern = ft_calloc(i + 1, sizeof(char*));
-	if (new_patern == NULL)
-		return (cleanup_arr((void** )patern),
-				malloc_assert(NULL, INFO), NULL);
+	if (malloc_assert(new_patern, INFO))
+		return (cleanup_arr((void** )patern), NULL);
 	i = 0;
 	while (patern[i])
 	{
@@ -33,8 +32,8 @@ char	**new_patern(char *line)
 	int		j;
 
 	patern = ft_calloc(ft_strlen(line) + 1, sizeof(char *));
-	if (!patern)
-		return(malloc_assert(NULL, INFO), NULL);
+	if (malloc_assert(patern, INFO))
+		return(NULL);
 	i = 0;
 	j = 0;
 	while (*line && *line != ' ')
@@ -56,6 +55,8 @@ char	**new_patern(char *line)
 			if (j == 0 || patern[j - 1][0] != '*')
 			{
 				patern[j] = ft_strdup("*");
+				if (malloc_assert(patern[j], INFO))
+					return (NULL);
 				while (*line == '*')
 					line++;
 				j++;

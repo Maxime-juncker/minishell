@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:50:13 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,8 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	char	*tmp;
 
 	tmp = ft_strdup(line);
-	if (!tmp)
-	{
-		ft_lstclear(lst, free);
-		return (malloc_assert(NULL, INFO), MALLOC_ERR);
-	}
+	if (malloc_assert(tmp, INFO))
+		return (ft_lstclear(lst, free), MALLOC_ERR);
 	if (tmp[0] != '\0')
 	{
 		if (ft_lstadd_back(lst, ft_lstnew(ft_strdup(tmp))) == -1)
@@ -42,7 +39,7 @@ char	*remove_spaces(char *str)
 	char	last;
 
 	buff = ft_calloc(ft_strlen(str) + 1, sizeof(char));
-	if (!buff)
+	if (malloc_assert(buff, INFO))
 		return (NULL);
 	i = 0;
 	last = 0;
@@ -70,8 +67,8 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 	size_t	j;
 
 	tmp = ft_calloc(get_str_len(&line[*i]) + 1, sizeof(char));
-	if (!tmp)
-		return (malloc_assert(NULL, INFO), MALLOC_ERR);
+	if (malloc_assert(tmp, INFO))
+		return (MALLOC_ERR);
 	j = 0;
 	while (line[*i] && !(line[*i] == '\'' || line[*i] == '\"'))
 	{
@@ -82,8 +79,8 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 	tmp[j] = '\0';
 	new_str = remove_spaces(tmp);
 	free(tmp);
-	if (!new_str)
-		return (malloc_assert(NULL, INFO), MALLOC_ERR);
+	if (malloc_assert(new_str, INFO))
+		return (MALLOC_ERR);
 	if (ft_lstadd_back(lst, ft_lstnew(ft_strdup(new_str))) == -1)
 		return (free(new_str), MALLOC_ERR);
 	free(new_str);

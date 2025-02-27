@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 11:39:03 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:19:27 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,7 @@ int	new_prompt(t_command_table *table)
 	free(prompt_char);
 	if (g_signal_received)
 	{
-		if (g_signal_received == SIGINT)
-			code = 130;
+		code = g_signal_received + 128;
 		g_signal_received = 0;
 		return (0);
 	}
@@ -155,7 +154,7 @@ int	new_prompt(t_command_table *table)
 	}
 	if (ft_strcmp(line, "\n"))
 		add_history(line);
-	if (check_cmd_line(process_line(line, table->env, &code), &code) == MALLOC_ERR)
-		return (MALLOC_ERR);
+	if (check_cmd_line(process_line(line, table->env, &code), &code) != 0)
+		return (0);
 	return (handle_process_cmd(table, line, &code, 0));
 }

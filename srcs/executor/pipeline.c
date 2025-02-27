@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 11:24:32 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:17:18 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,10 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 		if (pid == -1)
 		{
 			if (WIFSIGNALED(code) && WTERMSIG(code) == SIGPIPE)
-				return (code);
+				return (0);
 			if (g_signal_received)
 			{
-				if (g_signal_received == SIGINT)
-					code = 130;
+				code = g_signal_received + 128;
 				while (i < table->n_commands)
 					kill(childs[i++], g_signal_received);
 				if (seek_cmd(table, table->name) == -1)
@@ -115,8 +114,8 @@ int	run_pipeline(t_command_table *table, char **args)
 	g_signal_received = 0;
 	signal(SIGQUIT, handle_signal);
 	childs = ft_calloc(table->n_commands + 2, sizeof(int));
-	if (!childs)
-		return (malloc_assert(NULL, INFO), MALLOC_ERR);
+	if (malloc_assert(childs, INFO))
+		return (MALLOC_ERR);
 	childs[table->n_commands] = -1;
 	i = 0;
 	while (i < table->n_commands)

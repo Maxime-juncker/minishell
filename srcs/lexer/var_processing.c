@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 12:31:13 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:45:23 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,14 @@ static char	*process_var(char *str, char **env, int last_code)
 			str++;
 			result = ft_strjoin_free(result,
 					handle_dollar(&str, last_code, env), FREE1 | FREE2);
+			if (malloc_assert(result, INFO))
+				return (NULL);
 		}
 		else
 		{
 			result = ft_charjoin(result, *str);
+			if (malloc_assert(result, INFO))
+				return (NULL);
 			str++;
 		}
 		if (!result)
