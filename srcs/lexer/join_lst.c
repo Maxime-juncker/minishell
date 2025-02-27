@@ -6,18 +6,25 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 11:53:35 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	should_we_join_a_space(char *str_ref, int len, char content)
+static int	join_space(char **str_ref, int len, char content)
 {
-	return ((str_ref && !is_symbol((str_ref)[len - 1])
-		&& (str_ref)[len - 1] != ' ' && is_symbol(content))
-				|| (str_ref && is_symbol((str_ref)[len - 1])
-				&& content != ' ' && !is_symbol(content)));
+	if ((*str_ref && !is_symbol((*str_ref)[len - 1])
+		&& (*str_ref)[len - 1] != ' ' && is_symbol(content))
+				|| (*str_ref && is_symbol((*str_ref)[len - 1])
+				&& content != ' ' && !is_symbol(content)))
+	{
+		*str_ref = ft_charjoin(*str_ref, ' ');
+		if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
+			return (MALLOC_ERR);
+		return (1);
+	}
+	return (0);
 }
 
 static int	skip_spaces( char content_c, char *str_ref, char quote, int len )
@@ -34,7 +41,6 @@ static int	skip_spaces( char content_c, char *str_ref, char quote, int len )
 	return (0);
 }
 
-
 static int	join_loop(char *content, char **str_ref, int *len)
 {
 	int		i;
@@ -46,11 +52,8 @@ static int	join_loop(char *content, char **str_ref, int *len)
 	i = 0;
 	while (content[i])
 	{
-		if (should_we_join_a_space(*str_ref, *len, content[i]) && !quote)
+		if (join_space(str_ref, *len, content[i]) && !quote)
 		{
-			*str_ref = ft_charjoin(*str_ref, ' ');
-			if (malloc_assert(*str_ref, INFO))
-				return (MALLOC_ERR);
 			(*len)++;
 			continue ;
 		}
@@ -58,7 +61,7 @@ static int	join_loop(char *content, char **str_ref, int *len)
 		while (skip_spaces(content[i], *str_ref, quote, *len))
 			i++;
 		*str_ref = ft_charjoin(*str_ref, content[i]);
-		if (malloc_assert(*str_ref, INFO))
+		if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
 			return (MALLOC_ERR);
 		i++;
 		(*len)++;

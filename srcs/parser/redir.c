@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 14:58:44 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:37:51 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ static char	*get_file_name(char **s)
 		i++;
 	}
 	temp = ft_substr((*s), start, i - start);
-	if (malloc_assert(NULL, INFO) == MALLOC_ERR)
-		return (NULL);
+	if (!temp)
+		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
 	file = remove_quotes_pair(temp);
 	free(temp);
 	*s += i;
-	if (malloc_assert(NULL, INFO) == MALLOC_ERR)
-		return (NULL);
+	if (!file)
+		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
 	return (file);
 }
 
@@ -75,7 +75,7 @@ static int	update_args(t_command *cmd, char *temp)
 
 	args = ft_split(temp, ' ');
 	free(temp);
-	if (malloc_assert(args, INFO))
+	if (malloc_assert(args, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
 	i = 0;
 	while (args[i])
@@ -97,7 +97,7 @@ static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 	while (**command && **command != '>' && **command != '<')
 		(*command)++;
 	temp = ft_substr(start, 0, *command - start);
-	if (malloc_assert(temp, INFO))
+	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
 	if (update_args(cmd, temp) == MALLOC_ERR)
 		return (MALLOC_ERR);

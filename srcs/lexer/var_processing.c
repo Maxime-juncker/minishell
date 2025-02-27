@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 13:08:11 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	*handle_dollar(char **str, int last_code, char **env)
 		while ((*str)[j] && (ft_isalnum((*str)[j]) || (*str)[j] == '_'))
 			j++;
 		var_name = ft_substr(*str, 0, j);
-		if (malloc_assert(var_name, INFO))
+		if (malloc_assert(var_name, __FILE__, __LINE__, __FUNCTION__))
 			return (NULL);
 		var_value = find_env_var(env, var_name, NULL);
 		free(var_name);
@@ -53,13 +53,13 @@ static char	*process_var(char *str, char **env, int last_code)
 			str++;
 			result = ft_strjoin_free(result,
 					handle_dollar(&str, last_code, env), FREE1 | FREE2);
-			if (malloc_assert(result, INFO))
+			if (malloc_assert(result, __FILE__, __LINE__, __FUNCTION__))
 				return (NULL);
 		}
 		else
 		{
 			result = ft_charjoin(result, *str);
-			if (malloc_assert(result, INFO))
+			if (malloc_assert(result, __FILE__, __LINE__, __FUNCTION__))
 				return (NULL);
 			str++;
 		}
@@ -87,7 +87,7 @@ t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code)
 		if (!content)
 			return (NULL);
 		if (ft_lstadd_back(&process_lst, ft_lstnew(content)) == -1)
-			return (malloc_assert(NULL, INFO), NULL);
+			return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
 		lst = lst->next;
 	}
 	return (process_lst);

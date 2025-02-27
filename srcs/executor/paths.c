@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:52 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 12:51:09 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ static char	*get_path(char **paths, t_command cmd)
 	while (paths[++i] != NULL)
 	{
 		cmd_path = ft_strjoin("/", cmd.args[0]);
-		if (malloc_assert(cmd_path, INFO))
+		if (malloc_assert(cmd_path, __FILE__, __LINE__, __FUNCTION__))
 			return (cleanup_arr((void **)paths), NULL);
 		cmd_path = ft_strjoin_free(paths[i], cmd_path, FREE2);
-		if (malloc_assert(cmd_path, INFO))
+		if (malloc_assert(cmd_path, __FILE__, __LINE__, __FUNCTION__))
 			return (cleanup_arr((void **)paths), NULL);
 		if (access(cmd_path, F_OK) == 0)
 		{

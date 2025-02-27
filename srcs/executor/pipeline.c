@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 12:17:18 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 				if (seek_cmd(table, table->name) == -1)
 				{
 					if (g_signal_received == SIGQUIT)
-						printf("Quit (core dumped)");	
+						printf("Quit (core dumped)");
 					printf("\n");
 				}
 			}
@@ -65,7 +65,8 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 	return (code);
 }
 
-static int	run_env_cmd(t_command_table *table, t_command cmd, t_free_pkg package)
+static int	run_env_cmd(t_command_table *table, t_command cmd,
+				t_free_pkg package)
 {
 	char	*name;
 
@@ -114,7 +115,7 @@ int	run_pipeline(t_command_table *table, char **args)
 	g_signal_received = 0;
 	signal(SIGQUIT, handle_signal);
 	childs = ft_calloc(table->n_commands + 2, sizeof(int));
-	if (malloc_assert(childs, INFO))
+	if (malloc_assert(childs, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
 	childs[table->n_commands] = -1;
 	i = 0;
@@ -122,12 +123,14 @@ int	run_pipeline(t_command_table *table, char **args)
 	{
 		if (table->commands[i].n_args != 0)
 		{
-			if (env_stage(table, table->commands[i], &code, (t_free_pkg){childs, args}))
+			if (env_stage(table, table->commands[i], &code,
+					(t_free_pkg){childs, args}))
 			{
 				i++;
 				continue ;
 			}
-			childs[i] = run_command(&table->commands[i], table, (t_free_pkg){childs, args}, &code);
+			childs[i] = run_command(&table->commands[i], table,
+					(t_free_pkg){childs, args}, &code);
 		}
 		i++;
 	}

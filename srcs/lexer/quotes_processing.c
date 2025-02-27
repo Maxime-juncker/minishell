@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 11:50:13 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	char	*tmp;
 
 	tmp = ft_strdup(line);
-	if (malloc_assert(tmp, INFO))
+	if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
 		return (ft_lstclear(lst, free), MALLOC_ERR);
 	if (tmp[0] != '\0')
 	{
 		if (ft_lstadd_back(lst, ft_lstnew(ft_strdup(tmp))) == -1)
-			return (malloc_assert(NULL, INFO), MALLOC_ERR);
+			return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
 		*i += ft_strlen(tmp);
 	}
 	else
@@ -39,7 +39,7 @@ char	*remove_spaces(char *str)
 	char	last;
 
 	buff = ft_calloc(ft_strlen(str) + 1, sizeof(char));
-	if (malloc_assert(buff, INFO))
+	if (malloc_assert(buff, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	i = 0;
 	last = 0;
@@ -67,7 +67,7 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 	size_t	j;
 
 	tmp = ft_calloc(get_str_len(&line[*i]) + 1, sizeof(char));
-	if (malloc_assert(tmp, INFO))
+	if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
 	j = 0;
 	while (line[*i] && !(line[*i] == '\'' || line[*i] == '\"'))
@@ -79,7 +79,7 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 	tmp[j] = '\0';
 	new_str = remove_spaces(tmp);
 	free(tmp);
-	if (malloc_assert(new_str, INFO))
+	if (malloc_assert(new_str, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
 	if (ft_lstadd_back(lst, ft_lstnew(ft_strdup(new_str))) == -1)
 		return (free(new_str), MALLOC_ERR);

@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 15:13:58 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:35:59 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ static int	create_arg(char **cmd_arg, char *str)
 	}
 	arg = malloc(sizeof(char) * (i + 1));
 	if (!arg)
-		return (malloc_assert(NULL, INFO), MALLOC_ERR);
+		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
 	ft_strlcpy(arg, str, i + 1);
 	*cmd_arg = remove_quotes_pair(arg);
 	free(arg);
 	if (!*cmd_arg)
-		return (malloc_assert(NULL, INFO), MALLOC_ERR);
+		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
 	return (0);
 }
 
@@ -70,7 +70,7 @@ static int	get_args(t_command *cmd, char *cmd_str)
 
 	cmd->args = malloc(sizeof(char *) * count_args(cmd_str));
 	if (!cmd->args)
-		return (malloc_assert(NULL, INFO), MALLOC_ERR);
+		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
 	quote = 0;
 	i = 0;
 	new_arg = 1;
@@ -126,13 +126,12 @@ int	init_table(char *line, t_command_table *table)
 	commands = ft_split_quote(line, '|');
 	free(line);
 	if (!commands)
-		return (malloc_assert(NULL, INFO), MALLOC_ERR);
+		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
 	while (commands[table->n_commands])
 		table->n_commands++;
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
 	if (!table->commands)
-		return (cleanup_arr((void **)commands), malloc_assert(NULL, INFO),
-			MALLOC_ERR);
+		return (cleanup_arr((void **)commands), malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
 	i = 0;
 	while (i < table->n_commands)
 	{

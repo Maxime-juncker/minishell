@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 09:58:06 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 15:13:09 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:38:33 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	**ft_split_quote(const char *s, char c)
 	int			in_quote;
 
 	res = malloc(sizeof(char *) * (ft_count_words(s, c) + 1));
-	if (malloc_assert(res, INFO))
+	if (malloc_assert(res, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	i = 0;
 	in_quote = 0;

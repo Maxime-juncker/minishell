@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:12:37 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:35:38 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@
 
 # define DEBUG 0
 # define SHOW_LEXER 0
-
-# define INFO __FILE__, __LINE__, __FUNCTION__
 
 /* -------------------------------------------------------------------------- */
 /*                                command table                               */
@@ -65,7 +63,6 @@ typedef struct s_free_package
 	char	**args;
 }	t_free_pkg;
 
-
 extern int	g_signal_received;
 
 /* -------------------------------------------------------------------------- */
@@ -86,7 +83,8 @@ size_t	arrlen(void **arr);
 
 // export_utils.c
 int		export(t_command_table *table, char *arg, int append);
-int	malloc_assert (void *mem, const char *file, int line, const char *function);
+int		malloc_assert(void *mem, const char *file,
+			int line, const char *function);
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);
@@ -112,7 +110,7 @@ int		token_error(char c1, char c2);
 void	cleanup_arr(void **arr);
 
 // checker.c
-int	check_cmd_line(char *process_line, int *code);
+int		check_cmd_line(char *process_line, int *code);
 
 // path_checker.c
 int		check_path(const char *cmd_part, char **env);
@@ -133,7 +131,7 @@ int		check_token_error(const char *cmd_line, int i, int max_occ,
 			char to_find);
 int		check_quotes(const char *cmd_line);
 
-int	check_and_op(const char *line, int i);
+int		check_and_op(const char *line, int i);
 
 /* -------------------------------------------------------------------------- */
 /*                                   executor                                 */
@@ -144,7 +142,8 @@ void	show_table(t_command_table table);
 void	show_cmd(t_command cmd);
 
 // executor.c
-int		run_command(t_command *cmd, const t_command_table *table, t_free_pkg package, int *code);
+int		run_command(t_command *cmd, const t_command_table *table,
+			t_free_pkg package, int *code);
 void	close_fds(t_command cmd);
 
 // paths.c
@@ -178,7 +177,15 @@ t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
 t_list	*process_quotes(const char *line);
 char	*remove_spaces(char *str);
 
+// wildcard_processing.c
 char	*process_wildcard(char *line);
+
+// wildcard_expansion.c
+char	*expand_wildcard(char *line);
+
+// wildcard_patern.c
+char	**new_patern(char *line);
+
 /* -------------------------------------------------------------------------- */
 /*                                   parser                                   */
 /* -------------------------------------------------------------------------- */

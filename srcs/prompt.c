@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 13:10:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ static char	*get_folder(void)
 	{
 		temp = ft_strdup("");
 		if (!temp)
-			return (malloc_assert(NULL, INFO), NULL);
+			return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
 		return (temp);
 	}
 	folder = ft_strdup(buffer);
 	if (!folder)
-		return (malloc_assert(NULL, INFO), NULL);
+		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
 	temp = folder;
 	if (folder[1] != '\0')
 		while (*folder && ft_strchr(folder, '/') != 0)
@@ -52,7 +52,7 @@ static char	*get_folder(void)
 	folder = ft_strjoin(folder, ":");
 	free(temp);
 	if (!folder)
-		return (malloc_assert(NULL, INFO), NULL);
+		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
 	return (folder);
 }
 
@@ -62,22 +62,22 @@ static char	*new_prompt_txt(char **env)
 	char	*folder;
 
 	folder = get_folder();
-	if (malloc_assert(folder, INFO))
+	if (malloc_assert(folder, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	txt = ft_strjoin_free(BLUE, folder, FREE2);
-	if (malloc_assert(txt, INFO))
+	if (malloc_assert(txt, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	txt = ft_charjoin(txt, ' ');
-	if (malloc_assert(txt, INFO))
+	if (malloc_assert(txt, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	txt = ft_strjoin_free(txt, GREEN, FREE1);
-	if (malloc_assert(txt, INFO))
+	if (malloc_assert(txt, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	txt = ft_strjoin_free(txt, find_env_var(env, "USER", NULL), FREE1 | FREE2);
-	if (malloc_assert(txt, INFO))
+	if (malloc_assert(txt, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	txt = ft_strjoin_free(txt, "$\033[0m ", FREE1);
-	if (malloc_assert(txt, INFO))
+	if (malloc_assert(txt, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	return (txt);
 }
