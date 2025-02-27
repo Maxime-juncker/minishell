@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:17:30 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code)
 		if (!content)
 			return (NULL);
 		if (ft_lstadd_back(&process_lst, ft_lstnew(content)) == -1)
-			return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
+			return (malloc_assert(NULL, __FILE__,
+					__LINE__, __FUNCTION__), NULL);
 		lst = lst->next;
 	}
 	return (process_lst);

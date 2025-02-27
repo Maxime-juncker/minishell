@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:35:38 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:06:17 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,11 @@ char	**get_paths(char **env);
 
 // pipeline.c
 int		run_pipeline(t_command_table *table, char **args);
+
+// builtin_cmd.c
+int		env_stage(t_command_table *table, t_command cmd, int *code,
+			t_free_pkg package);
+int		run_built_in(const t_command cmd, const t_command_table *table);
 
 /* -------------------------------------------------------------------------- */
 /*                                    lexer                                   */

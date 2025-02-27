@@ -57,6 +57,7 @@ SRCS = 		main.c						\
 			and_checker.c				\
 			wildcard_expanssion.c		\
 			wildcard_patern.c			\
+			builtin_cmd.c				\
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #

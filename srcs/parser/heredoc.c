@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:21 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:43:52 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	heredoc(t_command *cmd, char *deli)
 	nb_line = 0;
 	while (1)
 	{
-		if (g_signal_received == SIGINT)
+		if (g_signal_received)
 			return (g_signal_received = 0, free(doc), 1);
 		line = readline("> ");
 		if (handle_eof(line, deli, nb_line++))

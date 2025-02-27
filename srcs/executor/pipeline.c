@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:06:56 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 		pid = wait(&code);
 		if (pid == -1)
 		{
-			if (WIFSIGNALED(code) && WTERMSIG(code) == SIGPIPE)
-				return (0);
 			if (g_signal_received)
 			{
 				code = g_signal_received + 128;
@@ -65,44 +63,14 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 	return (code);
 }
 
-static int	run_env_cmd(t_command_table *table, t_command cmd,
-				t_free_pkg package)
+static int	setup_pipeline(int **childs, t_command_table *table)
 {
-	char	*name;
-
-	name = cmd.args[0];
-	if (ft_strcmp(name, "export") == 0)
-	{
-		return (export_cmd(table, cmd));
-	}
-	if (ft_strcmp(name, "unset") == 0)
-	{
-		return (unset_cmd(table, cmd));
-	}
-	if (ft_strcmp(cmd.args[0], "cd") == 0)
-	{
-		return (cd_command(table, cmd));
-	}
-	if (ft_strcmp(cmd.args[0], "exit") == 0)
-	{
-		exit_shell(table, cmd, package);
-	}
-	return (0);
-}
-
-static int	env_stage(t_command_table *table, t_command cmd, int *code,
-	t_free_pkg package)
-{
-	if (!ft_strcmp(cmd.args[0], "export")
-		|| (!ft_strcmp(cmd.args[0], "unset"))
-		|| (!ft_strcmp(cmd.args[0], "cd"))
-		|| (!ft_strcmp(cmd.args[0], "exit")))
-	{
-		show_cmd(cmd);
-		*code = run_env_cmd(table, cmd, package);
-		close_fds(cmd);
-		return (1);
-	}
+	g_signal_received = 0;
+	signal(SIGQUIT, handle_signal);
+	*childs = ft_calloc(table->n_commands + 2, sizeof(int));
+	if (malloc_assert(childs, __FILE__, __LINE__, __FUNCTION__))
+		return (MALLOC_ERR);
+	(*childs)[table->n_commands] = -1;
 	return (0);
 }
 
@@ -112,12 +80,8 @@ int	run_pipeline(t_command_table *table, char **args)
 	int		code;
 	int		*childs;
 
-	g_signal_received = 0;
-	signal(SIGQUIT, handle_signal);
-	childs = ft_calloc(table->n_commands + 2, sizeof(int));
-	if (malloc_assert(childs, __FILE__, __LINE__, __FUNCTION__))
+	if (setup_pipeline(&childs, table) == MALLOC_ERR)
 		return (MALLOC_ERR);
-	childs[table->n_commands] = -1;
 	i = 0;
 	while (i < table->n_commands)
 	{

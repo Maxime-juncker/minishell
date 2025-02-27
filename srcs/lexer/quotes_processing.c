@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:17:52 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	if (tmp[0] != '\0')
 	{
 		if (ft_lstadd_back(lst, ft_lstnew(ft_strdup(tmp))) == -1)
-			return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
+			return (malloc_assert(NULL, __FILE__,
+					__LINE__, __FUNCTION__), MALLOC_ERR);
 		*i += ft_strlen(tmp);
 	}
 	else

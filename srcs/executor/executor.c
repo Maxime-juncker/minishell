@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:30:54 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:07:40 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,16 @@ void	close_fds(t_command cmd)
 		close(cmd.fd_in);
 }
 
-static int	run_built_in(const t_command cmd, const t_command_table *table)
+void	close_all_fds(const t_command_table *table)
 {
-	size_t	len;
+	size_t	i;
 
-	len = ft_strlen(cmd.args[0]);
-	if (ft_strncmp(cmd.args[0], "echo", len) == 0)
-		return (echo(&cmd.args[1], cmd.n_args - 1));
-	if (ft_strncmp(cmd.args[0], "env", len) == 0)
-		return (env(*table));
-	if (ft_strncmp(cmd.args[0], "pwd", len) == 0)
-		return (pwd());
-	return (-1);
+	i = 0;
+	while (i < table->n_commands)
+	{
+		close_fds(table->commands[i]);
+		i++;
+	}
 }
 
 static void	setup_args(t_command *cmd)
@@ -47,18 +45,6 @@ static void	setup_args(t_command *cmd)
 	}
 	show_cmd(*cmd);
 	cmd->args[cmd->n_args] = NULL;
-}
-
-void	close_all_fds(const t_command_table *table)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < table->n_commands)
-	{
-		close_fds(table->commands[i]);
-		i++;
-	}
 }
 
 static void	handle_child_process(t_command *cmd, const t_command_table *table,
@@ -85,7 +71,8 @@ static void	handle_child_process(t_command *cmd, const t_command_table *table,
 		alert("execve failed");
 }
 
-int	run_command(t_command *cmd, const t_command_table *table, t_free_pkg package, int *code)
+int	run_command(t_command *cmd, const t_command_table *table,
+		t_free_pkg package, int *code)
 {
 	int	pid;
 	int	status;
