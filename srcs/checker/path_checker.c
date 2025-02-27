@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_checker.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 13:40:55 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 09:01:49 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ static int	create_dummy_cmd(const char *name, t_command *cmd)
 {
 	cmd->args = malloc(2 * sizeof(char *));
 	if (!cmd->args)
-		return (MALLOC_ERR);
+		return (malloc_assert(ERR), MALLOC_ERR);
 	cmd->args[0] = ft_strdup(name);
 	if (!cmd->args[0])
 	{
 		free(cmd->args);
-		return (MALLOC_ERR);
+		return (malloc_assert(ERR), MALLOC_ERR);
 	}
 	cmd->args[1] = NULL;
 	return (0);
@@ -76,7 +76,7 @@ static int	check_cmd_validity(char **cmd_name, char **env)
 	char		*path;
 
 	if (create_dummy_cmd(*cmd_name, &dummy_cmd) == MALLOC_ERR)
-		return (MALLOC_ERR);
+		return (free(*cmd_name), MALLOC_ERR);
 	path = get_cmd_path(get_paths(env), dummy_cmd);
 	if (path == NULL && !is_builtin(*cmd_name))
 	{
@@ -113,7 +113,7 @@ int	check_path(const char *cmd_part, char **env)
 	name_no_quote = remove_quotes_pair(name);
 	free(name);
 	if (name_no_quote == NULL)
-		return (MALLOC_ERR);
+		return (malloc_assert(ERR), MALLOC_ERR);
 	if (ft_strchr(name_no_quote, '/') == NULL || name_no_quote[0] == '.')
 	{
 		return (check_cmd_validity(&name_no_quote, env));
