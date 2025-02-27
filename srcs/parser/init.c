@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:40:48 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
 	}
 	if (get_args(cmd, cmd_str) == MALLOC_ERR)
 		return (MALLOC_ERR);
-	if (redir(cmd, cmd_str) == MALLOC_ERR)
+	if (redir(cmd, cmd_str) != 0)
 		return (cleanup_arr((void **)cmd->args), MALLOC_ERR);
 	if (is_last && !ft_strchr(cmd_str, '>'))
 		cmd->fd_out = 1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:15:22 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,14 @@ static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 		return (free(file), malloc_assert(NULL, INFO), MALLOC_ERR);
 	args = ft_split(temp, ' ');
 	free(temp);
-	if (!args)
-		return (MALLOC_ERR);
+	if (malloc_assert(args, INFO))
+		return (free(file), MALLOC_ERR);
 	i = 0;
 	while (args[i])
+	{
+		free(cmd->args[cmd->n_args]);
 		cmd->args[cmd->n_args++] = args[i++];
+	}
 	free(args);
 	handle_fd(cmd, file, c, db_redir);
 	return (0);
@@ -100,6 +103,7 @@ static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 int	redir(t_command *cmd, char *command)
 {
 	char	quote;
+	int		temp;
 
 	cmd->n_args = 0;
 	while (cmd->args[cmd->n_args] && cmd->args[cmd->n_args][0] != '>'
@@ -108,17 +112,23 @@ int	redir(t_command *cmd, char *command)
 	quote = 0;
 	while (*command)
 	{
-		quote = toggle_quote(*command, quote);
+		if (*command == '\'' || *command == '\"')
+			quote = toggle_quote(*command, quote);
 		if (quote != 0)
 		{
 			command++;
 			continue ;
 		}
-		if ((*command == '<' || *command == '>') && MALLOC_ERR ==
-			handle_redir(cmd, &command, *command, *command == *(command + 1)))
-			return (MALLOC_ERR);
+		if (*command == '<' || *command == '>')
+		{
+			temp = handle_redir(cmd, &command, *command, *command == *(command + 1));
+			if (temp == MALLOC_ERR)
+				return (MALLOC_ERR);
+		}
 		else
 			command++;
+		if (cmd->fd_in == -1 || cmd->fd_out == -1)
+			return (1);
 	}
 	return (0);
 }

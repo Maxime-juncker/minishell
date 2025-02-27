@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:21 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 10:50:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:37:24 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	handle_eof(char *line, char *deli, int nb)
 	if (!line)
 	{
 		ft_dprintf(2, "%s%s %d delimited by end-of-file (wanted `%s')\n%s",
-			ORANGE, "\nminishell: warning: here-document at line",
+			ORANGE, "minishell: warning: here-document at line",
 			nb, deli, RESET);
 		return (1);
 	}
