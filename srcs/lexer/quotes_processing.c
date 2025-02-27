@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_processing.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/25 11:52:47 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:14:18 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	if (!tmp)
 	{
 		ft_lstclear(lst, free);
-		return (MALLOC_ERR);
+		return (print_malloc_error(ERR), MALLOC_ERR);
 	}
 	if (tmp[0] != '\0')
 	{
 		if (ft_lstadd_back(lst, ft_lstnew(ft_strdup(tmp))) == -1)
-			return (MALLOC_ERR);
+			return (print_malloc_error(ERR), MALLOC_ERR);
 		*i += ft_strlen(tmp);
 	}
 	else
@@ -71,7 +71,7 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 
 	tmp = ft_calloc(get_str_len(&line[*i]) + 1, sizeof(char));
 	if (!tmp)
-		return (MALLOC_ERR);
+		return (print_malloc_error(ERR), MALLOC_ERR);
 	j = 0;
 	while (line[*i] && !(line[*i] == '\'' || line[*i] == '\"'))
 	{
@@ -83,7 +83,7 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 	new_str = remove_spaces(tmp);
 	free(tmp);
 	if (!new_str)
-		return (MALLOC_ERR);
+		return (print_malloc_error(ERR), MALLOC_ERR);
 	if (ft_lstadd_back(lst, ft_lstnew(ft_strdup(new_str))) == -1)
 		return (free(new_str), MALLOC_ERR);
 	free(new_str);

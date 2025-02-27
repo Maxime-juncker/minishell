@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/26 13:48:06 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 08:21:00 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define IS_DIR		126
 # define MALLOC_ERR	-1
 
-# define DEBUG 0
+# define DEBUG 1
 # define SHOW_LEXER 0
 
 # define ERR __FUNCTION__, __LINE__

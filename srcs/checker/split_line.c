@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:29 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:30 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:25:30 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	add_tmp(char *tmp, t_list **lst)
 		{
 			ft_lstclear(lst, free);
 			free(tmp);
-			return (MALLOC_ERR);
+			return (print_malloc_error(ERR), MALLOC_ERR);
 		}
 		free(tmp);
 	}
@@ -47,7 +47,7 @@ static int	add_lines(char *line, t_list **lst, char **tmp)
 		quote = toggle_quote(line[i], quote);
 		*tmp = ft_charjoin(*tmp, line[i]);
 		if (*tmp == NULL)
-			return (MALLOC_ERR);
+			return (print_malloc_error(ERR), MALLOC_ERR);
 		i++;
 	}
 	return (0);
