@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:34 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 14:20:09 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:33:34 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,12 @@ int	export_cmd(t_command_table *table, t_command cmd)
 	int		i;
 	int		append;
 
-	if ((cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
+	if (cmd.n_args == 1)
+		return (ft_sort_export(table->exp), print_export(table->exp, cmd.fd_out), 0);
+	else if ((cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
 		&& table->n_commands)
 		return (0);
 	ft_sort_export(table->exp);
-	if (cmd.n_args == 1)
-		return (print_export(table->exp, cmd.fd_out), 0);
 	i = 0;
 	while (cmd.args[++i] != NULL)
 	{

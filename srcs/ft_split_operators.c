@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 10:49:02 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/26 12:36:30 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:12:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,6 @@ static char	*ft_strndup2(const char *s, size_t n)
 	}
 	res[i] = '\0';
 	return (res);
-}
-
-void	free_all(char **res, int i)
-{
-	while (--i != -1)
-		free(res[i]);
-	free(res);
 }
 
 char	**ft_split_operators(const char *s)

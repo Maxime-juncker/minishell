@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 09:58:06 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 09:58:50 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:12:49 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char	*ft_strndup(const char *s, char c)
 	return (res);
 }
 
-static void	free_all(char **res, int i)
+void	free_all(char **res, int i)
 {
 	while (--i != -1)
 		free(res[i]);
