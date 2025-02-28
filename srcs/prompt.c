@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/28 10:30:44 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:19:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static char	*new_prompt_txt(char **env)
 	return (txt);
 }
 
-int	handle_process_cmd(t_command_table *table, char *line, int *code, int rec)
+int	handle_process_cmd(t_command_table *table, char *line, int *code)
 {
 	char	**args;
 	char	*process_cmd;
@@ -78,15 +78,13 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code, int rec)
 
 	i = 0;
 	args = ft_split_operators(line);
-	if (!rec)
-		free(line);
 	if (!args)
 		return (MALLOC_ERR);
 	while (args[i])
 	{
 		if (args[i][0] == '(')
 		{
-			if (handle_process_cmd(table, &args[i][1], code, 1) == MALLOC_ERR)
+			if (handle_process_cmd(table, &args[i][1], code) == MALLOC_ERR)
 				return (MALLOC_ERR);
 			i++;
 		}
@@ -144,5 +142,5 @@ int	new_prompt(t_command_table *table)
 		add_history(line);
 	if (check_cmd_line(process_line(line, table->env, &code), &code) != 0)
 		return (0);
-	return (handle_process_cmd(table, line, &code, 0));
+	return (handle_process_cmd(table, line, &code));
 }
