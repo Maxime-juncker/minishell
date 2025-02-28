@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 11:48:43 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 08:53:49 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,6 @@
 #include <readline/readline.h>
 #include <signal.h>
 #include <sys/wait.h>
-
-char	*get_exec_name(char *name)
-{
-	char	*result;
-
-	result = ft_strrchr(name, '/');
-	if (result == NULL)
-		result = name;
-	else
-		result++;
-	return (result);
-}
 
 int	main(int argc, char **argv, char **env)
 {

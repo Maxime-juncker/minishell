@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:34 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:58:38 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	export_cmd(t_command_table *table, t_command cmd)
 			cmd.args[i] = ft_strdup_except_char(cmd.args[i], '+');
 		if (!cmd.args[i])
 			return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
-		if (export(table, cmd.args[i], append) == MALLOC_ERR)
+		if (export_env(table, cmd.args[i], append) == MALLOC_ERR)
 			return (MALLOC_ERR);
 	}
 	return (0);

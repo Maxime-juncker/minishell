@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 16:06:17 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 10:25:23 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	**duplicate_env(char **old_env);
 size_t	arrlen(void **arr);
 
 // export_utils.c
-int		export(t_command_table *table, char *arg, int append);
+int		export_env(t_command_table *table, char *arg, int append);
 int		malloc_assert(void *mem, const char *file,
 			int line, const char *function);
 
@@ -132,6 +132,9 @@ int		check_token_error(const char *cmd_line, int i, int max_occ,
 int		check_quotes(const char *cmd_line);
 
 int		check_and_op(const char *line, int i);
+
+// parenthesis_checker.c
+int		check_parenthesis(const char *line);
 
 /* -------------------------------------------------------------------------- */
 /*                                   executor                                 */
@@ -190,6 +193,7 @@ char	*expand_wildcard(char *line);
 
 // wildcard_patern.c
 char	**new_patern(char *line);
+char	**realloc_arr(char **patern);
 
 /* -------------------------------------------------------------------------- */
 /*                                   parser                                   */

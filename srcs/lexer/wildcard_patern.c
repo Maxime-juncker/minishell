@@ -6,13 +6,13 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:01:51 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 10:24:55 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**realloc_patern(char **patern)
+char	**realloc_arr(char **patern)
 {
 	char	**new_patern;
 	int		i;
@@ -83,5 +83,5 @@ char	**new_patern(char *line)
 		}
 	}
 	patern[j] = NULL;
-	return (realloc_patern(patern));
+	return (realloc_arr(patern));
 }

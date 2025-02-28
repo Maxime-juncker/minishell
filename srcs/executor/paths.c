@@ -6,12 +6,24 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:52 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 08:58:57 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <sys/stat.h>
+
+char	*get_exec_name(char *name)
+{
+	char	*result;
+
+	result = ft_strrchr(name, '/');
+	if (result == NULL)
+		result = name;
+	else
+		result++;
+	return (result);
+}
 
 char	**get_paths(char **env)
 {

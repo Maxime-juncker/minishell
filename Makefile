@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D) -g3 -fPIC
+CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D) -g3 -fPIE
 
 MAKEFLAGS += --no-print-directory
 
@@ -58,12 +58,15 @@ SRCS = 		main.c						\
 			wildcard_expanssion.c		\
 			wildcard_patern.c			\
 			builtin_cmd.c				\
+			parenthesis_checker.c		\
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #
 # ---------------------------------------------------------------------------- #
 
 OBJ := $(addprefix $(OBJ_D), $(SRCS:.c=.o))
+OBJ_NO_MAIN = $(filter-out $(OBJ_D)main.o, $(OBJ))
+OBJ_NO_MAIN = $(filter-out $(OBJ_D)prompt.o, $(OBJ))
 
 # ---------------------------------------------------------------------------- #
 #                                    colors                                    #
@@ -82,41 +85,21 @@ RM = rm -fr
 
 all: header libft $(BIN_D)$(NAME)
 
-de:
-	@echo $(SRCS)
-	@echo $(OBJ)
-
-# ---------------------------------------------------------------------------- #
-#                                     misc                                     #
-# ---------------------------------------------------------------------------- #
-
-.PHONY: header
-header:
-	printf "$(YELLOW)"
-	printf "\n---------------------------------------------------------------------\n"
-	printf "  __  __ ___ _   _ ___ ____  _   _ _____ _     _      \n";
-	printf " |  \/  |_ _| \ | |_ _/ ___|| | | | ____| |   | |     \n";
-	printf " | |\/| || ||  \| || |\___ \| |_| |  _| | |   | |     \n";
-	printf " | |  | || || |\  || | ___) |  _  | |___| |___| |___  \n";
-	printf " |_|  |_|___|_| \_|___|____/|_| |_|_____|_____|_____| \n";
-	printf "                                                      ";
-	printf "\n---------------------------------------------------------------------\n"
-
-	printf "$(YELLOW)[github]: $(GREEN)https://github.com/Maxime-juncker/Minishell.git\n\n"
-
-.PHONY: libft
-libft:
-	$(MAKE) -C libft
-
 # ---------------------------------------------------------------------------- #
 #                                 creating exec                                #
 # ---------------------------------------------------------------------------- #
 
 $(BIN_D)$(NAME): $(OBJ) | $(BIN_D)
 	$(CC) $(CFLAGS) $(OBJ) libft/bin/libft.a -o $(BIN_D)$(NAME) -L/usr/lib -lreadline
-	ar rcs $(BIN_D)libminishell.a $(LIB_OBJ) "libft/bin/libft.a"
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)$(RESET)\n\n"
+
+$(BIN)/libminishell.a:
+	printf "$(GREEN)compiling: success [$$(ls obj | wc -l)/$(words $(SRCS))]\n"
+	ar rcs $(BIN_D)libminishell.a $(OBJ_NO_MAIN)
+	printf "$(GREEN)$(NAME): success\n"
+	printf "\n---------------------$(CURSOR_ON)\n\n"
+
 
 # ---------------------------------------------------------------------------- #
 #                                   compiling                                  #
@@ -155,6 +138,31 @@ clog:
 re:
 		$(MAKE) fclean
 		$(MAKE) all
+
+
+# ---------------------------------------------------------------------------- #
+#                                  miscelanous                                 #
+# ---------------------------------------------------------------------------- #
+.PHONY: header
+header:
+	printf "$(YELLOW)\n"
+	echo "███╗   ███╗██╗███╗   ██╗██╗███████╗██╗  ██╗███████╗██╗     ██╗     ";
+	echo "████╗ ████║██║████╗  ██║██║██╔════╝██║  ██║██╔════╝██║     ██║     ";
+	echo "██╔████╔██║██║██╔██╗ ██║██║███████╗███████║█████╗  ██║     ██║     ";
+	echo "██║╚██╔╝██║██║██║╚██╗██║██║╚════██║██╔══██║██╔══╝  ██║     ██║     ";
+	echo "██║ ╚═╝ ██║██║██║ ╚████║██║███████║██║  ██║███████╗███████╗███████╗";
+	echo "╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝";
+	printf "$(YELLOW)[github]: $(GREEN)https://github.com/Maxime-juncker/Minishell.git\n\n"
+
+.PHONY: libft
+libft:
+	$(MAKE) -C libft
+
+.PHONY: tests
+tests:
+	$(MAKE) all
+	$(MAKE) $(BIN)/libminishell.a
+	$(MAKE) test -C better-libunit/
 
 .PHONY: leaks
 leaks: all

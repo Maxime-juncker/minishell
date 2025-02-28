@@ -6,11 +6,23 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:29:27 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ignore_prompt(char *prompt)
+{
+	while (*prompt)
+	{
+		if (!(*prompt == ' ' || (*prompt >= 9 && *prompt <= 13))
+			&& in_base(*prompt, ":!") == -1)
+			return (0);
+		prompt++;
+	}
+	return (1);
+}
 
 static int	join_space(char **str_ref, int len, char content)
 {

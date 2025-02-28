@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:32 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:29:02 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 09:43:19 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,9 @@ int	check_syntax(const char *cmd_line)
 	int	code;
 
 	code = check_quotes(cmd_line);
+	if (code != 0)
+		return (code);
+	code = check_parenthesis(cmd_line);
 	if (code != 0)
 		return (code);
 	i = 0;

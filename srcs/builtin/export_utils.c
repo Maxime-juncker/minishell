@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:58:38 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	**update_env(char *arg, char **env, int append)
 	return (cpy[i] = NULL, cpy);
 }
 
-int	export(t_command_table *table, char *arg, int append)
+int	export_env(t_command_table *table, char *arg, int append)
 {
 	if (ft_strchr(arg, '='))
 		table->env = update_env(arg, table->env, append);
