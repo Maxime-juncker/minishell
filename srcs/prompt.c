@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 15:45:03 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 10:30:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,6 @@
 #include <readline/history.h>
 #include <signal.h>
 #include <sys/wait.h>
-
-int	ignore_prompt(char *prompt)
-{
-	while (*prompt)
-	{
-		if (!(*prompt == ' ' || (*prompt >= 9 && *prompt <= 13))
-			&& in_base(*prompt, ":!") == -1)
-			return (0);
-		prompt++;
-	}
-	return (1);
-}
 
 static char	*get_folder(void)
 {

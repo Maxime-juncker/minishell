@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/28 10:25:23 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 10:39:28 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define IS_DIR		126
 # define MALLOC_ERR	-1
 
-# define DEBUG 0
+# define DEBUG 1
 # define SHOW_LEXER 0
 
 /* -------------------------------------------------------------------------- */
