@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 15:37:51 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/28 11:39:42 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ static char	*get_file_name(char **s)
 		i++;
 	}
 	temp = ft_substr((*s), start, i - start);
-	if (!temp)
-		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
+	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
+		return (NULL);
 	file = remove_quotes_pair(temp);
 	free(temp);
 	*s += i;
-	if (!file)
-		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
+	if (malloc_assert(file, __FILE__, __LINE__, __FUNCTION__))
+		return (NULL);
 	return (file);
 }
 

@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 10:49:02 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 10:12:44 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/28 10:32:50 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,47 +18,6 @@
 static int	is_operator(const char *s)
 {
 	return ((s[0] == '&' && s[1] == '&') || (s[0] == '|' && s[1] == '|'));
-}
-
-static int	count_words(const char *s)
-{
-	int		count;
-	int		paren_count;
-
-	count = 0;
-	paren_count = 0;
-	while (*s)
-	{
-		while (*s == ' ' || *s == '\t')
-			s++;
-		if (*s == '(')
-		{
-			paren_count++;
-			count++;
-			while (*s && (*s != ')' || paren_count > 1))
-			{
-				if (*s == '(')
-					paren_count++;
-				else if (*s == ')')
-					paren_count--;
-				s++;
-			}
-			if (*s == ')')
-				s++;
-		}
-		else if (is_operator(s))
-		{
-			count++;
-			s += 2;
-		}
-		else if (*s)
-		{
-			count++;
-			while (*s && !is_operator(s) && *s != '(')
-				s++;
-		}
-	}
-	return (count);
 }
 
 static char	*ft_strndup2(const char *s, size_t n)
@@ -89,7 +48,7 @@ char	**ft_split_operators(const char *s)
 
 	if (!s)
 		return (NULL);
-	res = malloc(sizeof(char *) * (count_words(s) + 1));
+	res = ft_calloc(ft_strlen(s) + 1, sizeof(char *));
 	if (!res)
 		return (NULL);
 	i = 0;
