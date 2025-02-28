@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_quote.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 09:58:06 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 15:38:33 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/28 13:22:29 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,11 @@ void	free_all(char **res, int i)
 	free(res);
 }
 
-char	**ft_split_quote(const char *s, char c)
+int	do_split(const char *s, char c, char **res)
 {
-	char		**res;
-	int			i;
-	int			in_quote;
+	char	in_quote;
+	int		i;
 
-	res = malloc(sizeof(char *) * (ft_count_words(s, c) + 1));
-	if (malloc_assert(res, __FILE__, __LINE__, __FUNCTION__))
-		return (NULL);
 	i = 0;
 	in_quote = 0;
 	while (*s)
@@ -89,7 +85,7 @@ char	**ft_split_quote(const char *s, char c)
 			break ;
 		res[i] = ft_strndup2(s, c);
 		if (!res[i++])
-			return (free_all(res, i), NULL);
+			return (free_all(res, i), MALLOC_ERR);
 		while (*s && (*s != c || in_quote))
 		{
 			if (*s == '\'' || *s == '\"')
@@ -97,6 +93,20 @@ char	**ft_split_quote(const char *s, char c)
 			s++;
 		}
 	}
+	return (i);
+}
+
+char	**ft_split_quote(const char *s, char c)
+{
+	char		**res;
+	int			i;
+
+	res = malloc(sizeof(char *) * (ft_count_words(s, c) + 1));
+	if (malloc_assert(res, __FILE__, __LINE__, __FUNCTION__))
+		return (NULL);
+	i = do_split(s, c, res);
+	if (i == MALLOC_ERR)
+		return (NULL);
 	res[i] = NULL;
 	return (res);
 }

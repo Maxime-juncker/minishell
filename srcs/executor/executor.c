@@ -6,9 +6,11 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 16:07:40 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:26:10 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// ls && wejgoiw || (cd / && pwd) && pwd
 
 #include "minishell.h"
 #include "sys/wait.h"

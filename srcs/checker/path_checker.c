@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/28 09:38:40 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 13:12:22 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int	check_path(const char *cmd_name, char **env)
 			ft_dprintf(2, "\033[0;31mminishell: %s: command not found\n\033[0m",
 				cmd_name);
 		cleanup_arr((void **)dummy_cmd.args);
-		// free(*cmd_name);
 		return (NOT_FOUND);
 	}
 	cleanup_arr((void **)dummy_cmd.args);

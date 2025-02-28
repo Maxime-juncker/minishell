@@ -6,13 +6,13 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:34 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 16:58:38 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 13:12:04 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	ft_sort_export(char **argv)
+static void	sort_export(char **argv)
 {
 	int		i;
 	int		diff;
@@ -94,30 +94,30 @@ static int	check_arg(char *arg, int *append)
 	return (0);
 }
 
-int	export_cmd(t_command_table *table, t_command cmd)
+int	export_cmd(t_command_table *t, t_command cmd)
 {
 	int		i;
 	int		append;
 
 	if (cmd.n_args == 1)
-		return (ft_sort_export(table->exp), print_export(table->exp, cmd.fd_out), 0);
+		return (sort_export(t->exp), print_export(t->exp, cmd.fd_out), 0);
 	else if ((cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
-		&& table->n_commands)
+		&& t->n_commands)
 		return (0);
-	ft_sort_export(table->exp);
+	sort_export(t->exp);
 	i = 0;
 	while (cmd.args[++i] != NULL)
 	{
 		append = 0;
 		if (check_arg(cmd.args[i], &append))
 			return (1);
-		if (!append && unset_if_needed(table, cmd.args[i]) == MALLOC_ERR)
+		if (!append && unset_if_needed(t, cmd.args[i]) == MALLOC_ERR)
 			return (MALLOC_ERR);
-		if (append && get_env_len(table->exp, cmd.args[i]) == -1 && !--append)
+		if (append && get_env_len(t->exp, cmd.args[i]) == -1 && !--append)
 			cmd.args[i] = ft_strdup_except_char(cmd.args[i], '+');
-		if (!cmd.args[i])
-			return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
-		if (export_env(table, cmd.args[i], append) == MALLOC_ERR)
+		if (malloc_assert(cmd.args[i], __FILE__, __LINE__, __FUNCTION__))
+			return (MALLOC_ERR);
+		if (export_env(t, cmd.args[i], append) == MALLOC_ERR)
 			return (MALLOC_ERR);
 	}
 	return (0);

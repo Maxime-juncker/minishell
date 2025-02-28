@@ -13,7 +13,7 @@ OBJ_D = obj/
 BIN_D = bin/
 INCLUDES_D = -Iincludes/ -Ilibft/includes/ -I/usr/include/readline/
 
-VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser:srcs/checker
+VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser:srcs/checker:srcs/prompt
 
 # ---------------------------------------------------------------------------- #
 #                                  srcs / objs                                 #
@@ -59,6 +59,7 @@ SRCS = 		main.c						\
 			wildcard_patern.c			\
 			builtin_cmd.c				\
 			parenthesis_checker.c		\
+			prompt_line.c				\
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #
@@ -105,7 +106,7 @@ $(BIN)/libminishell.a:
 $(OBJ_D)%.o: %.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
 	$(CC) $(CFLAGS) -c $< -o $@
 	printf "$(CURSOR_OFF)$(BLUE)"
-	printf "$(GRAY)compiling: $(BLUE)%-30s $(GRAY)[%d/%d]\n" "$<" "$$(ls obj | wc -l)" "$(words $(SRCS))"
+	printf "$(GRAY)compiling: $(BLUE)%-40s $(GRAY)[%d/%d]\n" "$<" "$$(ls obj | wc -l)" "$(words $(SRCS))"
 
 	# printf "compiling: $@\t\t[$$(ls obj | wc -l)/$(words $(SRCS))]\n"
 

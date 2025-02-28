@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:48 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/28 12:17:47 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:42:54 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,4 @@ char	toggle_quote(char c, char quote)
 			return (0);
 	}
 	return (quote);
-}
-
-int	is_symbol(char c)
-{
-	if (c == '|' || c == '<' || c == '>' || c == '&')
-		return (1);
-	return (0);
 }

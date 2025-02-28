@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 09:41:47 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/28 11:32:44 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 13:14:35 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	check_unclosed(const char *line)
 			{
 				paren--;
 				if (paren < 0)
-					break;
+					break ;
 			}
 		}
 		i++;
@@ -75,7 +75,6 @@ int	parenthesis_valid(const char *line)
 		return (1);
 	paren_err(&line[i]);
 	return (0);
-
 }
 
 int	check_content(const char *line)
@@ -99,10 +98,8 @@ int	check_content(const char *line)
 					return (1);
 			}
 			if (line[i] == ')')
-			{
 				if (parenthesis_valid(&line[i]) == 0)
 					return (2);
-			}
 		}
 		i++;
 	}
@@ -115,20 +112,11 @@ int	check_parenthesis(const char *line)
 
 	code = check_unclosed(line);
 	if (code > 0)
-	{
-		ft_dprintf(2, "%sminishell: syntax error near unexpected token `)\'%s\n", RED, RESET);
-		return (SYNTAX_ERR);
-	}
+		return (token_error(')', 0));
 	else if (code < 0)
-	{
-		ft_dprintf(2, "%sminishell: syntax error near unexpected token `(\'%s\n", RED, RESET);
-		return (SYNTAX_ERR);
-	}
+		return (token_error('(', 0));
 	code = check_content(line);
 	if (code == 1)
-	{
-		ft_dprintf(2, "%sminishell: syntax error near unexpected token `(\'%s\n", RED, RESET);
-		return (SYNTAX_ERR);
-	}
+		return (token_error('(', 0));
 	return (code);
 }

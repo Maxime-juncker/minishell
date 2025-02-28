@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:00 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/28 11:31:35 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:43:13 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	cleanup_table(t_command_table *table)
 	free(table->commands);
 }
 
-int	is_operator(char c)
+int	is_symbol(char c)
 {
 	return (
 		c == '|'

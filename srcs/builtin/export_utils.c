@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 16:58:38 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 16:09:39 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ static char	**update_env(char *arg, char **env, int append)
 					+ (ft_strchr(env[i], '=') != NULL), FREE1);
 		else
 			cpy[i] = env[i];
-		if (!cpy[i])
-			return (free(cpy), malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), env);
+		if (malloc_assert(cpy[i], __FILE__, __LINE__, __FUNCTION__))
+			return (free(cpy), env);
 	}
 	if (!append)
 	{
 		cpy[i] = ft_strdup(arg);
-		if (!cpy[i++])
-			return (free(cpy), malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), env);
+		if (malloc_assert(cpy[i++], __FILE__, __LINE__, __FUNCTION__))
+			return (free(cpy), env);
 	}
 	free(env);
 	return (cpy[i] = NULL, cpy);
