@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:48 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/25 10:42:43 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:17:47 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	toggle_quote(char c, char quote)
 
 int	is_symbol(char c)
 {
-	if (c == '|' || c == '<' || c == '>')
+	if (c == '|' || c == '<' || c == '>' || c == '&')
 		return (1);
 	return (0);
 }

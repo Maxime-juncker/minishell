@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/28 12:13:37 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:17:39 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,6 @@ void	init_env(t_command_table *table, char **env);
 void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);
 int		check_interrupt(void);
-int		is_symbol(char c);
 
 // prompt.c
 int		new_prompt(t_command_table *table);
