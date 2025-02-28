@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 15:35:59 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/02/28 11:38:01 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ static int	create_arg(char **cmd_arg, char *str)
 		i++;
 	}
 	arg = malloc(sizeof(char) * (i + 1));
-	if (!arg)
-		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
+	if (malloc_assert(arg, __FILE__, __LINE__, __FUNCTION__) != 0)
+		return (MALLOC_ERR);
 	ft_strlcpy(arg, str, i + 1);
 	*cmd_arg = remove_quotes_pair(arg);
 	free(arg);
-	if (!*cmd_arg)
-		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
+	if (malloc_assert(*cmd_arg, __FILE__, __LINE__, __FUNCTION__) != 0)
+		return (MALLOC_ERR);
 	return (0);
 }
 
@@ -69,8 +69,8 @@ static int	get_args(t_command *cmd, char *cmd_str)
 	int		n_args;
 
 	cmd->args = malloc(sizeof(char *) * count_args(cmd_str));
-	if (!cmd->args)
-		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
+	if (malloc_assert(cmd->args, __FILE__, __LINE__, __FUNCTION__) != 0)
+		return (MALLOC_ERR);
 	quote = 0;
 	i = 0;
 	new_arg = 1;
@@ -125,13 +125,13 @@ int	init_table(char *line, t_command_table *table)
 	table->n_commands = 0;
 	commands = ft_split_quote(line, '|');
 	free(line);
-	if (!commands)
-		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
+	if (malloc_assert(commands, __FILE__, __LINE__, __FUNCTION__) != 0)
+		return (MALLOC_ERR);
 	while (commands[table->n_commands])
 		table->n_commands++;
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
-	if (!table->commands)
-		return (cleanup_arr((void **)commands), malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), MALLOC_ERR);
+	if (malloc_assert(table->commands, __FILE__, __LINE__, __FUNCTION__) != 0)
+		return (cleanup_arr((void **)commands), MALLOC_ERR);
 	i = 0;
 	while (i < table->n_commands)
 	{
