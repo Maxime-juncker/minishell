@@ -1,7 +1,7 @@
 #include "tests.hpp"
 
 static int code;
-t_command_table table = {(char*)"minishell", NULL, 0, duplicate_env(environ), duplicate_env(environ)};
+static t_command_table table = {(char*)"minishell", NULL, 0, duplicate_env(environ), duplicate_env(environ)};
 
 int	synt_err_1( void )
 {
@@ -252,7 +252,8 @@ int	synt_err_22( void )
 	
 
 	Libunit::Redirect_err();
-	if (check_path(process_line("\"hola\"", environ, &code), environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	init_table(process_line("\"hola\"", table.env, &code), &table);
+	if (check_path(table.commands->args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -262,11 +263,12 @@ int	synt_err_23( void )
 {
 	const char *exepted_file[]
 	{
-		"\033[0;31mminishell: hola: command not found",
+		"\033[0;31mminishell: hola': command not found",
 	};
 
 	Libunit::Redirect_err();
-	if (check_path(process_line("hola\'", environ, &code), environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	init_table(process_line("\"hola\'\"", table.env, &code), &table);
+	if (check_path(table.commands->args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -294,7 +296,8 @@ int	synt_err_25( void )
 	};
 
 	Libunit::Redirect_err();
-	if (check_path(process_line("hola boula badaboum", environ, &code), environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	init_table(process_line("hola boula badaboum", table.env, &code), &table);
+	if (check_path(table.commands->args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -322,7 +325,8 @@ int	synt_err_27( void )
 	};
 
 	Libunit::Redirect_err();
-	if (check_path(process_line("hola\"\"oui", environ, &code), environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	init_table(process_line("hola\"\"oui", table.env, &code), &table);
+	if (check_path(table.commands->args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -336,7 +340,8 @@ int	synt_err_28( void )
 	};
 
 	Libunit::Redirect_err();
-	if (check_path(process_line("ho\"\'\'\"la\'\'oui", environ, &code), environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	init_table(process_line("ho\"\'\'\"la\'\'oui", table.env, &code), &table);
+	if (check_path(table.commands->args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -350,7 +355,8 @@ int	synt_err_29( void )
 	};
 
 	Libunit::Redirect_err();
-	if (check_path(process_line("\'\"hola\"\'", environ, &code), environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	init_table(process_line("\'\"hola\"\'", table.env, &code), &table);
+	if (check_path(table.commands->args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -364,7 +370,8 @@ int	synt_err_30( void )
 	};
 
 	Libunit::Redirect_err();
-	if (check_path(process_line("\"\'hola\'\"", environ, &code), environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	init_table(process_line("\"\'hola\'\"", table.env, &code), &table);
+	if (check_path(table.commands->args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -378,7 +385,8 @@ int	synt_err_31( void )
 	};
 
 	Libunit::Redirect_err();
-	if (check_path(process_line("\"\'\"ls\"\'\"", environ, &code), environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	init_table(process_line("\"\'\"ls\"\'\"", table.env, &code), &table);
+	if (check_path(table.commands->args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -392,7 +400,8 @@ int	synt_err_32( void )
 	};
 
 	Libunit::Redirect_err();
-	if (check_path(process_line("\"\'\'\"/bin", environ, &code), environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	init_table(process_line("\"\'\'\"/bin", table.env, &code), &table);
+	if (check_path(table.commands->args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -406,7 +415,8 @@ int	synt_err_33( void )
 	};
 
 	Libunit::Redirect_err();
-	if (check_path(process_line("\"e\"\' c\'\"h\"\'o\'", environ, &code), environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	init_table(process_line("\"e\"\' c\'\"h\"\'o\'", table.env, &code), &table);
+	if (check_path(table.commands->args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -428,8 +438,9 @@ int	synt_err_35( void )
 	};
 
 	Libunit::Redirect_err();
+	init_table(process_line("\"$HOGNGERbrknie\"", table.env, &code), &table);
 	check_cmd_line(process_line("\"$HOGNGERbrknie\"", environ, &code), &code);
-	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0 && code == NOT_FOUND)
+	if (check_path(table.commands->args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);

@@ -95,10 +95,7 @@ $(BIN_D)$(NAME): $(OBJ) | $(BIN_D)
 	printf "\n---------------------$(CURSOR_ON)$(RESET)\n\n"
 
 $(BIN)/libminishell.a:
-	printf "$(GREEN)compiling: success [$$(ls obj | wc -l)/$(words $(SRCS))]\n"
 	ar rcs $(BIN_D)libminishell.a $(OBJ_NO_MAIN)
-	printf "$(GREEN)$(NAME): success\n"
-	printf "\n---------------------$(CURSOR_ON)\n\n"
 
 
 # ---------------------------------------------------------------------------- #
@@ -158,8 +155,8 @@ header:
 libft:
 	$(MAKE) -C libft
 
-.PHONY: tests
-tests:
+.PHONY: test
+test:
 	$(MAKE) all
 	$(MAKE) $(BIN)/libminishell.a
 	$(MAKE) test -C better-libunit/

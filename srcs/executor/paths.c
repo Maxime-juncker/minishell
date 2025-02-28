@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:52 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/28 08:58:57 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:00:54 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	*get_cmd_path(char **paths, t_command cmd)
 	struct stat	st;
 
 	if (cmd.args[0][0] == '\0')
-		return (NULL);
+		return (cleanup_arr((void **)paths), NULL);
 	if (is_builtin(cmd.args[0]))
 	{
 		cleanup_arr((void **)paths);

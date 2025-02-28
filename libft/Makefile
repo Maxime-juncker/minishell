@@ -6,7 +6,7 @@
 #    By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 18:00:56 by mjuncker          #+#    #+#              #
-#    Updated: 2025/02/21 10:31:13 by mjuncker         ###   ########.fr        #
+#    Updated: 2025/02/28 11:28:27 by mjuncker         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ INCLUDES_D	= includes/
 # src file names
 SRCS =  ft_isalpha.c 		\
 		ft_isdigit.c 		\
+		ft_iswhitespace.c	\
 		ft_isalnum.c 		\
 		ft_isascii.c 		\
 		ft_isprint.c 		\

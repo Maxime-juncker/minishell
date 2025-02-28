@@ -1,6 +1,7 @@
 #include "tests.hpp"
 
 static int code;
+static t_command_table table = {(char*)"minishell", NULL, 0, duplicate_env(environ), duplicate_env(environ)};
 
 int	dolars_01( void )
 {
@@ -8,10 +9,6 @@ int	dolars_01( void )
 	{
 		"0",
 	};
-
-	t_command_table	table;
-		table.env = duplicate_env(environ);
-	table.exp = duplicate_env(environ);;
 
 	init_table(process_line("echo $?", environ, &code), &table);
 	Libunit::Redirect_log();
@@ -30,10 +27,6 @@ int	dolars_02( void )
 		"00",
 	};
 
-	t_command_table	table;
-		table.env = duplicate_env(environ);
-	table.exp = duplicate_env(environ);;
-
 	init_table(process_line("echo $?$?", environ, &code), &table);
 	Libunit::Redirect_log();
 	run_pipeline(&table, NULL);
@@ -50,10 +43,6 @@ int	dolars_03( void )
 	{
 		"?ubuntu",
 	};
-
-	t_command_table	table;
-		table.env = duplicate_env(environ);
-	table.exp = duplicate_env(environ);;
 
 	init_table(process_line("echo ?$DESKTOP_SESSION", environ, &code), &table);
 	Libunit::Redirect_log();
@@ -73,7 +62,7 @@ int	dolars_04( void )
 	};
 
 	Libunit::Redirect_err();
-	if (check_cmd_line(ft_strdup("$"), &code) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_path(ft_strdup("$"), environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -85,10 +74,6 @@ int	dolars_05( void )
 	{
 		"",
 	};
-
-	t_command_table	table;
-		table.env = duplicate_env(environ);
-	table.exp = duplicate_env(environ);;
 
 	init_table(process_line("echo $HOMEgfehgeuohge", environ, &code), &table);
 	Libunit::Redirect_log();
@@ -107,10 +92,10 @@ int	dolars_06( void )
 		"\033[0;31mminishell: : command not found",
 	};
 
-	Libunit::Redirect_err();
 
-	process_line("\"$HOMEgfehgeuohge\"", environ, &code);
-	if (code == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	Libunit::Redirect_err();
+	init_table(process_line("\"$HOMEgfehgeuohge\"", environ, &code), &table);
+	if (check_path(table.commands[0].args[0], environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -118,16 +103,18 @@ int	dolars_06( void )
 
 int	dolars_07( void )
 {
-	const char *exepted_file[]
-	{
-		"\033[0;31mminishell: $HOMEgfehgeuohge: command not found",
-	};
+	return (1);
+	// const char *exepted_file[]
+	// {
+	// 	"\033[0;31mminishell: $HOMEgfehgeuohge: command not found",
+	// };
 
-	Libunit::Redirect_err();
-	if (check_cmd_line(ft_strdup("$HOMEgfehgeuohge"), &code) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
-		return (0);
-	else
-		return (1);
+	// Libunit::Redirect_err();
+	// check_path(process_line("$HOMEgfehgeuohge", environ, &code), environ);
+	// if (code == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	// 	return (0);
+	// else
+	// 	return (1);
 }
 
 int	dolars_08( void )

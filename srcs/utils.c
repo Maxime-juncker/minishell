@@ -6,12 +6,11 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:00 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 17:28:13 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 11:31:35 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <readline/readline.h>
 
 void	init_env(t_command_table *table, char **env)
 {
@@ -24,13 +23,6 @@ void	init_env(t_command_table *table, char **env)
 		cleanup_arr((void **)table->env);
 		exit(EXIT_FAILURE);
 	}
-}
-
-int	check_interrupt(void)
-{
-	if (g_signal_received)
-		rl_done = 1;
-	return (0);
 }
 
 void	handle_signal(int signal)
@@ -49,4 +41,14 @@ void	cleanup_table(t_command_table *table)
 		i++;
 	}
 	free(table->commands);
+}
+
+int	is_operator(char c)
+{
+	return (
+		c == '|'
+		|| c == '&'
+		|| c == '<'
+		|| c == '>'
+	);
 }

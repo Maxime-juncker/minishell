@@ -6,16 +6,11 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 09:41:47 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/28 10:25:40 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/02/28 11:32:44 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_whitespace(char c)
-{
-	return (c == ' ' || (c >= 9 && c <= 13));
-}
 
 int	check_unclosed(const char *line)
 {
@@ -45,17 +40,43 @@ int	check_unclosed(const char *line)
 	return (paren);
 }
 
-// int	parenthesis_valid(char *line)
-// {
-// 	int	i;
+void	paren_err(const char *line)
+{
+	char	quote;
+	int		i;
 
-// 	i = 0;
-// 	while (line[i])
-// 	{
-		
-// 		i++;
-// 	}
-// }
+	quote = 0;
+	i = 0;
+	ft_dprintf(2, "%sminishell: syntax error near unexpected token `", RED);
+	if (line[i] == '\"' || line[i] == '\'')
+	{
+		quote = line[i];
+		ft_dprintf(2, "%c", line[i]);
+		i++;
+	}
+	while (line[i] && line[i] != quote)
+	{
+		ft_dprintf(2, "%c", line[i]);
+		i++;
+	}
+	if (quote)
+		ft_dprintf(2, "%c", quote);
+	ft_dprintf(2, "\'%s\n", RESET);
+}
+
+int	parenthesis_valid(const char *line)
+{
+	int	i;
+
+	i = 1;
+	while (line[i] && is_whitespace(line[i]))
+		i++;
+	if (line[i] == 0 || is_symbol(line[i]))
+		return (1);
+	paren_err(&line[i]);
+	return (0);
+
+}
 
 int	check_content(const char *line)
 {
@@ -75,12 +96,12 @@ int	check_content(const char *line)
 				while (line[i] && is_whitespace(line[i]))
 					i++;
 				if (line[i] == ')')
-					return (SYNTAX_ERR);
+					return (1);
 			}
 			if (line[i] == ')')
 			{
-				// if (parenthesis_valid(&line[i]) == 0)
-				// 	return (SYNTAX_ERR);
+				if (parenthesis_valid(&line[i]) == 0)
+					return (2);
 			}
 		}
 		i++;
@@ -104,10 +125,10 @@ int	check_parenthesis(const char *line)
 		return (SYNTAX_ERR);
 	}
 	code = check_content(line);
-	if (code == SYNTAX_ERR)
+	if (code == 1)
 	{
 		ft_dprintf(2, "%sminishell: syntax error near unexpected token `(\'%s\n", RED, RESET);
 		return (SYNTAX_ERR);
 	}
-	return (0);
+	return (code);
 }
