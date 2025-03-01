@@ -6,11 +6,9 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/01 22:03:21 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 22:28:45 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// ls -l > 1 -a
 
 #include "minishell.h"
 #include <fcntl.h>
@@ -22,7 +20,7 @@ static int	update_command(t_command *cmd)
 	int		i;
 	int		j;
 
-	temp = malloc(sizeof(char *) * (cmd->n_args + 1));
+	temp = malloc(sizeof(char *) * (cmd->n_args + 1)); // fd not closed
 	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
 		return (MALLOC_ERR);
 	i = 0;
@@ -105,7 +103,7 @@ static int	handle_fd(t_command *cmd, char *file, char c, int db_redir)
 		if (!db_redir)
 			cmd->fd_in = open(file, O_RDONLY, 0644);
 		else if (db_redir && heredoc(cmd, file))
-			return (MALLOC_ERR);
+			return (1);
 	}
 	return (0);
 }
@@ -120,8 +118,9 @@ int	redir(t_command *cmd)
 	{
 		if (cmd->args[i][0] == '>' || cmd->args[i][0] == '<')
 		{
-			handle_fd(cmd, cmd->args[i + 1], cmd->args[i][0],
-				cmd->args[i][0] == cmd->args[i][1]);
+			if (handle_fd(cmd, cmd->args[i + 1], cmd->args[i][0],
+				cmd->args[i][0] == cmd->args[i][1]) == 1)
+				return (1);
 			if (cmd->fd_in == -1 || cmd->fd_out == -1)
 				return (perror("Failed to open file"), 1);
 			i++;
