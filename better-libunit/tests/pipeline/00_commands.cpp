@@ -4,7 +4,7 @@
 
 int	commands_routine( void )
 {
-	Libunit::Routine	routine("commands");
+	Libunit::Routine	routine("pipeline");
 
 	/* ================ ADD TESTS HERE ================ */
 	routine.AddNewTest(Libunit::Test("CMD", "cmd_basic", &create_cmd));
@@ -23,6 +23,8 @@ int	commands_routine( void )
 	routine.AddNewTest(Libunit::Test("REDIR", "cat < out", &redir_in));
 	routine.AddNewTest(Libunit::Test("REDIR", "< out cat", &redir_in_hard));
 	routine.AddNewTest(Libunit::Test("REDIR", "echo test | wc > tmp -c", &redir_middle_cmd));
+	routine.AddNewTest(Libunit::Test("REDIR", "> file", &redir_out_alone));
+	routine.AddNewTest(Libunit::Test("REDIR", "< file", &redir_in_alone));
 	// ==================================================
 
 	routine.Run();

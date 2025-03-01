@@ -34,3 +34,5 @@ int	redir_in_hard( void );
 int	redir_middle_cmd( void );
 int redir_after_pipe( void );
 int	pipe_after_redir( void );
+int	redir_out_alone( void );
+int	redir_in_alone( void );

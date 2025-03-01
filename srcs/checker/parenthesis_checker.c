@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 09:41:47 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/28 13:14:35 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 10:01:38 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	parenthesis_valid(const char *line)
 	i = 1;
 	while (line[i] && is_whitespace(line[i]))
 		i++;
-	if (line[i] == 0 || is_symbol(line[i]))
+	if (line[i] == 0 || is_symbol(line[i]) || line[i] == ')')
 		return (1);
 	paren_err(&line[i]);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/28 16:23:40 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 11:08:21 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-int	handle_process_cmd(t_command_table *table, char *line, int *code);
+int	handle_process_cmd(t_command_table *table, char *line, int *code, t_list **to_free);
 
-int	handle_line_symbol(t_command_table *table, char **args, int *code, int i)
+int	handle_line_symbol(t_command_table *table, char **args, int *code, int i, t_list **to_free)
 {
 	char	*process_cmd;
 
 	if (args[i][0] == '(')
 	{
-		if (handle_process_cmd(table, &args[i][1], code) == MALLOC_ERR)
+		if (handle_process_cmd(table, &args[i][1], code, to_free) == MALLOC_ERR)
 			return (MALLOC_ERR);
 		return (1);
 	}
@@ -33,11 +33,11 @@ int	handle_line_symbol(t_command_table *table, char **args, int *code, int i)
 		process_cmd = process_line(args[i], table->env, code);
 		if (!process_cmd)
 			return (MALLOC_ERR);
-		if (!process_cmd && *code == MALLOC_ERR)
+		if (*code == MALLOC_ERR)
 			return (free(process_cmd), MALLOC_ERR);
 		if (!init_table(process_cmd, table))
 		{
-			*code = run_pipeline(table, args);
+			*code = run_pipeline(table, *to_free);
 			cleanup_table(table);
 		}
 		return (1);
@@ -45,7 +45,7 @@ int	handle_line_symbol(t_command_table *table, char **args, int *code, int i)
 	return (0);
 }
 
-int	handle_process_cmd(t_command_table *table, char *line, int *code)
+int	handle_process_cmd(t_command_table *table, char *line, int *code, t_list **to_free)
 {
 	char	**args;
 	int		i;
@@ -54,9 +54,10 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code)
 	args = ft_split_operators(line);
 	if (!args)
 		return (MALLOC_ERR);
+	ft_lstadd_back(to_free, ft_lstnew(args));
 	while (args[i])
 	{
-		i += handle_line_symbol(table, args, code, i);
+		i += handle_line_symbol(table, args, code, i, to_free);
 		if (!args[i])
 			break ;
 		if ((*code == 0 && !ft_strcmp(args[i], "&&"))
@@ -65,12 +66,15 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code)
 		else if (args[i + 1])
 			i += 2;
 	}
-	cleanup_arr((void **)args);
 	return (0);
 }
 
 int	exec_prompt(t_command_table *table, char *line, int *code)
 {
+	t_list	*lst;
+	int		res;
+
+	lst = NULL;
 	if (!line)
 	{
 		if (init_table(ft_strdup("exit"), table) == MALLOC_ERR
@@ -82,7 +86,9 @@ int	exec_prompt(t_command_table *table, char *line, int *code)
 		add_history(line);
 	if (check_cmd_line(process_line(line, table->env, &*code), &*code) != 0)
 		return (0);
-	return (handle_process_cmd(table, line, code));
+	res = handle_process_cmd(table, line, code, &lst);
+	ft_lstclear(&lst, cleanup_pacakge);
+	return (res);
 }
 
 int	new_prompt(t_command_table *table)

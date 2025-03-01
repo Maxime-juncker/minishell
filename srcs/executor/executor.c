@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/28 12:26:10 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 10:58:00 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	handle_child_process(t_command *cmd, const t_command_table *table,
 	dup2(cmd->fd_out, STDOUT_FILENO);
 	dup2(cmd->fd_in, STDIN_FILENO);
 	free(package.childs);
-	cleanup_arr((void **)package.args);
+	ft_lstclear(&package.args, cleanup_pacakge);
 	if (is_builtin(cmd->args[0]) == 1)
 	{
 		code = run_built_in(*cmd, table);
@@ -77,7 +77,6 @@ int	run_command(t_command *cmd, const t_command_table *table,
 		t_free_pkg package, int *code)
 {
 	int	pid;
-	int	status;
 
 	*code = check_path(cmd->args[0], table->env);
 	if (*code != 0)
@@ -93,11 +92,6 @@ int	run_command(t_command *cmd, const t_command_table *table,
 	else
 	{
 		cmd->pid = pid;
-		(void)status;
-		if (cmd->args[0][0] == '.' && table->n_commands == 1)
-		{
-			waitpid(pid, &status, WUNTRACED);
-		}
 		close_fds(*cmd);
 	}
 	return (pid);
