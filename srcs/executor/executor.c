@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 10:58:00 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 13:38:33 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	run_command(t_command *cmd, const t_command_table *table,
 
 	*code = check_path(cmd->args[0], table->env);
 	if (*code != 0)
-		return (close_fds(*cmd), -1);
+		return (close_fds(*cmd), 0);
 	setup_args(cmd);
 	pid = fork();
 	if (pid == -1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/01 12:39:47 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 13:42:44 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code,
 	args = ft_split_operators(line);
 	if (!args)
 		return (MALLOC_ERR);
-	ft_lstadd_back(to_free, ft_lstnew(args));
+	if (ft_lstadd_back(to_free, ft_lstnew(args)) == -1)
+		return (ft_lstclear(to_free, cleanup_pacakge), MALLOC_ERR);
 	while (args[i])
 	{
 		if ((args[i][0] == '(' || (ft_strcmp(args[i], "&&")

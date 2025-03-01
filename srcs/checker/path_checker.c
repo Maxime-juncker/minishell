@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 10:59:26 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 13:54:52 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	create_dummy_cmd(const char *name, t_command *cmd)
 	return (0);
 }
 
-static int	check_dir_validity(const char *path)
+static int	check_dir_validity(const char *path, t_command dummy_cmd)
 {
 	DIR	*dir;
 
@@ -34,8 +34,10 @@ static int	check_dir_validity(const char *path)
 	{
 		ft_dprintf(2, "%sminishell: %s: No such file or directory\n%s",
 			RED, path, RESET);
+		cleanup_arr((void **)dummy_cmd.args);
 		return (NOT_FOUND);
 	}
+	cleanup_arr((void **)dummy_cmd.args);
 	closedir(dir);
 	ft_dprintf(2, "\033[0;31mminishell: %s: Is a directory\n\033[0m", path);
 	return (IS_DIR);
@@ -52,7 +54,7 @@ int	check_path(const char *cmd_name, char **env)
 	if (path == NULL && !is_builtin((char *)cmd_name))
 	{
 		if (ft_strchr(cmd_name, '/') != NULL)
-			return (check_dir_validity(cmd_name));
+			return (check_dir_validity(cmd_name, dummy_cmd));
 		else
 			ft_dprintf(2, "\033[0;31mminishell: %s: command not found\n\033[0m",
 				cmd_name);

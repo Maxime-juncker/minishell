@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/01 10:08:27 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 13:40:17 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int argc, char **argv, char **env)
 	signal(SIGPIPE, handle_signal);
 	code = 0;
 	table.name = get_exec_name(argv[0]);
-	while (code == 0)
+	while (code != MALLOC_ERR)
 	{
 		code = new_prompt(&table);
 	}

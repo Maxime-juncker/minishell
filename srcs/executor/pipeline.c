@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 12:52:44 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 13:09:29 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,18 @@ static int	setup_pipeline(int **childs, t_command_table *table)
 	return (0);
 }
 
+int	only_redir(t_command cmd)
+{
+	return (cmd.args[0][0] == '>' || cmd.args[0][0] == '<');
+}
+
 int	run_pipeline(t_command_table *table, t_list *args)
 {
 	size_t	i;
 	int		code;
 	int		*childs;
 
-	if (table->commands[0].args[0][0] == '>' || table->commands[0].args[0][0] == '<')
+	if (only_redir(table->commands[0]))
 		return (close_all_fds(table), 0);
 	if (setup_pipeline(&childs, table) == MALLOC_ERR)
 		return (MALLOC_ERR);
