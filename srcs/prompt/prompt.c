@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/01 11:41:04 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:25:06 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ int	handle_line_symbol(t_command_table *table, char *arg, int *code,
 		process_cmd = process_line(arg, table->env, code);
 		if (!process_cmd)
 			return (MALLOC_ERR);
-		if (*code == MALLOC_ERR)
-			return (free(process_cmd), MALLOC_ERR);
 		if (!init_table(process_cmd, table))
 		{
 			*code = run_pipeline(table, *to_free);
@@ -61,6 +59,8 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code,
 	while (args[i])
 	{
 		i += handle_line_symbol(table, args[i], code, to_free);
+		if (*code == MALLOC_ERR)
+			return (MALLOC_ERR);
 		if (!args[i])
 			break ;
 		if ((*code == 0 && !ft_strcmp(args[i], "&&"))
@@ -69,7 +69,7 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code,
 		else if (args[i + 1])
 			i += 2;
 	}
-	return (0);
+	return (*code);
 }
 
 static int	exec_prompt(t_command_table *table, char *line, int *code)
