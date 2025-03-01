@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/28 16:23:40 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 10:38:26 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 
 int	handle_process_cmd(t_command_table *table, char *line, int *code);
 
-int	handle_line_symbol(t_command_table *table, char **args, int *code, int i)
+static int	handle_line_symbol(t_command_table *table, char **args, int *code,
+	int i)
 {
 	char	*process_cmd;
 
@@ -69,7 +70,7 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code)
 	return (0);
 }
 
-int	exec_prompt(t_command_table *table, char *line, int *code)
+static int	exec_prompt(t_command_table *table, char *line, int *code)
 {
 	if (!line)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/28 11:31:32 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 10:08:27 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,6 @@
 #include <readline/readline.h>
 #include <signal.h>
 #include <sys/wait.h>
-
-int	check_interrupt(void)
-{
-	if (g_signal_received)
-		rl_done = 1;
-	return (0);
-}
 
 int	main(int argc, char **argv, char **env)
 {

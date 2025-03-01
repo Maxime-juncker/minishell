@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/28 13:20:29 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 10:22:18 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,6 @@ int		check_interrupt(void);
 
 // prompt.c
 int		new_prompt(t_command_table *table);
-int		ignore_prompt(char *prompt);
 
 char	**ft_split_operators(const char *s);
 void	free_all(char **res, int i);

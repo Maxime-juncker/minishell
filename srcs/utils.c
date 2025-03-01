@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:00 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/28 12:43:13 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 10:25:13 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <readline/readline.h>
 
 void	init_env(t_command_table *table, char **env)
 {
@@ -23,6 +24,13 @@ void	init_env(t_command_table *table, char **env)
 		cleanup_arr((void **)table->env);
 		exit(EXIT_FAILURE);
 	}
+}
+
+int	check_interrupt(void)
+{
+	if (g_signal_received)
+		rl_done = 1;
+	return (0);
 }
 
 void	handle_signal(int signal)
