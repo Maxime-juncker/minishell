@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 10:22:18 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 11:36:49 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_command_table
 typedef struct s_free_package
 {
 	int		*childs;
-	char	**args;
+	t_list	*args;
 }	t_free_pkg;
 
 extern int	g_signal_received;
@@ -115,6 +115,7 @@ void	exit_shell(t_command_table *table, t_command cmd, t_free_pkg package);
 int		in_base(const char c, const char *base);
 int		token_error(char c1, char c2);
 void	cleanup_arr(void **arr);
+void	cleanup_pacakge(void *package);
 
 // checker.c
 int		check_cmd_line(char *process_line, int *code);
@@ -162,7 +163,7 @@ int		is_builtin(char *name);
 char	**get_paths(char **env);
 
 // pipeline.c
-int		run_pipeline(t_command_table *table, char **args);
+int		run_pipeline(t_command_table *table, t_list *args);
 
 // builtin_cmd.c
 int		env_stage(t_command_table *table, t_command cmd, int *code,

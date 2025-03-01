@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:01 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 16:16:03 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 10:55:57 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ void	exit_shell(t_command_table *table, t_command cmd, t_free_pkg package)
 	if (table->n_commands > 1)
 		return ;
 	printf("exit\n");
-	free(package.childs);
-	cleanup_arr((void **)package.args);
 	code = get_code(cmd);
+	free(package.childs);
 	cleanup_arr((void **)table->env);
 	cleanup_arr((void **)table->exp);
+	ft_lstclear(&package.args, cleanup_pacakge);
 	cleanup_table(table);
 	exit(code);
 }

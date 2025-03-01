@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 16:06:56 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 10:40:33 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	setup_pipeline(int **childs, t_command_table *table)
 	return (0);
 }
 
-int	run_pipeline(t_command_table *table, char **args)
+int	run_pipeline(t_command_table *table, t_list *args)
 {
 	size_t	i;
 	int		code;
