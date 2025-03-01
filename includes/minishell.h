@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 12:07:44 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:38:26 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void	show_cmd(t_command cmd);
 int		run_command(t_command *cmd, const t_command_table *table,
 			t_free_pkg package, int *code);
 void	close_fds(t_command cmd);
-
+void	close_all_fds(const t_command_table *table);
 // paths.c
 char	*get_cmd_path(char **paths, t_command cmd);
 int		is_builtin(char *name);

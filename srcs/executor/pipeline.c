@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 10:40:33 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:37:46 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ int	run_pipeline(t_command_table *table, t_list *args)
 	int		code;
 	int		*childs;
 
+	if (table->commands[0].n_args == 0)
+		return (close_all_fds(table), 0);
 	if (setup_pipeline(&childs, table) == MALLOC_ERR)
 		return (MALLOC_ERR);
 	i = 0;
