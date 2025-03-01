@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/28 17:47:01 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:14:46 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,32 @@
 
 #include "minishell.h"
 
-static void	handle_fd(t_command *cmd, char *file, char c, int db_redir)
+static int	update_command(t_command *cmd, char *file)
 {
-	if (c == '>')
+	char	*temp;
+	int		i;
+	int		j;
+
+	if (cmd->args[0][0] == '>' || cmd->args[0][0] == '<')
 	{
-		if (cmd->fd_out > 1)
-			close(cmd->fd_out);
-		if (db_redir)
-			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		temp = cmd->args[0];
+		cmd->args[0] = cmd->args[2];
+		cmd->args[2] = temp;
+		cmd->n_args = 1;
 	}
-	else
+	i = 3;
+	j = 1;
+	while (cmd->args[i] && ft_strcmp(cmd->args[i], file)
+		&& cmd->args[i][0] != '>' && cmd->args[i][0] != '<')
 	{
-		if (cmd->fd_in > 1)
-			close(cmd->fd_in);
-		if (db_redir)
-			heredoc(cmd, file);
-		else
-			cmd->fd_in = open(file, O_RDONLY, 0644);
+		free(cmd->args[j]);
+		cmd->args[j] = ft_strdup(cmd->args[i++]);
+		if (malloc_assert(cmd->args[j++], __FILE__, __LINE__, __FUNCTION__)
+			== MALLOC_ERR)
+			return (MALLOC_ERR);
+		cmd->n_args++;
 	}
-	free(file);
+	return (0);
 }
 
 static char	*get_file(char **s, int start, int i)
@@ -83,29 +88,18 @@ static char	*get_file_name(char **s)
 static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 {
 	char	*file;
-	char	*temp;
 	int		i;
-	int		j;
 
 	file = get_file_name(command);
 	if (!file)
 		return (MALLOC_ERR);
-	if (cmd->args[0][0] == '>' || cmd->args[0][0] == '<')
-	{
-		temp = cmd->args[0];
-		cmd->args[0] = cmd->args[2];
-		cmd->args[2] = temp;
-		cmd->n_args = 1;
-	}
-	i = 3;
-	j = 1;
-	while (cmd->args[i] && ft_strcmp(cmd->args[i], file)
-		&& cmd->args[i][0] != '>' && cmd->args[i][0] != '<')
-	{
-		free(cmd->args[j]);
-		cmd->args[j++] = ft_strdup(cmd->args[i++]);
-		cmd->n_args++;
-	}
+	i = 0;
+	while (cmd->args[i])
+		i++;
+	if (i > 2)
+		update_command(cmd, file);
+	else
+		cmd->n_args = 0;
 	return (handle_fd(cmd, file, c, db_redir), 0);
 }
 

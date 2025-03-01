@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 11:36:49 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:07:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,8 +213,8 @@ int		init_table(char *line, t_command_table *table);
 // redir.c
 int		redir(t_command *cmd, char *command);
 
-// heredoc.c
-int		heredoc(t_command *cmd, char *deli);
+// fd.c
+int		handle_fd(t_command *cmd, char *file, char c, int db_redir);
 
 // ft_split_quote.c
 char	**ft_split_quote(const char *s, char c);

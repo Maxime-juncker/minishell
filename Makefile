@@ -32,7 +32,7 @@ SRCS = 		main.c						\
 			executor.c					\
 			pipeline.c					\
 			checker.c					\
-			heredoc.c					\
+			fd.c						\
 			redir.c						\
 			init.c						\
 			lexer.c						\

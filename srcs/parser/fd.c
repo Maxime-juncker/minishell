@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
+/*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:21 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 16:43:52 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:10:16 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	*append_str(char *old, char *append_str)
 	return (new_str);
 }
 
-int	heredoc(t_command *cmd, char *deli)
+static int	heredoc(t_command *cmd, char *deli)
 {
 	char	*doc;
 	char	*line;
@@ -77,4 +77,28 @@ int	heredoc(t_command *cmd, char *deli)
 		write(cmd->fd_in, doc, ft_strlen(doc));
 	close(cmd->fd_in);
 	return (cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644), free(doc), 0);
+}
+
+int	handle_fd(t_command *cmd, char *file, char c, int db_redir)
+{
+	if (c == '>')
+	{
+		if (cmd->fd_out > 1)
+			close(cmd->fd_out);
+		if (db_redir)
+			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	}
+	else
+	{
+		if (cmd->fd_in > 1)
+			close(cmd->fd_in);
+		if (!db_redir)
+			cmd->fd_in = open(file, O_RDONLY, 0644);
+		else if (db_redir && heredoc(cmd, file) == MALLOC_ERR)
+			return (MALLOC_ERR);
+	}
+	free(file);
+	return (0);
 }
