@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/01 11:37:34 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 11:41:04 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,23 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-int	handle_process_cmd(t_command_table *table, char *line, int *code, t_list **to_free);
+int	handle_process_cmd(t_command_table *table, char *line, int *code,
+		t_list **to_free);
 
-int	handle_line_symbol(t_command_table *table, char **args, int *code, int i, t_list **to_free)
+int	handle_line_symbol(t_command_table *table, char *arg, int *code,
+		t_list **to_free)
 {
 	char	*process_cmd;
 
-	if (args[i][0] == '(')
+	if (arg[0] == '(')
 	{
-		if (handle_process_cmd(table, &args[i][1], code, to_free) == MALLOC_ERR)
+		if (handle_process_cmd(table, &arg[1], code, to_free) == MALLOC_ERR)
 			return (MALLOC_ERR);
 		return (1);
 	}
-	else if (ft_strcmp(args[i], "&&") && ft_strcmp(args[i], "||"))
+	else if (ft_strcmp(arg, "&&") && ft_strcmp(arg, "||"))
 	{
-		process_cmd = process_line(args[i], table->env, code);
+		process_cmd = process_line(arg, table->env, code);
 		if (!process_cmd)
 			return (MALLOC_ERR);
 		if (*code == MALLOC_ERR)
@@ -45,7 +47,8 @@ int	handle_line_symbol(t_command_table *table, char **args, int *code, int i, t_
 	return (0);
 }
 
-int	handle_process_cmd(t_command_table *table, char *line, int *code, t_list **to_free)
+int	handle_process_cmd(t_command_table *table, char *line, int *code,
+		t_list **to_free)
 {
 	char	**args;
 	int		i;
@@ -57,7 +60,7 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code, t_list **t
 	ft_lstadd_back(to_free, ft_lstnew(args));
 	while (args[i])
 	{
-		i += handle_line_symbol(table, args, code, i, to_free);
+		i += handle_line_symbol(table, args[i], code, to_free);
 		if (!args[i])
 			break ;
 		if ((*code == 0 && !ft_strcmp(args[i], "&&"))
