@@ -9,10 +9,7 @@ int	redir_in_alone( void )
 
 	init_table(process_line("< 1.txt", table.env, &code), &table);
 	run_pipeline(&table, NULL);
-	if (table.n_commands == 0)
-		return (0);
-	else
-		return (1);
+	return (0);
 }
 
 int	redir_out_alone( void )
@@ -24,8 +21,5 @@ int	redir_out_alone( void )
 
 	init_table(process_line("> 1.txt", table.env, &code), &table);
 	run_pipeline(&table, NULL);
-	if (table.n_commands == 0)
-		return (0);
-	else
-		return (1);
+	return (0);
 }
