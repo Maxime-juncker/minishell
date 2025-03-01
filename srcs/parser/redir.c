@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/01 12:21:17 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:47:36 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,21 @@ static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
 {
 	char	*file;
 	int		i;
+	int		nb_cmd;
 
 	file = get_file_name(command);
 	if (!file)
 		return (MALLOC_ERR);
 	i = 0;
+	nb_cmd = 0;
 	while (cmd->args[i])
+	{
+		if (cmd->args[i][0] != '>' && cmd->args[i][0] != '<'
+			&& ft_strcmp(cmd->args[i], file))
+			nb_cmd++;
 		i++;
-	if (i > 2)
+	}
+	if (nb_cmd > 0)
 		update_command(cmd, file);
 	else
 		cmd->n_args = 0;
