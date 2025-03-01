@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 12:40:08 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:52:44 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	run_pipeline(t_command_table *table, t_list *args)
 	int		code;
 	int		*childs;
 
-	if (table->commands[0].n_args == 0)
+	if (table->commands[0].args[0][0] == '>' || table->commands[0].args[0][0] == '<')
 		return (close_all_fds(table), 0);
 	if (setup_pipeline(&childs, table) == MALLOC_ERR)
 		return (MALLOC_ERR);
