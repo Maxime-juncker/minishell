@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 12:37:46 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:40:08 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,5 @@ int	run_pipeline(t_command_table *table, t_list *args)
 		}
 		i++;
 	}
-	code = wait_for_process(table, childs, code);
-	return (free(childs), code);
+	return (code = wait_for_process(table, childs, code), free(childs), code);
 }

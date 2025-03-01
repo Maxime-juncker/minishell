@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/01 12:25:06 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:39:47 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	handle_line_symbol(t_command_table *table, char *arg, int *code,
 	{
 		if (handle_process_cmd(table, &arg[1], code, to_free) == MALLOC_ERR)
 			return (MALLOC_ERR);
-		return (1);
 	}
 	else if (ft_strcmp(arg, "&&") && ft_strcmp(arg, "||"))
 	{
@@ -40,7 +39,6 @@ int	handle_line_symbol(t_command_table *table, char *arg, int *code,
 			*code = run_pipeline(table, *to_free);
 			cleanup_table(table);
 		}
-		return (1);
 	}
 	return (0);
 }
@@ -58,8 +56,10 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code,
 	ft_lstadd_back(to_free, ft_lstnew(args));
 	while (args[i])
 	{
-		i += handle_line_symbol(table, args[i], code, to_free);
-		if (*code == MALLOC_ERR)
+		if ((args[i][0] == '(' || (ft_strcmp(args[i], "&&")
+				&& ft_strcmp(args[i], "||")))
+			&& handle_line_symbol(table, args[i++], code, to_free)
+				== MALLOC_ERR)
 			return (MALLOC_ERR);
 		if (!args[i])
 			break ;
@@ -87,7 +87,7 @@ static int	exec_prompt(t_command_table *table, char *line, int *code)
 	}
 	if (ft_strcmp(line, "\n"))
 		add_history(line);
-	if (check_cmd_line(process_line(line, table->env, &*code), &*code) != 0)
+	if (check_cmd_line(process_line(line, table->env, &*code), code) != 0)
 		return (0);
 	res = handle_process_cmd(table, line, code, &lst);
 	ft_lstclear(&lst, cleanup_pacakge);
