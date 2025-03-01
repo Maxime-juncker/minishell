@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/28 11:38:01 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 20:22:05 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,11 +104,7 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
 		return (perror("Failed pipe"), MALLOC_ERR);
 	if (get_args(cmd, cmd_str) == MALLOC_ERR)
 		return (MALLOC_ERR);
-	cmd->n_args = 0;
-	while (cmd->args[cmd->n_args] && cmd->args[cmd->n_args][0] != '>'
-		&& cmd->args[cmd->n_args][0] != '<')
-		cmd->n_args++;
-	if (redir(cmd, cmd_str) != 0)
+	if (redir(cmd) != 0)
 		return (cleanup_arr((void **)cmd->args), MALLOC_ERR);
 	if (!i && !ft_strchr(cmd_str, '<'))
 		cmd->fd_in = 0;
