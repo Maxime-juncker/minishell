@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/28 16:09:39 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/02 21:51:48 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ static char	**update_env(char *arg, char **env, int append)
 	int		i;
 
 	cpy = malloc((arrlen((void **)env) + 2 - append) * sizeof(char *));
-	if (!cpy)
-		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), env);
+	if (malloc_assert(cpy, __FILE__, __LINE__, __FUNCTION__))
+		return (env);
 	i = -1;
 	while (env && env[++i])
 	{

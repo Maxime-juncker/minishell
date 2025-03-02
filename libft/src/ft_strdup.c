@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:56:43 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 13:37:12 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/02 21:58:20 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ char	*ft_strdup_except_char(char *s, char c)
 	if (!s)
 		return (NULL);
 	copy = malloc(ft_strlen(s));
-	if (copy == NULL)
-		return (NULL);
+	if (!copy)
+		return (free(s), NULL);
 	i = 0;
 	start = s;
 	while (*s)

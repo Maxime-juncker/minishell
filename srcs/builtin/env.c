@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/21 17:30:26 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Created: 2025/03/02 15:49:37 by abidolet          #+#    #+#             */
+/*   Updated: 2025/03/02 15:54:49 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,14 @@ char	**duplicate_env(char **old_env)
 	int		i;
 
 	new_env = malloc(sizeof(char *) * (arrlen((void **)old_env) + 1));
-	if (!new_env)
-		return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__), NULL);
+	if (malloc_assert(new_env, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
+		return (NULL);
 	i = 0;
 	while (old_env[i])
 	{
 		new_env[i] = ft_strdup(old_env[i]);
-		if (!new_env[i])
-			return (malloc_assert(NULL, __FILE__, __LINE__, __FUNCTION__),
-				cleanup_arr((void **)new_env), NULL);
+		if (malloc_assert(new_env[i], __FILE__, __LINE__, __FUNCTION__) != 0)
+			return (cleanup_arr((void **)new_env), NULL);
 		i++;
 	}
 	new_env[i] = NULL;
