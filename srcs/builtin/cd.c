@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 16:16:19 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 16:16:21 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/02 12:07:27 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,17 @@ static int	change_directory(char *path)
 
 	dir = opendir(path);
 	if (!dir)
-		return (free(path), perror("minishell: cd: can't open dir"), 1);
+		return (free(path), perror("minishell: cd"), 1);
 	if (chdir(path) == -1)
 		return (closedir(dir), free(path),
 			perror("\033[0;31mminishell: cd: chdir failed\033[0m"), 1);
 	free(path);
-	abs_path = getcwd(buffer, 4096);
 	closedir(dir);
-	if (malloc_assert(abs_path, __FILE__, __LINE__, __FUNCTION__))
-		return (MALLOC_ERR);
+	abs_path = getcwd(buffer, 4096);
+	if (abs_path == NULL)
+		ft_dprintf(2, "%schdir: error retrieving current directory: \
+getcwd: cannot access parent directories: \
+No such file or directory%s\n", RED, RESET);
 	return (0);
 }
 
