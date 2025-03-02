@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/01 22:28:45 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/02 09:19:56 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ static int	update_command(t_command *cmd)
 	int		i;
 	int		j;
 
-	temp = malloc(sizeof(char *) * (cmd->n_args + 1)); // fd not closed
+	temp = malloc(sizeof(char *) * (cmd->n_args + 1));
 	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
-		return (MALLOC_ERR);
+		return (close_fds(*cmd), MALLOC_ERR);
 	i = 0;
 	j = 0;
 	while (cmd->args[i])
@@ -64,7 +64,7 @@ static int	heredoc(t_command *cmd, char *deli)
 	char	*line;
 	int		nb_line;
 
-	cmd->fd_in = open("/tmp/temp.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
+	cmd->fd_in = open("/tmp/temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->fd_in == -1)
 		return (perror("Failed to open file"), 1);
 	nb_line = 0;
@@ -75,8 +75,8 @@ static int	heredoc(t_command *cmd, char *deli)
 		line = readline("> ");
 		if (handle_eof(line, deli, nb_line++))
 			break ;
-		write(cmd->fd_in, line, ft_strlen(line));
-		write(cmd->fd_in, "\n", 1);
+		ft_putendl_fd(line, cmd->fd_in);
+		free(line);
 	}
 	close(cmd->fd_in);
 	cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644);
