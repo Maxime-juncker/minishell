@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 22:03:45 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/02 09:52:47 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 /* -------------------------------------------------------------------------- */
 
 # define SYNTAX_ERR	2
+# define IGNORE		-2
 # define NOT_FOUND	127
 # define IS_DIR		126
 # define MALLOC_ERR	-1
@@ -176,6 +177,7 @@ int		run_built_in(const t_command cmd, const t_command_table *table);
 
 // join_lst.c
 char	*join_lst(t_list *lst);
+int		ignore_prompt(char *prompt);
 
 // lexer_utils.c
 char	toggle_quote(char c, char quote);

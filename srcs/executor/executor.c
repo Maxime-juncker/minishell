@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 13:38:33 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/02 10:21:17 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ static void	handle_child_process(t_command *cmd, const t_command_table *table,
 {
 	int		code;
 
-	cleanup_arr((void **)table->exp);
 	dup2(cmd->fd_out, STDOUT_FILENO);
 	dup2(cmd->fd_in, STDIN_FILENO);
 	free(package.childs);
+	cleanup_arr((void **)table->exp);
 	ft_lstclear(&package.args, cleanup_pacakge);
 	if (is_builtin(cmd->args[0]) == 1)
 	{

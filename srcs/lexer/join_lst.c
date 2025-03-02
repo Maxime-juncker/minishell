@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   join_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 10:22:13 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/02 09:52:09 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ignore_prompt(char *prompt)
+int	ignore_prompt(char *prompt)
 {
+	if (prompt[0] == ':' || prompt[0] == '!')
+		prompt++;
 	while (*prompt)
 	{
-		if (!(*prompt == ' ' || (*prompt >= 9 && *prompt <= 13))
-			&& in_base(*prompt, ":!") == -1)
+		if (*prompt != ' ' || (*prompt >= 9 && *prompt <= 13))
 			return (0);
 		prompt++;
 	}

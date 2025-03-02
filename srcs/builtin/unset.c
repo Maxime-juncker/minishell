@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:35:07 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/28 13:09:25 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/02 10:31:07 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ static char	**unset(char **env, char *arg, int len, int *is_malloc_error)
 			cpy[len] = env[i];
 			len++;
 		}
+		else
+			free(env[i]);
 	}
 	free(env);
 	cpy[len] = NULL;
