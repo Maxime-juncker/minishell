@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/02 11:55:55 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/02 12:30:26 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+/*
+	a tester :
+		echo "> 1"
+		echo "> 1" | cat -e
+		ls * > 1
+*/
 
 /* -------------------------------------------------------------------------- */
 /*                                   includes                                 */

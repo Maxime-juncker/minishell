@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 16:16:19 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/02 12:07:27 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/02 15:47:51 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,21 @@ static int	change_directory(char *path)
 
 	dir = opendir(path);
 	if (!dir)
-		return (free(path), perror("minishell: cd"), 1);
+		return (free(path), perror("\033[0;31mminishell: cd\033[0m"), 1);
 	if (chdir(path) == -1)
-		return (closedir(dir), free(path),
-			perror("\033[0;31mminishell: cd: chdir failed\033[0m"), 1);
-	free(path);
+	{
+		closedir(dir);
+		free(path);
+		perror("\033[0;31mminishell: cd: chdir failed\033[0m");
+		return (1);
+	}
 	closedir(dir);
+	free(path);
 	abs_path = getcwd(buffer, 4096);
-	if (abs_path == NULL)
-		ft_dprintf(2, "%schdir: error retrieving current directory: \
-getcwd: cannot access parent directories: \
-No such file or directory%s\n", RED, RESET);
+	if (!abs_path)
+		ft_dprintf(2, "%schdir: error retrieving current directory: %s%s%s\n",
+			RED, "getcwd: cannot access parent directories: ",
+			"No such file or directory", RESET);
 	return (0);
 }
 
@@ -81,9 +85,9 @@ int	cd_command(const t_command_table *table, const t_command cmd)
 	else
 		path = find_env_var(table->env, "HOME", &index);
 	if (index == -1)
-		return (ft_dprintf(2, "%sminishell: cd: HOME not set\n%s",
+		return (free(path), ft_dprintf(2, "%sminishell: cd: HOME not set\n%s",
 				RED, RESET), 1);
-	else if (!path)
+	else if (malloc_assert(path, __FILE__, __LINE__, __FUNCTION__) != 0)
 		return (MALLOC_ERR);
 	code = change_directory(path);
 	return (code);
