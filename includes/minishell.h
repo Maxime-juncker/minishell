@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/02 09:52:47 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/02 11:02:50 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,8 +203,7 @@ char	*expand_wildcard(char *line);
 
 // wildcard_patern.c
 char	**new_patern(char *line);
-char	**realloc_arr(char **patern);
-
+int		patern_valid(char *tmp, char **patern, int *i);
 /* -------------------------------------------------------------------------- */
 /*                                   parser                                   */
 /* -------------------------------------------------------------------------- */
