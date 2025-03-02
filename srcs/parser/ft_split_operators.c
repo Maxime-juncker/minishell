@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 10:49:02 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/28 18:24:34 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/02 22:26:08 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static char	*ft_strndup2(const char *s, size_t n)
 	size_t	i;
 
 	res = malloc(n + 1);
-	if (!res)
+	if (malloc_assert(res, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
 		return (NULL);
 	i = 0;
 	while (i < n)
@@ -38,69 +38,66 @@ static char	*ft_strndup2(const char *s, size_t n)
 	return (res);
 }
 
+static char	*handle_string(const char **s)
+{
+	size_t	len;
+	char	in_quote;
+
+	len = 0;
+	in_quote = 0;
+	while ((*s)[len] && (*s)[len] != '(')
+	{
+		if ((*s)[len] == '\'' || (*s)[len] == '\"')
+			in_quote = toggle_quote((*s)[len], in_quote);
+		if (in_quote == 0 && is_operator(*s + len))
+			break ;
+		len++;
+	}
+	return (ft_strndup2(*s, len));
+}
+
+static char	*handle_parentheses(const char **s, int *paren_count)
+{
+	size_t	len;
+
+	(*paren_count)++;
+	len = 1;
+	while ((*s)[len] && ((*s)[len] != ')' || *paren_count > 1))
+	{
+		if ((*s)[len] == '(')
+			(*paren_count)++;
+		else if ((*s)[len] == ')')
+			(*paren_count)--;
+		len++;
+	}
+	return (ft_strndup2(*s, len));
+}
+
 char	**ft_split_operators(const char *s)
 {
 	char	**res;
 	int		i;
-	size_t	len;
 	int		paren_count;
-	char	in_quote;
 
-	if (!s)
-		return (NULL);
 	res = ft_calloc(ft_strlen(s) + 1, sizeof(char *));
-	if (!res)
+	if (malloc_assert(res, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
 		return (NULL);
 	i = 0;
 	paren_count = 0;
-	in_quote = 0;
 	while (*s)
 	{
 		while (*s == ' ' || *s == '\t')
 			s++;
 		if (*s == '(')
-		{
-			paren_count++;
-			len = 1;
-			while (s[len] && (s[len] != ')' || paren_count > 1))
-			{
-				if (s[len] == '(')
-					paren_count++;
-				else if (s[len] == ')')
-					paren_count--;
-				len++;
-			}
-			res[i] = ft_strndup2(s, len);
-			if (!res[i++])
-				return (free_all(res, i), NULL);
-			s += len;
-			if (*s == ')')
-				s++;
-		}
+			res[i] = handle_parentheses(&s, &paren_count);
 		else if (is_operator(s))
-		{
 			res[i] = ft_strndup2(s, 2);
-			if (!res[i++])
-				return (free_all(res, i), NULL);
-			s += 2;
-		}
 		else if (*s)
-		{
-			len = 0;
-			while (s[len] && s[len] != '(')
-			{
-				if (s[len] == '\'' || s[len] == '\"')
-					in_quote = toggle_quote(s[len], in_quote);
-				if (in_quote == 0 && is_operator(s + len))
-					break ;
-				len++;
-			}
-			res[i] = ft_strndup2(s, len);
-			if (!res[i++])
-				return (free_all(res, i), NULL);
-			s += len;
-		}
+			res[i] = handle_string(&s);
+		if (!res[i++])
+			return (free_all(res, i), NULL);
+		s += ft_strlen(res[i - 1]);
+		s += (*s == ')');
 	}
-	res[i] = NULL;
-	return (res);
+	return (res[i] = NULL, res);
 }
