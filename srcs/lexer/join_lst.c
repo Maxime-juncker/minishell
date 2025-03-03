@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 14:41:28 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:18:10 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,26 @@ int	ignore_prompt(char *prompt)
 	return (1);
 }
 
+static int	add_str(char *content, char **str_ref, int *len, int *i)
+{
+	if (add_space(&(*str_ref)[*len], content[*i]) == 1)
+	{
+		*str_ref = ft_charjoin(*str_ref, ' ');
+		if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
+			return (MALLOC_ERR);
+		(*len)++;
+		return (0);
+	}
+	while (content[*i] == ' ' && (*str_ref)[*len - 1] == ' ')
+		(*i)++;
+	*str_ref = ft_charjoin(*str_ref, content[*i]);
+	if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
+		return (MALLOC_ERR);
+	(*i)++;
+	(*len)++;
+	return (0);
+}
+
 static int	join_loop(char *content, char **str_ref, int *len)
 {
 	int		i;
@@ -61,21 +81,8 @@ static int	join_loop(char *content, char **str_ref, int *len)
 			i++;
 			continue ;
 		}
-		if (add_space(&(*str_ref)[*len], content[i]) == 1)
-		{
-			*str_ref = ft_charjoin(*str_ref, ' ');
-			if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
-				return (MALLOC_ERR);
-			(*len)++;
-			continue ;
-		}
-		while (content[i] == ' ' && (*str_ref)[*len - 1] == ' ')
-			i++;
-		*str_ref = ft_charjoin(*str_ref, content[i]);
-		if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
+		if (add_str(content, str_ref, len, &i) == MALLOC_ERR)
 			return (MALLOC_ERR);
-		i++;
-		(*len)++;
 	}
 	return (0);
 }

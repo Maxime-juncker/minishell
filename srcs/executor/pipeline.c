@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 14:40:32 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:12:26 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,27 @@ static int	setup_pipeline(int **childs, t_command_table *table)
 	return (0);
 }
 
+int	run_stage(t_command_table *table, int i, int *childs, t_list *args)
+{
+	int	code;
+
+	code = check_path(table->commands[i].args[0], table->env);
+	if (code != 0)
+	{
+		close_fds(table->commands[i]);
+		childs[i] = -1;
+		return (code);
+	}
+	if (env_stage(table, table->commands[i], &code,
+			(t_free_pkg){childs, args}))
+	{
+		return (0);
+	}
+	childs[i] = run_command(&table->commands[i], table,
+			(t_free_pkg){childs, args});
+	return (0);
+}
+
 int	run_pipeline(t_command_table *table, t_list *args)
 {
 	size_t	i;
@@ -86,26 +107,12 @@ int	run_pipeline(t_command_table *table, t_list *args)
 	if (setup_pipeline(&childs, table) == MALLOC_ERR)
 		return (MALLOC_ERR);
 	i = 0;
+	show_table(*table);
 	while (i < table->n_commands)
 	{
 		if (table->commands[i].n_args != 0)
 		{
-			code = check_path(table->commands[i].args[0], table->env);
-			if (code != 0)
-			{
-				close_fds(table->commands[i]);
-				childs[i] = -1;
-				i++;
-				continue ;
-			}
-			if (env_stage(table, table->commands[i], &code,
-					(t_free_pkg){childs, args}))
-			{
-				i++;
-				continue ;
-			}
-			childs[i] = run_command(&table->commands[i], table,
-					(t_free_pkg){childs, args});
+			run_stage(table, i, childs, args);
 		}
 		i++;
 	}

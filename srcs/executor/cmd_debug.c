@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:37 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:06:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	show_table(t_command_table table)
 	size_t	i;
 
 	i = 0;
+	printf("%sn_command: %zu\n", GRAY, table.n_commands);
 	while (i < table.n_commands)
 	{
 		printf("%s%s:\n", GRAY, table.commands[i].args[0]);
