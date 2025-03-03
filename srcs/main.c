@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/01 13:40:17 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:38:58 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,60 @@
 #include <readline/readline.h>
 #include <signal.h>
 #include <sys/wait.h>
+
+// static int	exec_prompt(t_command_table *table, char *line, int *code)
+// {
+// 	t_list	*lst;
+// 	int		res;
+
+// 	lst = NULL;
+// 	if (check_cmd_line(process_line(line, table->env, &*code), code) != 0)
+// 		return (0);
+// 	res = handle_process_cmd(table, line, code, &lst);
+// 	ft_lstclear(&lst, cleanup_pacakge);
+// 	return (res);
+// }
+
+
+// int	load_config(t_command_table *table, int *code)
+// {
+// 	int		fd;
+// 	char	*path;
+// 	char	*line;
+// 	char	*buffer[512];
+// 	int		i;
+
+// 	path = find_env_var(table->env, "HOME", NULL);
+// 	if (path == NULL)
+// 		return (0);
+// 	path = ft_strjoin_free(path, "/.minishellrc", FREE1);
+// 	if (malloc_assert(path, __FILE__, __LINE__, __FUNCTION__))
+// 		return (0);
+// 	fd = open(path, O_RDONLY);
+// 	free(path);
+// 	if (fd == -1)
+// 		return (0);
+// 	line = get_next_line(fd);
+// 	i = 0;
+// 	while (line)
+// 	{
+// 		line[ft_strlen(line) - 1] = '\0';
+// 		buffer[i] = line;
+// 		line = get_next_line(fd);
+// 		i++;
+// 	}
+// 	buffer[i] = NULL;
+// 	close(fd);
+// 	i = 0;
+// 	while (buffer[i])
+// 	{
+// 		exec_prompt(table, buffer[i], code);
+// 		i++;
+// 	}
+
+// 	return (*code);
+// }
+
 
 int	main(int argc, char **argv, char **env)
 {
@@ -27,6 +81,7 @@ int	main(int argc, char **argv, char **env)
 	signal(SIGPIPE, handle_signal);
 	code = 0;
 	table.name = get_exec_name(argv[0]);
+	// load_config(&table, &code);
 	while (code != MALLOC_ERR)
 	{
 		code = new_prompt(&table);

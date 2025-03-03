@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/01 13:42:44 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:34:39 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code,
 
 	i = 0;
 	args = ft_split_operators(line);
+	free(line);
 	if (!args)
 		return (MALLOC_ERR);
 	if (ft_lstadd_back(to_free, ft_lstnew(args)) == -1)

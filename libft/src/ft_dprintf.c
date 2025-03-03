@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_dprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:15:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 17:30:11 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:44:01 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	handle_characters(const char *type, va_list *ptr, int fd)
 	void	*tmp;
 
 	if (*type == 'c')
-		return (ft_putchar_fd(va_arg(*ptr, int) % 256, 1));
+		return (ft_putchar_fd(va_arg(*ptr, int) % 256, fd));
 	else if (*type == 's')
 	{
 		tmp = va_arg(*ptr, char *);

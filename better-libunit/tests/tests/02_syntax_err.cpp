@@ -63,7 +63,7 @@ int	synt_err_5( void )
 {
 	const char *exepted_file[]
 	{
-		"\033[0;31mminishell: syntax error near unexpected token `newline\'",
+		"\033[0;31mminishell: syntax error near unexpected token `>\'",
 	};
 
 	Libunit::Redirect_err();

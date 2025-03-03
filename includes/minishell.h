@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 12:14:52 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:34:48 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,10 @@ extern int	g_signal_received;
 
 // prompt_line.c
 char	*new_prompt_txt(char **env);
+
+// prompt.c
+int	handle_process_cmd(t_command_table *table, char *line, int *code,
+		t_list **to_free);
 
 /* -------------------------------------------------------------------------- */
 /*                                   builtin                                  */

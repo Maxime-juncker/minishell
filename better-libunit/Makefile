@@ -1,5 +1,5 @@
 NAME = libunit.a
-CFLAGS = $(INCLUDES_D) -g3
+CFLAGS = $(INCLUDES_D) -g3 -fPIE
 CC = g++
 MAKEFLAGS += --no-print-directory
 

@@ -2,7 +2,7 @@ MAKEFLAGS += --no-print-directory
 
 NAME = tests.out
 CC = g++
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g3 -fPIE
 INCLUDES =	-I../includes/			\
 			-I../../includes/		\
 			-I../../libft/includes/	\

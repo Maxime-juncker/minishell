@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:32 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/28 09:43:19 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 12:42:33 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,16 @@ static int	error_symbol(char error_symb, const char *cmd_line, int i)
 static int	check_redir_out(const char *cmd_line, int i)
 {
 	char	error_symb;
+	int		j;
 
+	j = i - 1;
 	i++;
 	if (cmd_line[i] == '>')
 		return (0);
+	while (j >= 0 && is_whitespace(cmd_line[j]))
+		j--;
+	if (cmd_line[j] == '<')
+		return (token_error('>', 0));
 	while (cmd_line[i])
 	{
 		if (cmd_line[i] == ' ')

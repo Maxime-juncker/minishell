@@ -149,7 +149,7 @@ header:
 	echo "██║╚██╔╝██║██║██║╚██╗██║██║╚════██║██╔══██║██╔══╝  ██║     ██║     ";
 	echo "██║ ╚═╝ ██║██║██║ ╚████║██║███████║██║  ██║███████╗███████╗███████╗";
 	echo "╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝";
-	printf "$(YELLOW)[github]: $(GREEN)https://github.com/Maxime-juncker/Minishell.git\n\n"
+	printf "$(YELLOW)[github]: $(GREEN)https://github.com/Maxime-juncker/Minishell.git$(RESET)\n\n"
 
 .PHONY: libft
 libft:
@@ -163,7 +163,7 @@ test:
 
 .PHONY: leaks
 leaks: all
-	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=ignore_readline.supp -s ./bin/minishell
+	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --track-origins=yes ./bin/minishell
 
 # ---------------------------------------------------------------------------- #
 #                              create directories                              #
