@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 10:29:26 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 11:16:15 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+/*
+echo seg <<> echo segf
+echo test |  <<lala
+echo | > la
+((echo 1) | (echo 2) | (echo 3 | (echo 4)))
+*/
 
 /* -------------------------------------------------------------------------- */
 /*                                   includes                                 */
@@ -35,7 +42,7 @@
 # define PERM_DENIED	126
 # define IS_DIR			126
 
-# define DEBUG 1
+# define DEBUG 0
 # define SHOW_LEXER 0
 
 /* -------------------------------------------------------------------------- */

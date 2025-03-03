@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/03 10:35:27 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/03 11:24:19 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static int	get_args(t_command *cmd, char *cmd_str)
 	return (cmd->args[n_args] = NULL, 0);
 }
 
-static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
+static int	init_cmd(t_command *cmd, char *cmd_str, int is_last)
 {
 	static int	pipefd[2] = {-1};
 
@@ -103,10 +103,6 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
 		return (MALLOC_ERR);
 	if (redir(cmd) != 0)
 		return (cleanup_arr((void **)cmd->args), MALLOC_ERR);
-	if (!i && !ft_strchr(cmd_str, '<'))
-		cmd->fd_in = 0;
-	if (is_last && !ft_strchr(cmd_str, '>'))
-		cmd->fd_out = 1;
 	return (0);
 }
 
@@ -129,7 +125,7 @@ int	init_table(char *line, t_command_table *table)
 	while (i < table->n_commands)
 	{
 		if (init_cmd(&table->commands[i], commands[i],
-				i == table->n_commands - 1, i) == MALLOC_ERR)
+				i == table->n_commands - 1) == MALLOC_ERR)
 			return (cleanup_arr((void **)commands), table->n_commands = i,
 				cleanup_table(table), MALLOC_ERR);
 		i++;
