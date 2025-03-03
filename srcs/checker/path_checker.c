@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_checker.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 13:54:52 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 10:06:50 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	check_dir_validity(const char *path, t_command dummy_cmd)
 	}
 	cleanup_arr((void **)dummy_cmd.args);
 	closedir(dir);
-	ft_dprintf(2, "\033[0;31mminishell: %s: Is a directory\n\033[0m", path);
+	ft_dprintf(2, "%sminishell: %s: Is a directory\n", RED, path, RESET);
 	return (IS_DIR);
 }
 
@@ -56,8 +56,8 @@ int	check_path(const char *cmd_name, char **env)
 		if (ft_strchr(cmd_name, '/') != NULL)
 			return (check_dir_validity(cmd_name, dummy_cmd));
 		else
-			ft_dprintf(2, "\033[0;31mminishell: %s: command not found\n\033[0m",
-				cmd_name);
+			ft_dprintf(2, "minishell: %s: command not found\n",
+				RED, cmd_name, RESET);
 		cleanup_arr((void **)dummy_cmd.args);
 		return (NOT_FOUND);
 	}
