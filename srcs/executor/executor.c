@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 14:41:51 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:50:14 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ static void	handle_child_process(t_command *cmd, const t_command_table *table,
 }
 
 int	run_command(t_command *cmd, const t_command_table *table,
-		t_free_pkg package, int *code)
+	t_free_pkg package)
 {
 	int	pid;
-	(void)code;
+
 	setup_args(cmd);
 	pid = fork();
 	if (pid == -1)
