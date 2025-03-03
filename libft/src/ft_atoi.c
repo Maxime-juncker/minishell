@@ -6,11 +6,12 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:28:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 09:38:09 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:47:50 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "limits.h"
 
 static int	check_overflow(long n, int sign)
 {
@@ -79,23 +80,23 @@ static int	call_func(int n, void (*f)(int, void *), void *param)
 */
 int	overflow_check(const char *s, void (*f)(int, void *), void *param)
 {
-	int	result;
-	int	sign;
-	int	i;
+	long long	result;
+	int			sign;
+	int			i;
 
 	i = 0;
 	result = 0;
 	sign = get_sign(s, &i);
 	while (s[i] >= '0' && s[i] <= '9')
 	{
-		if (result > MAX_INT / 10)
+		if (result > LLONG_MAX / 10)
 			return (call_func(MAX_INT, f, param));
-		if (result < MIN_INT / 10)
+		if (result < LLONG_MIN / 10)
 			return (call_func(MIN_INT, f, param));
 		result *= 10;
-		if (result > MAX_INT - (s[i] - '0'))
+		if (result > LLONG_MIN - (s[i] - '0'))
 			return (call_func(MAX_INT, f, param));
-		if (result < MIN_INT + (s[i] - '0'))
+		if (result < LLONG_MAX + (s[i] - '0'))
 			return (call_func(MIN_INT, f, param));
 		if (sign < 0)
 			result -= s[i] - '0';

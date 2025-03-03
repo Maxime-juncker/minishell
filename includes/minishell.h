@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 13:34:48 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:46:21 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_command_table
 
 	char		**env;
 	char		**exp;
+	int			setup_fd;
 }	t_command_table;
 
 typedef struct s_free_package

@@ -1,7 +1,7 @@
 #include "tests.hpp"
 
 static int code;
-static t_command_table table = {(char*)"minishell", NULL, 0, duplicate_env(environ), duplicate_env(environ)};
+static t_command_table table = {(char*)"minishell", NULL, 0, duplicate_env(environ), duplicate_env(environ), -1};
 
 int	dolars_01( void )
 {

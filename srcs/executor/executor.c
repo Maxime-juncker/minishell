@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 09:23:24 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:41:51 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int	run_command(t_command *cmd, const t_command_table *table,
 		return (perror("\033[0;31mfork failed"), -1);
 	if (pid == 0)
 	{
+		if (table->setup_fd != -1)
+			close(table->setup_fd);
 		handle_child_process(cmd, table, package);
 	}
 	else
