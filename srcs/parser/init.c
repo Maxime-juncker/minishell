@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/03 10:07:47 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/03 10:35:27 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,7 @@ static int	create_arg(char **cmd_arg, char *str)
 	if (malloc_assert(arg, __FILE__, __LINE__, __FUNCTION__) != 0)
 		return (MALLOC_ERR);
 	ft_strlcpy(arg, str, i + 1);
-	*cmd_arg = remove_quotes_pair(arg);
-	free(arg);
-	if (!*cmd_arg)
-		return (MALLOC_ERR);
+	*cmd_arg = arg;
 	return (0);
 }
 

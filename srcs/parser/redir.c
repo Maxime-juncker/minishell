@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/02 09:19:56 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/03 10:43:21 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,19 @@ static int	update_command(t_command *cmd)
 	while (cmd->args[i])
 	{
 		if (cmd->args[i][0] != '>' && cmd->args[i][0] != '<')
-			temp[j++] = cmd->args[i++];
+		{
+			temp[j] = remove_quotes_pair(cmd->args[i]);
+			free(cmd->args[i++]);
+			if (malloc_assert(temp[j++], __FILE__, __LINE__, __FUNCTION__) != 0)
+				return (free(cmd->args), cmd->args = temp, MALLOC_ERR);
+		}
 		else
 		{
-			free(cmd->args[i]);
-			free(cmd->args[i + 1]);
-			i += 2;
+			free(cmd->args[i++]);
+			free(cmd->args[i++]);
 		}
 	}
-	free(cmd->args);
-	temp[j] = NULL;
-	cmd->args = temp;
-	return (0);
+	return (free(cmd->args), temp[j] = NULL, cmd->args = temp, 0);
 }
 
 static int	handle_eof(char *line, char *deli, int nb)
