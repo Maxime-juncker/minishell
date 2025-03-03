@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 10:29:26 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 10:58:48 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define PERM_DENIED	126
 # define IS_DIR			126
 
-# define DEBUG 1
+# define DEBUG 0
 # define SHOW_LEXER 0
 
 /* -------------------------------------------------------------------------- */
