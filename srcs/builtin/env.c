@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 15:49:37 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/02 15:54:49 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/03 09:42:10 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,15 @@ char	**duplicate_env(char **old_env)
 	return (new_env);
 }
 
-int	env(t_command_table table)
+int	env(t_command_table table, const t_command cmd)
 {
 	int	i;
 
+	if (cmd.n_args > 1)
+	{
+		ft_dprintf(2, "%sminishell: env: invalid option%s\n", RED, RESET);
+		return (0);
+	}
 	i = 0;
 	while (table.env[i])
 	{

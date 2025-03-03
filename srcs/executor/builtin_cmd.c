@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 16:03:48 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/02 11:55:50 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 09:41:36 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	run_built_in(const t_command cmd, const t_command_table *table)
 	if (ft_strncmp(cmd.args[0], "echo", len) == 0)
 		return (echo(&cmd.args[1], cmd.n_args - 1));
 	if (ft_strncmp(cmd.args[0], "env", len) == 0)
-		return (env(*table));
+		return (env(*table, cmd));
 	if (ft_strncmp(cmd.args[0], "pwd", len) == 0)
 		return (pwd(cmd));
 	return (-1);

@@ -6,21 +6,12 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/02 22:25:48 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/03 09:42:07 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-/*
-	a tester :
-		echo "> 1"
-		echo "> 1" | cat -e
-		ls * > 1
-		dzadza | wc -l
-		echo coucou && (ls || echo bonjour)
-*/
 
 /* -------------------------------------------------------------------------- */
 /*                                   includes                                 */
@@ -94,7 +85,7 @@ char	*find_env_var(char **env, char *to_find, int *index);
 int		echo(char **args, int n);
 
 // env.c
-int		env(t_command_table table);
+int		env(t_command_table table, const t_command cmd);
 char	**duplicate_env(char **old_env);
 size_t	arrlen(void **arr);
 
