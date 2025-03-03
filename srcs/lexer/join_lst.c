@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/02 09:52:09 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 10:27:57 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,35 +25,6 @@ int	ignore_prompt(char *prompt)
 	return (1);
 }
 
-static int	join_space(char **str_ref, int len, char content)
-{
-	if ((*str_ref && !is_symbol((*str_ref)[len - 1])
-		&& (*str_ref)[len - 1] != ' ' && is_symbol(content))
-				|| (*str_ref && is_symbol((*str_ref)[len - 1])
-				&& content != ' ' && !is_symbol(content)))
-	{
-		*str_ref = ft_charjoin(*str_ref, ' ');
-		if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
-			return (MALLOC_ERR);
-		return (1);
-	}
-	return (0);
-}
-
-static int	skip_spaces( char content_c, char *str_ref, char quote, int len )
-{
-	if (content_c == ' ' && !str_ref)
-	{
-		return (1);
-	}
-	if (!quote && content_c == ' ' && str_ref \
-		&& len > 0 && str_ref[len - 1] == ' ')
-	{
-		return (1);
-	}
-	return (0);
-}
-
 static int	join_loop(char *content, char **str_ref, int *len)
 {
 	int		i;
@@ -65,13 +36,17 @@ static int	join_loop(char *content, char **str_ref, int *len)
 	i = 0;
 	while (content[i])
 	{
-		if (join_space(str_ref, *len, content[i]) && !quote)
-		{
-			(*len)++;
-			continue ;
-		}
 		quote = toggle_quote(content[i], quote);
-		while (skip_spaces(content[i], *str_ref, quote, *len))
+		if (quote)
+		{
+			*str_ref = ft_charjoin(*str_ref, content[i]);
+			if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
+				return (MALLOC_ERR);
+			(*len)++;
+			i++;
+			continue;
+		}
+		while (content[i] == ' ' && (*str_ref)[*len] == ' ')
 			i++;
 		*str_ref = ft_charjoin(*str_ref, content[i]);
 		if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
