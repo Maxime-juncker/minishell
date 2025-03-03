@@ -6,11 +6,26 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 10:27:57 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 10:57:40 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int add_space(char *dest, char c)
+{
+	if (!dest)
+		return (0);
+	if (is_symbol(c)
+			&& !is_symbol(*(dest - 1))
+			&& *(dest - 1) != ' ')
+		return (1);
+	if (!is_symbol(c)
+			&& is_symbol(*(dest - 1))
+			&& c != ' ')
+		return (1);
+	return (0);
+}
 
 int	ignore_prompt(char *prompt)
 {
@@ -46,7 +61,15 @@ static int	join_loop(char *content, char **str_ref, int *len)
 			i++;
 			continue;
 		}
-		while (content[i] == ' ' && (*str_ref)[*len] == ' ')
+		if (add_space(&(*str_ref)[*len], content[i]) == 1)
+		{
+			*str_ref = ft_charjoin(*str_ref, ' ');
+			if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
+				return (MALLOC_ERR);
+			(*len)++;
+			continue;
+		}
+		while (content[i] == ' ' && (*str_ref)[*len - 1] == ' ')
 			i++;
 		*str_ref = ft_charjoin(*str_ref, content[i]);
 		if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
