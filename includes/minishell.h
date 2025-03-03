@@ -3,22 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 13:34:48 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:39:13 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-/*
-echo seg <<> echo segf
-echo test |  <<lala
-echo | > la
-((echo 1) | (echo 2) | (echo 3 | (echo 4)))
-*/
 
 /* -------------------------------------------------------------------------- */
 /*                                   includes                                 */
@@ -82,8 +75,8 @@ extern int	g_signal_received;
 char	*new_prompt_txt(char **env);
 
 // prompt.c
-int	handle_process_cmd(t_command_table *table, char *line, int *code,
-		t_list **to_free);
+int		handle_process_cmd(t_command_table *table, char *line, int *code,
+			t_list **to_free);
 
 /* -------------------------------------------------------------------------- */
 /*                                   builtin                                  */
@@ -167,7 +160,7 @@ void	show_cmd(t_command cmd);
 
 // executor.c
 int		run_command(t_command *cmd, const t_command_table *table,
-			t_free_pkg package, int *code);
+			t_free_pkg package);
 void	close_fds(t_command cmd);
 void	close_all_fds(const t_command_table *table);
 // paths.c

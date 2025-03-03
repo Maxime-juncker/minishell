@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 12:41:21 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:40:32 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,10 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 					printf("\n");
 				}
 			}
-			close_all_fds(table);
-			return (code);
+			return (close_all_fds(table), code);
 		}
 	}
-	close_all_fds(table);
-	return (code);
+	return (close_all_fds(table), code);
 }
 
 static int	setup_pipeline(int **childs, t_command_table *table)
@@ -98,7 +96,7 @@ int	run_pipeline(t_command_table *table, t_list *args)
 				close_fds(table->commands[i]);
 				childs[i] = -1;
 				i++;
-				continue;
+				continue ;
 			}
 			if (env_stage(table, table->commands[i], &code,
 					(t_free_pkg){childs, args}))
@@ -107,7 +105,7 @@ int	run_pipeline(t_command_table *table, t_list *args)
 				continue ;
 			}
 			childs[i] = run_command(&table->commands[i], table,
-					(t_free_pkg){childs, args}, &code);
+					(t_free_pkg){childs, args});
 		}
 		i++;
 	}

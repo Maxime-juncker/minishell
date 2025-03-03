@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_checker.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 10:33:50 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:38:30 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ static int	check_perm(char *path)
 {
 	if (!is_builtin(path) && access(path, X_OK) != 0)
 	{
-		ft_dprintf(2, "%sminishell: %s: Permission denied%s\n", RED, path, RESET);
+		ft_dprintf(2, "%sminishell: %s: Permission denied%s\n",
+			RED, path, RESET);
 		free(path);
 		return (PERM_DENIED);
 	}

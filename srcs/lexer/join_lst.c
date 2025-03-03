@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   join_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 10:57:40 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:41:28 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int add_space(char *dest, char c)
+int	add_space(char *dest, char c)
 {
 	if (!dest)
 		return (0);
 	if (is_symbol(c)
-			&& !is_symbol(*(dest - 1))
-			&& *(dest - 1) != ' ')
+		&& !is_symbol(*(dest - 1))
+		&& *(dest - 1) != ' ')
 		return (1);
 	if (!is_symbol(c)
-			&& is_symbol(*(dest - 1))
-			&& c != ' ')
+		&& is_symbol(*(dest - 1))
+		&& c != ' ')
 		return (1);
 	return (0);
 }
@@ -59,7 +59,7 @@ static int	join_loop(char *content, char **str_ref, int *len)
 				return (MALLOC_ERR);
 			(*len)++;
 			i++;
-			continue;
+			continue ;
 		}
 		if (add_space(&(*str_ref)[*len], content[i]) == 1)
 		{
@@ -67,7 +67,7 @@ static int	join_loop(char *content, char **str_ref, int *len)
 			if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
 				return (MALLOC_ERR);
 			(*len)++;
-			continue;
+			continue ;
 		}
 		while (content[i] == ' ' && (*str_ref)[*len - 1] == ' ')
 			i++;

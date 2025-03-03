@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/03 13:34:39 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:42:52 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,8 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code,
 	while (args[i])
 	{
 		if ((args[i][0] == '(' || (ft_strcmp(args[i], "&&")
-				&& ft_strcmp(args[i], "||")))
-			&& handle_line_symbol(table, args[i++], code, to_free)
-				== MALLOC_ERR)
+				&& ft_strcmp(args[i], "||"))) && MALLOC_ERR ==
+				handle_line_symbol(table, args[i++], code, to_free))
 			return (MALLOC_ERR);
 		if (!args[i])
 			break ;
