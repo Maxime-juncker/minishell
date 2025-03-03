@@ -5,106 +5,104 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 08:23:03 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/18 17:29:07 by abidolet         ###   ########.fr       */
+/*   Created: 2024/12/13 13:16:22 by abidolet          #+#    #+#             */
+/*   Updated: 2025/03/03 12:46:10 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	full_dump(char *buffer, char **line)
+static char	*ft_strjoin_to_endl(char *s1, char *s2)
 {
-	char	*new;
+	char	*res;
+	size_t	i;
+	size_t	j;
 
-	new = ft_strjoin(*line, buffer);
-	if (new == NULL)
-	{
-		if (*line != NULL)
-			free(*line);
-		return (-1);
-	}
-	if (*line != NULL)
-		free(*line);
-	*line = new;
-	ft_bzero(buffer, ft_strlen(buffer));
-	return (0);
+	i = 0;
+	while (s2[i] && s2[i] != '\n')
+		i++;
+	if (!s2[i])
+		i--;
+	j = 0;
+	if (s1)
+		while (s1[j])
+			j++;
+	res = malloc(i + j + 2);
+	if (!res)
+		return (NULL);
+	i = 0;
+	if (s1)
+		while (*s1)
+			res[i++] = *s1++;
+	while (*s2 && *s2 != '\n')
+		res[i++] = *s2++;
+	if (*s2 == '\n')
+		res[i++] = '\n';
+	return (res[i] = '\0', res);
 }
 
-static int	dump_buffer(char *buffer, char **line)
+static void	update_buffer(char buffer[BUFFER_SIZE + 1])
 {
-	char	*new;
-	int		len;
+	size_t	i;
+	size_t	j;
 
-	new = 0x0;
-	if (buffer[0])
+	i = 0;
+	while (buffer[i] && buffer[i] != '\n')
+		i++;
+	if (buffer[i] == '\n')
+		i++;
+	j = 0;
+	while (buffer[i + j])
 	{
-		if (ft_strchr(buffer, '\n') != NULL)
-		{
-			len = ft_strlen(*line) + ft_strchr(buffer, '\n') - buffer + 2;
-			new = ft_calloc(len, sizeof(char));
-			if (new == NULL)
-				return (-1);
-			if (*line)
-				ft_strlcpy(new, *line, len);
-			ft_strlcat(new, buffer, len);
-			ft_memmove(buffer, buffer + (ft_strchr(buffer, '\n') - buffer + 1),
-				BUFFER_SIZE);
-			if (*line)
-				free(*line);
-			*line = ft_strdup(new);
-			return (free(new), 1);
-		}
-		return (free(new), full_dump(buffer, line));
+		buffer[j] = buffer[i + j];
+		j++;
 	}
-	return (1);
+	while (buffer[j])
+		buffer[j++] = 0;
 }
 
-static int	read_line(int fd, char *buffer, char **line)
+static char	*extract_line(int fd, char buffer[BUFFER_SIZE + 1], char *res)
 {
-	int	nb_read;
+	int		read_output;
+	char	*temp;
+	int		i;
 
-	nb_read = read(fd, buffer, BUFFER_SIZE);
-	if (nb_read == -1)
+	while (!ft_strchr(buffer, '\n'))
 	{
-		if (*line != NULL)
-			free(*line);
-		return (-1);
+		i = 0;
+		while (buffer[i])
+			buffer[i++] = 0;
+		read_output = read(fd, buffer, BUFFER_SIZE);
+		if (read_output < 0)
+			return (free(res), NULL);
+		else if (read_output == 0)
+			break ;
+		temp = ft_strjoin_to_endl(res, buffer);
+		free(res);
+		if (!temp)
+			return (NULL);
+		res = temp;
 	}
-	return (nb_read);
+	return (res);
 }
 
-/*
- * @brief get next line will return the next line of the given file
- * @brief or null if an error occure of the file is already read
- * @param fd the file descriptor to read the file
- * @return the next line or null
- * @note the user is responsible for managing the return value
-*/
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE];
-	char		*line;
-	int			nb_read;
-	int			code;
+	static char	buffer[FD][BUFFER_SIZE + 1];
+	char		*res;
 
-	line = 0x0;
-	nb_read = 0;
-	if (fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > FD)
 		return (NULL);
-	if (dump_buffer(buffer, &line) == -1)
-		return (NULL);
-	while (nb_read != -1)
+	res = NULL;
+	if (buffer[fd][0])
 	{
-		nb_read = read_line(fd, buffer, &line);
-		if (nb_read == -1)
+		res = ft_strjoin_to_endl(res, buffer[fd]);
+		if (!res)
 			return (NULL);
-		if (nb_read == 0)
-			return (line);
-		code = dump_buffer(buffer, &line);
-		if (code == -1)
-			return (NULL);
-		if (code == 1 || nb_read != BUFFER_SIZE)
-			return (line);
 	}
-	return (NULL);
+	res = extract_line(fd, buffer[fd], res);
+	if (!res)
+		return (NULL);
+	update_buffer(buffer[fd]);
+	return (res);
 }
