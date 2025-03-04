@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 15:18:10 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/04 09:00:06 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	add_str(char *content, char **str_ref, int *len, int *i)
 		(*len)++;
 		return (0);
 	}
-	while (content[*i] == ' ' && (*str_ref)[*len - 1] == ' ')
+	while (*str_ref && content[*i] == ' ' && (*str_ref)[*len - 1] == ' ')
 		(*i)++;
 	*str_ref = ft_charjoin(*str_ref, content[*i]);
 	if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
