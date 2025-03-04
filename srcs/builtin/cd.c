@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 16:16:19 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 09:39:02 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/04 12:28:29 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*find_env_var(char **env, char *to_find, int *index)
 	len = ft_strlen(to_find);
 	while (env[i] != NULL)
 	{
-		if (ft_strncmp(env[i], to_find, len) == 0)
+		if (ft_strscmp(env[i], to_find, "=") == 0)
 		{
 			if (index != NULL)
 				*index = i;
