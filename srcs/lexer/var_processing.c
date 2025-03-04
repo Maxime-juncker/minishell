@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_processing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/01 13:43:40 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/04 13:08:47 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static char	*handle_dollar(char **str, int last_code, char **env)
 {
-	size_t	j;
+	char	*start;
 	char	*var_name;
 	char	*var_value;
 
@@ -26,17 +26,17 @@ static char	*handle_dollar(char **str, int last_code, char **env)
 		return ((*str)++, ft_strdup(""));
 	else if (ft_isalnum(**str) || **str == '_')
 	{
-		j = 0;
-		while ((*str)[j] && (ft_isalnum((*str)[j]) || (*str)[j] == '_'))
-			j++;
-		var_name = ft_substr(*str, 0, j);
+		start = *str;
+		while (*str && (ft_isalnum(**str) || **str == '_'))
+			(*str)++;
+		var_name = ft_substr(start, 0, *str - start);
 		if (malloc_assert(var_name, __FILE__, __LINE__, __FUNCTION__))
 			return (NULL);
 		var_value = find_env_var(env, var_name, NULL);
 		free(var_name);
 		if (var_value)
-			return (*str += j, var_value);
-		return (*str += j, ft_strdup(""));
+			return (var_value);
+		return (ft_strdup(""));
 	}
 	return (ft_strdup("$"));
 }

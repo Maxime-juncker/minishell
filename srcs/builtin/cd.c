@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 16:16:19 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/04 12:28:29 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:16:36 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,25 @@
 char	*find_env_var(char **env, char *to_find, int *index)
 {
 	int		i;
-	size_t	len;
+	int		j;
 	char	*temp;
 
 	i = 0;
-	len = ft_strlen(to_find);
 	while (env[i] != NULL)
 	{
-		if (ft_strscmp(env[i], to_find, "=") == 0)
+		j = 0;
+		while (env[i][j] && env[i][j] != '=')
+			j++;
+		temp = ft_substr(env[i], 0, j);
+		if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
+			return (NULL);
+		if (ft_strcmp(temp, to_find) == 0)
 		{
 			if (index != NULL)
 				*index = i;
-			temp = remove_spaces(env[i] + len + 1);
-			if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
-				return (NULL);
-			return (temp);
+			return (free(temp), remove_spaces(env[i] + ft_strlen(to_find) + 1));
 		}
+		free(temp);
 		i++;
 	}
 	if (index != NULL)
