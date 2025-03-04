@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 10:49:02 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/03 13:31:32 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/04 09:07:32 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	**ft_split_operators(const char *s)
 	paren_count = 0;
 	while (*s)
 	{
-		while (*s == ' ' || *s == '\t')
+		while (*s == ' ')
 			s++;
 		if (*s == '(')
 			res[i] = handle_parentheses(&s, &paren_count);
