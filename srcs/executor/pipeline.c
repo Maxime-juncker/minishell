@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 15:12:26 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/04 13:33:14 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	seek_cmd(t_command_table *table, char *name)
 	return (-1);
 }
 
-static int	wait_for_process(t_command_table *table, int *childs, int code)
+static int	wait_for_process(t_command_table *table, int *childs, int *code)
 {
 	int		pid;
 	size_t	i;
@@ -42,12 +42,15 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 	i = -1;
 	while (childs[++i])
 	{
-		pid = wait(&code);
+		pid = wait(code);
+		if (WIFEXITED(*code))
+			*code = WEXITSTATUS(*code);
+		else 
+			*code += 128;
 		if (pid == -1)
 		{
 			if (g_signal_received)
 			{
-				code = g_signal_received + 128;
 				while (i < table->n_commands)
 					kill(childs[i++], g_signal_received);
 				if (seek_cmd(table, table->name) == -1)
@@ -57,10 +60,10 @@ static int	wait_for_process(t_command_table *table, int *childs, int code)
 					printf("\n");
 				}
 			}
-			return (close_all_fds(table), code);
+			return (close_all_fds(table), *code);
 		}
 	}
-	return (close_all_fds(table), code);
+	return (close_all_fds(table), *code);
 }
 
 static int	setup_pipeline(int **childs, t_command_table *table)
@@ -88,11 +91,11 @@ int	run_stage(t_command_table *table, int i, int *childs, t_list *args)
 	if (env_stage(table, table->commands[i], &code,
 			(t_free_pkg){childs, args}))
 	{
-		return (0);
+		return (code);
 	}
 	childs[i] = run_command(&table->commands[i], table,
 			(t_free_pkg){childs, args});
-	return (0);
+	return (code);
 }
 
 int	run_pipeline(t_command_table *table, t_list *args)
@@ -101,7 +104,6 @@ int	run_pipeline(t_command_table *table, t_list *args)
 	int		code;
 	int		*childs;
 
-	code = 0;
 	if (table->commands[0].n_args == 0)
 		return (close_all_fds(table), 0);
 	if (setup_pipeline(&childs, table) == MALLOC_ERR)
@@ -112,9 +114,9 @@ int	run_pipeline(t_command_table *table, t_list *args)
 	{
 		if (table->commands[i].n_args != 0)
 		{
-			run_stage(table, i, childs, args);
+			code = run_stage(table, i, childs, args);
 		}
 		i++;
 	}
-	return (code = wait_for_process(table, childs, code), free(childs), code);
+	return (code = wait_for_process(table, childs, &code), free(childs), code);
 }

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 15:42:44 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:52:41 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int		malloc_assert(void *mem, const char *file,
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);
+void	sort_arr(char **argv);
 
 // pwd.c
 int		pwd(const t_command cmd);

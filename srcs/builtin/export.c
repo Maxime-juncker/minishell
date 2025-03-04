@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:34 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/02 21:58:55 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:44:07 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	sort_export(char **argv)
+void	sort_arr(char **argv)
 {
 	int		i;
 	int		diff;
@@ -100,11 +100,11 @@ int	export_cmd(t_command_table *t, t_command cmd)
 	int		append;
 
 	if (cmd.n_args == 1)
-		return (sort_export(t->exp), print_export(t->exp, cmd.fd_out), 0);
+		return (sort_arr(t->exp), print_export(t->exp, cmd.fd_out), 0);
 	else if ((cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
 		&& t->n_commands)
 		return (0);
-	sort_export(t->exp);
+	sort_arr(t->exp);
 	i = 0;
 	while (cmd.args[++i] != NULL)
 	{

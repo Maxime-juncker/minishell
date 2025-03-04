@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/04 12:33:10 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/04 12:42:52 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,8 @@ int	load_config(t_command_table *table, int *code)
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (line[0] == '\n')
-			free(line);
-		else
-		{
-			line[ft_strlen(line) - 1] = '\0';
-			exec_prompt(table, line, code);
-		}
+		line[ft_strlen(line) - 1] = '\0';
+		exec_prompt(table, line, code);
 		line = get_next_line(fd);
 	}
 	close(fd);

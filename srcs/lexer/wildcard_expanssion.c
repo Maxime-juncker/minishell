@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:50:51 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/02 11:33:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:21:02 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	include_file(char *filename, char **patern)
 
 	tmp = filename;
 	i = 0;
-	if (patern[i][0] != '*')
+	if (patern[i][0] != -1)
 	{
 		new_tmp = ft_strnstr(tmp, patern[i], ft_strlen(tmp));
 		if (tmp != new_tmp)
@@ -30,7 +30,7 @@ int	include_file(char *filename, char **patern)
 	}
 	if (patern_valid(tmp, patern, &i) == 0)
 		return (0);
-	if (patern[i][0] == '*')
+	if (patern[i][0] == -1)
 		return (1);
 	tmp = ft_strrstr(tmp, patern[i]);
 	if (tmp == NULL)
@@ -63,7 +63,7 @@ char	*add_files(char *line, DIR *dir, char **patern)
 	infos = readdir(dir);
 	while (infos)
 	{
-		if (infos->d_name[0] != '.')
+		if (infos->d_name[0] != '.' || patern[0][0] == '.')
 		{
 			if (include_file(infos->d_name, patern))
 			{

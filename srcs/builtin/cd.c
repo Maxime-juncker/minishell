@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 16:16:19 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/04 14:16:36 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:19:44 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ static int	change_directory(char *path)
 
 	dir = opendir(path);
 	if (!dir)
-		return (free(path), perror("\033[0;31mminishell: cd\033[0m"), 1);
+		return (free(path), perror("\033[0;31mminishell: cd"),
+			ft_dprintf(2, "%s", RESET), 1);
 	if (chdir(path) == -1)
 	{
 		closedir(dir);
