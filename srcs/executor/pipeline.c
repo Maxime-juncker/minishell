@@ -6,65 +6,14 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/04 13:33:14 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:39:18 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <sys/wait.h>
-#include <errno.h>
 #include <signal.h>
-#include <sys/ioctl.h>
 
 int	g_signal_received = 0;
-
-static int	seek_cmd(t_command_table *table, char *name)
-{
-	size_t	i;
-	char	*tmp;
-
-	i = 0;
-	while (i < table->n_commands)
-	{
-		tmp = get_exec_name(table->commands[i].args[0]);
-		if (ft_strcmp(tmp, name) == 0)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-static int	wait_for_process(t_command_table *table, int *childs, int *code)
-{
-	int		pid;
-	size_t	i;
-
-	i = -1;
-	while (childs[++i])
-	{
-		pid = wait(code);
-		if (WIFEXITED(*code))
-			*code = WEXITSTATUS(*code);
-		else 
-			*code += 128;
-		if (pid == -1)
-		{
-			if (g_signal_received)
-			{
-				while (i < table->n_commands)
-					kill(childs[i++], g_signal_received);
-				if (seek_cmd(table, table->name) == -1)
-				{
-					if (g_signal_received == SIGQUIT)
-						printf("Quit (core dumped)");
-					printf("\n");
-				}
-			}
-			return (close_all_fds(table), *code);
-		}
-	}
-	return (close_all_fds(table), *code);
-}
 
 static int	setup_pipeline(int **childs, t_command_table *table)
 {

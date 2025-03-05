@@ -59,6 +59,8 @@ SRCS = 		main.c						\
 			builtin_cmd.c				\
 			parenthesis_checker.c		\
 			prompt_line.c				\
+			wildcard_utils.c			\
+			waiter.c					\
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #

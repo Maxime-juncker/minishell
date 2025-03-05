@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:49:29 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 12:46:39 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:30:49 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memmove(void *dest, const void *src, size_t n);
 void	*ft_calloc(size_t nmemb, size_t size);
 void	*ft_memchr(const void *s, int c, size_t n);
+int		ft_arrchr(char **arr, char *to_find);
 
 int		is_whitespace(char c);
 int		ft_isalpha(int c);
@@ -87,6 +88,7 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_strscmp(const char *s1, const char *s2, char *s);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 int		ft_atoi(const char *nptr);
+char	*ft_atos(char **arr, char separator);
 int		overflow_check(const char *s, void (*f)(int, void *), void *param);
 int		ft_lstsize(t_list *lst);
 int		ft_putaddr(long int nbr, char *base, int fd);
@@ -126,6 +128,7 @@ char	*ft_uitoa(unsigned int n);
 char	*get_next_line(int fd);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	**ft_split(char const *s, char c);
+void	ft_sort_normalized(char **arr);
 
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstlast(t_list *lst);
@@ -136,8 +139,9 @@ void	ft_lstprint(const char *msg, t_list *lst);
 
 // debug.c
 void	debug_color(const char *msg, const char *color);
-void	success(const char *msg);
 void	warning(const char *msg);
 void	error(const char *msg);
 void	alert(const char *msg);
+int		malloc_assert(void *mem, const char *file, int line,
+			const char *function);
 #endif

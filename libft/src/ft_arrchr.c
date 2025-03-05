@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checker.c                                          :+:      :+:    :+:   */
+/*   ft_arrchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/21 14:56:17 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/05 10:29:53 by mjuncker         ###   ########.fr       */
+/*   Created: 2025/03/05 09:58:10 by mjuncker          #+#    #+#             */
+/*   Updated: 2025/03/05 10:30:04 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	check_cmd_line(char *process_line, int *code)
+int	ft_arrchr(char **arr, char *to_find)
 {
-	int	tmp;
+	int	i;
 
-	if (!process_line)
-		return (MALLOC_ERR);
-	if (ignore_prompt(process_line))
-		return (free(process_line), IGNORE);
-	tmp = check_syntax(process_line);
-	if (tmp != 0)
+	i = 0;
+	while (arr[i])
 	{
-		*code = tmp;
-		return (free(process_line), tmp);
+		if (ft_strcmp(arr[i], to_find) == 0)
+			return (i);
+		i++;
 	}
-	return (free(process_line), 0);
+	return (-1);
 }

@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checker.c                                          :+:      :+:    :+:   */
+/*   ft_atos.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/21 14:56:17 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/05 10:29:53 by mjuncker         ###   ########.fr       */
+/*   Created: 2025/03/05 09:38:55 by mjuncker          #+#    #+#             */
+/*   Updated: 2025/03/05 10:30:30 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	check_cmd_line(char *process_line, int *code)
+char	*ft_atos(char **arr, char separator)
 {
-	int	tmp;
+	char	*result;
+	int		i;
 
-	if (!process_line)
-		return (MALLOC_ERR);
-	if (ignore_prompt(process_line))
-		return (free(process_line), IGNORE);
-	tmp = check_syntax(process_line);
-	if (tmp != 0)
+	result = NULL;
+	i = 0;
+	while (arr[i])
 	{
-		*code = tmp;
-		return (free(process_line), tmp);
+		result = ft_strjoin_free(result, arr[i], FREE1);
+		if (malloc_assert(result, __FILE__, __LINE__, __FUNCTION__))
+			return (NULL);
+		result = ft_charjoin(result, separator);
+		if (malloc_assert(result, __FILE__, __LINE__, __FUNCTION__))
+			return (NULL);
+		i++;
 	}
-	return (free(process_line), 0);
+	return (result);
 }

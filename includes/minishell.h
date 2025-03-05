@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/04 15:52:41 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:40:07 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int		malloc_assert(void *mem, const char *file,
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);
-void	sort_arr(char **argv);
+void	sort_export(char **argv);
 
 // pwd.c
 int		pwd(const t_command cmd);
@@ -178,6 +178,9 @@ int		env_stage(t_command_table *table, t_command cmd, int *code,
 			t_free_pkg package);
 int		run_built_in(const t_command cmd, const t_command_table *table);
 
+// waiter.c
+int		wait_for_process(t_command_table *table, int *childs, int *code);
+
 /* -------------------------------------------------------------------------- */
 /*                                    lexer                                   */
 /* -------------------------------------------------------------------------- */
@@ -211,6 +214,10 @@ char	*expand_wildcard(char *line);
 // wildcard_patern.c
 char	**new_patern(char *line);
 int		patern_valid(char *tmp, char **patern, int *i);
+
+// wildcard_utils.c
+size_t	count_files(char *path);
+
 /* -------------------------------------------------------------------------- */
 /*                                   parser                                   */
 /* -------------------------------------------------------------------------- */

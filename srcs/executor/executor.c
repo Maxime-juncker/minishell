@@ -6,14 +6,13 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 15:12:54 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:41:02 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ls && wejgoiw || (cd / && pwd) && pwd
 
 #include "minishell.h"
-#include "sys/wait.h"
 
 void	close_fds(t_command cmd)
 {

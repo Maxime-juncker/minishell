@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:50:51 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/04 15:21:02 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:29:36 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ int	include_file(char *filename, char **patern)
 
 int	add_file(DIR *dir, struct dirent **infos, char **expanded)
 {
-	*expanded = ft_strjoin_free(*expanded, (*infos)->d_name, FREE1);
-	if (malloc_assert(*expanded, __FILE__, __LINE__, __FUNCTION__))
-		return (MALLOC_ERR);
-	*infos = readdir(dir);
-	if (!*infos)
-		return (0);
-	*expanded = ft_charjoin(*expanded, ' ');
-	if (!*expanded)
+	int	i;
+
+	i = 0;
+	(void)dir;
+	while (expanded[i])
+		i++;
+	expanded[i] = ft_strdup((*infos)->d_name);
+	if (malloc_assert(expanded[i], __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
 	return (0);
 }
@@ -57,9 +57,10 @@ int	add_file(DIR *dir, struct dirent **infos, char **expanded)
 char	*add_files(char *line, DIR *dir, char **patern)
 {
 	struct dirent	*infos;
-	char			*expanded;
+	char			**expanded;
+	char			*res;
 
-	expanded = NULL;
+	expanded = ft_calloc(count_files(".") + 1, sizeof(char *));
 	infos = readdir(dir);
 	while (infos)
 	{
@@ -67,19 +68,31 @@ char	*add_files(char *line, DIR *dir, char **patern)
 		{
 			if (include_file(infos->d_name, patern))
 			{
-				if (add_file(dir, &infos, &expanded) == MALLOC_ERR)
+				if (add_file(dir, &infos, expanded) == MALLOC_ERR)
 					return (cleanup_arr((void **)patern), NULL);
 			}
-			else
-				infos = readdir(dir);
 		}
-		else
-			infos = readdir(dir);
+		infos = readdir(dir);
 	}
-	cleanup_arr((void **)patern);
-	if (expanded == NULL)
-		return (ft_strdup(line));
-	return (expanded);
+	if (expanded[0] == NULL)
+		return (cleanup_arr((void **)expanded), ft_strdup(line));
+	ft_sort_normalized(expanded);
+	res = ft_atos(expanded, ' ');
+	return (cleanup_arr((void **)expanded), res);
+}
+
+int	expand_necessary(char **patern)
+{
+	int	i;
+
+	i = 0;
+	while (patern[i])
+	{
+		if (patern[i][0] == -1)
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 char	*expand_wildcard(char *line)
@@ -96,7 +109,10 @@ char	*expand_wildcard(char *line)
 	patern = new_patern(line);
 	if (patern == NULL)
 		return (closedir(dir), NULL);
+	if (!expand_necessary(patern))
+		return (ft_strdup(line));
 	expanded = add_files(line, dir, patern);
 	closedir(dir);
+	cleanup_arr((void **)patern);
 	return (expanded);
 }

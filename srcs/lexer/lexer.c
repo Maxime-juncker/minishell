@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:46 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/04 12:43:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/05 09:38:24 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 	char	*process_str;
 
 	if (cmd_line[0] == '\0')
-		return ((char*)cmd_line);
+		return ((char *)cmd_line);
 	quotes_lst = process_quotes(cmd_line);
 	var_lst = process_expanded_vars(quotes_lst, env, *code);
 	process_str = join_lst(var_lst);

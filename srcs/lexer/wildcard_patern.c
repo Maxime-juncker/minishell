@@ -6,66 +6,11 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 14:01:51 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/04 16:41:41 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:28:10 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_arr(char **arr)
-{
-	int	i;
-
-	i = 0;
-	printf("%s......arr.....\n", GRAY);
-	while (arr[i])
-	{
-		printf("%s, ", arr[i]);
-		i++;
-	}
-	printf("\n..............%s\n", RESET);
-}
-
-static int	check_patern(char **tmp, char *patern)
-{
-	char	*new_tmp;
-
-	new_tmp = ft_strnstr(*tmp, patern, ft_strlen(*tmp));
-	if (new_tmp == NULL)
-		return (1);
-	while (*tmp == new_tmp)
-	{
-		*tmp += ft_strlen(patern);
-		new_tmp = ft_strnstr(*tmp, patern, ft_strlen(*tmp));
-	}
-	return (0);
-}
-
-int	patern_valid(char *tmp, char **patern, int *i)
-{
-	while (patern[*i])
-	{
-		if (patern[*i + 1] == NULL)
-			break ;
-		if (patern[*i][0] == -1)
-		{
-			if (patern[*i + 2] == NULL)
-			{
-				(*i)++;
-				break ;
-			}
-			tmp = ft_strnstr(tmp, patern[*i + 1], ft_strlen(tmp));
-			if (tmp == NULL)
-				return (0);
-			(*i)++;
-			continue ;
-		}
-		if (check_patern(&tmp, patern[*i]) == 1)
-			return (0);
-		(*i)++;
-	}
-	return (1);
-}
 
 char	**realloc_arr(char **patern)
 {
@@ -91,26 +36,36 @@ char	**realloc_arr(char **patern)
 	return (new_patern);
 }
 
-static int	add_patern(char **line, char **patern, int *j)
+static int	add_part(char **line, char **patern, int *j, char *quote)
 {
 	int		i;
+	char	*sub;
+
+	i = 0;
+	while ((*line)[i] && (((*line)[i] != ' ' && (*line)[i] != '*') || *quote))
+	{
+		*quote = toggle_quote((*line)[i], *quote);
+		i++;
+	}
+	sub = ft_substr(*line, 0, i);
+	patern[*j] = remove_quotes_pair(sub);
+	free(sub);
+	if (malloc_assert(patern[*j], __FILE__, __LINE__, __FUNCTION__))
+		return (MALLOC_ERR);
+	(*j)++;
+	*line += i;
+	return (0);
+}
+
+static int	add_patern(char **line, char **patern, int *j)
+{
 	char	quote;
 
 	quote = 0;
 	if (*line[0] != '*')
 	{
-		i = 0;
-		while ((*line)[i] && (((*line)[i] != ' ' && (*line)[i] != '*') || quote))
-		{
-			quote = toggle_quote((*line)[i], quote);
-			i++;
-		}
-		patern[*j] = ft_substr(*line, 0, i);
-		patern[*j] = remove_quotes_pair(patern[*j]);
-		if (malloc_assert(patern[*j], __FILE__, __LINE__, __FUNCTION__))
+		if (add_part(line, patern, j, &quote) == MALLOC_ERR)
 			return (MALLOC_ERR);
-		(*j)++;
-		*line += i;
 	}
 	else
 	{
@@ -146,6 +101,5 @@ char	**new_patern(char *line)
 		}
 	}
 	patern[j] = NULL;
-	// print_arr(patern);
 	return (realloc_arr(patern));
 }
