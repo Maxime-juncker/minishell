@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 13:55:58 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:07:47 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ static int	add_str(char *content, char **str_ref, int *len, int *i)
 	if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
 			return (MALLOC_ERR);
 	(*i)++;
-
 	(*len)++;
 	return (0);
 }
