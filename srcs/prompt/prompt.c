@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 15:49:15 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:39:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	handle_line_symbol(t_command_table *table, char *arg, int *code,
 	else if (ft_strcmp(arg, "&&") && ft_strcmp(arg, "||"))
 	{
 		process_cmd = process_line(arg, table->env, code);
-		if (!process_cmd)
+		if (malloc_assert(process_cmd, __FILE__, __LINE__, __FUNCTION__))
 			return (MALLOC_ERR);
 		if (!init_table(process_cmd, table))
 		{
@@ -51,7 +51,7 @@ static int	handle_process_cmd(t_command_table *table, char *line, int *code,
 
 	i = 0;
 	args = ft_split_operators(line);
-	if (!args)
+	if (malloc_assert(args, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
 	if (ft_lstadd_back(to_free, ft_lstnew(args)) == -1)
 		return (ft_lstclear(to_free, cleanup_pacakge), MALLOC_ERR);

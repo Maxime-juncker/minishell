@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:06:14 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 15:44:27 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:38:10 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	handle_process_cmd(t_command_table *table, char *line, int *code,
 	i = 0;
 	args = ft_split_operators(line);
 	free(line);
-	if (!args)
+	if (malloc_assert(args, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
 	if (ft_lstadd_back(to_free, ft_lstnew(args)) == -1)
 		return (ft_lstclear(to_free, cleanup_pacakge), MALLOC_ERR);
@@ -50,7 +50,7 @@ static int	exec_prompt(t_command_table *table, char *line)
 	lst = NULL;
 	if (check_cmd_line(process_line(line, table->env, &table->code),
 			&table->code) != 0)
-		return (0);
+		return (free(line), 0);
 	res = handle_process_cmd(table, line, &table->code, &lst);
 	ft_lstclear(&lst, cleanup_pacakge);
 	return (res);
