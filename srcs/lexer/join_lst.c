@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 15:07:47 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:20:16 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,11 @@ int	ignore_prompt(char *prompt)
 
 static int	add_str(char *content, char **str_ref, int *len, int *i)
 {
-	if (is_whitespace(content[*i]) && is_whitespace((*str_ref)[*len - 1]))
+	if (*str_ref && content[*i] && is_whitespace(content[*i])
+		&& is_whitespace((*str_ref)[*len - 1]))
 	{
 		(*i)++;
-		return (0);	
+		return (0);
 	}
 	if (str_ref && add_space(&(*str_ref)[*len], content[*i]) == 1)
 	{
@@ -57,7 +58,7 @@ static int	add_str(char *content, char **str_ref, int *len, int *i)
 	}
 	*str_ref = ft_charjoin(*str_ref, content[*i]);
 	if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
-			return (MALLOC_ERR);
+		return (MALLOC_ERR);
 	(*i)++;
 	(*len)++;
 	return (0);

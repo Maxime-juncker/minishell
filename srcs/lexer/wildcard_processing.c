@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:23:19 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:19:13 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ char	*process_wildcard(char *line)
 	t_list	*lst;
 	char	*result;
 
+	if (ignore_prompt(line))
+		return (line);
 	if (!line)
 		return (NULL);
 	lst = split_line(line);
