@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 09:44:01 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 10:02:22 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code,
 	return (*code);
 }
 
-static int	exec_prompt(t_command_table *table, char *line, int *code)
+static int	exec_prompt(t_command_table *table, char *line)
 {
 	t_list	*lst;
 	int		res;
@@ -84,13 +84,13 @@ static int	exec_prompt(t_command_table *table, char *line, int *code)
 		if (init_table(ft_strdup("exit"), table) == MALLOC_ERR
 			|| run_pipeline(table, NULL) == MALLOC_ERR)
 			return (MALLOC_ERR);
-		return (*code);
+		return (table->code);
 	}
 	if (ft_strcmp(line, "\n"))
 		add_history(line);
-	if (check_cmd_line(process_line(line, table->env, &*code), code) != 0)
+	if (check_cmd_line(process_line(line, table->env, &table->code), &table->code) != 0)
 		return (0);
-	res = handle_process_cmd(table, line, code, &lst);
+	res = handle_process_cmd(table, line, &table->code, &lst);
 	ft_lstclear(&lst, cleanup_pacakge);
 	return (res);
 }
@@ -98,7 +98,6 @@ static int	exec_prompt(t_command_table *table, char *line, int *code)
 int	new_prompt(t_command_table *table)
 {
 	char		*line;
-	static int	code = 0;
 	char		*prompt_char;
 
 	g_signal_received = 0;
@@ -106,14 +105,13 @@ int	new_prompt(t_command_table *table)
 	prompt_char = new_prompt_txt(table->env);
 	if (!prompt_char)
 		return (MALLOC_ERR);
-	// usleep(1000);
 	line = readline(prompt_char);
 	free(prompt_char);
 	if (g_signal_received)
 	{
-		code = g_signal_received + 128;
+		table->code = g_signal_received + 128;
 		g_signal_received = 0;
 		return (0);
 	}
-	return (exec_prompt(table, line, &code));
+	return (exec_prompt(table, line));
 }

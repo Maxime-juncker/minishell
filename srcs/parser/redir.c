@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/03 10:43:21 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 10:08:22 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,33 +60,42 @@ static int	handle_eof(char *line, char *deli, int nb)
 	return (0);
 }
 
-static int	heredoc(t_command *cmd, char *deli)
+static int	heredoc_loop(t_command *cmd, char *deli, int code)
 {
 	char	*line;
 	int		nb_line;
 
-	cmd->fd_in = open("/tmp/temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (cmd->fd_in == -1)
-		return (perror("Failed to open file"), 1);
 	nb_line = 0;
+	(void)code;
 	while (1)
 	{
 		if (g_signal_received)
 			return (g_signal_received = 0, 1);
 		line = readline("> ");
 		if (handle_eof(line, deli, nb_line++))
-			break ;
+			return (0) ;
 		ft_putendl_fd(line, cmd->fd_in);
 		free(line);
 	}
+}
+
+static int	heredoc(t_command *cmd, char *deli, int code)
+{
+
+	cmd->fd_in = open("/tmp/temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (cmd->fd_in == -1)
+		return (perror("Failed to open file"), 1);
 	close(cmd->fd_in);
+	heredoc_loop(cmd, deli, code);
 	cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644);
 	if (cmd->fd_in == -1)
 		return (perror("Failed to open file"), 1);
 	return (0);
 }
 
-static int	handle_fd(t_command *cmd, char *file, char c, int db_redir)
+static int	handle_fd(t_command *cmd, char *file, char c, int db_redir, int code)
+
+
 {
 	if (c == '>')
 	{
@@ -103,13 +112,13 @@ static int	handle_fd(t_command *cmd, char *file, char c, int db_redir)
 			close(cmd->fd_in);
 		if (!db_redir)
 			cmd->fd_in = open(file, O_RDONLY, 0644);
-		else if (db_redir && heredoc(cmd, file))
+		else if (db_redir && heredoc(cmd, file, code))
 			return (1);
 	}
 	return (0);
 }
 
-int	redir(t_command *cmd)
+int	redir(t_command *cmd, int code)
 {
 	int		i;
 
@@ -120,7 +129,7 @@ int	redir(t_command *cmd)
 		if (cmd->args[i][0] == '>' || cmd->args[i][0] == '<')
 		{
 			if (handle_fd(cmd, cmd->args[i + 1], cmd->args[i][0],
-				cmd->args[i][0] == cmd->args[i][1]) == 1)
+				cmd->args[i][0] == cmd->args[i][1], code) == 1)
 				return (1);
 			if (cmd->fd_in == -1 || cmd->fd_out == -1)
 				return (perror("Failed to open file"), 1);

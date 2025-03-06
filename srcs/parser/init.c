@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/03 15:44:17 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 10:04:36 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static int	get_args(t_command *cmd, char *cmd_str)
 	return (cmd->args[n_args] = NULL, 0);
 }
 
-static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
+static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i, t_command_table *table)
 {
 	static int	pipefd[2] = {-1};
 
@@ -101,7 +101,7 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
 		return (perror("Failed pipe"), MALLOC_ERR);
 	if (get_args(cmd, cmd_str) == MALLOC_ERR)
 		return (MALLOC_ERR);
-	if (redir(cmd) != 0)
+	if (redir(cmd, table->code) != 0)
 		return (cleanup_arr((void **)cmd->args), MALLOC_ERR);
 	if (!i && !ft_strchr(cmd_str, '<'))
 		cmd->fd_in = 0;
@@ -129,7 +129,7 @@ int	init_table(char *line, t_command_table *table)
 	while (i < table->n_commands)
 	{
 		if (init_cmd(&table->commands[i], commands[i],
-				i == table->n_commands - 1, i) == MALLOC_ERR)
+				i == table->n_commands - 1, i, table) == MALLOC_ERR)
 			return (cleanup_arr((void **)commands), table->n_commands = i,
 				cleanup_table(table), MALLOC_ERR);
 		i++;

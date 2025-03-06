@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_processing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/04 13:08:47 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 10:05:15 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	*handle_dollar(char **str, int last_code, char **env)
 	return (ft_strdup("$"));
 }
 
-static char	*process_var(char *str, char **env, int last_code)
+char	*process_var(char *str, char **env, int last_code)
 {
 	char	*result;
 

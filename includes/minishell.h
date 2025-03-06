@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/05 10:40:07 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 10:05:29 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ typedef struct s_command_table
 
 	char		**env;
 	char		**exp;
+
 	int			setup_fd;
+	int			code;
 }	t_command_table;
 
 typedef struct s_free_package
@@ -201,6 +203,7 @@ size_t	get_str_len(const char *str);
 
 // var_processing.c
 t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
+char	*process_var(char *str, char **env, int last_code);
 
 t_list	*process_quotes(const char *line);
 char	*remove_spaces(char *str);
@@ -226,7 +229,7 @@ size_t	count_files(char *path);
 int		init_table(char *line, t_command_table *table);
 
 // redir.c
-int		redir(t_command *cmd);
+int		redir(t_command *cmd, int code);
 
 // ft_split_quote.c
 char	**ft_split_quote(const char *s, char c);
