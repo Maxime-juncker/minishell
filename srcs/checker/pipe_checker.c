@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 16:15:46 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 16:26:44 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 16:40:13 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	check_pipe(const char *line, int index)
 	i = index - 1;
 	while (i >= 0)
 	{
-		if (!is_symbol(line[i]) && line[i] != '|')
+		if (is_symbol(line[i]) && line[i] != '|')
 			return (token_error('|', 0));
 		i--;
 	}
