@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_processing.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 16:37:08 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 16:51:25 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*remove_spaces(char *str)
 	last = 0;
 	while (*str)
 	{
-		if (*str == ' ' && last == ' ')
+		if (is_whitespace(*str) && is_whitespace(last))
 		{
 			last = *str;
 			str++;
@@ -70,6 +70,7 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 		(*i)++;
 	}
 	temp = ft_substr(line, start, *i - start);
+	temp = remove_spaces(temp);
 	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
 	new = ft_lstnew(temp);
