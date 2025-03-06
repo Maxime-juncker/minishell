@@ -6,11 +6,26 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 12:42:29 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:55:58 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	add_space(char *dest, char c)
+{
+	if (!dest)
+		return (0);
+	if (is_symbol(c)
+		&& !is_symbol(*(dest - 1))
+		&& *(dest - 1) != ' ')
+		return (1);
+	if (!is_symbol(c)
+		&& is_symbol(*(dest - 1))
+		&& c != ' ')
+		return (1);
+	return (0);
+}
 
 int	ignore_prompt(char *prompt)
 {
@@ -27,12 +42,22 @@ int	ignore_prompt(char *prompt)
 
 static int	add_str(char *content, char **str_ref, int *len, int *i)
 {
-	if (is_whitespace(content[*i]) && is_whitespace(*str_ref[*len - 1]))
+	if (is_whitespace(content[*i]) && is_whitespace((*str_ref)[*len - 1]))
 	{
 		(*i)++;
 		return (0);	
 	}
+	if (str_ref && add_space(&(*str_ref)[*len], content[*i]) == 1)
+	{
+		*str_ref = ft_charjoin(*str_ref, ' ');
+		if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
+			return (MALLOC_ERR);
+		(*len)++;
+		return (0);
+	}
 	*str_ref = ft_charjoin(*str_ref, content[*i]);
+	if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
+			return (MALLOC_ERR);
 	(*i)++;
 
 	(*len)++;
@@ -49,7 +74,7 @@ static int	join_loop(char *content, char **str_ref, int *len)
 	while (content[i])
 	{
 		quote = content[0];
-		if (quote)
+		if (quote == '\'' || quote == '\"')
 		{
 			*str_ref = ft_strjoin_free(*str_ref, content, FREE1);
 			if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))

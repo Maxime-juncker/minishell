@@ -6,11 +6,41 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:06:14 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 11:11:25 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:34:29 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	handle_process_cmd(t_command_table *table, char *line, int *code,
+		t_list **to_free)
+{
+	char	**args;
+	int		i;
+
+	i = 0;
+	args = ft_split_operators(line);
+	free(line);
+	if (!args)
+		return (MALLOC_ERR);
+	if (ft_lstadd_back(to_free, ft_lstnew(args)) == -1)
+		return (ft_lstclear(to_free, cleanup_pacakge), MALLOC_ERR);
+	while (args[i])
+	{
+		if ((args[i][0] == '(' || (ft_strcmp(args[i], "&&")
+				&& ft_strcmp(args[i], "||"))) && MALLOC_ERR ==
+				handle_line_symbol(table, args[i++], code, to_free))
+			return (MALLOC_ERR);
+		if (!args[i])
+			break ;
+		if ((*code == 0 && !ft_strcmp(args[i], "&&"))
+			|| (*code != 0 && !ft_strcmp(args[i], "||")))
+			i++;
+		else if (args[i + 1])
+			i += 2;
+	}
+	return (*code);
+}
 
 static int	exec_prompt(t_command_table *table, char *line)
 {
@@ -18,7 +48,8 @@ static int	exec_prompt(t_command_table *table, char *line)
 	int		res;
 
 	lst = NULL;
-	if (check_cmd_line(process_line(line, table->env, &table->code), &table->code) != 0)
+	if (check_cmd_line(process_line(line, table->env, &table->code),
+			&table->code) != 0)
 		return (0);
 	res = handle_process_cmd(table, line, &table->code, &lst);
 	ft_lstclear(&lst, cleanup_pacakge);

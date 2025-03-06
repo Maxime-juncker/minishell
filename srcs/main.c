@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 11:59:19 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:07:08 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include <readline/readline.h>
 #include <signal.h>
 #include <sys/wait.h>
-
-
 
 int	main(int argc, char **argv, char **env)
 {

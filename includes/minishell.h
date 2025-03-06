@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 12:44:32 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:01:52 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ extern int	g_signal_received;
 char	*new_prompt_txt(char **env);
 
 // prompt.c
-int		handle_process_cmd(t_command_table *table, char *line, int *code,
-			t_list **to_free);
+int	handle_line_symbol(t_command_table *table, char *arg, int *code,
+		t_list **to_free);
 
 /* -------------------------------------------------------------------------- */
 /*                                   builtin                                  */

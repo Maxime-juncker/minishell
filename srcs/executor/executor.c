@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 12:10:08 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:34:06 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ static void	handle_child_process(t_command *cmd, const t_command_table *table,
 	if (cmd->fd_in == -1 || cmd->fd_out == -1)
 	{
 		close_all_fds(table);
+		cleanup_arr((void **)table->env);
+		cleanup_table((t_command_table *)table);
 		exit(1);
 	}
 	if (is_builtin(cmd->args[0]) == 1)

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 12:12:00 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:55:13 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static int	heredoc(t_command *cmd, char *deli)
 
 	cmd->fd_in = open("/tmp/temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->fd_in == -1)
-		return (perror("Failed to open fileé2"), 1);
+		return (perror("Failed to open file"), 1);
 	while (1)
 	{
 		if (g_signal_received)
@@ -130,7 +130,7 @@ int	redir(t_command *cmd)
 			if (handle_fd(cmd, cmd->args[i + 1], cmd->args[i]) == 1)
 				return (1);
 			if (cmd->fd_in == -1 || cmd->fd_out == -1)
-				return (perror("Failed to open file"), 0);
+				return (0);
 			i++;
 		}
 		else

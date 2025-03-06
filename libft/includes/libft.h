@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:49:29 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/05 10:30:49 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:01:10 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,4 +144,7 @@ void	error(const char *msg);
 void	alert(const char *msg);
 int		malloc_assert(void *mem, const char *file, int line,
 			const char *function);
+
+size_t	ft_occ(char *s, char c);
+
 #endif
