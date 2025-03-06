@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 16:51:25 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 16:52:43 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static int	add_str(t_list **lst, const char *line, size_t *i)
 	t_list	*new;
 
 	start = *i;
+	
 	while (line[*i] && line[*i] != '\'' && line[*i] != '\"')
 	{
 		(*i)++;
