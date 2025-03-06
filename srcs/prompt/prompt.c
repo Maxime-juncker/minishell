@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/04 16:44:57 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 10:18:16 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code,
 
 	i = 0;
 	args = ft_split_operators(line);
-	free(line);
 	if (!args)
 		return (MALLOC_ERR);
 	if (ft_lstadd_back(to_free, ft_lstnew(args)) == -1)
@@ -100,20 +99,23 @@ int	new_prompt(t_command_table *table)
 	char		*line;
 	static int	code = 0;
 	char		*prompt_char;
+	int			res;
 
 	g_signal_received = 0;
 	signal(SIGQUIT, SIG_IGN);
 	prompt_char = new_prompt_txt(table->env);
 	if (!prompt_char)
 		return (MALLOC_ERR);
-	usleep(1000);
 	line = readline(prompt_char);
 	free(prompt_char);
 	if (g_signal_received)
 	{
 		code = g_signal_received + 128;
 		g_signal_received = 0;
+		free(line);
 		return (0);
 	}
-	return (exec_prompt(table, line, &code));
+	res = exec_prompt(table, line, &code);
+	free(line);
+	return (res);
 }
