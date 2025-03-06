@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 12:43:13 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:44:32 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,8 +233,8 @@ int		init_table(char *line, t_command_table *table);
 // redir.c
 int		redir(t_command *cmd);
 
-// ft_split_quote.c
-char	**ft_split_quote(const char *s, char c);
+// ft_split_pipe.c
+char	**ft_split_pipe(const char *s);
 
 /* -------------------------------------------------------------------------- */
 /*                                   others                                   */

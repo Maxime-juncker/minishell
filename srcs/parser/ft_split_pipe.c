@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_quote.c                                   :+:      :+:    :+:   */
+/*   ft_split_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 09:58:06 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 11:17:50 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:48:12 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	ft_count_words(const char *s, char c)
 	while (*s)
 	{
 		if (*s == '\'' || *s == '\"')
-			in_quote = !in_quote;
+			in_quote = toggle_quote(*s, in_quote);
 		if (*s == c && !in_quote)
 			in_word = 0;
 		else if (!in_word)
@@ -50,7 +50,7 @@ static char	*ft_strndup2(const char *s, char c)
 	while (*s && (*s != c || in_quote))
 	{
 		if (*s == '\'' || *s == '\"')
-			in_quote = !in_quote;
+			in_quote = toggle_quote(*s, in_quote);
 		s++;
 	}
 	res = malloc(s - start + 1);
@@ -89,18 +89,20 @@ int	do_split(const char *s, char c, char **res)
 		while (*s && (*s != c || in_quote))
 		{
 			if (*s == '\'' || *s == '\"')
-				in_quote = !in_quote;
+				in_quote = toggle_quote(*s, in_quote);
 			s++;
 		}
 	}
 	return (i);
 }
 
-char	**ft_split_quote(const char *s, char c)
+char	**ft_split_pipe(const char *s)
 {
 	char		**res;
 	int			i;
+	char		c;
 
+	c = '|';
 	res = malloc(sizeof(char *) * (ft_count_words(s, c) + 1));
 	if (malloc_assert(res, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
