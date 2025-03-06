@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 11:36:54 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:42:29 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ static int	join_loop(char *content, char **str_ref, int *len)
 	int		i;
 	char	quote;
 
-	if (ignore_prompt(content))
-		return (0);
 	quote = 0;
 	i = 0;
 	while (content[i])

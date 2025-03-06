@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 11:08:13 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:12:00 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static int	heredoc(t_command *cmd, char *deli)
 		line = readline("> ");
 		if (handle_eof(line, deli))
 			break ;
-		new_line = process_var(line, cmd->env, cmd->code);
+		new_line = process_var(line, cmd->env, cmd->code, NULL);
 		free(line);
 		if (!new_line)
 			return (MALLOC_ERR);
@@ -130,7 +130,7 @@ int	redir(t_command *cmd)
 			if (handle_fd(cmd, cmd->args[i + 1], cmd->args[i]) == 1)
 				return (1);
 			if (cmd->fd_in == -1 || cmd->fd_out == -1)
-				return (perror("Failed to open file"), 1);
+				return (perror("Failed to open file"), 0);
 			i++;
 		}
 		else

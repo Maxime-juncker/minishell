@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:27 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 15:32:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:13:53 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	check_redir_in(const char *cmd_line, int i)
 		ft_dprintf(2, "%sminishell: %s: No such file or directory\n%s",
 			RED, file, RESET);
 		free(file);
-		return (1);
+		return (0);
 	}
 	free(file);
 	return (0);
