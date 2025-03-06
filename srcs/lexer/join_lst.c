@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 15:20:16 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:23:47 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	add_space(char *dest, char c)
 
 int	ignore_prompt(char *prompt)
 {
+	if (prompt == NULL)
+		return (1);
 	if (prompt[0] == ':' || prompt[0] == '!')
 		prompt++;
 	while (*prompt)

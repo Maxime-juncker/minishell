@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 15:21:52 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:49:00 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	handle_eof(char **line, char *deli, int diff, t_command *cmd)
 	{
 		new_line = process_var(*line, cmd->env, cmd->code, NULL);
 		free(*line);
-		if (malloc_assert(new_line, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
+		if (malloc_assert(new_line, __FILE__, __LINE__, __FUNCTION__))
 			return (cmd->code = MALLOC_ERR, 1);
 		*line = new_line;
 	}

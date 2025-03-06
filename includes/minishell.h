@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 15:20:37 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:34:06 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define IS_DIR			126
 
 # define DEBUG 0
-# define SHOW_LEXER 1
+# define SHOW_LEXER 0
 
 /* -------------------------------------------------------------------------- */
 /*                                command table                               */
@@ -167,8 +167,12 @@ void	show_cmd(t_command cmd);
 // executor.c
 int		run_command(t_command *cmd, const t_command_table *table,
 			t_free_pkg package);
+
+// pipeline_utils.c
 void	close_fds(t_command cmd);
 void	close_all_fds(const t_command_table *table);
+void	cleanup_child(const t_command_table *table);
+
 // paths.c
 char	*get_cmd_path(char **paths, t_command cmd);
 int		is_builtin(char *name);

@@ -62,6 +62,7 @@ SRCS = 		main.c						\
 			wildcard_utils.c			\
 			waiter.c					\
 			config.c					\
+			pipeline_utils.c			\
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #

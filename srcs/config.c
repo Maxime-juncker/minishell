@@ -6,13 +6,13 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:06:14 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 15:07:11 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:44:27 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_process_cmd(t_command_table *table, char *line, int *code,
+static int	handle_process_cmd(t_command_table *table, char *line, int *code,
 		t_list **to_free)
 {
 	char	**args;
@@ -76,7 +76,8 @@ int	load_config(t_command_table *table)
 	line = get_next_line(fd);
 	while (line)
 	{
-		line[ft_strlen(line) - 1] = '\0';
+		if (line[ft_strlen(line) - 1] == '\n')
+			line[ft_strlen(line) - 1] = '\0';
 		exec_prompt(table, line);
 		line = get_next_line(fd);
 	}

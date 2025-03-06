@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:32 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 14:41:57 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:27:59 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ static int	check_redir_out(const char *cmd_line, int i)
 	char	error_symb;
 	int		j;
 
-	j = i - 1;
-	if (i == 0)
-		j = 0;
+	j = ft_max(i - 1, 0);
 	i++;
 	if (cmd_line[i] == '>')
 		return (0);

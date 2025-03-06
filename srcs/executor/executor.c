@@ -6,33 +6,13 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 13:34:06 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:33:30 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ls && wejgoiw || (cd / && pwd) && pwd
 
 #include "minishell.h"
-
-void	close_fds(t_command cmd)
-{
-	if (cmd.fd_out != STDOUT_FILENO && cmd.fd_out != -1)
-		close(cmd.fd_out);
-	if (cmd.fd_in != STDIN_FILENO && cmd.fd_in != -1)
-		close(cmd.fd_in);
-}
-
-void	close_all_fds(const t_command_table *table)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < table->n_commands)
-	{
-		close_fds(table->commands[i]);
-		i++;
-	}
-}
 
 static void	setup_args(t_command *cmd)
 {
@@ -60,17 +40,13 @@ static void	handle_child_process(t_command *cmd, const t_command_table *table,
 	ft_lstclear(&package.args, cleanup_pacakge);
 	if (cmd->fd_in == -1 || cmd->fd_out == -1)
 	{
-		close_all_fds(table);
-		cleanup_arr((void **)table->env);
-		cleanup_table((t_command_table *)table);
+		cleanup_child(table);
 		exit(1);
 	}
 	if (is_builtin(cmd->args[0]) == 1)
 	{
 		code = run_built_in(*cmd, table);
-		close_all_fds(table);
-		cleanup_arr((void **)table->env);
-		cleanup_table((t_command_table *)table);
+		cleanup_child(table);
 		exit(code);
 	}
 	close_all_fds(table);
