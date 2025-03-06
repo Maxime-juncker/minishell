@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 15:21:14 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:21:52 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	redir(t_command *cmd)
 			if (cmd->code == MALLOC_ERR)
 				return (MALLOC_ERR);
 			if (cmd->fd_in == -1 || cmd->fd_out == -1)
-				return (perror("Failed to open file"), 0);
+				return (0);
 			i++;
 		}
 		else

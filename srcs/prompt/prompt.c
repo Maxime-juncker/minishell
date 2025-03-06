@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 12:39:44 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:34:15 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-int	handle_process_cmd(t_command_table *table, char *line, int *code,
+static int	handle_process_cmd(t_command_table *table, char *line, int *code,
 		t_list **to_free);
 
 int	handle_line_symbol(t_command_table *table, char *arg, int *code,
@@ -43,7 +43,7 @@ int	handle_line_symbol(t_command_table *table, char *arg, int *code,
 	return (0);
 }
 
-int	handle_process_cmd(t_command_table *table, char *line, int *code,
+static int	handle_process_cmd(t_command_table *table, char *line, int *code,
 		t_list **to_free)
 {
 	char	**args;
