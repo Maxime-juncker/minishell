@@ -51,7 +51,7 @@ SRCS = 		main.c						\
 			quote_checker.c				\
 			exit.c						\
 			ft_split_operators.c		\
-			ft_split_quote.c			\
+			ft_split_pipe.c				\
 			wildcard_processing.c		\
 			and_checker.c				\
 			wildcard_expanssion.c		\

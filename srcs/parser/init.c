@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 11:06:58 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:12:12 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	init_table(char *line, t_command_table *table)
 	size_t	i;
 
 	table->n_commands = 0;
-	commands = ft_split_quote(line, '|');
+	commands = ft_split_pipe(line);
 	free(line);
 	if (malloc_assert(commands, __FILE__, __LINE__, __FUNCTION__) != 0)
 		return (MALLOC_ERR);

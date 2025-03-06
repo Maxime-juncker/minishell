@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 10:56:53 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:13:43 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,8 +233,8 @@ int		init_table(char *line, t_command_table *table);
 // redir.c
 int		redir(t_command *cmd);
 
-// ft_split_quote.c
-char	**ft_split_quote(const char *s, char c);
+// ft_split_pipe.c
+char	**ft_split_pipe(const char *s);
 
 /* -------------------------------------------------------------------------- */
 /*                                   others                                   */

@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 11:06:46 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:39:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,7 @@ static int	exec_prompt(t_command_table *table, char *line)
 			return (MALLOC_ERR);
 		return (table->code);
 	}
-	if (ft_strcmp(line, "\n"))
-		add_history(line);
+	add_history(line);
 	if (check_cmd_line(process_line(line, table->env, &table->code),
 			&table->code) != 0)
 		return (0);
@@ -102,6 +101,7 @@ int	new_prompt(t_command_table *table)
 	int			res;
 
 	g_signal_received = 0;
+	res = 0;
 	signal(SIGQUIT, SIG_IGN);
 	prompt_char = new_prompt_txt(table->env);
 	if (!prompt_char)
@@ -115,7 +115,8 @@ int	new_prompt(t_command_table *table)
 		g_signal_received = 0;
 		return (0);
 	}
-	res = exec_prompt(table, line);
+	if (!line || (line && line[0] != '\0'))
+		res = exec_prompt(table, line);
 	free(line);
 	return (res);
 }
