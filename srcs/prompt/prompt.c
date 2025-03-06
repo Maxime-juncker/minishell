@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 10:20:54 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 11:06:46 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ static int	exec_prompt(t_command_table *table, char *line)
 	}
 	if (ft_strcmp(line, "\n"))
 		add_history(line);
-	if (check_cmd_line(process_line(line, table->env, &table->code), &table->code) != 0)
+	if (check_cmd_line(process_line(line, table->env, &table->code),
+			&table->code) != 0)
 		return (0);
 	res = handle_process_cmd(table, line, &table->code, &lst);
 	ft_lstclear(&lst, cleanup_pacakge);
@@ -109,9 +110,9 @@ int	new_prompt(t_command_table *table)
 	free(prompt_char);
 	if (g_signal_received)
 	{
+		free(line);
 		table->code = g_signal_received + 128;
 		g_signal_received = 0;
-		free(line);
 		return (0);
 	}
 	res = exec_prompt(table, line);
