@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 14:51:38 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 16:37:27 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static char	*handle_dollar(char **str, int last_code, char **env)
 char	*process_var(char *str, char **env, int last_code, t_list *next)
 {
 	char	*result;
+	char	*tmp;
 
 	result = NULL;
 	while (*str)
@@ -53,8 +54,10 @@ char	*process_var(char *str, char **env, int last_code, t_list *next)
 		if (*str == '$')
 		{
 			str++;
-			result = ft_strjoin_free(result,
-					handle_dollar(&str, last_code, env), FREE1 | FREE2);
+			tmp = handle_dollar(&str, last_code, env);
+			if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
+				return (free(result), NULL);
+			result = ft_strjoin_free(result, tmp, FREE1 | FREE2);
 		}
 		else
 		{
@@ -70,6 +73,7 @@ char	*process_var(char *str, char **env, int last_code, t_list *next)
 t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code)
 {
 	t_list	*process_lst;
+	t_list	*tmp;
 	char	*content;
 	char	*str_content;
 
@@ -82,11 +86,12 @@ t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code)
 			content = ft_strdup(str_content);
 		else
 			content = process_var(str_content, env, last_code, lst->next);
-		if (!content)
+		if (malloc_assert(content, __FILE__, __LINE__, __FUNCTION__))
 			return (NULL);
-		if (ft_lstadd_back(&process_lst, ft_lstnew(content)) == -1)
-			return (malloc_assert(NULL, __FILE__,
-					__LINE__, __FUNCTION__), NULL);
+		tmp = ft_lstnew(content);
+		if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
+			return (free(content), NULL);
+		ft_lstadd_back(&process_lst, tmp);
 		lst = lst->next;
 	}
 	return (process_lst);

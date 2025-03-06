@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 14:54:38 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 16:37:08 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,21 @@ char	*remove_spaces(char *str)
 static int	add_str(t_list **lst, const char *line, size_t *i)
 {
 	size_t	start;
+	char	*temp;
+	t_list	*new;
 
 	start = *i;
 	while (line[*i] && line[*i] != '\'' && line[*i] != '\"')
 	{
 		(*i)++;
 	}
-	if (ft_lstadd_back(lst, ft_lstnew(ft_substr(line, start, *i - start)))
-		== -1)
+	temp = ft_substr(line, start, *i - start);
+	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
+	new = ft_lstnew(temp);
+	if (malloc_assert(new, __FILE__, __LINE__, __FUNCTION__))
+		return (free(temp), MALLOC_ERR);
+	ft_lstadd_back(lst, new);
 	return (0);
 }
 
