@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 10:05:29 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 11:57:05 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define IS_DIR			126
 
 # define DEBUG 0
-# define SHOW_LEXER 0
+# define SHOW_LEXER 0	
 
 /* -------------------------------------------------------------------------- */
 /*                                command table                               */
@@ -203,7 +203,6 @@ size_t	get_str_len(const char *str);
 
 // var_processing.c
 t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
-char	*process_var(char *str, char **env, int last_code);
 
 t_list	*process_quotes(const char *line);
 char	*remove_spaces(char *str);
@@ -251,5 +250,8 @@ char	**ft_split_operators(const char *s);
 void	free_all(char **res, int i);
 
 char	*get_exec_name(char *name);
+
+// config.c
+int		load_config(t_command_table *table);
 
 #endif

@@ -61,6 +61,7 @@ SRCS = 		main.c						\
 			prompt_line.c				\
 			wildcard_utils.c			\
 			waiter.c					\
+			config.c					\
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #

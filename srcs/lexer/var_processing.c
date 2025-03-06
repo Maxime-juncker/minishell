@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 10:05:15 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:00:06 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,15 @@ static char	*handle_dollar(char **str, int last_code, char **env)
 	return (ft_strdup("$"));
 }
 
-char	*process_var(char *str, char **env, int last_code)
+char	*process_var(char *str, char **env, int last_code, t_list *next)
 {
 	char	*result;
 
 	result = NULL;
 	while (*str)
 	{
+		if (*str == '$' && str[1] == '\0' && next)
+			return (result);
 		if (*str == '$')
 		{
 			str++;
@@ -83,7 +85,7 @@ t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code)
 		if (str_content[0] == '\'')
 			content = ft_strdup(str_content);
 		else
-			content = process_var(str_content, env, last_code);
+			content = process_var(str_content, env, last_code, lst->next);
 		if (!content)
 			return (NULL);
 		if (ft_lstadd_back(&process_lst, ft_lstnew(content)) == -1)
