@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 16:00:38 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:23:34 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,5 @@ char	*join_lst(t_list *lst)
 			return (NULL);
 		lst = lst->next;
 	}
-	return (str);
+	return (format_spaces(str));
 }

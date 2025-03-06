@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 16:51:09 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:36:36 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,9 @@ int		patern_valid(char *tmp, char **patern, int *i);
 
 // wildcard_utils.c
 size_t	count_files(char *path);
+
+// formater.c
+char	*format_spaces(char *src);
 
 /* -------------------------------------------------------------------------- */
 /*                                   parser                                   */

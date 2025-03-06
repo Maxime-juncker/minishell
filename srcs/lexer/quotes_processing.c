@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 16:52:43 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:05:50 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,18 @@ char	*remove_spaces(char *str)
 	return (free(buff), new_str);
 }
 
-static int	add_str(t_list **lst, const char *line, size_t *i)
+static int	add_str(t_list **lst, char *line, size_t *i)
 {
 	size_t	start;
 	char	*temp;
 	t_list	*new;
 
 	start = *i;
-	
 	while (line[*i] && line[*i] != '\'' && line[*i] != '\"')
 	{
 		(*i)++;
 	}
 	temp = ft_substr(line, start, *i - start);
-	temp = remove_spaces(temp);
 	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
 	new = ft_lstnew(temp);
@@ -99,7 +97,7 @@ t_list	*process_quotes(const char *line)
 		}
 		else
 		{
-			if (add_str(&lst, line, &i) == MALLOC_ERR)
+			if (add_str(&lst, (char *)line, &i) == MALLOC_ERR)
 				return (ft_lstclear(&lst, free), NULL);
 		}
 	}
