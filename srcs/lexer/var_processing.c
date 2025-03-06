@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_processing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 12:00:06 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:51:38 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,13 @@ char	*process_var(char *str, char **env, int last_code, t_list *next)
 			str++;
 			result = ft_strjoin_free(result,
 					handle_dollar(&str, last_code, env), FREE1 | FREE2);
-			if (malloc_assert(result, __FILE__, __LINE__, __FUNCTION__))
-				return (NULL);
 		}
 		else
 		{
 			result = ft_charjoin(result, *str);
-			if (malloc_assert(result, __FILE__, __LINE__, __FUNCTION__))
-				return (NULL);
 			str++;
 		}
-		if (!result)
+		if (malloc_assert(result, __FILE__, __LINE__, __FUNCTION__))
 			return (NULL);
 	}
 	return (result);

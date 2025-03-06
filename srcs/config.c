@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:06:14 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 11:11:25 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:55:02 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static int	exec_prompt(t_command_table *table, char *line)
 	int		res;
 
 	lst = NULL;
-	if (check_cmd_line(process_line(line, table->env, &table->code), &table->code) != 0)
+	if (check_cmd_line(process_line(line, table->env, &table->code),
+			&table->code) != 0)
 		return (0);
 	res = handle_process_cmd(table, line, &table->code, &lst);
 	ft_lstclear(&lst, cleanup_pacakge);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_processing.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 12:37:35 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:54:38 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,18 @@
 static int	add_quotes(t_list **lst, const char *line, size_t *i)
 {
 	size_t	start;
-	
+
 	start = *i;
 	(*i)++;
 	while (line[*i] && line[*i] != line[start])
 	{
 		(*i)++;
 	}
-		(*i)++;
-
-	if (ft_lstadd_back(lst, ft_lstnew(ft_substr(line, start, *i - start))) == -1)
+	(*i)++;
+	if (ft_lstadd_back(lst, ft_lstnew(ft_substr(line, start, *i - start)))
+		== -1)
 		return (MALLOC_ERR);
 	return (0);
-	
 }
 
 char	*remove_spaces(char *str)
@@ -62,13 +61,14 @@ char	*remove_spaces(char *str)
 static int	add_str(t_list **lst, const char *line, size_t *i)
 {
 	size_t	start;
-	
+
 	start = *i;
 	while (line[*i] && line[*i] != '\'' && line[*i] != '\"')
 	{
 		(*i)++;
 	}
-	if (ft_lstadd_back(lst, ft_lstnew(ft_substr(line, start, *i - start))) == -1)
+	if (ft_lstadd_back(lst, ft_lstnew(ft_substr(line, start, *i - start)))
+		== -1)
 		return (MALLOC_ERR);
 	return (0);
 }

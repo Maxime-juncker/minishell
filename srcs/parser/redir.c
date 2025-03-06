@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 12:12:00 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:48:39 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,10 @@ static int	update_command(t_command *cmd)
 	return (free(cmd->args), temp[j] = NULL, cmd->args = temp, 0);
 }
 
-static int	handle_eof(char *line, char *deli)
+static int	handle_eof(char **line, char *deli, int diff, t_command *cmd)
 {
 	static int	nb_line = -1;
+	char		*new_line;
 
 	nb_line++;
 	if (!line)
@@ -56,36 +57,37 @@ static int	handle_eof(char *line, char *deli)
 		nb_line = -1;
 		return (1);
 	}
-	else if (!ft_strcmp(line, deli))
+	else if (!ft_strcmp(*line, deli))
+		return (free(*line), nb_line = -1, 1);
+	else if (!diff)
 	{
-		free(line);
-		nb_line = -1;
-		return (1);
+		new_line = process_var(*line, cmd->env, cmd->code, NULL);
+		free(*line);
+		if (!new_line)
+			return (MALLOC_ERR);
+		*line = new_line;
 	}
 	return (0);
 }
 
-static int	heredoc(t_command *cmd, char *deli)
+static int	heredoc(t_command *cmd, char *deli, int diff)
 {
 	char	*line;
-	char	*new_line;
 
 	cmd->fd_in = open("/tmp/temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->fd_in == -1)
-		return (perror("Failed to open fileé2"), 1);
+		return (perror("Failed to open file"), 1);
 	while (1)
 	{
 		if (g_signal_received)
 			return (g_signal_received = 0, 1);
 		line = readline("> ");
-		if (handle_eof(line, deli))
+		if (!line && handle_eof(NULL, deli, 0, cmd))
 			break ;
-		new_line = process_var(line, cmd->env, cmd->code, NULL);
+		if (handle_eof(&line, deli, diff, cmd))
+			break ;
+		ft_putendl_fd(line, cmd->fd_in);
 		free(line);
-		if (!new_line)
-			return (MALLOC_ERR);
-		ft_putendl_fd(new_line, cmd->fd_in);
-		free(new_line);
 	}
 	close(cmd->fd_in);
 	cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644);
@@ -96,6 +98,11 @@ static int	heredoc(t_command *cmd, char *deli)
 
 static int	handle_fd(t_command *cmd, char *file, char *arg)
 {
+	char	*temp;
+
+	temp = remove_quotes_pair(file);
+	if (!temp)
+		return (MALLOC_ERR);
 	if (arg[0] == '>')
 	{
 		if (cmd->fd_out > 1)
@@ -111,10 +118,10 @@ static int	handle_fd(t_command *cmd, char *file, char *arg)
 			close(cmd->fd_in);
 		if (arg[0] != arg[1])
 			cmd->fd_in = open(file, O_RDONLY, 0644);
-		else if (arg[0] == arg[1] && heredoc(cmd, file))
-			return (1);
+		else if (arg[0] == arg[1] && heredoc(cmd, temp, ft_strcmp(file, temp)))
+			return (free(temp), 1);
 	}
-	return (0);
+	return (free(temp), 0);
 }
 
 int	redir(t_command *cmd)

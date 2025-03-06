@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 12:42:29 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:53:51 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,10 @@ static int	add_str(char *content, char **str_ref, int *len, int *i)
 	if (is_whitespace(content[*i]) && is_whitespace(*str_ref[*len - 1]))
 	{
 		(*i)++;
-		return (0);	
+		return (0);
 	}
 	*str_ref = ft_charjoin(*str_ref, content[*i]);
 	(*i)++;
-
 	(*len)++;
 	return (0);
 }
