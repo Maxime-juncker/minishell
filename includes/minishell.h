@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 11:57:05 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:03:20 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ typedef struct s_command
 
 	int		fd_in;
 	int		fd_out;
+	char	**env;
+	int		code;
 }	t_command;
 
 typedef struct s_command_table
@@ -228,7 +230,7 @@ size_t	count_files(char *path);
 int		init_table(char *line, t_command_table *table);
 
 // redir.c
-int		redir(t_command *cmd, int code);
+int		redir(t_command *cmd);
 
 // ft_split_quote.c
 char	**ft_split_quote(const char *s, char c);
