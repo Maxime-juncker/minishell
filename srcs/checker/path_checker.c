@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 15:42:59 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:54:33 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	check_path(const char *cmd_name, char **env)
 		if (ft_strchr(cmd_name, '/') != NULL)
 			return (check_dir_validity(cmd_name, dummy_cmd));
 		else
-			ft_dprintf(2, "minishell: %s: command not found\n",
+			ft_dprintf(2, "%sminishell: %s: command not found\n%s",
 				RED, cmd_name, RESET);
 		cleanup_arr((void **)dummy_cmd.args);
 		return (NOT_FOUND);
