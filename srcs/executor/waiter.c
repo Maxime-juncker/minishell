@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 10:38:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/05 10:46:05 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 09:51:44 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	wait_for_process(t_command_table *table, int *childs, int *code)
 	size_t	i;
 
 	i = -1;
-	while (childs[++i])
+	while (childs[++i] != -1)
 	{
 		pid = wait(code);
 		if (WIFEXITED(*code))

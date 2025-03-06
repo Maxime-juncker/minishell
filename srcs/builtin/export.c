@@ -6,11 +6,12 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:34 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/05 08:40:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 09:44:36 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 void	sort_export(char **argv)
 {
@@ -48,22 +49,22 @@ static int	print_export(char **exp, int fd)
 	i = -1;
 	while (exp[++i] != NULL)
 	{
-		ft_putstr_fd("export ", fd);
+		dprintf(fd, "export ");
 		j = 0;
 		n = 0;
 		while (exp[i][j])
 		{
-			ft_putchar_fd(exp[i][j], fd);
+			dprintf(fd, "%c", exp[i][j]);
 			if (exp[i][j] == '=' && !n)
 			{
-				ft_putchar_fd('"', fd);
+				dprintf(fd, "\"");
 				n++;
 			}
 			if (!exp[i][j + 1] && n)
-				ft_putchar_fd('"', fd);
+				dprintf(fd, "\"");
 			j++;
 		}
-		ft_putchar_fd('\n', fd);
+		dprintf(fd, "\n");
 	}
 	return (0);
 }
