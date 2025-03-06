@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 10:02:22 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 10:20:54 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int	handle_process_cmd(t_command_table *table, char *line, int *code,
 
 	i = 0;
 	args = ft_split_operators(line);
-	free(line);
 	if (!args)
 		return (MALLOC_ERR);
 	if (ft_lstadd_back(to_free, ft_lstnew(args)) == -1)
@@ -99,6 +98,7 @@ int	new_prompt(t_command_table *table)
 {
 	char		*line;
 	char		*prompt_char;
+	int			res;
 
 	g_signal_received = 0;
 	signal(SIGQUIT, SIG_IGN);
@@ -111,7 +111,10 @@ int	new_prompt(t_command_table *table)
 	{
 		table->code = g_signal_received + 128;
 		g_signal_received = 0;
+		free(line);
 		return (0);
 	}
-	return (exec_prompt(table, line));
+	res = exec_prompt(table, line);
+	free(line);
+	return (res);
 }
