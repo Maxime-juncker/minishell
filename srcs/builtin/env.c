@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 15:49:37 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/03 09:42:10 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 09:40:47 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	env(t_command_table table, const t_command cmd)
 	i = 0;
 	while (table.env[i])
 	{
-		printf("%s\n", table.env[i]);
+		ft_dprintf(cmd.fd_out, "%s\n", table.env[i]);
 		i++;
 	}
 	return (0);
