@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:32 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 15:27:59 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 16:26:52 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static int	check_error(const char *cmd_line, int i)
 		return (check_redir_in(cmd_line, i));
 	}
 	if (to_find == '|')
-		return (check_token_error(cmd_line, i, 2, '|'));
+		return (check_pipe(cmd_line, i));
 	if (to_find == '&')
 		return (check_and_op(cmd_line, i));
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:52 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 15:00:32 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 16:25:22 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char	*get_path(char **paths, t_command cmd)
 	char		*cmd_path;
 
 	if (paths == NULL || ft_occ(cmd.args[0], '.') == ft_strlen(cmd.args[0]))
-		return (NULL);
+		return (cleanup_arr((void **)paths), NULL);
 	i = -1;
 	while (paths[++i] != NULL)
 	{

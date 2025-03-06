@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 15:55:25 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 16:21:14 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,9 @@ int		check_and_op(const char *line, int i);
 
 // parenthesis_checker.c
 int		check_parenthesis(const char *line);
+
+// pipe_checker.c
+int		check_pipe(const char *line, int index);
 
 /* -------------------------------------------------------------------------- */
 /*                                   executor                                 */
