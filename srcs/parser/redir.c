@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 14:48:39 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:21:14 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ static int	handle_eof(char **line, char *deli, int diff, t_command *cmd)
 	{
 		new_line = process_var(*line, cmd->env, cmd->code, NULL);
 		free(*line);
-		if (!new_line)
-			return (MALLOC_ERR);
+		if (malloc_assert(new_line, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
+			return (cmd->code = MALLOC_ERR, 1);
 		*line = new_line;
 	}
 	return (0);
@@ -101,8 +101,8 @@ static int	handle_fd(t_command *cmd, char *file, char *arg)
 	char	*temp;
 
 	temp = remove_quotes_pair(file);
-	if (!temp)
-		return (MALLOC_ERR);
+	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
+		return (cmd->code = MALLOC_ERR, MALLOC_ERR);
 	if (arg[0] == '>')
 	{
 		if (cmd->fd_out > 1)
@@ -136,6 +136,8 @@ int	redir(t_command *cmd)
 		{
 			if (handle_fd(cmd, cmd->args[i + 1], cmd->args[i]) == 1)
 				return (1);
+			if (cmd->code == MALLOC_ERR)
+				return (MALLOC_ERR);
 			if (cmd->fd_in == -1 || cmd->fd_out == -1)
 				return (perror("Failed to open file"), 0);
 			i++;
