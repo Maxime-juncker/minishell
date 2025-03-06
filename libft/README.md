@@ -5,7 +5,7 @@ creating utility fonction based on the libc
 
 ## Features
 - libc memory functions (calloc, memset etc...)
-- stdlib funciton (atoi, itoa...)
+- stdlib function (atoi, itoa...)
 - printf
 - link list
 - string function (strlcpy, strlcat, strmap, strtrim, split....)
@@ -16,7 +16,7 @@ creating utility fonction based on the libc
 first clone the repo
 ```
 git clone https://github.com/Maxime-juncker/libft.git
-cd minitalk
+cd libft
 ```
 
 then compile the project using make

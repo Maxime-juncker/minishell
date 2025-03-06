@@ -4,7 +4,7 @@
 extern "C"
 {
 	#include "minishell.h"
-	#include <libft.h>
+	
 }
 
 int	executor_routine( void );

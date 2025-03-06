@@ -2,12 +2,12 @@ MAKEFLAGS += --no-print-directory
 
 NAME = tests.out
 CC = g++
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g3 -fPIE
 INCLUDES =	-I../includes/			\
 			-I../../includes/		\
 			-I../../libft/includes/	\
 
-VPATH = .:builtin:tests:commands:echo:executor
+VPATH = .:builtin:tests:pipeline:echo:executor
 
 SRCS = 		main.cpp					\
 			00_executor.cpp				\
@@ -41,6 +41,7 @@ SRCS = 		main.cpp					\
 			13_redir_in.cpp				\
 			14_redir_in_hard.cpp		\
 			15_redir_middle_cmd.cpp		\
+			16_only_redir.cpp			\
 			00_tests.cpp				\
 			01_br.cpp					\
 			02_syntax_err.cpp			\
@@ -70,7 +71,7 @@ CURSOR_ON = 	\e[?25h
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) -pie $(OBJ) $(FRAMEWORK_LIB) $(TEST_LIB) $(INCLUDES) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(FRAMEWORK_LIB) $(TEST_LIB) $(INCLUDES) -o $(NAME) -L/usr/lib -lreadline
 	printf "$(GREEN)$(NAME): success\n"
 	printf "\n---------------------$(CURSOR_ON)\n\n"
 

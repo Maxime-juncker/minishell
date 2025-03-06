@@ -3,7 +3,10 @@
 int	pwd_test( void )
 {
 	Libunit::Redirect_log();
-	pwd();
+	t_command cmd;
+
+	cmd.n_args = 1;
+	pwd(cmd);
 	char *var = getenv("PWD");
 	if (var == NULL)
 		std::cout << "NULLL" << std::endl;

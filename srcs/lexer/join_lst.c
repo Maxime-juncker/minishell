@@ -3,64 +3,91 @@
 /*                                                        :::      ::::::::   */
 /*   join_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 11:15:30 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:23:47 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	should_we_join_a_space(char *str_ref, int len, char content)
+int	add_space(char *dest, char c)
 {
-	return ((str_ref && !is_symbol((str_ref)[len - 1])
-		&& (str_ref)[len - 1] != ' ' && is_symbol(content))
-				|| (str_ref && is_symbol((str_ref)[len - 1])
-				&& content != ' ' && !is_symbol(content)));
-}
-
-static int	skip_spaces( char content_c, char *str_ref, char quote, int len )
-{
-	if (content_c == ' ' && !str_ref)
-	{
+	if (!dest)
+		return (0);
+	if (is_symbol(c)
+		&& !is_symbol(*(dest - 1))
+		&& *(dest - 1) != ' ')
 		return (1);
-	}
-	if (!quote && content_c == ' ' && str_ref \
-		&& len > 0 && str_ref[len - 1] == ' ')
-	{
+	if (!is_symbol(c)
+		&& is_symbol(*(dest - 1))
+		&& c != ' ')
 		return (1);
-	}
 	return (0);
 }
 
-static void	join_loop(char *content, char **str_ref, int *len)
+int	ignore_prompt(char *prompt)
+{
+	if (prompt == NULL)
+		return (1);
+	if (prompt[0] == ':' || prompt[0] == '!')
+		prompt++;
+	while (*prompt)
+	{
+		if (!is_whitespace(*prompt))
+			return (0);
+		prompt++;
+	}
+	return (1);
+}
+
+static int	add_str(char *content, char **str_ref, int *len, int *i)
+{
+	if (*str_ref && content[*i] && is_whitespace(content[*i])
+		&& is_whitespace((*str_ref)[*len - 1]))
+	{
+		(*i)++;
+		return (0);
+	}
+	if (str_ref && add_space(&(*str_ref)[*len], content[*i]) == 1)
+	{
+		*str_ref = ft_charjoin(*str_ref, ' ');
+		if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
+			return (MALLOC_ERR);
+		(*len)++;
+		return (0);
+	}
+	*str_ref = ft_charjoin(*str_ref, content[*i]);
+	if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
+		return (MALLOC_ERR);
+	(*i)++;
+	(*len)++;
+	return (0);
+}
+
+static int	join_loop(char *content, char **str_ref, int *len)
 {
 	int		i;
 	char	quote;
 
-	if (ignore_prompt(content))
-		return ;
 	quote = 0;
-	i = -1;
-	while (content[++i])
+	i = 0;
+	while (content[i])
 	{
-		quote = toggle_quote(content[i], quote);
-		while (skip_spaces(content[i], *str_ref, quote, *len))
-			i++;
-		if (should_we_join_a_space(*str_ref, *len, content[i]))
+		quote = content[0];
+		if (quote == '\'' || quote == '\"')
 		{
-			*str_ref = ft_charjoin(*str_ref, ' ');
-			if (*str_ref == NULL)
-				return ;
-			(*len)++;
-			continue ;
+			*str_ref = ft_strjoin_free(*str_ref, content, FREE1);
+			if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
+				return (MALLOC_ERR);
+			*len = ft_strlen(*str_ref);
+			return (0);
 		}
-		*str_ref = ft_charjoin(*str_ref, content[i]);
-		if (*str_ref == NULL)
-			return ;
-		(*len)++;
+		if (add_str(content, str_ref, len, &i) == MALLOC_ERR)
+			return (MALLOC_ERR);
 	}
+	return (0);
 }
 
 char	*join_lst(t_list *lst)
@@ -72,8 +99,7 @@ char	*join_lst(t_list *lst)
 	len = 0;
 	while (lst)
 	{
-		join_loop(lst->content, &str, &len);
-		if (str == NULL)
+		if (join_loop(lst->content, &str, &len) == MALLOC_ERR)
 			return (NULL);
 		lst = lst->next;
 	}

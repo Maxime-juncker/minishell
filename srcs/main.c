@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 23:29:04 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:07:17 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,21 @@ int	main(int argc, char **argv, char **env)
 	int				code;
 
 	(void)argc;
-	(void)argv;
 	init_env(&table, env);
 	rl_event_hook = check_interrupt;
 	signal(SIGINT, handle_signal);
-	signal(SIGTSTP, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	signal(SIGPIPE, handle_signal);
 	code = 0;
-	while (code == 0)
+	table.name = get_exec_name(argv[0]);
+	table.setup_fd = -1;
+	table.code = 0;
+	load_config(&table);
+	table.setup_fd = -1;
+	while (code != MALLOC_ERR)
 	{
 		code = new_prompt(&table);
 	}
-	if (code == MALLOC_ERR)
-	{
-		cleanup_arr((void **)table.env);
-		cleanup_arr((void **)table.exp);
-	}
+	cleanup_arr((void **)table.env);
+	cleanup_arr((void **)table.exp);
 	exit(code);
 }

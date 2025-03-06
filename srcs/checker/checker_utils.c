@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:15 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 10:39:49 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 11:00:57 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	cleanup_arr(void **arr)
 {
 	int	i;
 
+	if (!arr)
+		return ;
 	i = 0;
 	while (arr[i])
 	{
@@ -23,6 +25,24 @@ void	cleanup_arr(void **arr)
 		i++;
 	}
 	free(arr);
+}
+
+void	cleanup_pacakge(void *package)
+{
+	void	**arr;
+	int		i;
+
+	arr = (void **)package;
+	if (!arr)
+		return ;
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(package);
+	arr = NULL;
 }
 
 int	token_error(char c1, char c2)

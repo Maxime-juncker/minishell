@@ -17,8 +17,7 @@ int	cd_relative( void )
 	std::string line = buffer;
 
 	Libunit::Redirect_log();
-	run_pipeline(&table);
-	pwd();
+	run_pipeline(&table, NULL);
 	if (Libunit::Check_output(line) == 0)
 		return (0);
 	else
@@ -34,9 +33,9 @@ int	cd_absolute( void )
 	t_command_table	table;
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
-	init_table((char*)"cd /bin", &table);
+	init_table(ft_strdup("cd /bin"), &table);
 
-    run_pipeline(&table);
+    run_pipeline(&table, NULL);
 	pwd = getenv("PWD");
 	if (pwd.compare("/usr/bin") == 0)
 		return (0);
@@ -51,9 +50,9 @@ int	cd_nothing( void )
 	t_command_table	table;
 		table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
-	init_table((char*)"cd", &table);
+	init_table(ft_strdup("cd"), &table);
 
-    run_pipeline(&table);
+    run_pipeline(&table, NULL);
 	pwd = getenv("PWD");
 	if (pwd.compare(getenv("HOME")) == 0)
 		return (0);

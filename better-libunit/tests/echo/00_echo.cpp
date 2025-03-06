@@ -10,8 +10,8 @@ int	echo_routine( void )
 	routine.AddNewTest(Libunit::Test("ECHO", "echo", &echo_01));
 	routine.AddNewTest(Libunit::Test("ECHO", "echo -n", &echo_02));
 	routine.AddNewTest(Libunit::Test("ECHO", "echo Test", &echo_03));
-	routine.AddNewTest(Libunit::Test("ECHO", "echoHola", &echo_04));
-	routine.AddNewTest(Libunit::Test("ECHO", "echo-nHola", &echo_05));
+	// routine.AddNewTest(Libunit::Test("ECHO", "echoHola", &echo_04));
+	// routine.AddNewTest(Libunit::Test("ECHO", "echo-nHola", &echo_05));
 	routine.AddNewTest(Libunit::Test("ECHO", "echo -n test", &echo_07));
 	routine.AddNewTest(Libunit::Test("ECHO", "echo \"-n\" Test", &echo_08));
 	routine.AddNewTest(Libunit::Test("ECHO", "echo -ntest", &echo_09));

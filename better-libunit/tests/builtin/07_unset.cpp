@@ -16,12 +16,12 @@ int	unset_test( void )
 
 	// set a env var
 	init_table((char *)"export TEST=hello", &table);
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	init_table((char *)"unset TEST", &table);
 
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", expected, 1) == 0)
 		return (0);

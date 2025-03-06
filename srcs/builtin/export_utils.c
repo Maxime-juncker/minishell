@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 11:46:10 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/05 09:39:41 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static char	**update_env(char *arg, char **env, int append)
 	int		i;
 
 	cpy = malloc((arrlen((void **)env) + 2 - append) * sizeof(char *));
-	if (cpy == NULL)
-		return (NULL);
+	if (malloc_assert(cpy, __FILE__, __LINE__, __FUNCTION__))
+		return (env);
 	i = -1;
 	while (env && env[++i])
 	{
@@ -28,22 +28,25 @@ static char	**update_env(char *arg, char **env, int append)
 					+ (ft_strchr(env[i], '=') != NULL), FREE1);
 		else
 			cpy[i] = env[i];
+		if (malloc_assert(cpy[i], __FILE__, __LINE__, __FUNCTION__))
+			return (free(cpy), env);
 	}
-	free(env);
 	if (!append)
 	{
 		cpy[i] = ft_strdup(arg);
-		if (!cpy[i])
-			return (cleanup_arr((void **)cpy), NULL);
-		i++;
+		if (malloc_assert(cpy[i++], __FILE__, __LINE__, __FUNCTION__))
+			return (free(cpy), env);
 	}
-	cpy[i] = NULL;
-	return (cpy);
+	free(env);
+	return (cpy[i] = NULL, cpy);
 }
 
-void	export(t_command_table *table, char *arg, int append)
+int	export_env(t_command_table *table, char *arg, int append)
 {
 	if (ft_strchr(arg, '='))
 		table->env = update_env(arg, table->env, append);
 	table->exp = update_env(arg, table->exp, append);
+	if (!table->env || !table->exp)
+		return (MALLOC_ERR);
+	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:32 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 10:45:27 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:27:59 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,16 @@ static int	error_symbol(char error_symb, const char *cmd_line, int i)
 static int	check_redir_out(const char *cmd_line, int i)
 {
 	char	error_symb;
+	int		j;
 
+	j = ft_max(i - 1, 0);
 	i++;
 	if (cmd_line[i] == '>')
 		return (0);
+	while (j >= 0 && is_whitespace(cmd_line[j]))
+		j--;
+	if (cmd_line[j] == '<')
+		return (token_error('>', 0));
 	while (cmd_line[i])
 	{
 		if (cmd_line[i] == ' ')
@@ -49,7 +55,8 @@ static int	check_redir_out(const char *cmd_line, int i)
 			i++;
 			continue ;
 		}
-		if (cmd_line[i] != '|' && cmd_line[i] != '<' && cmd_line[i] != '>')
+		if (cmd_line[i] != '|' && cmd_line[i] != '<'
+			&& cmd_line[i] != '>' && cmd_line[i] != '&')
 			return (0);
 		error_symb = cmd_line[i];
 		return (error_symbol(error_symb, cmd_line, i));
@@ -79,6 +86,8 @@ static int	check_error(const char *cmd_line, int i)
 	}
 	if (to_find == '|')
 		return (check_token_error(cmd_line, i, 2, '|'));
+	if (to_find == '&')
+		return (check_and_op(cmd_line, i));
 	return (0);
 }
 
@@ -96,7 +105,7 @@ static int	check_line(const char *cmd_line)
 	{
 		quote = toggle_quote(cmd_line[i], quote);
 		if (!quote && (cmd_line[i] == '<' || cmd_line[i] == '>'
-				|| cmd_line[i] == '|'))
+				|| cmd_line[i] == '|' || cmd_line[i] == '&'))
 		{
 			code = check_error(cmd_line, i);
 			if (code != 0)
@@ -117,6 +126,9 @@ int	check_syntax(const char *cmd_line)
 	int	code;
 
 	code = check_quotes(cmd_line);
+	if (code != 0)
+		return (code);
+	code = check_parenthesis(cmd_line);
 	if (code != 0)
 		return (code);
 	i = 0;

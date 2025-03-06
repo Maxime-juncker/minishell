@@ -3,22 +3,111 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 21:21:59 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:49:00 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <fcntl.h>
+#include <readline/readline.h>
 
-static void	handle_fd(t_command *cmd, char *file, char c, int db_redir)
+static int	update_command(t_command *cmd)
 {
-	if (c == '>')
+	char	**temp;
+	int		i;
+	int		j;
+
+	temp = malloc(sizeof(char *) * (cmd->n_args + 1));
+	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
+		return (close_fds(*cmd), MALLOC_ERR);
+	i = 0;
+	j = 0;
+	while (cmd->args[i])
+	{
+		if (cmd->args[i][0] != '>' && cmd->args[i][0] != '<')
+		{
+			temp[j] = remove_quotes_pair(cmd->args[i]);
+			free(cmd->args[i++]);
+			if (malloc_assert(temp[j++], __FILE__, __LINE__, __FUNCTION__) != 0)
+				return (free(cmd->args), cmd->args = temp, MALLOC_ERR);
+		}
+		else
+		{
+			free(cmd->args[i++]);
+			free(cmd->args[i++]);
+		}
+	}
+	return (free(cmd->args), temp[j] = NULL, cmd->args = temp, 0);
+}
+
+static int	handle_eof(char **line, char *deli, int diff, t_command *cmd)
+{
+	static int	nb_line = -1;
+	char		*new_line;
+
+	nb_line++;
+	if (!line)
+	{
+		ft_dprintf(2, "%s%s %d delimited by end-of-file (wanted `%s')\n%s",
+			ORANGE, "minishell: warning: here-document at line",
+			nb_line, deli, RESET);
+		nb_line = -1;
+		return (1);
+	}
+	else if (!ft_strcmp(*line, deli))
+		return (free(*line), nb_line = -1, 1);
+	else if (!diff)
+	{
+		new_line = process_var(*line, cmd->env, cmd->code, NULL);
+		free(*line);
+		if (malloc_assert(new_line, __FILE__, __LINE__, __FUNCTION__))
+			return (cmd->code = MALLOC_ERR, 1);
+		*line = new_line;
+	}
+	return (0);
+}
+
+static int	heredoc(t_command *cmd, char *deli, int diff)
+{
+	char	*line;
+
+	cmd->fd_in = open("/tmp/temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (cmd->fd_in == -1)
+		return (perror("Failed to open file"), 1);
+	while (1)
+	{
+		if (g_signal_received)
+			return (g_signal_received = 0, 1);
+		line = readline("> ");
+		if (!line && handle_eof(NULL, deli, 0, cmd))
+			break ;
+		if (handle_eof(&line, deli, diff, cmd))
+			break ;
+		ft_putendl_fd(line, cmd->fd_in);
+		free(line);
+	}
+	close(cmd->fd_in);
+	cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644);
+	if (cmd->fd_in == -1)
+		return (perror("Failed to open file"), 1);
+	return (0);
+}
+
+static int	handle_fd(t_command *cmd, char *file, char *arg)
+{
+	char	*temp;
+
+	temp = remove_quotes_pair(file);
+	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
+		return (cmd->code = MALLOC_ERR, MALLOC_ERR);
+	if (arg[0] == '>')
 	{
 		if (cmd->fd_out > 1)
 			close(cmd->fd_out);
-		if (db_redir)
+		if (arg[0] == arg[1])
 			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
 			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -27,94 +116,35 @@ static void	handle_fd(t_command *cmd, char *file, char c, int db_redir)
 	{
 		if (cmd->fd_in > 1)
 			close(cmd->fd_in);
-		if (db_redir)
-			heredoc(cmd, file);
-		else
+		if (arg[0] != arg[1])
 			cmd->fd_in = open(file, O_RDONLY, 0644);
+		else if (arg[0] == arg[1] && heredoc(cmd, temp, ft_strcmp(file, temp)))
+			return (free(temp), 1);
 	}
-	free(file);
+	return (free(temp), 0);
 }
 
-static char	*get_file_name(char **s)
+int	redir(t_command *cmd)
 {
 	int		i;
-	char	quote;
-	char	*file;
-	int		start;
-	char	*temp;
 
 	i = 0;
-	quote = 0;
-	start = 0;
-	while ((*s)[start] == ' ' || (*s)[start] == '>' || (*s)[start] == '<')
-		start++;
-	i = start;
-	while ((*s)[i])
+	cmd->n_args = 0;
+	while (cmd->args[i])
 	{
-		if ((*s)[i] == '\'' || (*s)[i] == '\"')
-			quote = toggle_quote(quote, (*s)[i]);
-		if ((*s)[i] == ' ' && !quote)
-			break ;
+		if (cmd->args[i][0] == '>' || cmd->args[i][0] == '<')
+		{
+			if (handle_fd(cmd, cmd->args[i + 1], cmd->args[i]) == 1)
+				return (1);
+			if (cmd->code == MALLOC_ERR)
+				return (MALLOC_ERR);
+			if (cmd->fd_in == -1 || cmd->fd_out == -1)
+				return (0);
+			i++;
+		}
+		else
+			cmd->n_args++;
 		i++;
 	}
-	temp = ft_substr((*s), start, i - start);
-	if (!temp)
-		return (NULL);
-	file = remove_quotes_pair(temp);
-	return (free(temp), *s += i, file);
-}
-
-static int	handle_redir(t_command *cmd, char **command, char c, int db_redir)
-{
-	char	*file;
-	char	*start;
-	char	**args;
-	int		i;
-	char	*temp;
-
-	file = get_file_name(command);
-	if (!file)
-		return (MALLOC_ERR);
-	start = *command;
-	while (**command && **command != '>' && **command != '<')
-		(*command)++;
-	temp = ft_substr(start, 0, *command - start);
-	if (!temp)
-		return (MALLOC_ERR);
-	args = ft_split(temp, ' ');
-	free(temp);
-	if (!args)
-		return (MALLOC_ERR);
-	i = 0;
-	while (args[i])
-		cmd->args[cmd->n_args++] = args[i++];
-	free(args);
-	handle_fd(cmd, file, c, db_redir);
-	return (0);
-}
-
-void	redir(t_command *cmd, char *command)
-{
-	char	quote;
-
-	cmd->n_args = 0;
-	quote = 0;
-	while (cmd->args[cmd->n_args] && cmd->args[cmd->n_args][0] != '>'
-		&& cmd->args[cmd->n_args][0] != '<')
-		cmd->n_args++;
-	while (*command)
-	{
-		quote = toggle_quote(*command, quote);
-		if (quote != 0)
-		{
-			command++;
-			continue ;
-		}
-		if (*command == '<' || *command == '>')
-			handle_redir(cmd, &command, *command, *command == *(command + 1));
-		else
-			command++;
-		if (cmd->fd_in == -1)
-			break ;
-	}
+	return (update_command(cmd));
 }

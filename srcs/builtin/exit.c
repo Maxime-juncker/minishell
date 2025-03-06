@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:01 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/22 10:39:09 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/02 12:10:21 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_number(char *s)
 	int	i;
 
 	i = 0;
-	if (s[0] == '-' && s[1] != '\0')
+	if (s[1] != '\0' && (s[0] == '-' || s[0] == '+'))
 		i++;
 	while (s[i])
 	{
@@ -58,17 +58,18 @@ static int	get_code(t_command cmd)
 	return (nb);
 }
 
-void	exit_shell(t_command_table *table, t_command cmd, int *childs)
+void	exit_shell(t_command_table *table, t_command cmd, t_free_pkg package)
 {
 	int	code;
 
 	if (table->n_commands > 1)
 		return ;
-	free(childs);
+	printf("exit\n");
 	code = get_code(cmd);
+	free(package.childs);
 	cleanup_arr((void **)table->env);
 	cleanup_arr((void **)table->exp);
+	ft_lstclear(&package.args, cleanup_pacakge);
 	cleanup_table(table);
-	printf("exit\n");
-	exit (code);
+	exit(code);
 }

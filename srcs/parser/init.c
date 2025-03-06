@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 20:45:16 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:12:12 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,10 @@ static int	create_arg(char **cmd_arg, char *str)
 		i++;
 	}
 	arg = malloc(sizeof(char) * (i + 1));
-	if (!arg)
+	if (malloc_assert(arg, __FILE__, __LINE__, __FUNCTION__) != 0)
 		return (MALLOC_ERR);
 	ft_strlcpy(arg, str, i + 1);
-	*cmd_arg = remove_quotes_pair(arg);
-	free(arg);
-	if (!*cmd_arg)
-		return (MALLOC_ERR);
+	*cmd_arg = arg;
 	return (0);
 }
 
@@ -69,7 +66,7 @@ static int	get_args(t_command *cmd, char *cmd_str)
 	int		n_args;
 
 	cmd->args = malloc(sizeof(char *) * count_args(cmd_str));
-	if (!cmd->args)
+	if (malloc_assert(cmd->args, __FILE__, __LINE__, __FUNCTION__) != 0)
 		return (MALLOC_ERR);
 	quote = 0;
 	i = 0;
@@ -83,7 +80,7 @@ static int	get_args(t_command *cmd, char *cmd_str)
 			quote = toggle_quote(quote, cmd_str[i]);
 		if (new_arg && create_arg(&cmd->args[n_args++], &cmd_str[i])
 			== MALLOC_ERR)
-			return (MALLOC_ERR);
+			return (free(cmd->args), MALLOC_ERR);
 		new_arg = (!quote && cmd_str[i] == ' ' && cmd_str[i + 1]);
 		i++;
 	}
@@ -97,23 +94,19 @@ static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
 	cmd->fd_in = 0;
 	cmd->fd_out = 1;
 	if (pipefd[0] != -1)
-	{
 		cmd->fd_in = pipefd[0];
-	}
-	if (is_last == 0)
-	{
-		if (pipe(pipefd) != -1)
-			cmd->fd_out = pipefd[1];
-		else
-			return (cleanup_arr((void **)cmd->args), 1);
-	}
+	if (is_last == 0 && pipe(pipefd) != -1)
+		cmd->fd_out = pipefd[1];
+	else if (is_last == 0)
+		return (perror("Failed pipe"), MALLOC_ERR);
 	if (get_args(cmd, cmd_str) == MALLOC_ERR)
 		return (MALLOC_ERR);
-	redir(cmd, cmd_str);
-	if (is_last && !ft_strchr(cmd_str, '>'))
-		cmd->fd_out = 1;
+	if (redir(cmd) != 0)
+		return (cleanup_arr((void **)cmd->args), MALLOC_ERR);
 	if (!i && !ft_strchr(cmd_str, '<'))
 		cmd->fd_in = 0;
+	if (is_last && !ft_strchr(cmd_str, '>'))
+		cmd->fd_out = 1;
 	return (0);
 }
 
@@ -122,26 +115,26 @@ int	init_table(char *line, t_command_table *table)
 	char	**commands;
 	size_t	i;
 
-	while (*line == ' ' || *line == '\t')
-		line++;
-	commands = ft_split(line, '|');
-	if (!commands)
-		return (MALLOC_ERR);
 	table->n_commands = 0;
+	commands = ft_split_pipe(line);
+	free(line);
+	if (malloc_assert(commands, __FILE__, __LINE__, __FUNCTION__) != 0)
+		return (MALLOC_ERR);
 	while (commands[table->n_commands])
 		table->n_commands++;
 	table->commands = malloc(sizeof(t_command) * table->n_commands);
-	if (!table->commands)
+	if (malloc_assert(table->commands, __FILE__, __LINE__, __FUNCTION__) != 0)
 		return (cleanup_arr((void **)commands), MALLOC_ERR);
 	i = 0;
 	while (i < table->n_commands)
 	{
+		table->commands[i].env = table->env;
+		table->commands[i].code = table->code;
 		if (init_cmd(&table->commands[i], commands[i],
 				i == table->n_commands - 1, i) == MALLOC_ERR)
-			return (cleanup_arr((void **)commands), free(table->commands),
-				MALLOC_ERR);
+			return (cleanup_arr((void **)commands), table->n_commands = i,
+				cleanup_table(table), MALLOC_ERR);
 		i++;
 	}
-	cleanup_arr((void **)commands);
-	return (free(line), 0);
+	return (cleanup_arr((void **)commands), 0);
 }

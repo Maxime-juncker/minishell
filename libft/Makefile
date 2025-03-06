@@ -6,7 +6,7 @@
 #    By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 18:00:56 by mjuncker          #+#    #+#              #
-#    Updated: 2025/02/21 10:31:13 by mjuncker         ###   ########.fr        #
+#    Updated: 2025/03/06 15:01:32 by mjuncker         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ INCLUDES_D	= includes/
 # src file names
 SRCS =  ft_isalpha.c 		\
 		ft_isdigit.c 		\
+		ft_iswhitespace.c	\
 		ft_isalnum.c 		\
 		ft_isascii.c 		\
 		ft_isprint.c 		\
@@ -69,6 +70,10 @@ SRCS =  ft_isalpha.c 		\
 		ft_lstnew.c			\
 		ft_lstprint.c		\
 		ft_dprintf.c		\
+		ft_sort_arr.c		\
+		ft_atos.c			\
+		ft_arrchr.c			\
+		ft_occ.c			\
 
 OBJ = $(SRCS:.c=.o)
 
@@ -78,7 +83,7 @@ SRCS := $(addprefix $(SRCS_D), $(SRCS))
 
 # compiler settings
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES_D) -g3 -D BUFFER_SIZE=4 -fPIC
+CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES_D) -g3 -D BUFFER_SIZE=4 -fPIE
 MAKEFLAGS += -s
 
 # commands

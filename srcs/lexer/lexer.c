@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:46 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:47 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 10:01:42 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 	ft_lstprint("var lst: ", var_lst);
 	process_str = join_lst(var_lst);
 	ft_printf("process str: [%s]\n", process_str);
+	process_str = process_wildcard(process_str);
+	printf("expanded wildcard: %s\n", process_str);
 	ft_printf("----------------------------------------------------------\n");
 	ft_lstclear(&quotes_lst, free);
 	ft_lstclear(&var_lst, free);
-	*code = check_cmd_line(process_str, env);
 	return (process_str);
 }
 
@@ -45,10 +46,11 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 	char	*process_str;
 
 	if (cmd_line[0] == '\0')
-		return (ft_strdup(cmd_line));
+		return ((char *)cmd_line);
 	quotes_lst = process_quotes(cmd_line);
 	var_lst = process_expanded_vars(quotes_lst, env, *code);
 	process_str = join_lst(var_lst);
+	process_str = process_wildcard(process_str);
 	ft_lstclear(&quotes_lst, free);
 	ft_lstclear(&var_lst, free);
 	if (process_str == NULL)
@@ -56,8 +58,6 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 		*code = MALLOC_ERR;
 		return (NULL);
 	}
-	if (code)
-		*code = check_cmd_line(process_str, env);
 	return (process_str);
 }
 

@@ -6,12 +6,24 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:52 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:53 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:00:32 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <sys/stat.h>
+
+char	*get_exec_name(char *name)
+{
+	char	*result;
+
+	result = ft_strrchr(name, '/');
+	if (result == NULL)
+		result = name;
+	else
+		result++;
+	return (result);
+}
 
 char	**get_paths(char **env)
 {
@@ -33,21 +45,21 @@ static char	*get_path(char **paths, t_command cmd)
 {
 	int			i;
 	char		*cmd_path;
-	struct stat	st;
 
+	if (paths == NULL || ft_occ(cmd.args[0], '.') == ft_strlen(cmd.args[0]))
+		return (NULL);
 	i = -1;
 	while (paths[++i] != NULL)
 	{
 		cmd_path = ft_strjoin("/", cmd.args[0]);
-		if (cmd_path == NULL)
+		if (malloc_assert(cmd_path, __FILE__, __LINE__, __FUNCTION__))
 			return (cleanup_arr((void **)paths), NULL);
 		cmd_path = ft_strjoin_free(paths[i], cmd_path, FREE2);
-		if (cmd_path == NULL)
+		if (malloc_assert(cmd_path, __FILE__, __LINE__, __FUNCTION__))
 			return (cleanup_arr((void **)paths), NULL);
 		if (access(cmd_path, F_OK) == 0)
 		{
 			cleanup_arr((void **)paths);
-			stat(cmd.args[0], &st);
 			return (cmd_path);
 		}
 		free(cmd_path);
@@ -81,14 +93,14 @@ char	*get_cmd_path(char **paths, t_command cmd)
 {
 	struct stat	st;
 
-	if (paths == NULL || cmd.args[0][0] == '\0')
-		return (NULL);
+	if (cmd.args[0][0] == '\0')
+		return (cleanup_arr((void **)paths), NULL);
 	if (is_builtin(cmd.args[0]))
 	{
 		cleanup_arr((void **)paths);
 		return (ft_strdup(cmd.args[0]));
 	}
-	if (cmd.args[0][0] == '.')
+	if (ft_strchr(cmd.args[0], '/') != NULL)
 	{
 		cleanup_arr((void **)paths);
 		if (access(cmd.args[0], F_OK) == 0)

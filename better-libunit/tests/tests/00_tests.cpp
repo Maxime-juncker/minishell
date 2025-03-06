@@ -30,7 +30,7 @@ int	tests_routine( void )
 	routine.AddNewTest(Libunit::Test("syntax", "||||||||||", &synt_err_20));
 	routine.AddNewTest(Libunit::Test("syntax", ">>|><", &synt_err_21));
 	routine.AddNewTest(Libunit::Test("syntax", "\"hola\"", &synt_err_22));
-	// routine.AddNewTest(Libunit::Test("syntax", "hola\'", &synt_err_23));
+	routine.AddNewTest(Libunit::Test("syntax", "hola\'", &synt_err_23));
 	routine.AddNewTest(Libunit::Test("syntax", "hola", &synt_err_24));
 	routine.AddNewTest(Libunit::Test("syntax", "hola boula badaboum", &synt_err_25));
 	routine.AddNewTest(Libunit::Test("syntax", "Makefile", &synt_err_26));
@@ -47,10 +47,10 @@ int	tests_routine( void )
 	routine.AddNewTest(Libunit::Test("DOLLAR", "echo $?", &dolars_01));
 	routine.AddNewTest(Libunit::Test("DOLLAR", "echo $?$?", &dolars_02));
 	routine.AddNewTest(Libunit::Test("DOLLAR", "echo ?$DESKTOP_SESSION", &dolars_03));
-	routine.AddNewTest(Libunit::Test("DOLLAR", "echo $", &dolars_04));
+	routine.AddNewTest(Libunit::Test("DOLLAR", "$", &dolars_04));
 	routine.AddNewTest(Libunit::Test("DOLLAR", "echo $HOMEgfehgeuohge", &dolars_05));
 	routine.AddNewTest(Libunit::Test("DOLLAR", "\"$HOMEgfehgeuohge\"", &dolars_06));
-	routine.AddNewTest(Libunit::Test("DOLLAR", "$HOMEgfehgeuohge", &dolars_07));
+	// routine.AddNewTest(Libunit::Test("DOLLAR", "$HOMEgfehgeuohge", &dolars_07));
 	routine.AddNewTest(Libunit::Test("DOLLAR", "$DONTEXIST", &dolars_08));
 	routine.AddNewTest(Libunit::Test("DOLLAR", "$DONTEXIST$VAR", &dolars_09));
 

@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:00 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 23:29:22 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/01 10:25:13 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,14 @@ void	cleanup_table(t_command_table *table)
 		i++;
 	}
 	free(table->commands);
+}
+
+int	is_symbol(char c)
+{
+	return (
+		c == '|'
+		|| c == '&'
+		|| c == '<'
+		|| c == '>'
+	);
 }

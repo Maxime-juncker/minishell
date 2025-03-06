@@ -6,13 +6,13 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 11:00:09 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/05 13:35:21 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/01 09:19:04 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor/executor.hpp"
 #include "builtin/builtin.hpp"
-#include "commands/commands.hpp"
+#include "pipeline/commands.hpp"
 #include "tests/tests.hpp"
 #include "echo/echo.hpp"
 

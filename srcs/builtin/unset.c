@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:35:07 by abidolet          #+#    #+#             */
-/*   Updated: 2025/02/22 10:35:09 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/02 22:00:26 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,45 +30,48 @@ int	get_env_len(char **env, char *arg)
 	return (len);
 }
 
-static char	**unset(char **env, char *arg, int len)
+static char	**unset(char **env, char *arg, int len, int *is_malloc_error)
 {
 	char	**cpy;
 	int		i;
 
 	cpy = malloc((len + 1) * sizeof(char *));
-	if (cpy == NULL)
-		return (NULL);
-	i = 0;
+	if (malloc_assert(cpy, __FILE__, __LINE__, __FUNCTION__))
+		return (*is_malloc_error = 1, env);
+	i = -1;
 	len = 0;
-	while (env[i] != NULL)
+	while (env[++i] != NULL)
 	{
 		if (ft_strscmp(env[i], arg, "+="))
 		{
-			cpy[len] = ft_strdup(env[i]);
-			if (!cpy[len])
-			{
-				cleanup_arr((void **)cpy);
-				return (NULL);
-			}
+			cpy[len] = env[i];
 			len++;
 		}
-		i++;
+		else
+			free(env[i]);
 	}
-	if (env)
-		cleanup_arr((void **)env);
-	return (cpy[len] = NULL, cpy);
+	free(env);
+	cpy[len] = NULL;
+	return (cpy);
 }
 
-void	unset_if_needed(t_command_table *table, char *arg)
+int	unset_if_needed(t_command_table *table, char *arg)
 {
 	int		len;
+	int		is_malloc_error;
 
+	is_malloc_error = 0;
 	len = get_env_len(table->env, arg);
 	if (len != -1)
-		table->env = unset(table->env, arg, len);
+		table->env = unset(table->env, arg, len, &is_malloc_error);
+	if (is_malloc_error)
+		return (MALLOC_ERR);
 	len = get_env_len(table->exp, arg);
 	if (len != -1)
-		table->exp = unset(table->exp, arg, len);
+		table->exp = unset(table->exp, arg, len, &is_malloc_error);
+	if (is_malloc_error)
+		return (MALLOC_ERR);
+	return (0);
 }
 
 int	unset_cmd(t_command_table *table, t_command cmd)
@@ -78,8 +81,7 @@ int	unset_cmd(t_command_table *table, t_command cmd)
 	i = 1;
 	while (cmd.args[i])
 	{
-		unset_if_needed(table, cmd.args[i]);
-		if (table->env == NULL || table->exp == NULL)
+		if (unset_if_needed(table, cmd.args[i]) == MALLOC_ERR)
 			return (MALLOC_ERR);
 		i++;
 	}

@@ -11,7 +11,7 @@ int	echo_01( void )
 
 	init_table(process_line("echo", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("\n") == 0)
 		return (0);
@@ -27,7 +27,7 @@ int	echo_02( void )
 
 	init_table(process_line("echo -n", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("") == 0)
 		return (0);
@@ -43,7 +43,7 @@ int	echo_03( void )
 
 	init_table(process_line("echo Test", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("Test\n") == 0)
 		return (0);
@@ -59,7 +59,7 @@ int	echo_04( void )
 	};
 
 	Libunit::Redirect_err();
-	if (check_cmd_line("echoHola", environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd_line(ft_strdup("echoHola"), &code) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -73,7 +73,7 @@ int	echo_05( void )
 	};
 
 	Libunit::Redirect_err();
-	if (check_cmd_line("echo-nHola", environ) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
+	if (check_cmd_line(ft_strdup("echo-nHola"), &code) == NOT_FOUND && Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
 	else
 		return (1);
@@ -87,7 +87,7 @@ int	echo_07( void )
 
 	init_table(process_line("echo -n test", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("test") == 0)
 		return (0);
@@ -108,7 +108,7 @@ int	echo_08( void )
 
 	init_table(process_line("echo \"-n\" Test", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
@@ -124,7 +124,7 @@ int	echo_09( void )
 
 	init_table(process_line("echo -ntest", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("-ntest\n") == 0)
 		return (0);
@@ -140,7 +140,7 @@ int	echo_10( void )
 
 	init_table(process_line("echo test -n", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("test -n\n") == 0)
 		return (0);
@@ -156,7 +156,7 @@ int	echo_11( void )
 
 	init_table(process_line("echo test1 test2 test3", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("test1 test2 test3\n") == 0)
 		return (0);
@@ -172,7 +172,7 @@ int	echo_12( void )
 
 	init_table(process_line("echo                test", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("test\n") == 0)
 		return (0);
@@ -188,7 +188,7 @@ int	echo_13( void )
 
 	init_table(process_line("echo test1     test2    test3", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("test1 test2 test3\n") == 0)
 		return (0);
@@ -204,7 +204,7 @@ int	echo_14( void )
 
 	init_table(process_line("echo    \\n test", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("n test") == 0)
 		return (0);
@@ -220,7 +220,7 @@ int	echo_15( void )
 
 	init_table(process_line("echo \"         \" | cat -e", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("         $\n") == 0)
 		return (0);
@@ -236,7 +236,7 @@ int	echo_16( void )
 
 	init_table(process_line("echo           | cat -e", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("$\n") == 0)
 		return (0);
@@ -260,7 +260,7 @@ int	echo_17( void )
 
 	init_table(process_line("\"\"test", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", expected, 1) == 0)
 		return (0);
@@ -276,7 +276,7 @@ int	echo_18( void )
 
 	init_table(process_line("echo -n -n", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("") == 0)
 		return (0);
@@ -292,7 +292,7 @@ int	echo_19( void )
 
 	init_table(process_line("echo -n -n test oui", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("test oui") == 0)
 		return (0);
@@ -308,7 +308,7 @@ int	echo_20( void )
 
 	init_table(process_line("echo -p", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("-p\n") == 0)
 		return (0);
@@ -324,7 +324,7 @@ int	echo_21( void )
 
 	init_table(process_line("echo -nnnnnnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("") == 0)
 		return (0);
@@ -340,7 +340,7 @@ int	echo_22( void )
 
 	init_table(process_line("echo -nnnn -n -nnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("") == 0)
 		return (0);
@@ -356,7 +356,7 @@ int	echo_23( void )
 
 	init_table(process_line("echo -nnnn-n -nnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("-nnnn-n -nnnn\n") == 0)
 		return (0);
@@ -372,7 +372,7 @@ int	echo_24( void )
 
 	init_table(process_line("echo -n -nnn test -n -nnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("test -n -nnnn") == 0)
 		return (0);
@@ -388,7 +388,7 @@ int	echo_25( void )
 
 	init_table(process_line("echo -n -nnn-nnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("-nnn-nnnn") == 0)
 		return (0);
@@ -404,7 +404,7 @@ int	echo_26( void )
 
 	init_table(process_line("echo -----n", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("-----n\n") == 0)
 		return (0);
@@ -420,7 +420,7 @@ int	echo_27( void )
 
 	init_table(process_line("echo -nnn -----n", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("-----n") == 0)
 		return (0);
@@ -436,7 +436,7 @@ int	echo_28( void )
 
 	init_table(process_line("echo -nnn -----nn---nnnn", table.env, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::Check_output("-----nn---nnnn") == 0)
 		return (0);
@@ -457,7 +457,7 @@ int	echo_29( void )
 
 	Libunit::Redirect_log();
 	init_table(process_line("echo $", environ, &code), &table);
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
@@ -478,7 +478,7 @@ int	echo_30( void )
 
 	init_table(process_line("echo $?", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
@@ -499,7 +499,7 @@ int	echo_31( void )
 
 	init_table(process_line("echo $?$", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
@@ -520,7 +520,7 @@ int	echo_32( void )
 
 	Libunit::Redirect_log();
 	init_table(process_line("echo $? | echo $? | echo $?", environ, &code), &table);
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
@@ -541,7 +541,7 @@ int	echo_33( void )
 
 	init_table(process_line("echo $:$= | cat -e", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
@@ -562,7 +562,7 @@ int	echo_34( void )
 
 	init_table(process_line("echo \" $ \" | cat -e", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
@@ -578,12 +578,12 @@ int	echo_35( void )
 	};
 
 	t_command_table	table;
-		table.env = duplicate_env(environ);
+	table.env = duplicate_env(environ);
 	table.exp = duplicate_env(environ);;
 
 	init_table(process_line("echo \' $ \' | cat -e", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
@@ -604,7 +604,7 @@ int	echo_36( void )
 
 	init_table(process_line("echo \"$DONTEXIST\"test", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
@@ -625,7 +625,7 @@ int	echo_37( void )
 
 	init_table(process_line("echo \"$DONTEXIST\"\"test\"", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
@@ -646,7 +646,7 @@ int	echo_38( void )
 
 	init_table(process_line("echo \"$DONTEXIST\" \"test\"", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
@@ -667,7 +667,7 @@ int	echo_39( void )
 
 	init_table(process_line("echo \"$DONTEXIST\"       \"test\"", environ, &code), &table);
 	Libunit::Redirect_log();
-	run_pipeline(&table);
+	run_pipeline(&table, NULL);
 
 	if (Libunit::CheckFile("log.txt", exepted_file, 1) == 0)
 		return (0);
