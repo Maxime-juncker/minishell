@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 17:39:44 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:31:27 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ int	new_prompt(t_command_table *table)
 		return (MALLOC_ERR);
 	line = readline(prompt_char);
 	free(prompt_char);
+	remove_unnecessary_parentheses(line);
 	if (g_signal_received)
 	{
 		free(line);

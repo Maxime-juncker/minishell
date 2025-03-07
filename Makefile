@@ -64,6 +64,7 @@ SRCS = 		main.c						\
 			pipeline_utils.c			\
 			pipe_checker.c				\
 			formater.c					\
+			remove_unnecessary_parentheses.c \
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/07 10:11:13 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:32:19 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,9 @@ int		redir(t_command *cmd);
 char	**ft_split_pipe(const char *s);
 char	**ft_split_operators(const char *s);
 void	free_all(char **res, int i);
+
+// remove_unnecessary_parentheses.c
+void	remove_unnecessary_parentheses(char *s);
 
 /* -------------------------------------------------------------------------- */
 /*                                   others                                   */
