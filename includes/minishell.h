@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 17:36:36 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/07 10:11:13 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ char	*new_prompt_txt(char **env);
 // prompt.c
 int		handle_line_symbol(t_command_table *table, char *arg, int *code,
 			t_list **to_free);
+int		new_prompt(t_command_table *table);
 
 /* -------------------------------------------------------------------------- */
 /*                                   builtin                                  */
@@ -101,15 +102,12 @@ size_t	arrlen(void **arr);
 
 // export_utils.c
 int		export_env(t_command_table *table, char *arg, int append);
-int		malloc_assert(void *mem, const char *file,
-			int line, const char *function);
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);
-void	sort_export(char **argv);
 
 // pwd.c
-int		pwd(const t_command cmd);
+int		pwd(void);
 
 // unset.c
 int		unset_cmd(t_command_table *table, t_command cmd);
@@ -124,7 +122,6 @@ void	exit_shell(t_command_table *table, t_command cmd, t_free_pkg package);
 /* -------------------------------------------------------------------------- */
 
 // checker_utils.c
-int		in_base(const char c, const char *base);
 int		token_error(char c1, char c2);
 void	cleanup_arr(void **arr);
 void	cleanup_pacakge(void *package);
@@ -192,6 +189,9 @@ int		run_built_in(const t_command cmd, const t_command_table *table);
 // waiter.c
 int		wait_for_process(t_command_table *table, int *childs, int *code);
 
+// paths.c
+char	*get_exec_name(char *name);
+
 /* -------------------------------------------------------------------------- */
 /*                                    lexer                                   */
 /* -------------------------------------------------------------------------- */
@@ -206,9 +206,6 @@ int		is_symbol(char c);
 
 // lexer.c
 char	*process_line(const char *cmd_line, char **env, int *code);
-
-// quote_utils.c
-size_t	get_str_len(const char *str);
 
 // var_processing.c
 t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
@@ -232,6 +229,7 @@ size_t	count_files(char *path);
 
 // formater.c
 char	*format_spaces(char *src);
+char	*format_wildcard(char **expanded);
 
 /* -------------------------------------------------------------------------- */
 /*                                   parser                                   */
@@ -245,6 +243,8 @@ int		redir(t_command *cmd);
 
 // ft_split_pipe.c
 char	**ft_split_pipe(const char *s);
+char	**ft_split_operators(const char *s);
+void	free_all(char **res, int i);
 
 /* -------------------------------------------------------------------------- */
 /*                                   others                                   */
@@ -255,14 +255,6 @@ void	init_env(t_command_table *table, char **env);
 void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);
 int		check_interrupt(void);
-
-// prompt.c
-int		new_prompt(t_command_table *table);
-
-char	**ft_split_operators(const char *s);
-void	free_all(char **res, int i);
-
-char	*get_exec_name(char *name);
 
 // config.c
 int		load_config(t_command_table *table);

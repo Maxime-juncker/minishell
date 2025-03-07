@@ -6,7 +6,7 @@
 #    By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 18:00:56 by mjuncker          #+#    #+#              #
-#    Updated: 2025/03/06 15:01:32 by mjuncker         ###   ########.fr        #
+#    Updated: 2025/03/07 10:07:53 by mjuncker         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,6 +74,7 @@ SRCS =  ft_isalpha.c 		\
 		ft_atos.c			\
 		ft_arrchr.c			\
 		ft_occ.c			\
+		ft_pad.c			\
 
 OBJ = $(SRCS:.c=.o)
 
@@ -83,7 +84,7 @@ SRCS := $(addprefix $(SRCS_D), $(SRCS))
 
 # compiler settings
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES_D) -g3 -D BUFFER_SIZE=4 -fPIE
+CFLAGS = -Wall -Wextra -Werror -I$(INCLUDES_D) -g3 -D BUFFER_SIZE=4 -fPIE
 MAKEFLAGS += -s
 
 # commands

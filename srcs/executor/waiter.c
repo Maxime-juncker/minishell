@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 10:38:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 09:51:44 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/07 09:51:55 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	propagate_sig(size_t i, t_command_table *table, int *childs)
 		if (seek_cmd(table, table->name) == -1)
 		{
 			if (g_signal_received == SIGQUIT)
-				printf("Quit (core dumped)");
+				printf("%sQuit (core dumped)%s", RED, RESET);
 			printf("\n");
 		}
 	}
@@ -60,7 +60,7 @@ int	wait_for_process(t_command_table *table, int *childs, int *code)
 		{
 			*code = g_signal_received + 128;
 		}
-		if (pid == -1)
+		if (pid != -1)
 		{
 			propagate_sig(i, table, childs);
 			return (close_all_fds(table), *code);

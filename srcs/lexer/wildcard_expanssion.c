@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:50:51 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/05 10:29:36 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/07 10:41:46 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ char	*add_files(char *line, DIR *dir, char **patern)
 {
 	struct dirent	*infos;
 	char			**expanded;
-	char			*res;
 
 	expanded = ft_calloc(count_files(".") + 1, sizeof(char *));
 	infos = readdir(dir);
@@ -77,8 +76,7 @@ char	*add_files(char *line, DIR *dir, char **patern)
 	if (expanded[0] == NULL)
 		return (cleanup_arr((void **)expanded), ft_strdup(line));
 	ft_sort_normalized(expanded);
-	res = ft_atos(expanded, ' ');
-	return (cleanup_arr((void **)expanded), res);
+	return (format_wildcard(expanded));
 }
 
 int	expand_necessary(char **patern)

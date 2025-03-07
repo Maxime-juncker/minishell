@@ -45,7 +45,6 @@ SRCS = 		main.c						\
 			split_line.c				\
 			lexer_utils.c				\
 			join_lst.c					\
-			quote_utils.c				\
 			redir_checker.c				\
 			token_error.c				\
 			quote_checker.c				\
@@ -118,6 +117,7 @@ $(OBJ_D)%.o: %.c includes/minishell.h libft/bin/libft.a | $(OBJ_D)
 # ---------------------------------------------------------------------------- #
 #                                   cleaning                                   #
 # ---------------------------------------------------------------------------- #
+
 .PHONY: clean
 clean:
 	printf "$(RED)clean:\t$(NAME)\n\n"
@@ -133,19 +133,15 @@ fclean:
 	printf "$(RED)fclean:\t$(NAME)\n"
 	$(MAKE) clean
 
-.PHONY: clog
-clog:
-	$(RM) $(LOG_D)
-
 .PHONY: re
 re:
 		$(MAKE) fclean
 		$(MAKE) all
 
-
 # ---------------------------------------------------------------------------- #
 #                                  miscelanous                                 #
 # ---------------------------------------------------------------------------- #
+
 .PHONY: header
 header:
 	printf "$(YELLOW)\n"
@@ -161,15 +157,15 @@ header:
 libft:
 	$(MAKE) -C libft
 
-.PHONY: test
-test:
-	$(MAKE) all
-	$(MAKE) $(BIN)/libminishell.a
-	$(MAKE) test -C better-libunit/
+# .PHONY: test
+# test:
+# 	$(MAKE) all
+# 	$(MAKE) $(BIN)/libminishell.a
+# 	$(MAKE) test -C better-libunit/
 
 .PHONY: leaks
 leaks: all
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=ignore_readline.supp -s ./bin/minishell
+	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --track-origins=yes --suppressions=ignore_readline.supp -s ./bin/minishell
 
 # ---------------------------------------------------------------------------- #
 #                              create directories                              #

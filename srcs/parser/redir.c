@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 15:49:00 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/07 09:37:09 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ static int	handle_eof(char **line, char *deli, int diff, t_command *cmd)
 	{
 		new_line = process_var(*line, cmd->env, cmd->code, NULL);
 		free(*line);
-		if (malloc_assert(new_line, __FILE__, __LINE__, __FUNCTION__))
-			return (cmd->code = MALLOC_ERR, 1);
+		if (new_line == NULL)
+			return (1);
 		*line = new_line;
 	}
 	return (0);

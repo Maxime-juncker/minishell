@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:37:27 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/02 21:59:37 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/07 09:49:23 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,11 @@ static char	*get_pwd(int *is_malloc_error)
 	return (res);
 }
 
-int	pwd(const t_command cmd)
+int	pwd(void)
 {
 	char	*path;
 	int		is_malloc_error;
 
-	if (cmd.n_args > 1)
-	{
-		ft_dprintf(2, "%sminishell: pwd: invalid option%s\n", RED, RESET);
-		return (0);
-	}
 	is_malloc_error = 0;
 	path = get_pwd(&is_malloc_error);
 	if (is_malloc_error)

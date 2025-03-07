@@ -1,23 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quote_utils.c                                      :+:      :+:    :+:   */
+/*   ft_pad.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/21 14:56:44 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 14:56:45 by mjuncker         ###   ########.fr       */
+/*   Created: 2025/03/07 10:04:53 by mjuncker          #+#    #+#             */
+/*   Updated: 2025/03/07 10:08:43 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-size_t	get_str_len(const char *str)
+char	*ft_pad(char *s, char c)
 {
-	size_t	i;
+	char	*res;
+	int		i;
 
+	res = ft_calloc(ft_strlen(s) + 3, sizeof(char));
+	if (malloc_assert(res, __FILE__, __LINE__, __FUNCTION__))
+		return (NULL);
+	res[0] = c;
 	i = 0;
-	while (str[i] && !(str[i] == '\'' || str[i] == '\"'))
+	while (s[i])
+	{
+		res[i + 1] = s[i];
 		i++;
-	return (i);
+	}
+	res[i + 1] = c;
+	res[i + 2] = '\0';
+	return (res);
 }
