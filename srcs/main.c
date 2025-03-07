@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 15:07:17 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:29:43 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	main(int argc, char **argv, char **env)
 	table.name = get_exec_name(argv[0]);
 	table.setup_fd = -1;
 	table.code = 0;
-	load_config(&table);
 	table.setup_fd = -1;
 	while (code != MALLOC_ERR)
 	{

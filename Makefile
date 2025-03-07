@@ -60,7 +60,6 @@ SRCS = 		main.c						\
 			prompt_line.c				\
 			wildcard_utils.c			\
 			waiter.c					\
-			config.c					\
 			pipeline_utils.c			\
 			pipe_checker.c				\
 			formater.c					\
@@ -90,6 +89,8 @@ CURSOR_ON 		= \e[?25h
 RM = rm -fr
 
 all: header libft $(BIN_D)$(NAME)
+
+bonus: all
 
 # ---------------------------------------------------------------------------- #
 #                                 creating exec                                #
