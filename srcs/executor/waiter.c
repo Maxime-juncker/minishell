@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 10:38:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/07 09:51:55 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/07 10:56:47 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,21 +50,19 @@ int	wait_for_process(t_command_table *table, int *childs, int *code)
 	int		pid;
 	size_t	i;
 
-	i = -1;
-	while (childs[++i] != -1)
+	i = 0;
+	while (childs[i] != -1)
 	{
 		pid = wait(code);
 		if (WIFEXITED(*code))
 			*code = WEXITSTATUS(*code);
-		else if (g_signal_received)
+		if (g_signal_received)
 		{
 			*code = g_signal_received + 128;
-		}
-		if (pid != -1)
-		{
 			propagate_sig(i, table, childs);
 			return (close_all_fds(table), *code);
 		}
+		i++;
 	}
 	return (close_all_fds(table), *code);
 }
