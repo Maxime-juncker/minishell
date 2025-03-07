@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 12:12:12 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/07 10:15:28 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,52 +39,57 @@ static int	create_arg(char **cmd_arg, char *str)
 	char	*arg;
 	int		i;
 	int		quote;
+	int		start;
 
 	i = 0;
 	quote = 0;
+	start = 0;
+	while (str[i] == ' ')
+		i++;
+	start = i;
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '\"')
-			quote = toggle_quote(quote, str[i]);
-		if (!quote && str[i] == ' ')
+			quote = toggle_quote(str[i], quote);
+		else if (quote == 0 && str[i] == ' ')
 			break ;
 		i++;
 	}
-	arg = malloc(sizeof(char) * (i + 1));
+	arg = malloc(sizeof(char) * (i - start + 1));
 	if (malloc_assert(arg, __FILE__, __LINE__, __FUNCTION__) != 0)
 		return (MALLOC_ERR);
-	ft_strlcpy(arg, str, i + 1);
+	ft_strlcpy(arg, &str[start], i - start + 1);
 	*cmd_arg = arg;
 	return (0);
 }
 
 static int	get_args(t_command *cmd, char *cmd_str)
 {
-	int		i;
-	int		quote;
-	int		new_arg;
-	int		n_args;
+	int	i;
+	int	quote;
+	int	n_args;
 
-	cmd->args = malloc(sizeof(char *) * count_args(cmd_str));
+	cmd->args = malloc(sizeof(char *) * (count_args(cmd_str) + 1));
 	if (malloc_assert(cmd->args, __FILE__, __LINE__, __FUNCTION__) != 0)
 		return (MALLOC_ERR);
-	quote = 0;
 	i = 0;
-	new_arg = 1;
+	quote = 0;
 	n_args = 0;
-	while (cmd_str[i] == ' ')
-		i++;
 	while (cmd_str[i])
 	{
-		if (cmd_str[i] == '\'' || cmd_str[i] == '\"')
-			quote = toggle_quote(quote, cmd_str[i]);
-		if (new_arg && create_arg(&cmd->args[n_args++], &cmd_str[i])
-			== MALLOC_ERR)
+		while (cmd_str[i] == ' ')
+			i++;
+		if (cmd_str[i] == '\0')
+			break ;
+		if (create_arg(&cmd->args[n_args], &cmd_str[i]) == MALLOC_ERR)
 			return (free(cmd->args), MALLOC_ERR);
-		new_arg = (!quote && cmd_str[i] == ' ' && cmd_str[i + 1]);
-		i++;
+		while (cmd_str[i] && (quote || cmd_str[i] != ' '))
+			if (cmd_str[i++] == '\'' || cmd_str[i - 1] == '\"')
+				quote = toggle_quote(cmd_str[i - 1], quote);
+		n_args++;
 	}
-	return (cmd->args[n_args] = NULL, 0);
+	cmd->args[n_args] = NULL;
+	return (0);
 }
 
 static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
