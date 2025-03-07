@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/07 10:11:13 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:29:49 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,8 +255,5 @@ void	init_env(t_command_table *table, char **env);
 void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);
 int		check_interrupt(void);
-
-// config.c
-int		load_config(t_command_table *table);
 
 #endif
