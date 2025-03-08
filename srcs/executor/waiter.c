@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   waiter.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 10:38:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/07 10:56:47 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/08 13:12:39 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,12 @@ static void	propagate_sig(size_t i, t_command_table *table, int *childs)
 
 int	wait_for_process(t_command_table *table, int *childs, int *code)
 {
-	int		pid;
 	size_t	i;
 
 	i = 0;
 	while (childs[i] != -1)
 	{
-		pid = wait(code);
+		wait(code);
 		if (WIFEXITED(*code))
 			*code = WEXITSTATUS(*code);
 		if (g_signal_received)

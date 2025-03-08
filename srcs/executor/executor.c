@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 15:33:30 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/08 13:16:24 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// ls && wejgoiw || (cd / && pwd) && pwd
 
 #include "minishell.h"
 

@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:00 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/01 10:25:13 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/08 13:17:06 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,13 @@ void	init_env(t_command_table *table, char **env)
 
 int	check_interrupt(void)
 {
-	if (g_signal_received)
-		rl_done = 1;
 	return (0);
 }
 
 void	handle_signal(int signal)
 {
 	g_signal_received = signal;
+	rl_done = 1;
 }
 
 void	cleanup_table(t_command_table *table)

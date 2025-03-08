@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/07 09:37:09 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/08 13:19:59 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <fcntl.h>
 #include <readline/readline.h>
+#include <signal.h>
 
 static int	update_command(t_command *cmd)
 {
@@ -59,7 +60,7 @@ static int	handle_eof(char **line, char *deli, int diff, t_command *cmd)
 	}
 	else if (!ft_strcmp(*line, deli))
 		return (free(*line), nb_line = -1, 1);
-	else if (!diff)
+	else if (!diff && !g_signal_received)
 	{
 		new_line = process_var(*line, cmd->env, cmd->code, NULL);
 		free(*line);
@@ -79,8 +80,8 @@ static int	heredoc(t_command *cmd, char *deli, int diff)
 		return (perror("Failed to open file"), 1);
 	while (1)
 	{
-		if (g_signal_received)
-			return (g_signal_received = 0, 1);
+		if (g_signal_received == SIGINT)
+			return (1);
 		line = readline("> ");
 		if (!line && handle_eof(NULL, deli, 0, cmd))
 			break ;
