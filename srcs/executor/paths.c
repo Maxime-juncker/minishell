@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:52 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 16:25:22 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:36:07 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,29 @@ char	**get_paths(char **env)
 	return (ft_split(tmp, ':'));
 }
 
+static char *find_local(t_command cmd)
+{
+	char	*path;
+
+	path = ft_strjoin("./", cmd.args[0]);
+	if (malloc_assert(path, __FILE__, __LINE__, __FUNCTION__))
+		return (NULL);
+	if (access(path, F_OK) == 0)
+	{
+		return (path);
+	}
+	return (NULL);
+}
+
 static char	*get_path(char **paths, t_command cmd)
 {
 	int			i;
 	char		*cmd_path;
 
-	if (paths == NULL || ft_occ(cmd.args[0], '.') == ft_strlen(cmd.args[0]))
+	if (ft_occ(cmd.args[0], '.') == ft_strlen(cmd.args[0]))
 		return (cleanup_arr((void **)paths), NULL);
+	if (paths == NULL)
+		return (find_local(cmd));	
 	i = -1;
 	while (paths[++i] != NULL)
 	{
