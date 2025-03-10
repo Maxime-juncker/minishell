@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:35:07 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/02 22:00:26 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/10 13:02:38 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	get_env_len(char **env, char *arg)
 	diff = 0;
 	while (env[len])
 	{
-		if (arg && !ft_strscmp(env[len], arg, "="))
+		if (arg && !ft_strscmp(env[len], arg, "=")
+			&& ft_strlen(arg) == ft_strclen(env[len], '='))
 			diff++;
 		len++;
 	}
@@ -42,7 +43,8 @@ static char	**unset(char **env, char *arg, int len, int *is_malloc_error)
 	len = 0;
 	while (env[++i] != NULL)
 	{
-		if (ft_strscmp(env[i], arg, "+="))
+		if (ft_strscmp(env[i], arg, "+=") || ft_strlen(arg)
+			!= ft_strclen(env[i], '='))
 		{
 			cpy[len] = env[i];
 			len++;
@@ -60,6 +62,8 @@ int	unset_if_needed(t_command_table *table, char *arg)
 	int		len;
 	int		is_malloc_error;
 
+	if (!arg)
+		return (MALLOC_ERR);
 	is_malloc_error = 0;
 	len = get_env_len(table->env, arg);
 	if (len != -1)
@@ -71,6 +75,7 @@ int	unset_if_needed(t_command_table *table, char *arg)
 		table->exp = unset(table->exp, arg, len, &is_malloc_error);
 	if (is_malloc_error)
 		return (MALLOC_ERR);
+	free(arg);
 	return (0);
 }
 
@@ -81,7 +86,7 @@ int	unset_cmd(t_command_table *table, t_command cmd)
 	i = 1;
 	while (cmd.args[i])
 	{
-		if (unset_if_needed(table, cmd.args[i]) == MALLOC_ERR)
+		if (unset_if_needed(table, ft_strdup(cmd.args[i])) == MALLOC_ERR)
 			return (MALLOC_ERR);
 		i++;
 	}
