@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   waiter.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 10:38:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/08 13:12:39 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:09:17 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static void	propagate_sig(size_t i, t_command_table *table, int *childs)
 		if (seek_cmd(table, table->name) == -1)
 		{
 			if (g_signal_received == SIGQUIT)
-				printf("%sQuit (core dumped)%s", RED, RESET);
-			printf("\n");
+				ft_printf("%sQuit (core dumped)%s", RED, RESET);
+			ft_printf("\n");
 		}
 	}
 }

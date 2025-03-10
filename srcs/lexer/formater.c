@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:22:25 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/07 10:41:50 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:09:27 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ void	print_arr(char **arr)
 	i = 0;
 	while (arr[i])
 	{
-		printf("[%s]", arr[i]);
+		ft_printf("[%s]", arr[i]);
 		i++;
 	}
-	printf("\n");
+	ft_printf("\n");
 }
 
 char	*format_wildcard(char **expanded)
