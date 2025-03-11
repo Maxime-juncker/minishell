@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 12:58:51 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 13:01:27 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <readline/readline.h>
 #include <signal.h>
 
-static int	update_command(t_command *cmd)
+int	update_command(t_command *cmd)
 {
 	char	**temp;
 	int		i;
@@ -91,7 +91,7 @@ int	redir(t_command_table *table, t_command *cmd)
 			cmd->n_args++;
 		i++;
 	}
-	return (update_command(cmd));
+	return (0);
 }
 
 int	heredoc(t_command_table *table, t_command *cmd, char *temp)
