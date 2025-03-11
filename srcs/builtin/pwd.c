@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:37:27 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/10 12:08:39 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:52:24 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,17 @@ static char	*get_pwd(int *is_malloc_error)
 	return (res);
 }
 
-int	pwd(void)
+int	pwd(const t_command *cmd)
 {
 	char	*path;
 	int		is_malloc_error;
 
+	if (cmd->n_args > 1 && cmd->args[1][0] == '-' && cmd->args[1][0] != '\0')
+	{
+		ft_dprintf(2, "%sminishell: pwd: %s invalid option\n",
+			RED, cmd->args[1]);
+		return (2);
+	}
 	is_malloc_error = 0;
 	path = get_pwd(&is_malloc_error);
 	if (is_malloc_error)

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:27 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/11 10:29:11 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:45:11 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,30 +83,10 @@ static char	*get_file_name(const char *s)
 	return (free(file), res);
 }
 
-static int	skip_check_in(const char *cmd_line, int i)
-{
-	if (i > 0)
-	{
-		if (cmd_line[i + 1] == '<' || cmd_line[i - 1] == '<'
-			|| cmd_line[i + 1] == '>' || cmd_line[i + 1] == '\0')
-			return (1);
-	}
-	else if (cmd_line[i + 1] == '<' || cmd_line[i + 1] == '>'
-		|| cmd_line[i + 1] == '\0')
-		return (1);
-	while (cmd_line[i] == ' ')
-		i++;
-	if (cmd_line[i] == '\0')
-		return (1);
-	return (0);
-}
-
 int	check_redir_in(const char *cmd_line, int i)
 {
 	char	*file;
 
-	if (skip_check_in(cmd_line, i))
-		return (0);
 	file = get_file_name(cmd_line + i);
 	if (file == NULL)
 	{
@@ -118,6 +98,13 @@ int	check_redir_in(const char *cmd_line, int i)
 			RED, file, RESET);
 		free(file);
 		return (NOT_FOUND);
+	}
+	if (access(file, R_OK) == -1)
+	{
+		ft_dprintf(2, "%sminishell: %s: Permission denied\n%s",
+			RED, file, RESET);
+		free(file);
+		return (PERM_DENIED);
 	}
 	free(file);
 	return (0);
