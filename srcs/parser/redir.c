@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 10:29:44 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:43:33 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,18 @@ int	redir(t_command_table *table, t_command *cmd)
 	return (update_command(cmd));
 }
 
-int	heredoc(t_command_table *table, t_command *cmd, char *deli)
+int	heredoc(t_command_table *table, t_command *cmd, char *temp)
 {
+	char	*deli;
 	char	*line;
 	char	*new_line;
 	int		nb_line;
+	int		diff;
 
+	diff = temp[0] == '\'' || temp[0] == '"';
+	deli = remove_quotes_pair(temp);
+	if (malloc_assert(deli, __FILE__, __LINE__, __FUNCTION__))
+		return (MALLOC_ERR);
 	cmd->fd_in = open("/tmp/temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->fd_in == -1)
 		return (perror("Failed to open file"), 1);
@@ -105,7 +111,7 @@ int	heredoc(t_command_table *table, t_command *cmd, char *deli)
 	{
 		line = readline("> ");
 		if (g_signal_received == SIGINT)
-			return (table->code = 130,  1);
+			return (free(deli), table->code = 130,  1);
 		if (!line)
 		{
 			ft_dprintf(2, "%s%s %d delimited by end-of-file (wanted `%s')\n%s",
@@ -118,7 +124,7 @@ int	heredoc(t_command_table *table, t_command *cmd, char *deli)
 			free(line);
 			break ;
 		}
-		else if (!g_signal_received)
+		else if (!diff && !g_signal_received)
 		{
 			new_line = process_var(line, table->env, table->code, NULL);
 			free(line);
@@ -129,6 +135,7 @@ int	heredoc(t_command_table *table, t_command *cmd, char *deli)
 		ft_putendl_fd(line, cmd->fd_in);
 		free(line);
 	}
+	free(deli);
 	close(cmd->fd_in);
 	cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644);
 	if (cmd->fd_in == -1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/11 10:24:54 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:34:05 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ typedef struct s_command
 
 	int		fd_in;
 	int		fd_out;
-	char	**env;
-	int		code;
 }	t_command;
 
 typedef struct s_command_table
@@ -236,10 +234,11 @@ char	*format_wildcard(char **expanded);
 /* -------------------------------------------------------------------------- */
 
 // init.c
-int		init_table(char *line, t_command_table *table);
+int		init_table(t_command_table *table, char *line);
 
 // redir.c
-int		redir(t_command *cmd);
+int		heredoc(t_command_table *table, t_command *cmd, char *deli);
+int		redir(t_command_table *table, t_command *cmd);
 
 // ft_split_pipe.c
 char	**ft_split_pipe(const char *s);
