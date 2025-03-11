@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 12:15:17 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:48:56 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ static int	init_cmd(t_command_table *table, t_command *cmd, char *cmd_str, size_
 			return (MALLOC_ERR);
 		}
 	}
+	if (n == table->n_commands - 1)
+		pipefd[0] = -1;
 	return (0);
 }
 

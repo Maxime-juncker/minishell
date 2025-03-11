@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 12:22:32 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:52:16 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,11 @@ static int	handle_fd(t_command *cmd, char *file, char *arg)
 			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
 			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->fd_out == -1)
+		{
+			ft_dprintf(2, "minishell: %s: Permission denied\n", file);
+			return (NOT_FOUND);
+		}
 	}
 	else if (arg[0] != arg[1])
 	{
@@ -78,10 +83,6 @@ int	redir(t_command_table *table, t_command *cmd)
 		{
 			if (handle_fd(cmd, cmd->args[i + 1], cmd->args[i]) == NOT_FOUND)
 				return (table->code = NOT_FOUND, NOT_FOUND);
-			if (table->code == MALLOC_ERR)
-				return (MALLOC_ERR);
-			if (cmd->fd_in == -1 || cmd->fd_out == -1)
-				return (0);
 			i++;
 		}
 		else
