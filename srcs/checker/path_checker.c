@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/07 09:58:49 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:28:07 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,12 @@ int	check_path(const char *cmd_name, char **env)
 
 	if (create_dummy_cmd(cmd_name, &dummy_cmd) == MALLOC_ERR)
 		return (MALLOC_ERR);
+	if (dummy_cmd.args[0][0] == '.' && dummy_cmd.args[0][1] == '\0')
+	{
+		ft_dprintf(2, "%sminishell: .: filename argument required\n", ORANGE);
+		ft_dprintf(2, ".: usage: . filename [arguments]%s\n", RESET);
+		return (2);
+	}
 	path = get_cmd_path(get_paths(env), dummy_cmd);
 	if (path == NULL && !is_builtin((char *)cmd_name))
 	{

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:04 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/27 10:23:08 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:08:35 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ int	echo(char **args, int n)
 	no_br = i;
 	while (i < n)
 	{
-		printf("%s", args[i]);
+		ft_printf("%s", args[i]);
 		if (i < n - 1)
-			printf(" ");
+			ft_printf(" ");
 		i++;
 	}
 	if (no_br == 0)
-		printf("\n");
+		ft_printf("\n");
 	return (0);
 }

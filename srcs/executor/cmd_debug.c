@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/03 15:06:34 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:08:48 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void	show_table(t_command_table table)
 	size_t	i;
 
 	i = 0;
-	printf("%sn_command: %zu\n", GRAY, table.n_commands);
+	ft_printf("%sn_command: %zu\n", GRAY, table.n_commands);
 	while (i < table.n_commands)
 	{
-		printf("%s%s:\n", GRAY, table.commands[i].args[0]);
-		printf("  fd: in (%d) out (%d)\n", \
+		ft_printf("%s%s:\n", GRAY, table.commands[i].args[0]);
+		ft_printf("  fd: in (%d) out (%d)\n", \
 				table.commands[i].fd_in, table.commands[i].fd_out);
-		printf("%s", RESET);
+		ft_printf("%s", RESET);
 		i++;
 	}
 }
@@ -38,14 +38,14 @@ void	show_cmd(t_command cmd)
 {
 	size_t	i;
 
-	printf("%srunning %s (%zu args)\nargs: ", GRAY, cmd.args[0], cmd.n_args);
+	ft_printf("%srunning %s (%zu args)\nargs: ", GRAY, cmd.args[0], cmd.n_args);
 	i = 0;
 	while (i < cmd.n_args)
 	{
-		printf("[%s]", cmd.args[i]);
+		ft_printf("[%s]", cmd.args[i]);
 		i++;
 	}
-	printf("\nfd_in(%d)\tfd_out(%d)%s\n", cmd.fd_in, cmd.fd_out, RESET);
+	ft_printf("\nfd_in(%d)\tfd_out(%d)%s\n", cmd.fd_in, cmd.fd_out, RESET);
 }
 
 #else

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:46 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 10:01:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:09:31 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*process_line(const char *cmd_line, char **env, int *code)
 	process_str = join_lst(var_lst);
 	ft_printf("process str: [%s]\n", process_str);
 	process_str = process_wildcard(process_str);
-	printf("expanded wildcard: %s\n", process_str);
+	ft_printf("expanded wildcard: %s\n", process_str);
 	ft_printf("----------------------------------------------------------\n");
 	ft_lstclear(&quotes_lst, free);
 	ft_lstclear(&var_lst, free);

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 16:03:48 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/07 09:49:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:05:07 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	run_env_cmd(t_command_table *table, t_command cmd,
 	}
 	if (ft_strcmp(cmd.args[0], "exit") == 0)
 	{
-		exit_shell(table, cmd, package);
+		return (exit_shell(table, cmd, package));
 	}
 	return (0);
 }

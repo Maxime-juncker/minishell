@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/07 14:37:41 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:04:47 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int		unset_if_needed(t_command_table *table, char *arg);
 int		get_env_len(char **env, char *arg);
 
 // exit.c
-void	exit_shell(t_command_table *table, t_command cmd, t_free_pkg package);
+int		exit_shell(t_command_table *table, t_command cmd, t_free_pkg package);
 
 /* -------------------------------------------------------------------------- */
 /*                                   checker                                  */
