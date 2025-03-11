@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/07 10:15:28 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:28:05 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,37 +92,37 @@ static int	get_args(t_command *cmd, char *cmd_str)
 	return (0);
 }
 
-static int	init_cmd(t_command *cmd, char *cmd_str, int is_last, int i)
+static int	init_cmd(t_command_table *table, t_command *cmd, char *cmd_str, size_t n)
 {
 	static int	pipefd[2] = {-1};
+	int						i;
 
 	cmd->fd_in = 0;
 	cmd->fd_out = 1;
 	if (pipefd[0] != -1)
 		cmd->fd_in = pipefd[0];
-	if (is_last == 0 && pipe(pipefd) != -1)
+	if (n != table->n_commands - 1 && pipe(pipefd) != -1)
 		cmd->fd_out = pipefd[1];
-	else if (is_last == 0)
+	else if (n != table->n_commands - 1)
 		return (perror("Failed pipe"), MALLOC_ERR);
 	if (get_args(cmd, cmd_str) == MALLOC_ERR)
 		return (MALLOC_ERR);
-	if (redir(cmd) != 0)
-		return (cleanup_arr((void **)cmd->args), MALLOC_ERR);
-	if (!i && !ft_strchr(cmd_str, '<'))
-		cmd->fd_in = 0;
-	if (is_last && !ft_strchr(cmd_str, '>'))
-		cmd->fd_out = 1;
+	i = -1;
+	while (cmd->args[++i])
+		if (cmd->args[i][0] == '<' && cmd->args[i][1] == '<'
+			&& heredoc(table, cmd, cmd->args[i + 1]) == MALLOC_ERR)
+				return (MALLOC_ERR);
 	return (0);
 }
 
-int	init_table(char *line, t_command_table *table)
+int	init_table(t_command_table *table, char *line)
 {
 	char	**commands;
 	size_t	i;
 
-	table->n_commands = 0;
 	commands = ft_split_pipe(line);
 	free(line);
+	table->n_commands = 0;
 	if (malloc_assert(commands, __FILE__, __LINE__, __FUNCTION__) != 0)
 		return (MALLOC_ERR);
 	while (commands[table->n_commands])
@@ -133,13 +133,22 @@ int	init_table(char *line, t_command_table *table)
 	i = 0;
 	while (i < table->n_commands)
 	{
-		table->commands[i].env = table->env;
-		table->commands[i].code = table->code;
-		if (init_cmd(&table->commands[i], commands[i],
-				i == table->n_commands - 1, i) == MALLOC_ERR)
+		if (init_cmd(table, &table->commands[i], commands[i], i) == MALLOC_ERR)
 			return (cleanup_arr((void **)commands), table->n_commands = i,
 				cleanup_table(table), MALLOC_ERR);
 		i++;
 	}
+	i = 0;
+	while (i < table->n_commands)
+	{
+		if (redir(table, &table->commands[i]) == MALLOC_ERR)
+			return (cleanup_arr((void **)commands), table->n_commands = i,
+				cleanup_table(table), MALLOC_ERR);
+		i++;
+	}
+	// if (i == 0 && !ft_strchr(commands[i], '<'))
+	// 	table->commands[i].fd_in = 0;
+	if (i == table->n_commands - 1 && !ft_strchr(commands[i], '>'))
+		table->commands[i].fd_out = 1;
 	return (cleanup_arr((void **)commands), 0);
 }

@@ -65,6 +65,7 @@ SRCS = 		main.c						\
 			formater.c					\
 			remove_unnecessary_parentheses.c \
 
+
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #
 # ---------------------------------------------------------------------------- #
@@ -159,11 +160,11 @@ header:
 libft:
 	$(MAKE) -C libft
 
-# .PHONY: test
-# test:
-# 	$(MAKE) all
-# 	$(MAKE) $(BIN)/libminishell.a
-# 	$(MAKE) test -C better-libunit/
+.PHONY: test
+test:
+	$(MAKE) all
+	$(MAKE) $(BIN)/libminishell.a
+	$(MAKE) test -C better-libunit/
 
 .PHONY: leaks
 leaks: all

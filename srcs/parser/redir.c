@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/08 13:19:59 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:29:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,66 +44,8 @@ static int	update_command(t_command *cmd)
 	return (free(cmd->args), temp[j] = NULL, cmd->args = temp, 0);
 }
 
-static int	handle_eof(char **line, char *deli, int diff, t_command *cmd)
-{
-	static int	nb_line = -1;
-	char		*new_line;
-
-	nb_line++;
-	if (!line)
-	{
-		ft_dprintf(2, "%s%s %d delimited by end-of-file (wanted `%s')\n%s",
-			ORANGE, "minishell: warning: here-document at line",
-			nb_line, deli, RESET);
-		nb_line = -1;
-		return (1);
-	}
-	else if (!ft_strcmp(*line, deli))
-		return (free(*line), nb_line = -1, 1);
-	else if (!diff && !g_signal_received)
-	{
-		new_line = process_var(*line, cmd->env, cmd->code, NULL);
-		free(*line);
-		if (new_line == NULL)
-			return (1);
-		*line = new_line;
-	}
-	return (0);
-}
-
-static int	heredoc(t_command *cmd, char *deli, int diff)
-{
-	char	*line;
-
-	cmd->fd_in = open("/tmp/temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (cmd->fd_in == -1)
-		return (perror("Failed to open file"), 1);
-	while (1)
-	{
-		if (g_signal_received == SIGINT)
-			return (1);
-		line = readline("> ");
-		if (!line && handle_eof(NULL, deli, 0, cmd))
-			break ;
-		if (handle_eof(&line, deli, diff, cmd))
-			break ;
-		ft_putendl_fd(line, cmd->fd_in);
-		free(line);
-	}
-	close(cmd->fd_in);
-	cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644);
-	if (cmd->fd_in == -1)
-		return (perror("Failed to open file"), 1);
-	return (0);
-}
-
 static int	handle_fd(t_command *cmd, char *file, char *arg)
 {
-	char	*temp;
-
-	temp = remove_quotes_pair(file);
-	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
-		return (cmd->code = MALLOC_ERR, MALLOC_ERR);
 	if (arg[0] == '>')
 	{
 		if (cmd->fd_out > 1)
@@ -113,19 +55,18 @@ static int	handle_fd(t_command *cmd, char *file, char *arg)
 		else
 			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	}
-	else
+	else if (arg[0] != arg[1])
 	{
+		if (check_redir_in(file, 0) == NOT_FOUND)
+			return (0);
 		if (cmd->fd_in > 1)
 			close(cmd->fd_in);
-		if (arg[0] != arg[1])
-			cmd->fd_in = open(file, O_RDONLY, 0644);
-		else if (arg[0] == arg[1] && heredoc(cmd, temp, ft_strcmp(file, temp)))
-			return (free(temp), 1);
+		cmd->fd_in = open(file, O_RDONLY, 0644);
 	}
-	return (free(temp), 0);
+	return (0);
 }
 
-int	redir(t_command *cmd)
+int	redir(t_command_table *table, t_command *cmd)
 {
 	int		i;
 
@@ -137,7 +78,7 @@ int	redir(t_command *cmd)
 		{
 			if (handle_fd(cmd, cmd->args[i + 1], cmd->args[i]) == 1)
 				return (1);
-			if (cmd->code == MALLOC_ERR)
+			if (table->code == MALLOC_ERR)
 				return (MALLOC_ERR);
 			if (cmd->fd_in == -1 || cmd->fd_out == -1)
 				return (0);
@@ -148,4 +89,49 @@ int	redir(t_command *cmd)
 		i++;
 	}
 	return (update_command(cmd));
+}
+
+int	heredoc(t_command_table *table, t_command *cmd, char *deli)
+{
+	char	*line;
+	char	*new_line;
+	int		nb_line;
+
+	cmd->fd_in = open("/tmp/temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (cmd->fd_in == -1)
+		return (perror("Failed to open file"), 1);
+	nb_line = 0;
+	while (1)
+	{
+		line = readline("> ");
+		if (g_signal_received == SIGINT)
+			return (table->code = 130,  1);
+		if (!line)
+		{
+			ft_dprintf(2, "%s%s %d delimited by end-of-file (wanted `%s')\n%s",
+				ORANGE, "minishell: warning: here-document at line",
+				nb_line, deli, RESET);
+			break ;
+		}
+		else if (!ft_strcmp(line, deli))
+		{
+			free(line);
+			break ;
+		}
+		else if (!g_signal_received)
+		{
+			new_line = process_var(line, table->env, table->code, NULL);
+			free(line);
+			if (new_line == NULL)
+				return (1);
+			line = new_line;
+		}
+		ft_putendl_fd(line, cmd->fd_in);
+		free(line);
+	}
+	close(cmd->fd_in);
+	cmd->fd_in = open("/tmp/temp.txt", O_RDONLY, 0644);
+	if (cmd->fd_in == -1)
+		return (perror("Failed to open file"), 1);
+	return (0);
 }
