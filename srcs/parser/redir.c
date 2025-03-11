@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 10:52:31 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:53:27 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	handle_fd(t_command *cmd, char *file, char *arg)
 	else if (arg[0] != arg[1])
 	{
 		if (check_redir_in(file, 0) == NOT_FOUND)
-			return (0);
+			return (NOT_FOUND);
 		if (cmd->fd_in > 1)
 			close(cmd->fd_in);
 		cmd->fd_in = open(file, O_RDONLY, 0644);
@@ -76,8 +76,8 @@ int	redir(t_command_table *table, t_command *cmd)
 	{
 		if (cmd->args[i][0] == '>' || cmd->args[i][0] == '<')
 		{
-			if (handle_fd(cmd, cmd->args[i + 1], cmd->args[i]) == 1)
-				return (1);
+			if (handle_fd(cmd, cmd->args[i + 1], cmd->args[i]) == NOT_FOUND)
+				return (table->code = NOT_FOUND, NOT_FOUND);
 			if (table->code == MALLOC_ERR)
 				return (MALLOC_ERR);
 			if (cmd->fd_in == -1 || cmd->fd_out == -1)
