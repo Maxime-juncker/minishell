@@ -6,11 +6,30 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 17:05:50 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:24:31 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+	
+int	has_open_heredoc(char *s)
+{
+	int		i;
+	char	*tmp;
+
+	tmp = ft_strnstr(s, "<<", ft_strlen(s));
+	if (!tmp)
+		return (0);
+	i = 2;
+	while (tmp[i])
+	{
+		if (!is_whitespace(tmp[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 static int	add_quotes(t_list **lst, const char *line, size_t *i)
 {
@@ -58,10 +77,30 @@ char	*remove_spaces(char *str)
 	return (free(buff), new_str);
 }
 
+static char *heredoc_delemiter(char *s, size_t *i)
+{
+	char	quote;
+	size_t	start;
+
+	start = *i;
+	quote = 0;
+	while (s[*i])
+	{
+		quote = toggle_quote(s[*i], quote);
+		if (!is_whitespace(s[*i]) && !quote)
+		{
+			(*i)++;
+			break;
+		}
+		(*i)++;
+	}
+	return (ft_substr(s, start, *i - start));
+}
+
 static int	add_str(t_list **lst, char *line, size_t *i)
 {
 	size_t	start;
-	char	*temp;
+	char	*tmp;
 	t_list	*new;
 
 	start = *i;
@@ -69,12 +108,18 @@ static int	add_str(t_list **lst, char *line, size_t *i)
 	{
 		(*i)++;
 	}
-	temp = ft_substr(line, start, *i - start);
-	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
+	tmp = ft_substr(line, start, *i - start);
+	if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
-	new = ft_lstnew(temp);
+	if (has_open_heredoc(tmp))
+	{
+		tmp = ft_strjoin_free(tmp, heredoc_delemiter(line, i), FREE1 | FREE2);
+		if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
+			return (MALLOC_ERR);
+	}
+	new = ft_lstnew(tmp);
 	if (malloc_assert(new, __FILE__, __LINE__, __FUNCTION__))
-		return (free(temp), MALLOC_ERR);
+		return (free(tmp), MALLOC_ERR);
 	ft_lstadd_back(lst, new);
 	return (0);
 }
