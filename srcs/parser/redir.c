@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 10:43:33 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:52:31 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	heredoc(t_command_table *table, t_command *cmd, char *temp)
 	{
 		line = readline("> ");
 		if (g_signal_received == SIGINT)
-			return (free(deli), table->code = 130,  1);
+			return (close(cmd->fd_in), free(deli), table->code = 130, 1);
 		if (!line)
 		{
 			ft_dprintf(2, "%s%s %d delimited by end-of-file (wanted `%s')\n%s",

@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 10:28:05 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:51:51 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ static int	init_cmd(t_command_table *table, t_command *cmd, char *cmd_str, size_
 	i = -1;
 	while (cmd->args[++i])
 		if (cmd->args[i][0] == '<' && cmd->args[i][1] == '<'
-			&& heredoc(table, cmd, cmd->args[i + 1]) == MALLOC_ERR)
-				return (MALLOC_ERR);
+			&& heredoc(table, cmd, cmd->args[i + 1]) != 0)
+				return (cleanup_arr((void **)cmd->args), MALLOC_ERR);
 	return (0);
 }
 
