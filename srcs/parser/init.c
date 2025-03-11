@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 10:28:05 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:48:37 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int	init_table(t_command_table *table, char *line)
 	i = 0;
 	while (i < table->n_commands)
 	{
-		if (redir(table, &table->commands[i]) == MALLOC_ERR)
+		if (redir(table, &table->commands[i]) != 0)
 			return (cleanup_arr((void **)commands), table->n_commands = i,
 				cleanup_table(table), MALLOC_ERR);
 		i++;
