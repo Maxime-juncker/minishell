@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:27 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/11 12:45:11 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:57:44 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	check_redir_in(const char *cmd_line, int i)
 		ft_dprintf(2, "%sminishell: %s: Permission denied\n%s",
 			RED, file, RESET);
 		free(file);
-		return (PERM_DENIED);
+		return (1);
 	}
 	free(file);
 	return (0);
