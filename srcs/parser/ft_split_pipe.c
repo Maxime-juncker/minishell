@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 09:58:06 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 14:49:46 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:50:26 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	free_all(char **res, int i)
 	free(res);
 }
 
-int	do_split(const char *s, char c, char **res)
+int	do_split(char *s, char c, char **res)
 {
 	char	in_quote;
 	int		i;
@@ -85,7 +85,7 @@ int	do_split(const char *s, char c, char **res)
 			break ;
 		res[i] = ft_strndup2(s, c);
 		if (!res[i++])
-			return (free_all(res, i), MALLOC_ERR);
+			return (free(s), free_all(res, i), MALLOC_ERR);
 		while (*s && (*s != c || in_quote))
 		{
 			if (*s == '\'' || *s == '\"')
@@ -96,17 +96,18 @@ int	do_split(const char *s, char c, char **res)
 	return (i);
 }
 
-char	**ft_split_pipe(const char *s)
+char	**ft_split_pipe(char *s)
 {
-	char		**res;
-	int			i;
-	char		c;
+	char	**res;
+	int		i;
+	char	c;
 
 	c = '|';
 	res = malloc(sizeof(char *) * (ft_count_words(s, c) + 1));
 	if (malloc_assert(res, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	i = do_split(s, c, res);
+	free(s);
 	if (i == MALLOC_ERR)
 		return (NULL);
 	res[i] = NULL;

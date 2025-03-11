@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 13:04:41 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:32:31 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	update_command(t_command *cmd)
 	return (free(cmd->args), temp[j] = NULL, cmd->args = temp, 0);
 }
 
-static int	handle_fd(t_command_table *table,  t_command *cmd, char *file, char *arg)
+static int	handle_fd(t_command_table *table, t_command *cmd, char *file,
+	char *arg)
 {
 	if (arg[0] == '>')
 	{
@@ -91,7 +92,7 @@ int	redir(t_command_table *table, t_command *cmd)
 			cmd->n_args++;
 		i++;
 	}
-	return (0);
+	return (update_command(cmd));
 }
 
 int	heredoc(t_command_table *table, t_command *cmd, char *temp)
@@ -110,7 +111,7 @@ int	heredoc(t_command_table *table, t_command *cmd, char *temp)
 		close(cmd->fd_in);
 	cmd->fd_in = open("/tmp/temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->fd_in == -1)
-		return (perror("Failed to open file"), 1);
+		return (free(deli), perror("Failed to open file"), 1);
 	nb_line = 0;
 	while (1)
 	{

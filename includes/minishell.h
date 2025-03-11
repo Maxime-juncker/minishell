@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/11 13:00:53 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 16:50:32 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ size_t	arrlen(void **arr);
 
 // export_utils.c
 int		export_env(t_command_table *table, char *arg, int append);
+void	sort_export(char **argv);
 
 // export.c
 int		export_cmd(t_command_table *table, t_command cmd);
@@ -242,7 +243,7 @@ int		redir(t_command_table *table, t_command *cmd);
 int		update_command(t_command *cmd);
 
 // ft_split_pipe.c
-char	**ft_split_pipe(const char *s);
+char	**ft_split_pipe(char *s);
 char	**ft_split_operators(const char *s);
 void	free_all(char **res, int i);
 

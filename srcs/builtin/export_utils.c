@@ -6,11 +6,38 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/10 13:15:13 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 15:53:31 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	sort_export(char **argv)
+{
+	int		i;
+	int		diff;
+	char	*temp;
+	int		size;
+
+	diff = 1;
+	size = arrlen((void **)argv);
+	while (diff)
+	{
+		i = 0;
+		diff = 0;
+		while (i < (size - 1))
+		{
+			if (ft_strcmp(argv[i], argv[i + 1]) > 0)
+			{
+				temp = argv[i];
+				argv[i] = argv[i + 1];
+				argv[i + 1] = temp;
+				diff = 1;
+			}
+			i++;
+		}
+	}
+}
 
 static char	**update_env(char *arg, char **env, int append)
 {
