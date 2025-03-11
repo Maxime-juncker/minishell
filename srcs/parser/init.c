@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 10:53:40 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:15:17 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static int	get_args(t_command *cmd, char *cmd_str)
 static int	init_cmd(t_command_table *table, t_command *cmd, char *cmd_str, size_t n)
 {
 	static int	pipefd[2] = {-1};
-	int						i;
+	int			i;
 
 	cmd->fd_in = 0;
 	cmd->fd_out = 1;
@@ -109,9 +109,16 @@ static int	init_cmd(t_command_table *table, t_command *cmd, char *cmd_str, size_
 		return (MALLOC_ERR);
 	i = -1;
 	while (cmd->args[++i])
-		if (cmd->args[i][0] == '<' && cmd->args[i][1] == '<'
-			&& heredoc(table, cmd, cmd->args[i + 1]) != 0)
-				return (cleanup_arr((void **)cmd->args), MALLOC_ERR);
+	{
+		if (cmd->args[i][0] == '<' && cmd->args[i][1] == '<' && heredoc(table, cmd, cmd->args[i + 1]) != 0)
+		{
+			close(cmd->fd_out);
+			table->n_commands = n + 1;
+			close_all_fds(table);
+			cleanup_arr((void **)cmd->args);
+			return (MALLOC_ERR);
+		}
+	}
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:34 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/10 13:16:25 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:30:25 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,27 +83,28 @@ static int	check_in_env(char **env, char *arg)
 	return (0);
 }
 
-static int	check_arg(char *arg, int *append, int *res)
+static int	check_arg(t_command_table *t, char *arg, int *append)
 {
-	int	i;
+	int			i;
 
 	i = 0;
-	while (arg[i] && arg[i] != '=')
+	while (arg[i])
 	{
-		if ((!i && !ft_isalpha(arg[i]) && arg[i] != '_')
-			|| (i && (!(ft_isalnum(arg[i]) || arg[i] == '_'
-						|| arg[i] == '=' || (arg[i] == '+'
-							&& arg[i + 1] == '=')))))
+		if ((i == 0 && !ft_isalpha(arg[i]) && arg[i] != '_')
+			|| (i != 0 && (!(ft_isalnum(arg[i])
+			|| arg[i] == '_' || arg[i] == '='
+			|| (arg[i] == '+' && arg[i + 1] == '=')))))
 		{
 			ft_putstr_fd("\033[0;31mminishell: export: `", 2);
 			ft_putstr_fd(arg, 2);
 			ft_putstr_fd("': not a valid identifier\n\033[0m", 2);
-			return (*res = 1, 1);
+			t->code = 1;
+			return (1);
 		}
 		i++;
 	}
 	if (!i)
-		return (*res = 1, 1);
+		return (t->code = 1, 1);
 	else if (!*append && (arg[i - 1] == '+' && arg[i] == '='))
 		(*append)++;
 	return (0);
@@ -113,7 +114,6 @@ int	export_cmd(t_command_table *t, t_command cmd)
 {
 	int		i;
 	int		append;
-	int		res;
 
 	if (cmd.n_args == 1)
 		return (sort_export(t->exp), print_export(t->exp, cmd.fd_out), 0);
@@ -122,11 +122,10 @@ int	export_cmd(t_command_table *t, t_command cmd)
 		return (0);
 	sort_export(t->exp);
 	i = 0;
-	res = 0;
 	while (cmd.args[++i] != NULL)
 	{
 		append = 0;
-		if (check_arg(cmd.args[i], &append, &res) || check_in_env(t->env, cmd.args[i]))
+		if (check_arg(t, cmd.args[i], &append) || check_in_env(t->env, cmd.args[i]))
 			continue ;
 		if (!append && unset_if_needed(t, ft_strndup(cmd.args[i], '=')) != 0)
 			return (MALLOC_ERR);
@@ -137,5 +136,5 @@ int	export_cmd(t_command_table *t, t_command cmd)
 		if (export_env(t, cmd.args[i], append) == MALLOC_ERR)
 			return (MALLOC_ERR);
 	}
-	return (res);
+	return (t->code);
 }

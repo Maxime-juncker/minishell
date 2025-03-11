@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 10:53:27 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:22:32 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ int	heredoc(t_command_table *table, t_command *cmd, char *temp)
 	deli = remove_quotes_pair(temp);
 	if (malloc_assert(deli, __FILE__, __LINE__, __FUNCTION__))
 		return (MALLOC_ERR);
+	if (cmd->fd_in != 0)
+		close(cmd->fd_in);
 	cmd->fd_in = open("/tmp/temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->fd_in == -1)
 		return (perror("Failed to open file"), 1);
@@ -111,7 +113,7 @@ int	heredoc(t_command_table *table, t_command *cmd, char *temp)
 	{
 		line = readline("> ");
 		if (g_signal_received == SIGINT)
-			return (close(cmd->fd_in), free(deli), table->code = 130, 1);
+			return (free(deli), table->code = 130, 1);
 		if (!line)
 		{
 			ft_dprintf(2, "%s%s %d delimited by end-of-file (wanted `%s')\n%s",
