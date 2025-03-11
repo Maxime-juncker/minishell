@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 12:52:16 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:58:51 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	update_command(t_command *cmd)
 	return (free(cmd->args), temp[j] = NULL, cmd->args = temp, 0);
 }
 
-static int	handle_fd(t_command *cmd, char *file, char *arg)
+static int	handle_fd(t_command_table *table,  t_command *cmd, char *file, char *arg)
 {
 	if (arg[0] == '>')
 	{
@@ -56,14 +56,16 @@ static int	handle_fd(t_command *cmd, char *file, char *arg)
 			cmd->fd_out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->fd_out == -1)
 		{
-			ft_dprintf(2, "minishell: %s: Permission denied\n", file);
-			return (NOT_FOUND);
+			ft_dprintf(2, "%sminishell: %s: Permission denied\n%s",
+				RED, file, RESET);
+			table->code = 1;
+			return (1);
 		}
 	}
 	else if (arg[0] != arg[1])
 	{
 		if (check_redir_in(file, 0) == NOT_FOUND)
-			return (NOT_FOUND);
+			return (1);
 		if (cmd->fd_in > 1)
 			close(cmd->fd_in);
 		cmd->fd_in = open(file, O_RDONLY, 0644);
@@ -81,8 +83,8 @@ int	redir(t_command_table *table, t_command *cmd)
 	{
 		if (cmd->args[i][0] == '>' || cmd->args[i][0] == '<')
 		{
-			if (handle_fd(cmd, cmd->args[i + 1], cmd->args[i]) == NOT_FOUND)
-				return (table->code = NOT_FOUND, NOT_FOUND);
+			if (handle_fd(table, cmd, cmd->args[i + 1], cmd->args[i]) == 1)
+				return (table->code = 1, 1);
 			i++;
 		}
 		else
