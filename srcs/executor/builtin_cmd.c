@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 16:03:48 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/10 12:05:07 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:22:12 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,27 @@ int	env_stage(t_command_table *table, t_command cmd, int *code,
 		close_fds(cmd);
 		return (1);
 	}
+	return (0);
+}
+
+int	is_builtin(char *name)
+{
+	if (!name)
+		return (0);
+	if (ft_strcmp(name, "echo") == 0)
+		return (1);
+	if (ft_strcmp(name, "export") == 0)
+		return (1);
+	if (ft_strcmp(name, "unset") == 0)
+		return (1);
+	if (ft_strcmp(name, "env") == 0)
+		return (1);
+	if (ft_strcmp(name, "cd") == 0)
+		return (1);
+	if (ft_strcmp(name, "pwd") == 0)
+		return (1);
+	if (ft_strcmp(name, "exit") == 0)
+		return (1);
 	return (0);
 }
 

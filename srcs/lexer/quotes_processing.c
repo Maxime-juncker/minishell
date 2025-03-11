@@ -6,13 +6,12 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:54:00 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/11 10:24:31 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:24:15 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-	
 int	has_open_heredoc(char *s)
 {
 	int		i;
@@ -48,36 +47,7 @@ static int	add_quotes(t_list **lst, const char *line, size_t *i)
 	return (0);
 }
 
-char	*remove_spaces(char *str)
-{
-	char	*buff;
-	char	*new_str;
-	int		i;
-	char	last;
-
-	buff = ft_calloc(ft_strlen(str) + 1, sizeof(char));
-	if (malloc_assert(buff, __FILE__, __LINE__, __FUNCTION__))
-		return (NULL);
-	i = 0;
-	last = 0;
-	while (*str)
-	{
-		if (is_whitespace(*str) && is_whitespace(last))
-		{
-			last = *str;
-			str++;
-			continue ;
-		}
-		buff[i] = *str;
-		last = *str;
-		i++;
-		str++;
-	}
-	new_str = ft_strdup(buff);
-	return (free(buff), new_str);
-}
-
-static char *heredoc_delemiter(char *s, size_t *i)
+static char	*heredoc_delemiter(char *s, size_t *i)
 {
 	char	quote;
 	size_t	start;
@@ -90,7 +60,7 @@ static char *heredoc_delemiter(char *s, size_t *i)
 		if (!is_whitespace(s[*i]) && !quote)
 		{
 			(*i)++;
-			break;
+			break ;
 		}
 		(*i)++;
 	}

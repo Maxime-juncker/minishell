@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:52 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/10 12:36:07 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:22:46 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	**get_paths(char **env)
 	return (ft_split(tmp, ':'));
 }
 
-static char *find_local(t_command cmd)
+static char	*find_local(t_command cmd)
 {
 	char	*path;
 
@@ -63,7 +63,7 @@ static char	*get_path(char **paths, t_command cmd)
 	if (ft_occ(cmd.args[0], '.') == ft_strlen(cmd.args[0]))
 		return (cleanup_arr((void **)paths), NULL);
 	if (paths == NULL)
-		return (find_local(cmd));	
+		return (find_local(cmd));
 	i = -1;
 	while (paths[++i] != NULL)
 	{
@@ -82,27 +82,6 @@ static char	*get_path(char **paths, t_command cmd)
 	}
 	cleanup_arr((void **)paths);
 	return (NULL);
-}
-
-int	is_builtin(char *name)
-{
-	if (!name)
-		return (0);
-	if (ft_strcmp(name, "echo") == 0)
-		return (1);
-	if (ft_strcmp(name, "export") == 0)
-		return (1);
-	if (ft_strcmp(name, "unset") == 0)
-		return (1);
-	if (ft_strcmp(name, "env") == 0)
-		return (1);
-	if (ft_strcmp(name, "cd") == 0)
-		return (1);
-	if (ft_strcmp(name, "pwd") == 0)
-		return (1);
-	if (ft_strcmp(name, "exit") == 0)
-		return (1);
-	return (0);
 }
 
 char	*get_cmd_path(char **paths, t_command cmd)

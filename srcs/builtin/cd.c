@@ -6,12 +6,41 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 16:16:19 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/04 14:19:44 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:24:07 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <dirent.h>
+
+char	*remove_spaces(char *str)
+{
+	char	*buff;
+	char	*new_str;
+	int		i;
+	char	last;
+
+	buff = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+	if (malloc_assert(buff, __FILE__, __LINE__, __FUNCTION__))
+		return (NULL);
+	i = 0;
+	last = 0;
+	while (*str)
+	{
+		if (is_whitespace(*str) && is_whitespace(last))
+		{
+			last = *str;
+			str++;
+			continue ;
+		}
+		buff[i] = *str;
+		last = *str;
+		i++;
+		str++;
+	}
+	new_str = ft_strdup(buff);
+	return (free(buff), new_str);
+}
 
 char	*find_env_var(char **env, char *to_find, int *index)
 {

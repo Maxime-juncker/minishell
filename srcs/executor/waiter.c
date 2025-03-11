@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 10:38:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/10 13:41:19 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:22:57 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	wait_for_process(t_command_table *table, int *childs, int *code)
 		if (g_signal_received)
 		{
 			*code = g_signal_received + 128;
-			
 			propagate_sig(i, table, childs);
 			return (close_all_fds(table), *code);
 		}

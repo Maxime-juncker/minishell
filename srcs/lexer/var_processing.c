@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/11 10:24:27 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:29:52 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static char	*add_heredoc_delemiter(char **s)
 		if (!is_whitespace((*s)[i]) && !quote)
 		{
 			i++;
-			break;
+			break ;
 		}
 		i++;
 	}
@@ -64,36 +64,44 @@ static char	*add_heredoc_delemiter(char **s)
 	return (sub);
 }
 
+static int	process(char **str, char **result, int last_code, char **env)
+{
+	char	*tmp;
+
+	if (*str[0] == '<' && *(str[0] + 1) == '<')
+	{
+		tmp = add_heredoc_delemiter(str);
+		if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
+			return (MALLOC_ERR);
+		*result = ft_strjoin_free(*result, tmp, FREE1 | FREE2);
+	}
+	else if (*str[0] == '$')
+	{
+		(*str)++;
+		tmp = handle_dollar(str, last_code, env);
+		if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
+			return (MALLOC_ERR);
+		*result = ft_strjoin_free(*result, tmp, FREE1 | FREE2);
+	}
+	else
+	{
+		*result = ft_charjoin(*result, *str[0]);
+		(*str)++;
+	}
+	return (0);
+}
+
 char	*process_var(char *str, char **env, int last_code, t_list *next)
 {
 	char	*result;
-	char	*tmp;
 
 	result = NULL;
 	while (*str)
 	{
 		if (*str == '$' && str[1] == '\0' && next)
 			return (result);
-		if (*str == '<' && *(str + 1) == '<')
-		{
-			tmp = add_heredoc_delemiter(&str);
-			if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
-				return (free(result), NULL);
-			result = ft_strjoin_free(result, tmp, FREE1 | FREE2);
-		}
-		else if (*str == '$')
-		{
-			str++;
-			tmp = handle_dollar(&str, last_code, env);
-			if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
-				return (free(result), NULL);
-			result = ft_strjoin_free(result, tmp, FREE1 | FREE2);
-		}
-		else
-		{
-			result = ft_charjoin(result, *str);
-			str++;
-		}
+		if (process(&str, &result, last_code, env) == MALLOC_ERR)
+			return (free(result), NULL);
 		if (malloc_assert(result, __FILE__, __LINE__, __FUNCTION__))
 			return (NULL);
 	}
