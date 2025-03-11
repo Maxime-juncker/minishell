@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/07 14:31:27 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:03:21 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	handle_line_symbol(t_command_table *table, char *arg, int *code,
 		process_cmd = process_line(arg, table->env, code);
 		if (malloc_assert(process_cmd, __FILE__, __LINE__, __FUNCTION__))
 			return (MALLOC_ERR);
+		// if (check_cmd_line(process_cmd, table->code))
 		if (!init_table(process_cmd, table))
 		{
 			*code = run_pipeline(table, *to_free);

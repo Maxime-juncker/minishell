@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_processing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/06 16:37:27 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:24:27 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,29 @@ static char	*handle_dollar(char **str, int last_code, char **env)
 	return (ft_strdup("$"));
 }
 
+static char	*add_heredoc_delemiter(char **s)
+{
+	char	quote;
+	int		i;
+	char	*sub;
+
+	quote = 0;
+	i = 2;
+	while ((*s)[i])
+	{
+		quote = toggle_quote((*s)[i], quote);
+		if (!is_whitespace((*s)[i]) && !quote)
+		{
+			i++;
+			break;
+		}
+		i++;
+	}
+	sub = ft_substr(*s, 0, i);
+	*s += i;
+	return (sub);
+}
+
 char	*process_var(char *str, char **env, int last_code, t_list *next)
 {
 	char	*result;
@@ -51,7 +74,14 @@ char	*process_var(char *str, char **env, int last_code, t_list *next)
 	{
 		if (*str == '$' && str[1] == '\0' && next)
 			return (result);
-		if (*str == '$')
+		if (*str == '<' && *(str + 1) == '<')
+		{
+			tmp = add_heredoc_delemiter(&str);
+			if (malloc_assert(tmp, __FILE__, __LINE__, __FUNCTION__))
+				return (free(result), NULL);
+			result = ft_strjoin_free(result, tmp, FREE1 | FREE2);
+		}
+		else if (*str == '$')
 		{
 			str++;
 			tmp = handle_dollar(&str, last_code, env);
