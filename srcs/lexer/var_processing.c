@@ -3,14 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   var_processing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/11 11:29:52 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/15 14:13:08 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char	*update_env_var(char *var_value)
+{
+	char	*first;
+	char	*second;
+	char	*temp;
+
+	if (!ft_strchr(var_value, ' '))
+		return (var_value);
+	first = ft_strndup(var_value, ' ');
+	if (malloc_assert(first, __FILE__, __LINE__, __FUNCTION__))
+		return (free(var_value), NULL);
+	first = ft_charjoin(first, ' ');
+	if (malloc_assert(first, __FILE__, __LINE__, __FUNCTION__))
+		return (free(var_value), NULL);
+	second = ft_strdup(ft_strchr(var_value, ' ') + 1);
+	free(var_value);
+	if (malloc_assert(second, __FILE__, __LINE__, __FUNCTION__))
+		return (free(first), NULL);
+	temp = ft_pad(second, '"');
+	free(second);
+	if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
+		return (free(first), NULL);
+	return (ft_strjoin_free(first, temp, FREE1 | FREE2));
+}
 
 static char	*handle_dollar(char **str, int last_code, char **env)
 {
@@ -35,7 +60,7 @@ static char	*handle_dollar(char **str, int last_code, char **env)
 		var_value = find_env_var(env, var_name, NULL);
 		free(var_name);
 		if (var_value)
-			return (var_value);
+			return (update_env_var(var_value));
 		return (ft_strdup(""));
 	}
 	return (ft_strdup("$"));
