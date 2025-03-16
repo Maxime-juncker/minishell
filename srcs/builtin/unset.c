@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:35:07 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/10 13:02:38 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/16 18:32:38 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int	get_env_len(char **env, char *arg)
 	diff = 0;
 	while (env[len])
 	{
-		if (arg && !ft_strscmp(env[len], arg, "=")
-			&& ft_strlen(arg) == ft_strclen(env[len], '='))
+		if (arg && !ft_strscmp(env[len], arg, "="))
 			diff++;
 		len++;
 	}
@@ -38,7 +37,7 @@ static char	**unset(char **env, char *arg, int len, int *is_malloc_error)
 
 	cpy = malloc((len + 1) * sizeof(char *));
 	if (malloc_assert(cpy, __FILE__, __LINE__, __FUNCTION__))
-		return (*is_malloc_error = 1, env);
+		return (free(arg), *is_malloc_error = 1, env);
 	i = -1;
 	len = 0;
 	while (env[++i] != NULL)
@@ -62,8 +61,6 @@ int	unset_if_needed(t_command_table *table, char *arg)
 	int		len;
 	int		is_malloc_error;
 
-	if (!arg)
-		return (MALLOC_ERR);
 	is_malloc_error = 0;
 	len = get_env_len(table->env, arg);
 	if (len != -1)

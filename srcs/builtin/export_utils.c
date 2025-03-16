@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/16 15:10:20 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/16 17:23:53 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,7 @@ static char	**update_env(char *arg, char **env)
 		return (env);
 	i = -1;
 	while (env && env[++i])
-	{
 		cpy[i] = env[i];
-		if (malloc_assert(cpy[i], __FILE__, __LINE__, __FUNCTION__))
-			return (free(cpy), env);
-	}
 	cpy[i] = ft_strdup(arg);
 	if (malloc_assert(cpy[i], __FILE__, __LINE__, __FUNCTION__))
 		return (free(cpy), env);

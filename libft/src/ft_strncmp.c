@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:58:50 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/02/21 13:25:18 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/16 15:46:32 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ int	ft_strscmp(const char *s1, const char *s2, char *s)
 			break ;
 		i++;
 	}
+	if (cs2[i])
+		return (cs1[i] - cs2[i]);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:34 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/16 15:12:41 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/16 16:50:54 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,18 @@ static int	check_arg(t_command_table *t, char *arg)
 
 static int	export(t_command_table *t, t_command cmd)
 {
-	int	i;
+	int		i;
+	char	*temp;
 
 	i = 0;
 	while (cmd.args[++i] != NULL)
 	{
 		if (check_arg(t, cmd.args[i]) || check_in_env(t->env, cmd.args[i]))
 			continue ;
-		if (unset_if_needed(t, ft_strndup(cmd.args[i], '=')) != 0)
+		temp = ft_strndup(cmd.args[i], '=');
+		if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
 			return (MALLOC_ERR);
-		if (malloc_assert(cmd.args[i], __FILE__, __LINE__, __FUNCTION__))
+		if (unset_if_needed(t, temp) != 0)
 			return (MALLOC_ERR);
 		if (export_env(t, cmd.args[i]) == MALLOC_ERR)
 			return (MALLOC_ERR);
@@ -102,8 +104,12 @@ static int	export(t_command_table *t, t_command cmd)
 
 int	export_cmd(t_command_table *t, t_command cmd)
 {
+	sort_export(t->exp);
 	if (cmd.n_args == 1)
-		return (sort_export(t->exp), print_export(t->exp, cmd.fd_out), 0);
+	{
+		print_export(t->exp, cmd.fd_out);
+		return (0);
+	}
 	else if ((cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
 		&& t->n_commands)
 		return (0);
@@ -115,7 +121,6 @@ int	export_cmd(t_command_table *t, t_command cmd)
 			RESET);
 		return (1);
 	}
-	sort_export(t->exp);
 	export(t, cmd);
 	return (t->code);
 }
