@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:30:34 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 16:54:50 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/16 15:12:41 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	check_in_env(char **env, char *arg)
 	i = 0;
 	while (env[i])
 	{
-		if (!ft_strscmp(env[i], arg, "+=")
+		if (!ft_strscmp(env[i], arg, "=")
 			&& ft_strlen(arg) == ft_strclen(env[i], '=')
 			&& (!ft_strchr(arg, '=') && ft_strchr(env[i], '=')))
 			return (1);
@@ -57,51 +57,44 @@ static int	check_in_env(char **env, char *arg)
 	return (0);
 }
 
-static int	check_arg(t_command_table *t, char *arg, int *append)
+static int	check_arg(t_command_table *t, char *arg)
 {
-	int			i;
+	int	i;
 
 	i = 0;
-	while (arg[i] && arg[i + 1] != '=')
+	while (arg[i] && arg[i] != '=')
 	{
-		if ((i == 0 && !ft_isalpha(arg[i]) && arg[i] != '_')
-			|| (i != 0 && (!(ft_isalnum(arg[i])
-						|| arg[i] == '_' || arg[i] == '='
-						|| (arg[i] == '+' && arg[i + 1] == '=')))))
+		if (!ft_isalpha(arg[i]) && arg[i] != '_')
 		{
-			ft_putstr_fd("\033[0;31mminishell: export: `", 2);
-			ft_putstr_fd(arg, 2);
-			ft_putstr_fd("': not a valid identifier\n\033[0m", 2);
+			ft_dprintf(2, "%sminishell: export: `%s'%s",
+				RED, arg, ": not a valid identifier\n", RESET);
 			t->code = 1;
 			return (1);
 		}
 		i++;
 	}
 	if (i == 0 && !arg[i])
-		return (t->code = 1, 1);
-	else if (i != 0 && !*append && (arg[i - 1] == '+' && arg[i] == '='))
-		(*append)++;
+	{
+		t->code = 1;
+		return (1);
+	}
 	return (0);
 }
 
 static int	export(t_command_table *t, t_command cmd)
 {
 	int	i;
-	int	a;
 
 	i = 0;
 	while (cmd.args[++i] != NULL)
 	{
-		a = 0;
-		if (check_arg(t, cmd.args[i], &a) || check_in_env(t->env, cmd.args[i]))
+		if (check_arg(t, cmd.args[i]) || check_in_env(t->env, cmd.args[i]))
 			continue ;
-		if (!a && unset_if_needed(t, ft_strndup(cmd.args[i], '=')) != 0)
+		if (unset_if_needed(t, ft_strndup(cmd.args[i], '=')) != 0)
 			return (MALLOC_ERR);
-		if (a && get_env_len(t->exp, cmd.args[i]) == -1 && !--a)
-			cmd.args[i] = ft_strdup_except_char(cmd.args[i], '+');
 		if (malloc_assert(cmd.args[i], __FILE__, __LINE__, __FUNCTION__))
 			return (MALLOC_ERR);
-		if (export_env(t, cmd.args[i], a) == MALLOC_ERR)
+		if (export_env(t, cmd.args[i]) == MALLOC_ERR)
 			return (MALLOC_ERR);
 	}
 	return (0);

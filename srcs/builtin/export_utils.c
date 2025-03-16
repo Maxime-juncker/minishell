@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:59:03 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/11 15:53:31 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/16 15:10:20 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,40 +39,34 @@ void	sort_export(char **argv)
 	}
 }
 
-static char	**update_env(char *arg, char **env, int append)
+static char	**update_env(char *arg, char **env)
 {
 	char	**cpy;
 	int		i;
 
-	cpy = malloc((arrlen((void **)env) + 2 - append) * sizeof(char *));
+	cpy = malloc((arrlen((void **)env) + 2) * sizeof(char *));
 	if (malloc_assert(cpy, __FILE__, __LINE__, __FUNCTION__))
 		return (env);
 	i = -1;
 	while (env && env[++i])
 	{
-		if (append && !ft_strscmp(env[i], arg, "+="))
-			cpy[i] = ft_strjoin_free(env[i], ft_strchr(arg, '=')
-					+ (ft_strchr(env[i], '=') != NULL), FREE1);
-		else
-			cpy[i] = env[i];
+		cpy[i] = env[i];
 		if (malloc_assert(cpy[i], __FILE__, __LINE__, __FUNCTION__))
 			return (free(cpy), env);
 	}
-	if (!append)
-	{
-		cpy[i] = ft_strdup(arg);
-		if (malloc_assert(cpy[i++], __FILE__, __LINE__, __FUNCTION__))
-			return (free(cpy), env);
-	}
+	cpy[i] = ft_strdup(arg);
+	if (malloc_assert(cpy[i], __FILE__, __LINE__, __FUNCTION__))
+		return (free(cpy), env);
 	free(env);
-	return (cpy[i] = NULL, cpy);
+	cpy[i + 1] = NULL;
+	return (cpy);
 }
 
-int	export_env(t_command_table *table, char *arg, int append)
+int	export_env(t_command_table *table, char *arg)
 {
 	if (ft_strchr(arg, '='))
-		table->env = update_env(arg, table->env, append);
-	table->exp = update_env(arg, table->exp, append);
+		table->env = update_env(arg, table->env);
+	table->exp = update_env(arg, table->exp);
 	if (!table->env || !table->exp)
 		return (MALLOC_ERR);
 	return (0);

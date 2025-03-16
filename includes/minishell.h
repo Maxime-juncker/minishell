@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/11 16:50:32 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/16 15:32:54 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char	**duplicate_env(char **old_env);
 size_t	arrlen(void **arr);
 
 // export_utils.c
-int		export_env(t_command_table *table, char *arg, int append);
+int		export_env(t_command_table *table, char *arg);
 void	sort_export(char **argv);
 
 // export.c

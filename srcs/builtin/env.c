@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 15:49:37 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/06 09:40:47 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/16 14:22:37 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,6 @@ int	env(t_command_table table, const t_command cmd)
 {
 	int	i;
 
-	if (cmd.n_args > 1)
-	{
-		ft_dprintf(2, "%sminishell: env: invalid option%s\n", RED, RESET);
-		return (0);
-	}
 	i = 0;
 	while (table.env[i])
 	{
