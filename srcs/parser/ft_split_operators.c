@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_operators.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 10:49:02 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/04 09:07:32 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/16 20:59:12 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 #include <string.h>
 #include "minishell.h"
 
-static int	is_operator(const char *s)
+int	is_operator(char *s)
 {
 	return ((s[0] == '&' && s[1] == '&') || (s[0] == '|' && s[1] == '|'));
 }
 
-static char	*ft_strndup2(const char *s, size_t n)
+static char	*ft_strndup2(char *s, size_t n)
 {
 	char	*res;
 	size_t	i;
@@ -38,7 +38,7 @@ static char	*ft_strndup2(const char *s, size_t n)
 	return (res);
 }
 
-static char	*handle_string(const char **s)
+static char	*handle_string(char **s)
 {
 	size_t	len;
 	char	in_quote;
@@ -56,7 +56,7 @@ static char	*handle_string(const char **s)
 	return (ft_strndup2(*s, len));
 }
 
-static char	*handle_parentheses(const char **s, int *paren_count)
+static char	*handle_parentheses(char **s, int *paren_count)
 {
 	size_t	len;
 
@@ -73,13 +73,13 @@ static char	*handle_parentheses(const char **s, int *paren_count)
 	return (ft_strndup2(*s, len));
 }
 
-char	**ft_split_operators(const char *s)
+char	**ft_split_operators(char *s)
 {
 	char	**res;
 	int		i;
 	int		paren_count;
 
-	res = ft_calloc(ft_strlen(s) + 1, sizeof(char *));
+	res = malloc((count_words_operators(s) + 1) * sizeof(char *));
 	if (malloc_assert(res, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
 		return (NULL);
 	i = 0;

@@ -19,53 +19,54 @@ VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser:srcs/checker:src
 #                                  srcs / objs                                 #
 # ---------------------------------------------------------------------------- #
 
-SRCS = 		main.c								\
-			prompt.c							\
-			utils.c								\
-			echo.c								\
-			cd.c								\
-			env.c								\
-			export.c							\
-			export_utils.c						\
-			pwd.c								\
-			unset.c								\
-			executor.c							\
-			pipeline.c							\
-			checker.c							\
-			redir.c								\
-			init.c								\
-			lexer.c								\
-			checker_utils.c						\
-			cmd_debug.c							\
-			quotes_processing.c					\
-			var_processing.c					\
-			syntax_checker.c					\
-			path_checker.c						\
-			paths.c								\
-			split_line.c						\
-			lexer_utils.c						\
-			join_lst.c							\
-			redir_checker.c						\
-			token_error.c						\
-			quote_checker.c						\
-			exit.c								\
-			ft_split_operators.c				\
-			ft_split_pipe.c						\
-			wildcard_processing.c				\
-			and_checker.c						\
-			wildcard_expanssion.c				\
-			wildcard_patern.c					\
-			builtin_cmd.c						\
-			parenthesis_checker.c				\
-			prompt_line.c						\
-			wildcard_utils.c					\
-			waiter.c							\
-			pipeline_utils.c					\
-			pipe_checker.c						\
-			formater.c							\
-			remove_unnecessary_parentheses.c	\
-			config.c							\
-
+SRCS = 		main.c							\
+			prompt.c						\
+			utils.c							\
+			echo.c							\
+			cd.c							\
+			env.c							\
+			export.c						\
+			export_utils.c					\
+			pwd.c							\
+			unset.c							\
+			executor.c						\
+			pipeline.c						\
+			checker.c						\
+			redir.c							\
+			init.c							\
+			lexer.c							\
+			checker_utils.c					\
+			cmd_debug.c						\
+			quotes_processing.c				\
+			var_processing.c				\
+			syntax_checker.c				\
+			path_checker.c					\
+			paths.c							\
+			split_line.c					\
+			lexer_utils.c					\
+			join_lst.c						\
+			redir_checker.c					\
+			token_error.c					\
+			quote_checker.c					\
+			exit.c							\
+			ft_split_operators.c			\
+			ft_split_pipe.c					\
+			wildcard_processing.c			\
+			and_checker.c					\
+			wildcard_expanssion.c			\
+			wildcard_patern.c				\
+			builtin_cmd.c					\
+			parenthesis_checker.c			\
+			prompt_line.c					\
+			wildcard_utils.c				\
+			waiter.c						\
+			pipeline_utils.c				\
+			pipe_checker.c					\
+			formater.c						\
+			remove_useless_parentheses.c	\
+			config.c						\
+			count_words_operators.c			\
+			heredoc.c						\
 
 # ---------------------------------------------------------------------------- #
 #                                 adding prefix                                #
@@ -80,7 +81,7 @@ OBJ_NO_MAIN = $(filter-out $(OBJ_D)prompt.o, $(OBJ))
 # ---------------------------------------------------------------------------- #
 
 RESET 			= \033[0m
-GRAY			=\033[90m
+GRAY			= \033[90m
 RED 			= \033[31m
 GREEN 			= \033[32m
 YELLOW 			= \033[33m

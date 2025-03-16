@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/16 15:32:54 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/16 21:51:35 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,14 +238,21 @@ char	*format_wildcard(char **expanded);
 int		init_table(t_command_table *table, char *line);
 
 // redir.c
+int		init_redir(t_command_table *table);
+
+// heredoc.c
 int		heredoc(t_command_table *table, t_command *cmd, char *deli);
-int		redir(t_command_table *table, t_command *cmd);
-int		update_command(t_command *cmd);
 
 // ft_split_pipe.c
 char	**ft_split_pipe(char *s);
-char	**ft_split_operators(const char *s);
 void	free_all(char **res, int i);
+
+// ft_split_operators.c
+char	**ft_split_operators(char *s);
+int		is_operator(char *s);
+
+// count_words_operators.c
+int		count_words_operators(char *s);
 
 // remove_unnecessary_parentheses.c
 void	remove_unnecessary_parentheses(char *s);

@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/15 14:17:17 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/16 21:56:50 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	create_arg(char **cmd_arg, char *str)
 	}
 	arg = malloc(sizeof(char) * (i - start + 1));
 	if (malloc_assert(arg, __FILE__, __LINE__, __FUNCTION__) != 0)
-		return (MALLOC_ERR);
+		return (*cmd_arg = NULL, MALLOC_ERR);
 	ft_strlcpy(arg, &str[start], i - start + 1);
 	*cmd_arg = arg;
 	return (0);
@@ -82,7 +82,7 @@ static int	get_args(t_command *cmd, char *cmd_str)
 		if (cmd_str[i] == '\0')
 			break ;
 		if (create_arg(&cmd->args[n_args], &cmd_str[i]) == MALLOC_ERR)
-			return (free(cmd->args), MALLOC_ERR);
+			return (MALLOC_ERR);
 		while (cmd_str[i] && (quote || cmd_str[i] != ' '))
 			if (cmd_str[i++] == '\'' || cmd_str[i - 1] == '\"')
 				quote = toggle_quote(cmd_str[i - 1], quote);
@@ -94,7 +94,7 @@ static int	get_args(t_command *cmd, char *cmd_str)
 
 static int	init_cmd(t_command_table *table, t_command *cmd, char *cmd_str)
 {
-	int			i;
+	int	i;
 
 	cmd->fd_in = 0;
 	cmd->fd_out = 1;
@@ -105,25 +105,8 @@ static int	init_cmd(t_command_table *table, t_command *cmd, char *cmd_str)
 	{
 		if (cmd->args[i][0] == '<' && cmd->args[i][1] == '<'
 			&& heredoc(table, cmd, cmd->args[i + 1]) != 0)
-		{
 			return (MALLOC_ERR);
-		}
 	}
-	return (0);
-}
-
-static int	handle_pipe(t_command_table *table, t_command *cmd, size_t n)
-{
-	static int	pipefd[2] = {-1};
-
-	if (pipefd[0] != -1)
-		cmd->fd_in = pipefd[0];
-	if (n != table->n_commands - 1 && pipe(pipefd) != -1)
-		cmd->fd_out = pipefd[1];
-	else if (n != table->n_commands - 1)
-		return (perror("Failed pipe"), MALLOC_ERR);
-	if (n == table->n_commands - 1)
-		pipefd[0] = -1;
 	return (0);
 }
 
@@ -146,16 +129,8 @@ int	init_table(t_command_table *table, char *line)
 		if (init_cmd(table, &table->commands[i], commands[i]) == MALLOC_ERR)
 			return (cleanup_arr((void **)commands), table->n_commands = i + 1,
 				close_all_fds(table), cleanup_table(table), MALLOC_ERR);
-	i = -1;
-	while (++i < table->n_commands)
-	{
-		if (handle_pipe(table, &table->commands[i], i))
-			return (cleanup_arr((void **)commands),
-				cleanup_table(table), MALLOC_ERR);
-		if (redir(table, &table->commands[i]) != 0)
-			return (cleanup_arr((void **)commands),
-				cleanup_table(table), MALLOC_ERR);
-	}
+	if (init_redir(table) == MALLOC_ERR)
+		return (cleanup_arr((void **)commands), MALLOC_ERR);
 	if (i == table->n_commands - 1 && !ft_strchr(commands[i], '>'))
 		table->commands[i].fd_out = 1;
 	return (cleanup_arr((void **)commands), 0);
