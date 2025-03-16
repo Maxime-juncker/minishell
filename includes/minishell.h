@@ -260,4 +260,7 @@ void	cleanup_table(t_command_table *table);
 void	handle_signal(int signal);
 int		check_interrupt(void);
 
+int		load_config(t_command_table *table);
+
+
 #endif

@@ -28,6 +28,7 @@ int	main(int argc, char **argv, char **env)
 	code = 0;
 	table.name = get_exec_name(argv[0]);
 	table.setup_fd = -1;
+	load_config(&table);
 	table.code = 0;
 	table.setup_fd = -1;
 	while (code != MALLOC_ERR)
