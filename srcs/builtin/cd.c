@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 16:16:19 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/11 12:30:42 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:19:33 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,40 +42,9 @@ char	*remove_spaces(char *str)
 	return (free(buff), new_str);
 }
 
-char	*find_env_var(char **env, char *to_find, int *index)
-{
-	int		i;
-	int		j;
-	char	*temp;
-
-	i = 0;
-	while (env[i] != NULL)
-	{
-		j = 0;
-		while (env[i][j] && env[i][j] != '=')
-			j++;
-		temp = ft_substr(env[i], 0, j);
-		if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
-			return (NULL);
-		if (ft_strcmp(temp, to_find) == 0)
-		{
-			if (index != NULL)
-				*index = i;
-			return (free(temp), remove_spaces(env[i] + ft_strlen(to_find) + 1));
-		}
-		free(temp);
-		i++;
-	}
-	if (index != NULL)
-		*index = -1;
-	return (NULL);
-}
-
 static int	change_directory(char *path)
 {
 	DIR		*dir;
-	char	*abs_path;
-	char	buffer[4096];
 
 	dir = opendir(path);
 	if (!dir)
@@ -90,38 +59,72 @@ static int	change_directory(char *path)
 	}
 	closedir(dir);
 	free(path);
-	abs_path = getcwd(buffer, 4096);
-	if (!abs_path)
-		ft_dprintf(2, "%schdir: error retrieving current directory: %s%s%s\n",
-			RED, "getcwd: cannot access parent directories: ",
-			"No such file or directory", RESET);
 	return (0);
 }
 
-int	cd_command(const t_command_table *table, const t_command cmd)
+void	update_oldpwd(t_command_table *table)
 {
-	char	*path;
-	int		code;
+	char		*abs_path;
+	char		buffer[4096];
+	t_command	cmd_fake;
+
+	abs_path = getcwd(buffer, 4096);
+	if (!abs_path)
+	{
+		ft_dprintf(2, "%schdir: error retrieving current directory: %s%s%s\n",
+			RED, "getcwd: cannot access parent directories: ",
+			"No such file or directory", RESET);
+		return ;
+	}
+	if (create_dummy_cmd(ft_strjoin("export OLDPWD=", abs_path),
+			&cmd_fake) == MALLOC_ERR)
+		return ;
+	export_cmd(table, cmd_fake);
+	cleanup_arr((void **)cmd_fake.args);
+}
+
+int	get_cd_path(t_command_table *table, const t_command cmd, char **path)
+{
 	int		index;
+
+	index = 0;
+	if (cmd.n_args == 1 || ft_strcmp(cmd.args[1], "~") == 0)
+	{
+		*path = find_env_var(table->env, "HOME", &index);
+		if (index == -1)
+			return (free(*path), ft_dprintf(2,
+					"%sminishell: cd: HOME not set\n%s", RED, RESET), 1);
+	}
+	else if (ft_strcmp(cmd.args[1], "-") == 0)
+	{
+		*path = find_env_var(table->env, "OLDPWD", &index);
+		if (index == -1)
+			return (free(*path), ft_dprintf(2,
+					"%sminishell: cd: OLDPWD not set\n%s", RED, RESET), 1);
+	}
+	else
+		*path = ft_strdup(cmd.args[1]);
+	return (0);
+}
+
+int	cd_command(t_command_table *table, const t_command cmd)
+{
+	int		code;
+	char	*path;
 
 	if ((cmd.fd_in != STDIN_FILENO || cmd.fd_out != STDOUT_FILENO)
 		&& table->n_commands > 1)
 		return (0);
-	index = 0;
 	if (cmd.n_args > 2)
 	{
 		ft_dprintf(2, "%sminishell: cd: too many arguments\n%s", RED, RESET);
 		return (1);
 	}
-	else if (cmd.n_args == 2 && ft_strcmp(cmd.args[1], "~"))
-		path = ft_strdup(cmd.args[1]);
-	else
-		path = find_env_var(table->env, "HOME", &index);
-	if (index == -1)
-		return (free(path), ft_dprintf(2, "%sminishell: cd: HOME not set\n%s",
-				RED, RESET), 1);
-	else if (malloc_assert(path, __FILE__, __LINE__, __FUNCTION__) != 0)
+	if (get_cd_path(table, cmd, &path) == 1)
+		return (1);
+	if (malloc_assert(path, __FILE__, __LINE__, __FUNCTION__) != 0)
 		return (MALLOC_ERR);
+	update_oldpwd(table);
 	code = change_directory(path);
 	return (code);
 }

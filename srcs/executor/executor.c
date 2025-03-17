@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:54 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/08 13:16:24 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:19:50 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,19 @@ int	run_command(t_command *cmd, const t_command_table *table,
 		close_fds(*cmd);
 	}
 	return (pid);
+}
+
+int	create_dummy_cmd(char *str_args, t_command *cmd)
+{
+	char	**args;
+
+	args = ft_split(str_args, ' ');
+	free(str_args);
+	if (malloc_assert(args, __FILE__, __LINE__, __FUNCTION__))
+		return (MALLOC_ERR);
+	cmd->args = args;
+	cmd->n_args = arrlen((void **)args);
+	cmd->fd_in = STDIN_FILENO;
+	cmd->fd_out = STDOUT_FILENO;
+	return (0);
 }

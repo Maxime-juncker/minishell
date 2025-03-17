@@ -39,6 +39,7 @@ SRCS = 		main.c							\
 			cmd_debug.c						\
 			quotes_processing.c				\
 			var_processing.c				\
+			var_processing_utils.c			\
 			syntax_checker.c				\
 			path_checker.c					\
 			paths.c							\

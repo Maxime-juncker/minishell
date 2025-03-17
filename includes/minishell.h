@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/17 09:15:21 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:21:44 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int		new_prompt(t_command_table *table);
 /* -------------------------------------------------------------------------- */
 
 // cd.c
-int		cd_command(const t_command_table *table, const t_command cmd);
+int		cd_command(t_command_table *table, const t_command cmd);
 char	*find_env_var(char **env, char *to_find, int *index);
 
 // echo.c
@@ -166,6 +166,7 @@ void	show_cmd(t_command cmd);
 // executor.c
 int		run_command(t_command *cmd, const t_command_table *table,
 			t_free_pkg package);
+int		create_dummy_cmd(char *str_args, t_command *cmd);
 
 // pipeline_utils.c
 void	close_fds(t_command cmd);
@@ -208,8 +209,9 @@ char	*process_line(const char *cmd_line, char **env, int *code);
 
 // var_processing.c
 t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
-char	*process_var(char *str, char **env, int last_code, t_list *next);
 
+// var_processing_utils.c
+char	*process_var(char *str, char **env, int last_code, t_list *next);
 t_list	*process_quotes(const char *line);
 char	*remove_spaces(char *str);
 
@@ -268,6 +270,5 @@ void	handle_signal(int signal);
 int		check_interrupt(void);
 
 int		load_config(t_command_table *table);
-
 
 #endif

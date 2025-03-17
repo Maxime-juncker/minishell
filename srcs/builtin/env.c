@@ -3,14 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 15:49:37 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/16 14:22:37 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 09:47:55 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*find_env_var(char **env, char *to_find, int *index)
+{
+	int		i;
+	int		j;
+	char	*temp;
+
+	i = 0;
+	while (env[i] != NULL)
+	{
+		j = 0;
+		while (env[i][j] && env[i][j] != '=')
+			j++;
+		temp = ft_substr(env[i], 0, j);
+		if (malloc_assert(temp, __FILE__, __LINE__, __FUNCTION__))
+			return (NULL);
+		if (ft_strcmp(temp, to_find) == 0)
+		{
+			if (index != NULL)
+				*index = i;
+			return (free(temp), remove_spaces(env[i] + ft_strlen(to_find) + 1));
+		}
+		free(temp);
+		i++;
+	}
+	if (index != NULL)
+		*index = -1;
+	return (NULL);
+}
 
 size_t	arrlen(void **arr)
 {

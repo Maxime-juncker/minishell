@@ -6,14 +6,14 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:20 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/11 11:30:27 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:12:41 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <dirent.h>
 
-static int	create_dummy_cmd(const char *name, t_command *cmd)
+static int	create_dummy_path_cmd(const char *name, t_command *cmd)
 {
 	cmd->args = malloc(2 * sizeof(char *));
 	if (malloc_assert(cmd->args, __FILE__, __LINE__, __FUNCTION__))
@@ -61,7 +61,7 @@ int	check_path(const char *cmd_name, char **env)
 	t_command	dummy_cmd;
 	char		*path;
 
-	if (create_dummy_cmd(cmd_name, &dummy_cmd) == MALLOC_ERR)
+	if (create_dummy_path_cmd(cmd_name, &dummy_cmd) == MALLOC_ERR)
 		return (MALLOC_ERR);
 	if (dummy_cmd.args[0][0] == '.' && dummy_cmd.args[0][1] == '\0')
 	{
