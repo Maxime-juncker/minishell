@@ -65,7 +65,6 @@ SRCS = 		main.c							\
 			pipe_checker.c					\
 			formater.c						\
 			remove_useless_parentheses.c	\
-			config.c						\
 			count_words_operators.c			\
 			heredoc.c						\
 

@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/17 10:37:06 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:46:21 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	join_loop(char *content, char **str_ref, int *len)
 		quote = content[0];
 		if (quote == '\'' || quote == '\"')
 		{
-			if (is_symbol((*str_ref)[*len - 1]))
+			if (*str_ref && is_symbol((*str_ref)[*len - 1]))
 			{
 				*str_ref = ft_charjoin(*str_ref, ' ');
 			}
