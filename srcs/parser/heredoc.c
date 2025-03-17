@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 21:46:10 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/16 21:53:17 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 08:32:08 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	print_heredoc_warning(char *deli, int nb_line)
 
 int	heredoc_loop(t_command_table *table, t_command *cmd, char *deli, int diff)
 {
-	char *line;
-	char *new_line;
-	int nb_line;
+	char	*line;
+	char	*new_line;
+	int		nb_line;
 
 	nb_line = 0;
 	while (1)
@@ -51,7 +51,7 @@ int	heredoc_loop(t_command_table *table, t_command *cmd, char *deli, int diff)
 
 int	heredoc(t_command_table *table, t_command *cmd, char *temp)
 {
-	static int fd = -1;
+	static int	fd = -1;
 	char		*deli;
 	int			diff;
 
