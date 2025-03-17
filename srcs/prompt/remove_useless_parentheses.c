@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   remove_unnecessary_parentheses.c                   :+:      :+:    :+:   */
+/*   remove_useless_parentheses.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:31:31 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/07 14:34:26 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 11:20:48 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static void	check_parenthesis_back(char *s, int i)
 {
+	if (i < 0)
+		return ;
 	while (i != 0 && is_whitespace(s[i]))
 		i--;
 	if (s[i] == ')')
