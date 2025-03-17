@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/07 14:29:43 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/17 08:49:13 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	main(int argc, char **argv, char **env)
 	while (code != MALLOC_ERR)
 	{
 		code = new_prompt(&table);
+		usleep(1000);
 	}
 	cleanup_arr((void **)table.env);
 	cleanup_arr((void **)table.exp);
