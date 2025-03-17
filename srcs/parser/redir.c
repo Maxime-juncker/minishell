@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/16 21:59:29 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:28:53 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,12 @@ static int	handle_fd(t_command_table *table, t_command *cmd, char *file,
 	}
 	else if (arg[0] != arg[1])
 	{
-		if (check_redir_in(file, 0) != 0)
-			return (table->code = 1, 1);
+		printf("file: %s\n", cmd->args[1]);
+
 		if (cmd->fd_in > 1)
 			close(cmd->fd_in);
+		if (check_redir_in(file, -1) != 0)
+			return (close_all_fds(table), table->code = 1, 1);
 		cmd->fd_in = open(file, O_RDONLY, 0644);
 	}
 	return (0);
@@ -96,6 +98,10 @@ static int	handle_pipe(t_command_table *table, t_command *cmd, size_t n)
 {
 	static int	pipefd[2] = {-1};
 
+	if (cmd->fd_in != 0)
+		close(cmd->fd_in);
+	if (cmd->fd_out != 1)
+		close(cmd->fd_out);
 	if (pipefd[0] != -1)
 		cmd->fd_in = pipefd[0];
 	if (n != table->n_commands - 1 && pipe(pipefd) != -1)

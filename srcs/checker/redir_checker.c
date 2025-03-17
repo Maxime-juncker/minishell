@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_checker.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:27 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/11 12:57:44 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:26:32 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,11 @@ int	check_redir_in(const char *cmd_line, int i)
 {
 	char	*file;
 
-	file = get_file_name(cmd_line + i);
-	if (file == NULL)
+	if (i != -1)
+		file = get_file_name(cmd_line + i);
+	else
+		file = ft_strdup(cmd_line);
+	if (!file)
 	{
 		return (NOT_FOUND);
 	}

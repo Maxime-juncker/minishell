@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:06:14 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/17 08:32:18 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:06:38 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int	load_config(t_command_table *table)
 	char	*path;
 	char	*line;
 
+	table->code = 0;
 	path = find_env_var(table->env, "HOME", NULL);
 	if (path == NULL)
 		return (0);
