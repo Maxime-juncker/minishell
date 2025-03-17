@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/16 21:51:35 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 09:15:21 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,11 +248,11 @@ char	**ft_split_pipe(char *s);
 void	free_all(char **res, int i);
 
 // ft_split_operators.c
-char	**ft_split_operators(char *s);
-int		is_operator(char *s);
+char	**ft_split_operators(const char *s);
+int		is_operator(const char *s);
 
 // count_words_operators.c
-int		count_words_operators(char *s);
+int		count_words_operators(const char *s);
 
 // remove_unnecessary_parentheses.c
 void	remove_unnecessary_parentheses(char *s);

@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 20:38:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/16 20:58:20 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 09:14:45 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,29 +39,31 @@ static void	handle_operator(char **s, int *count)
 	}
 }
 
-int	count_words_operators(char *s)
+int	count_words_operators(const char *s)
 {
 	int		count;
 	char	in_quote;
+	char	*temp;
 
+	temp = (char *)s;
 	count = 0;
 	in_quote = 0;
-	while (*s)
+	while (*temp)
 	{
-		while (*s == ' ')
-			s++;
-		if (!*s)
+		while (*temp == ' ')
+			temp++;
+		if (!*temp)
 			break ;
-		if (*s == '(' || is_operator(s))
-			handle_operator(&s, &count);
+		if (*temp == '(' || is_operator(temp))
+			handle_operator(&temp, &count);
 		else
 		{
 			count++;
-			while (*s && *s != ' ' && *s != '(' && !is_operator(s))
+			while (*temp && *temp != ' ' && *temp != '(' && !is_operator(temp))
 			{
-				if (*s == '\'' || *s == '\"')
-					in_quote = toggle_quote(*s, in_quote);
-				s++;
+				if (*temp == '\'' || *temp == '\"')
+					in_quote = toggle_quote(*temp, in_quote);
+				temp++;
 			}
 		}
 	}
