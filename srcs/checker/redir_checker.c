@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:27 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/17 10:26:32 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:36:00 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,7 @@ int	check_redir_in(const char *cmd_line, int i)
 	else
 		file = ft_strdup(cmd_line);
 	if (!file)
-	{
 		return (NOT_FOUND);
-	}
 	if (access(file, F_OK) == -1)
 	{
 		ft_dprintf(2, "%sminishell: %s: No such file or directory\n%s",

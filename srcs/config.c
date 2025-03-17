@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:06:14 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/17 10:06:38 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:36:16 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,5 @@ int	load_config(t_command_table *table)
 		exec_prompt(table, line);
 		line = get_next_line(fd);
 	}
-	close(fd);
-	return (table->code);
+	return (close(fd), table->code);
 }

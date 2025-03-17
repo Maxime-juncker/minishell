@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 20:38:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/17 09:14:45 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:35:39 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,11 @@ int	count_words_operators(const char *s)
 	in_quote = 0;
 	while (*temp)
 	{
-		while (*temp == ' ')
+		while (is_whitespace(*temp))
 			temp++;
-		if (!*temp)
-			break ;
 		if (*temp == '(' || is_operator(temp))
 			handle_operator(&temp, &count);
-		else
+		else if (*temp)
 		{
 			count++;
 			while (*temp && *temp != ' ' && *temp != '(' && !is_operator(temp))

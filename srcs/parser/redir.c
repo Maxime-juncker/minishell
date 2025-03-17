@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/17 10:28:53 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:33:59 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ static int	handle_fd(t_command_table *table, t_command *cmd, char *file,
 	}
 	else if (arg[0] != arg[1])
 	{
-		printf("file: %s\n", cmd->args[1]);
-
 		if (cmd->fd_in > 1)
 			close(cmd->fd_in);
 		if (check_redir_in(file, -1) != 0)
