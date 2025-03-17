@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/17 10:33:59 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:50:08 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ static int	handle_fd(t_command_table *table, t_command *cmd, char *file,
 static int	redir(t_command_table *table, t_command *cmd)
 {
 	int		i;
+	char	*file;
 
 	i = 0;
 	cmd->n_args = 0;
@@ -81,8 +82,12 @@ static int	redir(t_command_table *table, t_command *cmd)
 	{
 		if (cmd->args[i][0] == '>' || cmd->args[i][0] == '<')
 		{
-			if (handle_fd(table, cmd, cmd->args[i + 1], cmd->args[i]) == 1)
-				return (table->code = 1, 1);
+			file = remove_quotes_pair(cmd->args[i + 1]);
+			if (malloc_assert(file, __FILE__, __LINE__, __FUNCTION__) == MALLOC_ERR)
+				return (MALLOC_ERR);
+			if (handle_fd(table, cmd, file, cmd->args[i]) == 1)
+				return (free(file), table->code = 1, 1);
+			free(file);
 			i++;
 		}
 		else
