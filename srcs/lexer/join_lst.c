@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:56:38 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/17 10:31:50 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:37:06 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,10 @@ static int	join_loop(char *content, char **str_ref, int *len)
 		quote = content[0];
 		if (quote == '\'' || quote == '\"')
 		{
+			if (is_symbol((*str_ref)[*len - 1]))
+			{
+				*str_ref = ft_charjoin(*str_ref, ' ');
+			}
 			*str_ref = ft_strjoin_free(*str_ref, content, FREE1);
 			if (malloc_assert(*str_ref, __FILE__, __LINE__, __FUNCTION__))
 				return (MALLOC_ERR);
