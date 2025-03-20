@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/16 22:02:45 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/20 13:10:38 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	handle_line_symbol(t_command_table *table, char *arg, int *code,
 		process_cmd = process_line(arg, table->env, code);
 		if (malloc_assert(process_cmd, __FILE__, __LINE__, __FUNCTION__))
 			return (MALLOC_ERR);
-		if (!init_table(table, process_cmd))
+		if (!init_table(process_cmd, table))
 		{
 			*code = run_pipeline(table, *to_free);
 			cleanup_table(table);
@@ -80,7 +80,7 @@ static int	exec_prompt(t_command_table *table, char *line)
 	lst = NULL;
 	if (!line)
 	{
-		if (init_table(table, ft_strdup("exit")) == MALLOC_ERR
+		if (init_table(ft_strdup("exit"), table) == MALLOC_ERR
 			|| run_pipeline(table, NULL) == MALLOC_ERR)
 			return (MALLOC_ERR);
 		return (table->code);

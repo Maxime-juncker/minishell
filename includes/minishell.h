@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/17 11:13:54 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/20 13:10:16 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ char	*format_wildcard(char **expanded);
 /* -------------------------------------------------------------------------- */
 
 // init.c
-int		init_table(t_command_table *table, char *line);
+int		init_table(char *line, t_command_table *table);
 
 // redir.c
 int		init_redir(t_command_table *table);

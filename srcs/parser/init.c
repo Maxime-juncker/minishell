@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/17 17:21:44 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/20 13:10:05 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ static int	init_cmd(t_command_table *table, t_command *cmd, char *cmd_str)
 	return (0);
 }
 
-int	init_table(t_command_table *table, char *line)
+int	init_table(char *line, t_command_table *table)
 {
 	char	**commands;
 	size_t	i;
