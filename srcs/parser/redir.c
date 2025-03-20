@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:09:45 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/20 10:57:48 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/20 12:44:31 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,12 +127,12 @@ int	init_redir(t_command_table *table)
 	i = 0;
 	while (i < table->n_commands)
 	{
-		if (redir(table, &table->commands[i]) != 0)
+		if (handle_pipe(table, &table->commands[i], i) != 0)
 		{
 			cleanup_table(table);
 			return (MALLOC_ERR);
 		}
-		if (handle_pipe(table, &table->commands[i], i) != 0)
+		if (redir(table, &table->commands[i]) != 0)
 		{
 			cleanup_table(table);
 			return (MALLOC_ERR);
