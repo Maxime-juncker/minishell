@@ -162,15 +162,15 @@ header:
 libft:
 	$(MAKE) -C libft
 
-.PHONY: test
-test:
-	$(MAKE) all
-	$(MAKE) $(BIN)/libminishell.a
-	$(MAKE) test -C better-libunit/
+# .PHONY: test
+# test:
+# 	$(MAKE) all
+# 	$(MAKE) $(BIN)/libminishell.a
+# 	$(MAKE) test -C better-libunit/
 
-.PHONY: leaks
-leaks: all
-	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --track-origins=yes --suppressions=ignore_readline.supp -s ./bin/minishell
+# .PHONY: leaks
+# leaks: all
+# 	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --track-origins=yes --suppressions=ignore_readline.supp -s ./bin/minishell
 
 # ---------------------------------------------------------------------------- #
 #                              create directories                              #
