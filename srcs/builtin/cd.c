@@ -6,12 +6,13 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 16:16:19 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/17 10:19:33 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:18:07 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <dirent.h>
+#include <unistd.h>
 
 char	*remove_spaces(char *str)
 {
@@ -46,6 +47,15 @@ static int	change_directory(char *path)
 {
 	DIR		*dir;
 
+	if (ft_strcmp(path, "..") == 0)
+	{
+		if (chdir(path) == -1)
+		{
+			perror("\033[0;31mminishell: cd: \033[0m");
+			return (1);
+		}
+		return (0);
+	}
 	dir = opendir(path);
 	if (!dir)
 		return (free(path), perror("\033[0;31mminishell: cd"),
@@ -120,7 +130,13 @@ int	cd_command(t_command_table *table, const t_command cmd)
 		ft_dprintf(2, "%sminishell: cd: too many arguments\n%s", RED, RESET);
 		return (1);
 	}
-	if (get_cd_path(table, cmd, &path) == 1)
+	if (ft_strcmp(cmd.args[1], "..") == 0)
+	{
+		path = get_up();
+		if (!path)
+			return (0);
+	}
+	else if (get_cd_path(table, cmd, &path) == 1)
 		return (1);
 	if (malloc_assert(path, __FILE__, __LINE__, __FUNCTION__) != 0)
 		return (MALLOC_ERR);

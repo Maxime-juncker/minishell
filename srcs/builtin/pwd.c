@@ -3,16 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 10:37:27 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/16 19:49:02 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:16:15 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*get_pwd(int *is_malloc_error)
+char	*get_up(void)
+{
+	int		error;
+	char	*path;
+	char	*up;
+	int		lenght;
+
+	error = 0;
+	path = get_pwd(&error);
+	if (error)
+		return (NULL);
+	lenght = ft_strrchr(path, '/') - path;
+	up = ft_substr(path, 0, lenght);
+	free(path);
+	return (up);
+}
+
+char	*get_pwd(int *is_malloc_error)
 {
 	char	buffer[1024];
 	char	*res;

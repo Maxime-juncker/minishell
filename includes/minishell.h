@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/20 13:10:16 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:16:10 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ int		export_cmd(t_command_table *table, t_command cmd);
 
 // pwd.c
 int		pwd(const t_command *cmd);
+char	*get_pwd(int *is_malloc_error);
+char	*get_up(void);
 
 // unset.c
 int		unset_cmd(t_command_table *table, t_command cmd);
