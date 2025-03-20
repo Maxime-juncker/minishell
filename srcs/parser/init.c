@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:25:59 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/16 21:56:50 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/17 17:21:44 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,5 @@ int	init_table(t_command_table *table, char *line)
 				close_all_fds(table), cleanup_table(table), MALLOC_ERR);
 	if (init_redir(table) == MALLOC_ERR)
 		return (cleanup_arr((void **)commands), MALLOC_ERR);
-	if (i == table->n_commands - 1 && !ft_strchr(commands[i], '>'))
-		table->commands[i].fd_out = 1;
 	return (cleanup_arr((void **)commands), 0);
 }

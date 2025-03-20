@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_processing_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 10:20:36 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/17 10:20:57 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/20 10:37:23 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,8 @@ char	*process_var(char *str, char **env, int last_code, t_list *next)
 	char	*result;
 
 	result = NULL;
+	if (*str == 0)
+		return (ft_strdup(""));
 	while (*str)
 	{
 		if (*str == '$' && str[1] == '\0' && next)
