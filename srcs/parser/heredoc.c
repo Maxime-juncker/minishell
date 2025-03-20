@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 21:46:10 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/20 10:30:41 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:39:15 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	heredoc_loop(t_command_table *table, t_command *cmd, char *deli, int diff)
 			ft_putendl_fd(new_line, cmd->fd_in);
 			free(new_line);
 		}
+		nb_line++;
 	}
 }
 
