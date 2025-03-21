@@ -6,11 +6,13 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:31:08 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/21 19:31:17 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/21 21:57:41 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+#if CUSTOM_PROMPT
 
 static char	*get_folder(void)
 {
@@ -44,7 +46,7 @@ char	*new_prompt_txt(char **env)
 	char	*txt;
 	char	*folder;
 
-	folder = ft_strjoin("\001", get_folder());
+	folder = get_folder();
 	if (malloc_assert(folder, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	txt = ft_strjoin_free(BLUE, folder, FREE2);
@@ -62,8 +64,15 @@ char	*new_prompt_txt(char **env)
 	txt = ft_strjoin_free(txt, "$\033[0m ", FREE1);
 	if (malloc_assert(txt, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
-	txt = ft_strjoin_free(txt, "\002", FREE1);
-	if (malloc_assert(txt, __FILE__, __LINE__, __FUNCTION__))
-		return (NULL);
 	return (txt);
 }
+
+#else
+
+char	*new_prompt_txt(char **env)
+{
+	(void)env;
+	return (ft_strdup("minishell $ "));
+}
+
+#endif

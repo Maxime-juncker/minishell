@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:33 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/17 15:53:59 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/21 22:17:45 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ int	main(int argc, char **argv, char **env)
 	t_command_table	table;
 	int				code;
 
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	{
+		ft_dprintf(2, "%s is not a tty\n", argv[0]);
+		return (1);
+	}
 	(void)argc;
 	init_env(&table, env);
 	rl_event_hook = check_interrupt;
