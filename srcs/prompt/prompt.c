@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:29:50 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/20 13:10:38 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/21 19:28:32 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	new_prompt(t_command_table *table)
 	if (!prompt_char)
 		return (MALLOC_ERR);
 	line = readline(prompt_char);
+	rl_redisplay();
 	free(prompt_char);
 	remove_unnecessary_parentheses(line);
 	if (g_signal_received)

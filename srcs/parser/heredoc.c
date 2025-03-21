@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 21:46:10 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/20 16:39:15 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/21 19:26:15 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ int	heredoc_loop(t_command_table *table, t_command *cmd, char *deli, int diff)
 			return (print_heredoc_warning(deli, nb_line), 0);
 		else if (!ft_strcmp(line, deli))
 			return (free(line), 0);
-		else if (!diff && !g_signal_received)
+		else if (diff)
 		{
 			new_line = process_var(line, table->env, table->code, NULL);
 			free(line);
 			if (!new_line)
 				return (1);
-			ft_putendl_fd(new_line, cmd->fd_in);
-			free(new_line);
+			line = new_line;
 		}
+		(ft_putendl_fd(line, cmd->fd_in), free(line));
 		nb_line++;
 	}
 }
