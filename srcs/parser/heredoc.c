@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 21:46:10 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/21 19:26:15 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/21 22:35:14 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	heredoc_loop(t_command_table *table, t_command *cmd, char *deli, int diff)
 			return (print_heredoc_warning(deli, nb_line), 0);
 		else if (!ft_strcmp(line, deli))
 			return (free(line), 0);
-		else if (diff)
+		else if (!diff)
 		{
 			new_line = process_var(line, table->env, table->code, NULL);
 			free(line);
