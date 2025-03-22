@@ -3,16 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   var_processing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/21 14:56:40 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/17 10:21:01 by mjuncker         ###   ########.fr       */
+/*   Created: 2025/03/17 10:20:36 by mjuncker          #+#    #+#             */
+/*   Updated: 2025/03/22 17:56:18 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code)
+char	*process_var(char *str, char **env, int last_code, t_list *next)
+{
+	char	*result;
+
+	result = NULL;
+	if (*str == 0)
+		return (ft_strdup(""));
+	while (*str)
+	{
+		if (*str == '$' && str[1] == '\0' && next)
+			return (result);
+		if (process(&str, &result, last_code, env) == MALLOC_ERR)
+			return (free(result), NULL);
+		if (malloc_assert(result, __FILE__, __LINE__, __FUNCTION__))
+			return (NULL);
+	}
+	return (result);
+}
+
+t_list	*process_expanded_vars(const t_list *lst, char **env,
+	int last_code)
 {
 	t_list	*process_lst;
 	t_list	*tmp;

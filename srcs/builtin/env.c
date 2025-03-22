@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 15:49:37 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/17 09:47:55 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/22 17:17:17 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*find_env_var(char **env, char *to_find, int *index)
 		{
 			if (index != NULL)
 				*index = i;
-			return (free(temp), remove_spaces(env[i] + ft_strlen(to_find) + 1));
+			return (free(temp), ft_strdup(env[i] + ft_strlen(to_find) + 1));
 		}
 		free(temp);
 		i++;

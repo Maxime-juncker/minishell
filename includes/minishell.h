@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 14:55:59 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/22 10:10:20 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/22 17:58:23 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,10 @@ char	*get_exec_name(char *name);
 /*                                    lexer                                   */
 /* -------------------------------------------------------------------------- */
 
+// formater.c
+char	*format_spaces(char *src);
+char	*format_wildcard(char **expanded);
+
 // join_lst.c
 char	*join_lst(t_list *lst);
 int		ignore_prompt(char *prompt);
@@ -210,13 +214,15 @@ int		is_symbol(char c);
 // lexer.c
 char	*process_line(const char *cmd_line, char **env, int *code);
 
-// var_processing.c
-t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
+// quotes_processing.c
+t_list	*process_quotes(const char *line);
 
 // var_processing_utils.c
+int		process(char **str, char **result, int last_code, char **env);
+
+// var_processing.c
+t_list	*process_expanded_vars(const t_list *lst, char **env, int last_code);
 char	*process_var(char *str, char **env, int last_code, t_list *next);
-t_list	*process_quotes(const char *line);
-char	*remove_spaces(char *str);
 
 // wildcard_processing.c
 char	*process_wildcard(char *line);
@@ -230,10 +236,6 @@ int		patern_valid(char *tmp, char **patern, int *i);
 
 // wildcard_utils.c
 size_t	count_files(char *path);
-
-// formater.c
-char	*format_spaces(char *src);
-char	*format_wildcard(char **expanded);
 
 /* -------------------------------------------------------------------------- */
 /*                                   parser                                   */
