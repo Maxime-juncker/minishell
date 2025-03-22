@@ -53,7 +53,7 @@ int	run_pipeline(t_command_table *table, t_list *args)
 	int		code;
 	int		*childs;
 
-	if (table->commands[0].n_args == 0)
+	if (table->n_commands == 0)
 		return (close_all_fds(table), 0);
 	if (setup_pipeline(&childs, table) == MALLOC_ERR)
 		return (MALLOC_ERR);

@@ -47,15 +47,6 @@ static int	change_directory(char *path)
 {
 	DIR		*dir;
 
-	if (ft_strcmp(path, "..") == 0)
-	{
-		if (chdir(path) == -1)
-		{
-			perror("\033[0;31mminishell: cd: \033[0m");
-			return (1);
-		}
-		return (0);
-	}
 	dir = opendir(path);
 	if (!dir)
 		return (free(path), perror("\033[0;31mminishell: cd"),
@@ -134,7 +125,7 @@ int	cd_command(t_command_table *table, const t_command cmd)
 	{
 		path = get_up();
 		if (!path)
-			return (0);
+			path = ft_strdup("..");
 	}
 	else if (get_cd_path(table, cmd, &path) == 1)
 		return (1);

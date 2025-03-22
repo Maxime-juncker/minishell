@@ -61,7 +61,7 @@ char	*new_prompt_txt(char **env)
 	txt = ft_strjoin_free(txt, find_env_var(env, "USER", NULL), FREE1 | FREE2);
 	if (malloc_assert(txt, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
-	txt = ft_strjoin_free(txt, "$\033[0m ", FREE1);
+	txt = ft_strjoin_free(txt, "$\001\033[0m\002 ", FREE1);
 	if (malloc_assert(txt, __FILE__, __LINE__, __FUNCTION__))
 		return (NULL);
 	return (txt);

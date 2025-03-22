@@ -14,14 +14,13 @@
 
 char	*get_up(void)
 {
-	int		error;
 	char	*path;
 	char	*tmp;
 	int		lenght;
+	char	buffer[1024];
 
-	error = 0;
-	path = get_pwd(&error);
-	if (error)
+	path = getcwd(buffer, sizeof(buffer));
+	if (!path)
 		return (NULL);
 	tmp = ft_strrchr(path, '/');
 	if (tmp == NULL)

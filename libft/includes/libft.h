@@ -29,17 +29,17 @@
 # define MIN_INT -2147483648
 
 // colors
-# define RESET		"\033[0m"
-# define BLACK		"\033[0;30m"
-# define RED		"\033[0;31m"
-# define GREEN		"\033[0;32m"
-# define YELLOW		"\033[0;33m"
-# define BLUE		"\033[0;34m"
-# define PURPLE		"\033[0;35m"
-# define CYAN		"\033[0;36m"
-# define WHITE		"\033[0;37m"
-# define GRAY		"\033[90m"
-# define ORANGE		"\033[38;5;208m"
+# define RESET		"\001\033[0m\002"
+# define BLACK		"\001\033[0;30m\002"
+# define RED		"\001\033[0;31m\002"
+# define GREEN		"\001\033[0;32m\002"
+# define YELLOW		"\001\033[0;33m\002"
+# define BLUE		"\001\033[0;34m\002"
+# define PURPLE		"\001\033[0;35m\002"
+# define CYAN		"\001\033[0;36m\002"
+# define WHITE		"\001\033[0;37m\002"
+# define GRAY		"\001\033[90m\002"
+# define ORANGE		"\001\033[38;5;208m\002"
 
 // Background
 # define B_BLACK	"\033[40m"
