@@ -6,7 +6,7 @@
 /*   By: abidolet <abidolet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 10:49:02 by abidolet          #+#    #+#             */
-/*   Updated: 2025/03/17 09:13:55 by abidolet         ###   ########.fr       */
+/*   Updated: 2025/03/22 12:02:42 by abidolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,10 @@ static char	*handle_parentheses(const char **s, int *paren_count)
 		if ((*s)[len] == '(')
 			(*paren_count)++;
 		else if ((*s)[len] == ')')
+		{
 			(*paren_count)--;
+			len--;
+		}
 		len++;
 	}
 	return (ft_strndup2(*s, len));
