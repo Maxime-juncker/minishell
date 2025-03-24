@@ -49,8 +49,10 @@ static int	change_directory(char *path)
 
 	dir = opendir(path);
 	if (!dir)
+	{
 		return (free(path), perror("\033[0;31mminishell: cd"),
 			ft_dprintf(2, "%s", RESET), 1);
+	}
 	if (chdir(path) == -1)
 	{
 		closedir(dir);
@@ -72,7 +74,7 @@ void	update_oldpwd(t_command_table *table)
 	abs_path = getcwd(buffer, 4096);
 	if (!abs_path)
 	{
-		ft_dprintf(2, "%schdir: error retrieving current directory: %s%s%s\n",
+		ft_dprintf(2, "%cd: error retrieving current directory: %s%s%s\n",
 			RED, "getcwd: cannot access parent directories: ",
 			"No such file or directory", RESET);
 		return ;

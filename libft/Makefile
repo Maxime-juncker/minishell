@@ -84,7 +84,7 @@ SRCS := $(addprefix $(SRCS_D), $(SRCS))
 
 # compiler settings
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(INCLUDES_D) -g3 -D BUFFER_SIZE=4 -fPIE
+CFLAGS = -Wall -Wextra -Werror -I$(INCLUDES_D)
 MAKEFLAGS += -s
 
 # commands

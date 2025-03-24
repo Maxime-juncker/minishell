@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D) -g3 -fPIE
+CFLAGS = -Wall -Wextra -Werror $(INCLUDES_D) -g3 
 
 MAKEFLAGS += --no-print-directory
 
@@ -10,7 +10,7 @@ MAKEFLAGS += --no-print-directory
 # ---------------------------------------------------------------------------- #
 
 OBJ_D = obj/
-BIN_D = bin/
+BIN_D = ./
 INCLUDES_D = -Iincludes/ -Ilibft/includes/ -I/usr/include/readline/
 
 VPATH = srcs/:srcs/builtin:srcs/executor:srcs/lexer:srcs/parser:srcs/checker:srcs/prompt
@@ -91,7 +91,10 @@ CURSOR_ON 		= \e[?25h
 
 RM = rm -fr
 
-all: header libft $(BIN_D)$(NAME)
+all: 
+	$(MAKE) header
+	$(MAKE) libft
+	$(MAKE) $(BIN_D)$(NAME)
 
 bonus: all
 
@@ -134,7 +137,7 @@ clean:
 .PHONY: fclean
 fclean:
 	$(MAKE) fclean -C ./libft
-	$(RM) $(BIN_D)
+	$(RM) $(NAME)
 	printf "$(RED)fclean:\t$(NAME)\n"
 	$(MAKE) clean
 
@@ -170,7 +173,7 @@ libft:
 
 # .PHONY: leaks
 # leaks: all
-# 	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --track-origins=yes --suppressions=ignore_readline.supp -s ./bin/minishell
+# 	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --track-origins=yes --suppressions=ignore_readline.supp -s ./minishell
 
 # ---------------------------------------------------------------------------- #
 #                              create directories                              #

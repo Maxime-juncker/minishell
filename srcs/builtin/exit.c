@@ -41,16 +41,20 @@ static int	get_code(t_command cmd, t_command_table *table)
 	int	code;
 
 	if (cmd.n_args == 1)
-		return (table->code);
+	{
+		return (0);
+	}
 	code = 0;
 	nb = overflow_check(cmd.args[1], &overflow_feedback, &code);
 	if (code != 0 || is_number(cmd.args[1]) == 0)
 	{
 		ft_dprintf(2, "%sminishell: exit: %s: numeric argument required%s\n",
 			RED, cmd.args[1], RESET);
-		return (2);
+		table->code = 2;
+		return (1);
 	}
-	return (nb);
+	table->code = nb;
+	return (0);
 }
 
 int	exit_shell(t_command_table *table, t_command cmd, t_free_pkg package)
@@ -60,16 +64,16 @@ int	exit_shell(t_command_table *table, t_command cmd, t_free_pkg package)
 	if (table->n_commands > 1)
 		return (0);
 	ft_printf("exit\n");
-	if (cmd.n_args > 2 && is_number(cmd.args[1]) == 1)
+	code = get_code(cmd, table);
+	if (cmd.n_args > 2 && code == 0)
 	{
 		ft_dprintf(2, "%sminishell: exit: too many arguments%s\n", RED, RESET);
 		return (1);
 	}
-	code = get_code(cmd, table);
 	free(package.childs);
 	cleanup_arr((void **)table->env);
 	cleanup_arr((void **)table->exp);
 	ft_lstclear(&package.args, cleanup_pacakge);
 	cleanup_table(table);
-	exit(code);
+	exit(table->code);
 }

@@ -27,9 +27,8 @@ char	*get_up(void)
 		return (ft_strdup("/"));
 	lenght = tmp - path;
 	if (lenght == 0)
-		return (free(path), ft_strdup("/"));
+		return (ft_strdup("/"));
 	tmp = ft_substr(path, 0, lenght);
-	free(path);
 	return (tmp);
 }
 
