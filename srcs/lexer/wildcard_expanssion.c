@@ -6,7 +6,7 @@
 /*   By: mjuncker <mjuncker@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:50:51 by mjuncker          #+#    #+#             */
-/*   Updated: 2025/03/07 10:41:46 by mjuncker         ###   ########.fr       */
+/*   Updated: 2025/03/24 09:26:00 by mjuncker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ char	*add_files(char *line, DIR *dir, char **patern)
 	char			**expanded;
 
 	expanded = ft_calloc(count_files(".") + 1, sizeof(char *));
+	if (malloc_assert(expanded, __FILE__, __LINE__, __FUNCTION__))
+		return (NULL);
 	infos = readdir(dir);
 	while (infos)
 	{
