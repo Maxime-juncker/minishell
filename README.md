@@ -75,3 +75,8 @@ finally run the shell
 [@abidolet](https://github.com/Alexis42lyon)
 
 [@mjuncker](https://github.com/Maxime-juncker)
+
+## Resources used 
+[code_quoi](https://www.codequoi.com/categories/c/)
+
+[Introduction to Systems Programming](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
