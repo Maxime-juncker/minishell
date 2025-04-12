@@ -67,7 +67,9 @@ finally run the shell
 1. lexer: format the user prompt for easier parsing and replace `$var` / `*` 
 2. checker: check if the prompt syntax is correct
 3. parser: return a command table that will be given to the command pipeline, every file / pipe is open here
-4. pipeline: will create every child process to run command (if it exist) et manage std out / in redirection 
+4. pipeline: will create every child process to run command (if it exist) et manage std out / in redirection
+\
+\
 [![Project-20250412054030.jpg](https://i.postimg.cc/Qd32MdgJ/Project-20250412054030.jpg)](https://postimg.cc/tYBSSyMs)
 ## Contributors
 [@abidolet](https://github.com/Alexis42lyon)
