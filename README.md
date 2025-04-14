@@ -3,7 +3,7 @@
  
 
 ## About
-minishell is an attemps a recreate a smaller version of bash
+minishell is an attemps at recreating a smaller version of bash
 
 ## Features
 
@@ -16,6 +16,7 @@ minishell is an attemps a recreate a smaller version of bash
 | ` << 'delemiter' `   | create a new heredoc |
 | `\|`   | create pipe |
 | `&&`   | run next command if the previous succeed |
+| `(` `)`   | for commands priorities |
 | `\|\|`   | run next command if the previous failed |
 | `$var`   |  replace `$var` by it's env variable if it exist|
 | `*`   |  wildcard, will be replace by every file conforming to the patern|
@@ -29,7 +30,6 @@ minishell is an attemps a recreate a smaller version of bash
 |`cd`|`~` (go to /home) or `-` (revert last cd)|change the current working directory |
 |`pwd` | none | show current working directory |
 |`export`| `id=var` or `none` (show export table)| export / override var to the env |
-|`unset`|`id` | export env var if it exist|
 |`unset`|`id` | export env var if it exist|
 |`env`|none | show the environement |
 |`exit`| `exit code` or none | exit with `exit code` or the last error code if nothing is given |
